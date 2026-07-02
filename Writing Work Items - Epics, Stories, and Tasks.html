@@ -1,0 +1,1013 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Writing Work Items: Epics, Stories &amp; Tasks</title>
+<style>
+:root{
+  --nav: 300px;       /* left nav rail (Red Hat "span-2") */
+  --rgutter: 14vw;    /* right reserve ("span-2" aside); a % of the window so the
+                         content column scales continuously instead of freezing */
+  --ink:#1f2329; --muted:#5b6470; --line:#e2e6eb; --bg:#ffffff;
+  --soft:#f6f8fa; --accent:#2b6cb0; --code-bg:#f2f4f7; --code-ink:#9a2c5b;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%; scroll-behavior:smooth}
+body{
+  margin:0; background:var(--bg); color:var(--ink);
+  font:16px/1.65 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+}
+.wrap{display:block}
+
+/* ---- flush-left, full-height nav rail (Red Hat docs style) ---- */
+.toc{position:fixed; top:0; left:0; width:var(--nav); height:100vh; overflow:auto;
+  background:var(--bg); border-right:1px solid var(--line);
+  padding:1.2rem 1rem 2rem; font-size:.9rem; z-index:20}
+.toc-title{font-weight:700; color:#11161c; font-size:.95rem; line-height:1.3;
+  padding:0 .3rem .7rem; border-bottom:1px solid var(--line); margin-bottom:.5rem}
+.toc-group{border-radius:8px; margin-bottom:.2rem}
+.toc-tab{display:block; width:100%; text-align:left; cursor:pointer;
+  background:none; border:0; border-radius:8px; padding:.45rem .55rem;
+  font:inherit; font-weight:700; color:#243140; line-height:1.25}
+.toc-tab:hover{background:var(--soft)}
+.toc-group.active>.toc-tab{background:#eaf2fc; color:var(--accent)}
+.toc-sub{display:block; font-weight:400; font-size:.74rem; color:var(--muted);
+  margin-top:.1rem}
+.toc-list{list-style:none; margin:.15rem 0 .5rem; padding:0; display:none}
+.toc-group.active .toc-list{display:block}
+.toc-list a{display:block; color:#3a4654; padding:.2rem .55rem; border-radius:6px;
+  border-left:2px solid transparent}
+.toc-list a:hover{background:var(--soft); text-decoration:none;
+  border-left-color:var(--accent)}
+.toc-list .lvl2{margin-top:.15rem}
+.toc-list .lvl2 a{font-weight:600}
+.toc-list .lvl3 a{padding-left:1.4rem; font-size:.85rem; color:var(--muted)}
+
+/* ---- content area (offset to clear the fixed rail) ----
+   Red Hat's layout is a 3-column grid: left nav, a content column that's a
+   PROPORTION of the window, and a reserved right gutter (its "span-2" aside).
+   We mirror that with margins instead of a frozen pixel cap, so the column
+   keeps scaling with the window — prose and tables widen together, with the
+   right gutter (a % of the viewport) keeping lines from getting too long. */
+.content{margin-left:var(--nav); margin-right:var(--rgutter); min-width:0;
+  background:var(--bg); padding:2.2rem clamp(1.5rem,5vw,4rem) 4rem}
+.doc-header>h1:first-child{margin-top:0}
+
+h1,h2,h3,h4{line-height:1.25; color:#11161c; font-weight:700}
+h1{font-size:2rem; margin:.2em 0 .1em}
+h2{font-size:1.5rem; margin:2.2em 0 .6em; padding-bottom:.3em;
+   border-bottom:2px solid var(--line); scroll-margin-top:4.5rem}
+.panel>h2:first-child{margin-top:.3em}
+h3{font-size:1.2rem; margin:1.8em 0 .5em; color:#243140; scroll-margin-top:4.5rem}
+h4{font-size:1.02rem; margin:1.4em 0 .4em; color:var(--muted);
+   text-transform:uppercase; letter-spacing:.04em}
+a{color:var(--accent); text-decoration:none}
+a:hover{text-decoration:underline}
+hr{border:0; border-top:1px solid var(--line); margin:2.4em 0}
+p{margin:.7em 0}
+ul,ol{margin:.6em 0 .9em; padding-left:1.5em}
+li{margin:.3em 0}
+li::marker{color:var(--accent)}
+li.task{list-style:none; margin-left:-1.4em}
+li.task input{margin-right:.55em; transform:translateY(1px)}
+li.task.done{color:var(--muted)}
+
+/* ---- tabs ---- */
+.tabbar{position:sticky; top:0; z-index:10; display:flex; gap:.4rem; flex-wrap:wrap;
+  margin:0 0 1.4rem; padding:.7rem 0; background:var(--bg);
+  border-bottom:2px solid var(--line)}
+.tabbtn{cursor:pointer; border:1px solid var(--line); background:var(--soft);
+  color:#3a4654; font:inherit; font-weight:600; padding:.45rem 1rem;
+  border-radius:999px}
+.tabbtn:hover{background:#eaf2fc}
+.tabbtn.active{background:var(--accent); color:#fff; border-color:var(--accent)}
+.panel{display:none}
+.panel.active{display:block; animation:fade .18s ease}
+@keyframes fade{from{opacity:0; transform:translateY(3px)}to{opacity:1}}
+
+/* ---- expand boxes (Confluence-style) ---- */
+.expand{border:1px solid var(--line); border-radius:10px; margin:1em 0;
+  background:var(--soft); overflow:hidden}
+.expand[open]{background:var(--bg); box-shadow:0 1px 3px rgba(20,30,50,.05)}
+.expand>summary{cursor:pointer; list-style:none; padding:.8rem 1rem;
+  font-weight:700; color:#243140; display:flex; align-items:center; gap:.6rem}
+.expand>summary::-webkit-details-marker{display:none}
+.expand>summary::before{content:"▸"; color:var(--accent); font-size:.9em;
+  transition:transform .15s ease}
+.expand[open]>summary::before{transform:rotate(90deg)}
+.expand>summary:hover{background:#eaf2fc}
+.expand-body{padding:0 1rem 1rem; border-top:1px solid var(--line)}
+
+/* inline code + code blocks */
+code{font-family:"SF Mono",SFMono-Regular,ui-monospace,"Cascadia Code",
+  Consolas,"Liberation Mono",Menlo,monospace; font-size:.88em}
+:not(pre)>code{background:var(--code-bg); color:var(--code-ink);
+  padding:.12em .4em; border-radius:5px; border:1px solid #e6e2e8}
+pre{background:#0f1722; color:#e6edf3; padding:1.1rem 1.25rem; border-radius:10px;
+  overflow-x:auto; line-height:1.5; border:1px solid #0a0f17;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.04)}
+pre code{background:none; color:inherit; padding:0; border:0; font-size:.86em}
+
+/* tables */
+table{border-collapse:separate; border-spacing:0; width:100%; margin:1.1em 0;
+  font-size:.94rem; border:1px solid var(--line); border-radius:10px; overflow:hidden}
+thead th{background:#eef3f9; color:#1c2b3a; text-align:left; font-weight:700;
+  border-bottom:2px solid #d7e0ea}
+th,td{padding:.62rem .8rem; vertical-align:top; border-bottom:1px solid var(--line);
+  border-right:1px solid var(--line)}
+th:last-child,td:last-child{border-right:0}
+tbody tr:last-child td{border-bottom:0}
+tbody tr:nth-child(even){background:var(--soft)}
+tbody tr:hover{background:#eef6ff}
+td code{white-space:nowrap}
+
+/* callouts (were markdown blockquotes) */
+.callout{margin:1.1em 0; padding:.85rem 1.1rem .85rem 1.2rem;
+  border-radius:10px; border:1px solid var(--line); border-left:5px solid var(--muted);
+  background:var(--soft)}
+.callout>:first-child{margin-top:0}
+.callout>:last-child{margin-bottom:0}
+.callout p,.callout li{font-size:.97rem}
+.callout.key{border:1px solid #cdd9e8; border-left:5px solid var(--accent);
+  background:linear-gradient(180deg,#eef5ff,#f7faff)}
+.callout.key>p{font-size:1.05rem; font-weight:600; color:#16314f}
+.callout.note   {border-left-color:#6b7785; background:#f6f8fa}
+.callout.scope  {border-left-color:#0e7490; background:#ecfeff}
+.callout.example{border-left-color:#7c3aed; background:#f6f2ff}
+.callout.warn   {border-left-color:#d97706; background:#fff8ec}
+.callout.danger {border-left-color:#dc2626; background:#fef2f2}
+.callout.success{border-left-color:#16a34a; background:#f0fdf4}
+.callout::before{display:block; font-size:.72rem; font-weight:700; letter-spacing:.08em;
+  text-transform:uppercase; margin-bottom:.35rem; opacity:.8}
+.callout.key::before    {content:"Key rule";   color:#2b6cb0}
+.callout.note::before   {content:"Note";       color:#52606d}
+.callout.scope::before  {content:"Scope";      color:#0e7490}
+.callout.example::before{content:"Worked example"; color:#7c3aed}
+.callout.warn::before   {content:"Watch out";  color:#b45309}
+.callout.danger::before {content:"Anti-pattern"; color:#dc2626}
+.callout.success::before{content:"Do this";    color:#15803d}
+
+@media print{
+  body{background:#fff}
+  .toc,.tabbar,.totop{display:none}
+  .content{margin-left:0; padding:0}
+  .panel{display:block !important}
+  .expand,.expand-body{border:1px solid #ccc}
+  .expand>summary::before{content:""}
+  pre{background:#f4f6f8; color:#111; border:1px solid #ccc}
+  .callout,tr,table,blockquote{break-inside:avoid}
+}
+@media (max-width:860px){
+  .toc{position:static; width:auto; height:auto; overflow:visible;
+    border-right:0; border-bottom:1px solid var(--line)}
+  .toc-list{display:block}
+  .content{margin-left:0; margin-right:0; padding:1.4rem 1.2rem}
+}
+
+/* ---- back-to-top button ---- */
+.totop{position:fixed; right:1.5rem; bottom:1.5rem; z-index:30;
+  width:44px; height:44px; border-radius:50%; cursor:pointer;
+  border:1px solid var(--line); background:var(--accent); color:#fff;
+  font-size:1.2rem; line-height:1; display:flex; align-items:center;
+  justify-content:center; box-shadow:0 3px 10px rgba(20,30,50,.25);
+  opacity:0; visibility:hidden; transition:opacity .2s ease, visibility .2s ease}
+.totop.show{opacity:1; visibility:visible}
+.totop:hover{background:#235c98}
+</style>
+</head>
+<body>
+<div class="wrap">
+<nav class="toc">
+<div class="toc-title">Writing Work Items: Epics, Stories &amp; Tasks</div>
+<div class="toc-group active" data-tab="principles">
+<button class="toc-tab" data-tab="principles">Principles<span class="toc-sub">Why &amp; how to think — §1–8</span></button>
+<ul class="toc-list">
+<li class="lvl2"><a href="#1-why-this-exists">1. Why this exists</a></li>
+<li class="lvl3"><a href="#the-one-rule-that-fixes-the-headline-problem">The one rule that fixes the headline problem</a></li>
+<li class="lvl3"><a href="#worked-example-what-the-example-epic-gets-right-and-wrong">Worked example: what the Example Epic gets right and wrong</a></li>
+<li class="lvl2"><a href="#2-the-work-hierarchy">2. The work hierarchy</a></li>
+<li class="lvl3"><a href="#where-to-split--and-at-which-layer">Where to split — and at which layer</a></li>
+<li class="lvl3"><a href="#worked-example-why-the-example-task-is-mis-leveled">Worked example: why the Example Task is mis-leveled</a></li>
+<li class="lvl2"><a href="#3-writing-outcomes-for-epics">3. Writing outcomes (for epics)</a></li>
+<li class="lvl3"><a href="#the-ops-outcome-catalog">The ops outcome catalog</a></li>
+<li class="lvl3"><a href="#---for-the-example-epic">❌ → ✅ for the Example Epic</a></li>
+<li class="lvl2"><a href="#4-acceptance-criteria-for-stories--work-packages">4. Acceptance criteria (for stories / work packages)</a></li>
+<li class="lvl3"><a href="#the-pr-submitted-rule">The "PR submitted" rule</a></li>
+<li class="lvl2"><a href="#5-three-things-people-confuse-dod-vs-acceptance-vs-outcome">5. Three things people confuse: DoD vs. Acceptance vs. Outcome</a></li>
+<li class="lvl3"><a href="#standing-gates-the-anti-weasel-rule">Standing gates (the anti-weasel rule)</a></li>
+<li class="lvl3"><a href="#architecture-quality-has-a-home--and-it-isnt-here">Architecture quality has a home — and it isn't here</a></li>
+<li class="lvl2"><a href="#6-demand-driven-work-is-first-class">6. Demand-driven work is first-class</a></li>
+<li class="lvl3"><a href="#the-reporting-boundary-principle-and-our-instance-of-it">The reporting-boundary principle (and our instance of it)</a></li>
+<li class="lvl3"><a href="#the-work-taxonomy">The work taxonomy</a></li>
+<li class="lvl3"><a href="#the-toil-to-epic-rule-this-is-the-feedback-loop">The toil-to-epic rule (this is the feedback loop)</a></li>
+<li class="lvl3"><a href="#what-the-demand-data-is-for">What the demand data is for</a></li>
+<li class="lvl3"><a href="#repeatable-requests-the-machinery-frozen-into-a-form">Repeatable requests: the machinery frozen into a form</a></li>
+<li class="lvl3"><a href="#the-three-modes-in-one-frame">The three modes, in one frame</a></li>
+<li class="lvl2"><a href="#7-splitting--sizing">7. Splitting &amp; sizing</a></li>
+<li class="lvl3"><a href="#invest--the-quick-gut-check-for-a-storywp">INVEST — the quick gut-check for a story/WP</a></li>
+<li class="lvl3"><a href="#split-by-vertical-slice-not-by-layer">Split by vertical slice, not by layer</a></li>
+<li class="lvl3"><a href="#separate-the-decision-from-the-delivery">Separate the decision from the delivery</a></li>
+<li class="lvl2"><a href="#8-definition-of-ready">8. Definition of Ready</a></li>
+</ul></div>
+<div class="toc-group" data-tab="examples">
+<button class="toc-tab" data-tab="examples">Example tickets<span class="toc-sub">The two worked examples, as written</span></button>
+<ul class="toc-list">
+<li class="lvl2"><a href="#the-example-tickets-as-written">The example tickets (as written)</a></li>
+<li class="lvl3"><a href="#the-example-epic">The Example Epic</a></li>
+<li class="lvl3"><a href="#the-example-task">The Example Task</a></li>
+</ul></div>
+<div class="toc-group" data-tab="templates">
+<button class="toc-tab" data-tab="templates">Templates<span class="toc-sub">Copy-paste blocks — §9</span></button>
+<ul class="toc-list">
+<li class="lvl3"><a href="#91-epic-template">9.1 Epic template</a></li>
+<li class="lvl3"><a href="#92-story--work-package-template">9.2 Story / Work Package template</a></li>
+<li class="lvl3"><a href="#93-task-template">9.3 Task template</a></li>
+<li class="lvl3"><a href="#94-discovery-work-package-template">9.4 Discovery work package template</a></li>
+</ul></div>
+<div class="toc-group" data-tab="quickref">
+<button class="toc-tab" data-tab="quickref">Quick reference<span class="toc-sub">The one-page checklist — §10</span></button>
+<ul class="toc-list">
+<li class="lvl2"><a href="#10-quick-reference">10. Quick reference</a></li>
+</ul></div>
+</nav>
+<main class="content">
+<div class="doc-header">
+<h1 id="writing-work-items-epics-stories--tasks">Writing Work Items: Epics, Stories &amp; Tasks</h1>
+<p><em>A standard for pre-task project planning — how to describe the work and how to know when it's done.</em></p>
+<p><strong>Audience:</strong> everyone who writes work items in Jira — across every tech-related department. No project-management background assumed.
+<strong>Status:</strong> v1. This is a living standard; see <a href="#10-quick-reference">Section 10</a> for the one-page version you'll actually keep open.</p>
+<hr>
+<h2 id="how-to-read-this-document">How to read this document</h2>
+<p>Sections 1–8 explain the <strong>principles</strong> — <em>why</em> we do this and <em>how</em> to think about it. Section 9 gives you the <strong>strict templates</strong> to copy-paste. Section 10 is the <strong>checklist</strong>.</p>
+<p>If you only have five minutes, read <a href="#1-why-this-exists">Section 1</a> and <a href="#10-quick-reference">Section 10</a>.</p>
+<p>Throughout, we use two of our own real work items as worked examples — one epic and one task — because the lessons land harder when the material is ours. Their <strong>as-written</strong> content lives in the <a href="#the-example-tickets-as-written"><strong>Example tickets</strong></a> tab; the analysis below refers to them as the <strong>Example Epic</strong> and the <strong>Example Task</strong>:</p>
+<ul>
+<li>the <strong>Example Epic</strong> — a golden-image epic</li>
+<li>the <strong>Example Task</strong> — a cloud-init / capsule-registration item (typed a Task; child of the epic above)</li>
+</ul>
+<p>Both are useful precisely because they show what to fix.</p>
+<hr>
+
+</div>
+<div class="tabbar"><button class="tabbtn active" data-tab="principles">Principles</button><button class="tabbtn" data-tab="examples">Example tickets</button><button class="tabbtn" data-tab="templates">Templates</button><button class="tabbtn" data-tab="quickref">Quick reference</button></div>
+<div class="panels">
+<section class="panel active" id="tab-principles" data-tab="principles"><h2 id="1-why-this-exists">1. Why this exists</h2>
+<p>We keep hitting the same wall: <strong>we cannot tell when an epic is done.</strong> We close the child tickets, and then we stand around asking "…so, is it finished?" Nobody can answer, because nobody wrote down what <em>finished</em> means.</p>
+<p>This is not a discipline problem or a writing-style problem. It is a <strong>definition problem</strong>, and it has a specific root cause:</p>
+<blockquote class="callout key">
+<p><strong>We describe work by its <em>output</em> (the thing we build) instead of its <em>outcome</em> (the change the thing is supposed to cause).</strong></p>
+</blockquote>
+<p>An <strong>output</strong> is an activity or artifact: <em>"build a golden image,"</em> <em>"submit a PR."</em> An output is "done" when the activity stops — which is to say, never cleanly, because there's always more you <em>could</em> do.</p>
+<p>An <strong>outcome</strong> is a change in the world, stated as a condition that is either true or false: <em>"all hosts provision from one image with zero manual steps,"</em> <em>"instances auto-register to the correct regional capsule on first boot."</em> An outcome is done when the condition becomes true. You can <em>check</em> it.</p>
+<h3 id="the-one-rule-that-fixes-the-headline-problem">The one rule that fixes the headline problem</h3>
+<blockquote class="callout key">
+<p><strong>An epic is not done when its child tickets are closed.</strong></p>
+</blockquote>
+<p>The child stories and tasks are a <em>bet</em> — our best current guess at the work that will produce the outcome. If every child is closed but the outcome didn't happen, <strong>the epic is not done.</strong> You write more stories, or you change the approach. Closing tickets is activity; achieving the outcome is the point.</p>
+<p>Everything else in this document exists to make that rule operable.</p>
+<h3 id="worked-example-what-the-example-epic-gets-right-and-wrong">Worked example: what the Example Epic gets right and wrong</h3>
+<p>The Example Epic actually <em>has</em> a "Definition of Done." Here it is, paraphrased:</p>
+<ul>
+<li>image-based configs tracked in our Image Builder (RHIB/Packer) repo</li>
+<li>on-prem-only configs include logic to skip on EC2</li>
+<li>cloud-init scripts modular and managed in code</li>
+<li>scripts have logging</li>
+<li>every config has a regression/validation test in a post-build step</li>
+</ul>
+<p>Read that list again. <strong>Not one item tells you when the <em>epic</em> is finished</strong> — at best they're per-<em>child-task</em> quality bars. "Enabling and building a golden image" is an activity with no end state — so it ends when we get tired of it, which is exactly the problem we're trying to kill.</p>
+<p>(And only <em>at best</em>: two of these aren't even clean quality bars. "Skip on EC2" misunderstands the epic — a <em>golden/base</em> image holds only what <strong>all</strong> systems need, so per-environment conditionals don't belong in it at all; environment divergence lives in image <em>layering</em> or runtime metadata, not baked-in <code>if-EC2</code> logic. "Modular… in code" dictates an <em>architecture</em>, which a Definition of Done has no business mandating. We dissect why in <a href="#5-three-things-people-confuse-dod-vs-acceptance-vs-outcome">Section 5</a>; for now just note that a sloppy DoD is hiding an <em>absent</em> outcome.)</p>
+<p>What's missing is an <strong>outcome / exit condition</strong> for the epic itself. Something like:</p>
+<blockquote class="callout success">
+<p><em>A single golden image provisions RHEL9 hosts across EC2 and Nutanix with zero manual post-build steps; ≥20 consecutive automated builds pass post-build validation; the legacy PXE/kickstart path is decommissioned.</em></p>
+</blockquote>
+<p>That sentence is checkable. Today's epic is not. We'll fix it properly in <a href="#5-three-things-people-confuse-dod-vs-acceptance-vs-outcome">Section 5</a>.</p>
+<hr>
+
+<h2 id="2-the-work-hierarchy">2. The work hierarchy</h2>
+<p>We use four levels. <strong>The level is decided by the <em>kind of completion condition</em> the work has — not by how big it feels or how many hours it takes.</strong></p>
+<table>
+<thead>
+<tr>
+<th>Level</th>
+<th>What it is</th>
+<th>"Done" means…</th>
+<th>Completion condition is…</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Epic</strong></td>
+<td>A meaningful change in capability, reliability, risk, or cost</td>
+<td>The <strong>outcome / exit condition</strong> is met</td>
+<td>A measured change in the world (metric or verifiable end-state)</td>
+</tr>
+<tr>
+<td><strong>Story / Work Package</strong></td>
+<td>One coherent slice of user- or system-visible behavior</td>
+<td><strong>Acceptance criteria</strong> pass</td>
+<td>Testable behavior — observable from outside</td>
+</tr>
+<tr>
+<td><strong>Task</strong></td>
+<td>A concrete deliverable contributing to a story</td>
+<td>The deliverable <strong>objectively exists</strong></td>
+<td>Binary: it's merged / created / configured, or it isn't</td>
+</tr>
+<tr>
+<td><strong>Sub-task</strong></td>
+<td>A checklist step inside a task</td>
+<td>The step is done</td>
+<td>Binary, usually only meaningful to the assignee</td>
+</tr>
+</tbody>
+</table>
+<blockquote class="callout note">
+<p><strong>"Story" and "Work Package" are the same level</strong>, named differently by different teams. Planned product-style work tends to say "Story"; operational and infrastructure work tends to say "Work Package." Pick one term per project and stick to it. This doc uses <strong>Story/WP</strong> interchangeably.</p>
+<p><strong>Who owns what (this matters for the rest of the doc):</strong> an epic is, in effect, a <strong>broad-stroke request from the business</strong> — and its <strong>Outcome</strong> and <strong>Definition of Done are owned by the requester / standard-owner, not by the implementers.</strong> The people choosing <em>how</em> to build it don't get to rewrite the bar they're measured against. The practical consequence shows up in <a href="#5-three-things-people-confuse-dod-vs-acceptance-vs-outcome">Section 5</a>: because the DoD isn't the implementers' to write, it can only hold things the business can legitimately demand — <strong>substitutable, checkable invariants</strong> ("works on both hypervisors," "complies with our standards") — never <em>architecture choices</em> like "make it modular," which would be the requester reaching into the implementers' domain.</p>
+</blockquote>
+<h3 id="where-to-split--and-at-which-layer">Where to split — and at which layer</h3>
+<p>One mistake people make is trying to split an <em>epic</em> the moment its scope diverges. Usually that's wrong. <strong>Epics are supposed to be divergent.</strong> An epic aggregates work that serves <em>one capability</em> — and the pieces are often <em>expected</em> to span wildly different kinds of work.</p>
+<blockquote class="callout example">
+<p><strong>Worked example — a metrics system epic.</strong> "Ingest <em>X</em> metrics in time <em>t</em>," "render visualizations of <em>Y</em>-size queries in <em>t₂</em>," "enforce standard RBAC." Those three diverge enormously — different skills, different acceptance tests, different risk profiles. <strong>It's still one epic</strong>, because none of them delivers a usable metrics system on its own: ingestion with no visualization is invisible plumbing; visualization with no RBAC isn't releasable. They are worthless apart, so they cohere.</p>
+</blockquote>
+<p>So the "I diverged widely across the <em>ands</em>" instinct is a <strong>false alarm at the epic layer.</strong> </p>
+<p>Apply two tests in order — one for whether a piece is its own epic, one for whether a work package is really two.</p>
+<p><strong>Test A — the standalone-value test (decides: one epic or two?)</strong></p>
+<blockquote class="callout note">
+<p><em>If I shipped this slice and nothing else, would someone get real value from it — without the siblings shipping too?</em></p>
+</blockquote>
+<ul>
+<li><strong>Yes</strong> → it stands alone; make it its <strong>own epic.</strong></li>
+<li><strong>No — it's worthless or unreleasable without its siblings</strong> → <strong>same epic.</strong> (Metrics: ingestion, visualization, and RBAC each fail this, so all three stay together.)</li>
+</ul>
+<p><strong>Test B — the single-intent test (decides: one work package or two?)</strong>
+Once you're inside an epic, each "and" becomes a <strong>work package (story)</strong>. Name its intent — pick exactly one:</p>
+<ul>
+<li><strong>Discovery</strong> — reduce uncertainty; deliverable is a reusable artifact (taxonomy, decision record, capability list)</li>
+<li><strong>Migration</strong> — move state A → state B</li>
+<li><strong>Redesign</strong> — change structure</li>
+<li><strong>Enablement</strong> — remove blockers for others</li>
+<li><strong>Optimization</strong> — improve efficiency</li>
+</ul>
+<blockquote class="callout note">
+<p><em>Can I name a single intent for this work package, or do I need two?</em></p>
+</blockquote>
+<ul>
+<li><strong>One intent</strong> → it's one work package.</li>
+<li><strong>Two intents</strong> (a <em>decision</em> <strong>and</strong> a <em>build</em>; a <em>build</em> <strong>and</strong> a <em>migration</em>) → it's <strong>two work packages wearing one ticket</strong> — split it. The tell: an acceptance criteria that reads <em>"1. build and test X; 2. migrate Y to X"</em> is two work packages, and either half can keep the ticket alive forever.</li>
+</ul>
+<p>So the metrics epic splits <em>downward</em> into work packages — "ingest pipeline," "query/visualization layer," "RBAC" — <strong>not sideways into more epics.</strong> (A decide-then-build is the same call: the Discovery and the build are two intents, so pull the Discovery out as its own work package whose done-condition is <em>"a decision is recorded,"</em> then build against the decision — see <a href="#7-splitting--sizing">Section 7</a>.)</p>
+<h3 id="worked-example-why-the-example-task-is-mis-leveled">Worked example: why the Example Task is mis-leveled</h3>
+<p>The Example Task is typed as a <strong>Task</strong>, but it bundles three different kinds of work, each with a different completion condition:</p>
+<ol>
+<li><strong>A Discovery / decision</strong> — <em>"This Jira will identify methodology for dynamically targeting a region or VPC-specific RH Capsule server."</em> Done when a decision is recorded.</li>
+<li><strong>An implementation</strong> — the cloud-init script using IMDSv1 metadata to fetch the regional secret. Done when it's merged and works.</li>
+<li><strong>Infrastructure changes</strong> — <em>"create the secret,"</em> <em>"update the EC2 instance role IAM permissions."</em> Done when those resources exist and grant access.</li>
+</ol>
+<p>Three completion conditions = at least three items, and by <strong>Test B</strong> it fails immediately: it carries multiple intents — a <em>Discovery</em> ("identify the methodology") fused to a <em>Redesign/Enablement</em> build. This isn't one task; it's a <strong>Discovery work package</strong> (decide the approach) followed by a <strong>Story/WP</strong> to implement it, with child tasks for the secret and the IAM change. It is not one task.</p>
+<hr>
+
+<h2 id="3-writing-outcomes-for-epics">3. Writing outcomes (for epics)</h2>
+<blockquote class="callout scope">
+<p><strong>Scope:</strong> outcomes are a <strong>roadmap-work</strong> construct (Section 6). Reactive demand items — incidents, standard requests — are <em>not</em> given outcome statements; they're governed by resolution and structured capture. This section is about the improvement epics we <em>choose</em> to run.</p>
+</blockquote>
+<p>Every epic needs an <strong>Outcome / Exit Condition</strong> — at least one checkable condition, and often several bundled into the one field (the corrected Example Epic below combines three). Use one of these two forms for each condition.</p>
+<p><strong>Quantitative (preferred when a metric exists):</strong></p>
+<blockquote class="callout note">
+<p>We'll know this is done when <strong>[metric/state]</strong> moves from <strong>[baseline]</strong> to <strong>[target]</strong>, measured by <strong>[method]</strong>, by <strong>[horizon]</strong>.</p>
+</blockquote>
+<p><strong>Qualitative (when the change is a capability or a removed risk):</strong></p>
+<blockquote class="callout note">
+<p>When this is done, <strong>[capability]</strong> is now possible / <strong>[failure mode]</strong> is no longer possible, verified by <strong>[specific check]</strong>.</p>
+</blockquote>
+<p>The qualitative form still has to be <em>checkable</em> — "verified by [check]" is not optional. "Improve reliability" is not an outcome; "no P1 incidents attributable to cause X for 30 rolling days, confirmed from the incident log" is.</p>
+<blockquote class="callout note">
+<p><strong>The substitutability test — outcome vs. implementation.</strong> The trap isn't vagueness; it's naming a <em>how</em>. An outcome must survive <strong>swapping the implementation underneath it</strong>: "ingest X metrics within <em>t</em>" stays true whether you use cloud-init, Telegraf, or anything else, so it's an outcome. "cloud-init scripts are modular" names a mechanism — swap cloud-init out and the clause is meaningless — so it's an <em>implementation detail</em>, not an outcome (and not a DoD invariant either; see <a href="#5-three-things-people-confuse-dod-vs-acceptance-vs-outcome">Section 5</a>). Note the test is <strong>not</strong> "is it specific?" — "zero manual post-build steps" is brutally specific and names no <em>how</em>, so it passes. <strong>Ask: does this clause name a mechanism? If yes, it doesn't belong in the outcome.</strong></p>
+</blockquote>
+<h3 id="the-ops-outcome-catalog">The ops outcome catalog</h3>
+<p>Much of our work delivers value as <strong>reduced risk or reduced toil</strong>, which people find genuinely hard to phrase as an outcome ("how do I put 'we made it less likely to break' into a done-condition?"). Use these four patterns — most ops epics are one of them. <strong>Phrase them additively, not subtractively</strong> (see the <em>Automation ROI — SLT Reporting</em> template): leadership hears "capacity reclaimed," not "work avoided."</p>
+<table>
+<thead>
+<tr>
+<th>Outcome type</th>
+<th>Phrase it as… (additive)</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Reliability / SLO</strong></td>
+<td>A failure rate or availability target held over a window — or <em>zero-miss execution</em></td>
+<td>"Image-build success rate ≥ 99% over 30 days"</td>
+</tr>
+<tr>
+<td><strong>Toil → throughput</strong></td>
+<td><strong>Capacity reclaimed</strong>, measured <code>t × n</code> per period and redirected to roadmap</td>
+<td>"Host provisioning requires 0 manual post-build steps (was 7); ~<code>t×n</code> hrs/period reclaimed for roadmap"</td>
+</tr>
+<tr>
+<td><strong>Risk retirement</strong></td>
+<td>A failure mode made impossible, or a single point of failure removed</td>
+<td>"No host can register against the wrong regional capsule; enforced by per-region secret + IAM scoping"</td>
+</tr>
+<tr>
+<td><strong>Capability at zero marginal cost</strong></td>
+<td>New capability that scales <strong>without added headcount</strong></td>
+<td>"New VPCs' hosts stand up with no bespoke config — output grows, team size flat; proven in 2 regions"</td>
+</tr>
+</tbody>
+</table>
+<blockquote class="callout note">
+<p><strong>Quantifying toil:</strong> <code>reclaimed = t × n</code> per period (t = time per occurrence, n = occurrences per period). When <code>t×n</code> is small, <strong>lead with the reliability/zero-miss win, not the hours</strong> — e.g. auto-sprint-creation saves ~2 hrs/yr but its real value is "the team always has a place to plan into; no one has to remember." Don't undersell a reliability win by reporting only its modest hours.</p>
+<p><strong>Automation Ladder</strong> — for <em>Optimization / Enablement</em> outcomes, state the <strong>level transition</strong> rather than "automate X":
+<strong>L0 Undocumented</strong> (tribal) → <strong>L1 Documented</strong> (runbook) → <strong>L2 Checklist</strong> (verifiable, no shadowing) → <strong>L3 Semi-automated</strong> (human runs + validates) → <strong>L4 Fully automated</strong> (event-triggered, human notified).
+e.g. <em>"Move pipeline-X provisioning from L1 (runbook) to L3 (Ansible playbook)."</em> Not everything needs L4 — but <strong>nothing should stay at L0</strong>, because that's key-person risk written as a process.</p>
+</blockquote>
+<h3 id="---for-the-example-epic">❌ → ✅ for the Example Epic</h3>
+<p><strong>❌ As written:</strong> <em>"Epic to track work related to enabling and building a golden image."</em> — an activity, no end state.</p>
+<p><strong>✅ Outcome statement:</strong></p>
+<blockquote class="callout success">
+<p><em>When this is done, a single golden image provisions RHEL9 hosts across EC2 and Nutanix with </em><em>zero manual post-build steps</em><em>, verified by </em><em>≥20 consecutive automated builds passing post-build validation</em><em>, and the </em><em>legacy PXE/kickstart path is decommissioned</em><em> by end of Q3.</em></p>
+</blockquote>
+<p>That combines toil-reduction + reliability + risk-retirement, and every clause is checkable.</p>
+<hr>
+
+<h2 id="4-acceptance-criteria-for-stories--work-packages">4. Acceptance criteria (for stories / work packages)</h2>
+<p>Acceptance criteria (AC) define <strong>done for a story</strong> in terms of <strong>observable behavior</strong>. They are the contract: if the AC pass, the story is accepted — no debate.</p>
+<p>Two formats. Use whichever fits; don't mix within one criterion.</p>
+<p><strong>Given / When / Then</strong> — best for behavior with conditions:</p>
+<blockquote class="callout note">
+<p><strong>Given</strong> an instance launches in VPC-X, <strong>when</strong> cloud-init runs on first boot, <strong>then</strong> it registers against the VPC-X regional capsule using the VPC-X activation key, and <code>subscription-manager status</code> reports <code>Overall Status: Current</code>.</p>
+</blockquote>
+<p><strong>Checklist</strong> — best for a set of concrete, independent conditions:</p>
+<blockquote class="callout note">
+<ul>
+<li class="task"><input type="checkbox" disabled> Script determines region/account/VPC from instance metadata with no hard-coded values</li>
+<li class="task"><input type="checkbox" disabled> Correct capsule URL + activation key fetched from the per-region secret</li>
+<li class="task"><input type="checkbox" disabled> First-boot registration verified in <strong>at least 2 regions</strong></li>
+<li class="task"><input type="checkbox" disabled> Failure to fetch the secret fails the build loudly (logged, non-zero exit)</li>
+</ul>
+</blockquote>
+<h3 id="the-pr-submitted-rule">The "PR submitted" rule</h3>
+<blockquote class="callout note">
+<p><strong>Never write "PR submitted," "code written," or "script created" as an acceptance criterion.</strong> Those describe an <em>output existing</em>, not a <em>behavior working</em>.</p>
+</blockquote>
+<p>The Example Task's sole acceptance criterion was:</p>
+<blockquote class="callout danger">
+<p>❌ <em>"PR submitted with cloud-init script that can dynamically determine capsule URL and activation key."</em></p>
+</blockquote>
+<p>This is done the moment a PR exists — even if the script never successfully registers a single instance. The real done-condition is the ✅ Given/When/Then above: <em>an instance actually boots in a region and registers against the correct capsule.</em> A PR is how the work arrives; it is not proof the work worked.</p>
+<p><strong>Good AC are:</strong> observable from outside, testable (pass/fail with no judgment call), and about <em>behavior or end-state</em> — never about the existence of an artifact.</p>
+<hr>
+
+<h2 id="5-three-things-people-confuse-dod-vs-acceptance-vs-outcome">5. Three things people confuse: DoD vs. Acceptance vs. Outcome</h2>
+<p>This is the single biggest source of our "is it done?" confusion. These are <strong>three different fields</strong> that answer <strong>three different questions</strong>, and the Example Epic mixed them up.</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th><strong>Definition of Done (DoD)</strong></th>
+<th><strong>Acceptance Criteria</strong></th>
+<th><strong>Outcome / Exit Condition</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Answers</strong></td>
+<td>"Is our <em>workmanship</em> up to standard?"</td>
+<td>"Does <em>this specific item</em> do what it promised?"</td>
+<td>"Did the <em>epic</em> achieve the change we wanted?"</td>
+</tr>
+<tr>
+<td><strong>Scope</strong></td>
+<td>Same checklist for <strong>every item of its kind, team-wide</strong> (e.g. every task) — authored once, not per ticket and <strong>not per epic</strong></td>
+<td><strong>Unique</strong> to each story</td>
+<td><strong>Unique</strong> to each epic</td>
+</tr>
+<tr>
+<td><strong>Example</strong></td>
+<td>"Has tests, has logging, peer-reviewed, docs updated"</td>
+<td>"Registers in 2 regions on first boot"</td>
+<td>"Zero manual provisioning steps; legacy path retired"</td>
+</tr>
+<tr>
+<td><strong>Lives on</strong></td>
+<td>Team standard (applies to all stories/tasks)</td>
+<td>The story/WP</td>
+<td>The epic</td>
+</tr>
+</tbody>
+</table>
+<p><strong>The key insight applied to the Example Epic:</strong> that epic's "Definition of Done" block was doing the <strong>outcome's</strong> job — it was the de-facto "are we finished?" list — while the actual outcome slot sat empty. That's the core error: a DoD was made to carry a burden it can't bear, because no outcome existed. Both fields should exist, and they're different:</p>
+<ul>
+<li><strong>Promote the <em>valid</em> items</strong> — "tracked in version control," "has logging," "has a validation test" — to the <strong>team's DoD</strong>, so they apply to every task (probably every infra task we write).</li>
+<li><strong>Drop the items that were never DoD material.</strong> Two of the five don't belong in <em>any</em> of these three fields:</li>
+<li><em>"On-prem-only configs skip on EC2"</em> — incoherent for this epic. A <strong>golden/base image contains only what every system needs</strong>; environment divergence belongs in image <strong>layering</strong> or runtime metadata resolution, never as baked-in conditionals. This isn't a mis-slotted bar, it's a misunderstanding of how images compose.</li>
+<li><em>"cloud-init scripts are modular"</em> — an <strong>architecture decision</strong>, and (per the ownership model in <a href="#2-the-work-hierarchy">Section 2</a>) the DoD is the requester's bar, not the implementers'; it has no standing to mandate a design. Architecture quality is real and worth pursuing — it just lives in <strong>design / code review</strong>, not a DoD (see the note at the end of this section). <em>(Note "modular </em><em>and managed in code</em><em>" was also redundant: "managed in code" = version-controlled = the item we already kept.)</em></li>
+<li><strong>Add</strong> the missing <strong>Outcome statement</strong> from <a href="#3-writing-outcomes-for-epics">Section 3</a>.</li>
+</ul>
+<p>Two different fields. We were writing one, calling it the other, and smuggling two non-bars into the mix.</p>
+<h3 id="standing-gates-the-anti-weasel-rule">Standing gates (the anti-weasel rule)</h3>
+<p>There's a failure mode the DoD exists to kill: someone ships something insecure (or undocumented, or untested) and defends it with <em>"it wasn't in the acceptance criteria."</em> That's a lame defense — but if our standard relies on each author <em>remembering</em> to write a security criterion every time, it will eventually win, because people forget and reviewers are busy.</p>
+<p>The fix is <strong>standing gates</strong>: a small set of requirements baked into the team DoD that apply to <strong>every</strong> item <strong>by default</strong>, whether or not anyone wrote them on the ticket. The only way past a standing gate is a <strong>documented, approved exception</strong> — not silence.</p>
+<blockquote class="callout warn">
+<p><strong>Standing gates (apply to every story/WP unless an approved exception is linked):</strong></p>
+<ul>
+<li class="task"><input type="checkbox" disabled> <strong>Complies with existing security requirements, or has an approved and documented exception</strong> (link it)</li>
+<li class="task"><input type="checkbox" disabled> <strong>Complies with the team's applicable governing standards, or links a documented non-applicability / exception determination</strong></li>
+<li class="task"><input type="checkbox" disabled> Meets the team's testing/validation bar (see DoD)</li>
+<li class="task"><input type="checkbox" disabled> Observability in place where applicable (logging/metrics)</li>
+<li class="task"><input type="checkbox" disabled> Docs/runbook updated where behavior changed</li>
+</ul>
+<p><strong>The compliance gate is <em>parameterized</em> — bind it to your team's standard, don't hardcode one.</strong> The portable part is the <strong>mechanism</strong> (default-on; the only way past is a <em>written</em> determination, never silence). The <strong>specific standard is per-team configuration</strong>: an SRE-governed service binds to the relevant SRE RFCs (e.g. service-acceptance and scorecard standards); an enterprise-applications team binds to whatever governs their SaaS estate (ServiceNow, Salesforce, NetSuite); image/Satellite work binds to whatever governs it. Hardcoding one team's standard into this doc would silently exclude every team it doesn't cover — the same parochialism we avoid by treating project keys like OPS/SED as <em>our instance</em>, not the rule.
+<strong>Why "or links a documented non-applicability determination" carries the load — not the word "applicable":</strong> letting an author silently judge a standard "not applicable" reopens the exact "it wasn't in the AC" hole this section exists to close. The escape isn't an <em>assertion</em> that something doesn't apply; it's a <strong>recorded determination</strong> that it doesn't. Spell the opt-out out inline so "applicable" is just a pointer, never the thing doing the adjudicating.</p>
+</blockquote>
+<p>Why this beats "train everyone to imagine how 'done' could be false": that habit (asking <em>"under what condition is this claim untrue?"</em>) is excellent and worth teaching — but it's a <em>personal</em> discipline, unevenly applied. A standing gate is <em>structural</em>: it doesn't depend on the author's diligence, and it converts <em>"it wasn't in the AC"</em> from an escape hatch into an admission that a required gate was skipped without an approved exception. Security as a default-on gate means nothing ships insecure <em>quietly</em>; if there's a real reason to defer, it gets written down and approved, which is exactly the audit trail you want.</p>
+<blockquote class="callout scope">
+<p><strong>Note the scope:</strong> standing gates live in the <strong>DoD column</strong> (apply to everything), not the <strong>Acceptance column</strong> (unique per story). The whole point is that they're <em>not</em> something each author re-invents per ticket.</p>
+</blockquote>
+<h3 id="architecture-quality-has-a-home--and-it-isnt-here">Architecture quality has a home — and it isn't here</h3>
+<p>A DoD holds <strong>binary, universal, substitutable invariants</strong> — things that are pass/fail with no judgment call and stay true no matter which solution you pick. "Modular," "loosely coupled," "easy to change later" are none of those: they're <strong>judgment calls</strong>, they're <strong>solution-dependent</strong> (sometimes one tight script is the right answer), and the DoD is the requester's bar, not a place to grade engineering taste. So they don't go in the DoD, Acceptance, or Outcome.</p>
+<p>That does <strong>not</strong> make them unimportant. Here we deliberately push back against building a monolithic, single-purpose solution for every narrow use case — <strong>build for modifiability</strong>, so the system flexes as markets (and threats) change unpredictably. That's a real and valued <strong>engineering principle</strong> — it just lives in <strong>design review and code review</strong>, where judgment-based quality is assessed by people, not auto-checked off a ticket. Keep the work-item fields for what's checkable; keep architecture where it can be argued.</p>
+<hr>
+
+<h2 id="6-demand-driven-work-is-first-class">6. Demand-driven work is first-class</h2>
+<p>We are an operations team: a large share of our work is <strong>not roadmap work</strong> — hardware failures, resource exhaustion, incidents, and a steady stream of standard requests (build me a server, sign this RPM). A planning standard that pretends everything is deliberate project work is useless to us. So we name this work explicitly and give it a place in the same reporting system.</p>
+<p>Throughout this section, distinguish two things people lump together:</p>
+<ul>
+<li><strong>Roadmap-driven work</strong> — improvement we <em>chose</em> to do. This is where the epic/outcome machinery in Sections 2–5 lives.</li>
+<li><strong>Demand-driven work</strong> — work that <em>arrives</em>, whether we planned for it or not. It splits in turn into <strong>reactive</strong> (incidents — unpredictable) and <strong>repeatable</strong> (requests — predictable, same shape every time).</li>
+</ul>
+<h3 id="the-reporting-boundary-principle-and-our-instance-of-it">The reporting-boundary principle (and our instance of it)</h3>
+<blockquote class="callout note">
+<p><strong>Once roadmap-driven and demand-driven work are reviewed by different people and at different cadences, putting them in one bucket can only produce confusion.</strong> Give each its own reporting boundary.</p>
+</blockquote>
+<p>Think of a ticketing boundary the way you'd think of a service boundary: separating two concerns that are owned, reviewed, and reported differently buys you clean signal; collapsing them buys you noise. (Sometimes one bucket genuinely <em>is</em> right — a small team with low interrupt volume. Deciding <strong>where to draw your own boundaries</strong> is out of scope for this document; what follows assumes you've decided you need one.)</p>
+<blockquote class="callout note">
+<p><strong>Our instance.</strong> We split the boundary across two Jira projects: <strong>OPS</strong> for roadmap-driven work, <strong>SED</strong> for demand-driven work (enterprise-infrastructure operations — analogous to a service desk, different skill set). The examples in this doc (the Example Epic and Example Task) are roadmap items, so they're OPS. Your org will have its own names; the <em>pattern</em> is what's portable, not the project keys.</p>
+<p><strong>A note on change management.</strong> Changes are roadmap-driven by definition, and here a separate change/CAB system governs them — but that system is an <strong>audit overlay</strong>, not a third category of work: no central board can assess a change's impact independently of the experts who own it, so CAB exists to confirm the i's are dotted, not to own the work. It does not affect the roadmap-vs-demand split, which stays a clean <strong>two-way</strong> cut. (We borrow ITIL as a shared vocabulary for these ideas; we are not a strict ITIL shop, and nothing here requires ITIL compliance.)</p>
+</blockquote>
+<h3 id="the-work-taxonomy">The work taxonomy</h3>
+<table>
+<thead>
+<tr>
+<th>Type</th>
+<th>What it is</th>
+<th>How we track it</th>
+<th>Becomes an epic?</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Incident / break-fix</strong></td>
+<td>Reactive response to something broken now</td>
+<td>A distinct <strong>work type</strong> set at creation; cause from a <strong>required, resolve-gated field</strong>; time from the <strong>worklog</strong>. <strong>Not</strong> an epic.</td>
+<td>No — a single incident <em>feeds</em> the data below</td>
+</tr>
+<tr>
+<td><strong>Request</strong></td>
+<td>A standard, repeatable ask with a known procedure (e.g. server build, RPM signing)</td>
+<td>Its own <strong>work type(s)</strong>; governed by <strong>acceptance criteria frozen into the type</strong> (see <a href="#repeatable-requests-the-machinery-frozen-into-a-form">below</a>)</td>
+<td>No — it's steady-state demand, not improvement</td>
+</tr>
+<tr>
+<td><strong>Recurring toil</strong></td>
+<td>The same manual fix/request, again and again</td>
+<td><strong>Not a work type you create</strong> — a <strong>derived signal</strong> from aggregating the above <strong>by cause</strong></td>
+<td><strong>Yes — when a <em>cause category</em> crosses a threshold</strong> (see below)</td>
+</tr>
+<tr>
+<td><strong>Roadmap project work</strong></td>
+<td>Deliberate improvement we chose to do</td>
+<td>Epics with outcomes (Sections 2–5)</td>
+<td>It already is one</td>
+</tr>
+</tbody>
+</table>
+<blockquote class="callout note">
+<p><strong>Surface toil by work <em>type</em>, not by <em>tag</em> — and let that get harder, not easier, as you mature.</strong> Two rungs:</p>
+<ul>
+<li><strong>Rudimentary (one project):</strong> make "incident," "request," etc. <strong>distinct work types chosen at creation</strong>, and have humans <strong>reclassify</strong> the occasional mistake. Do <strong>not</strong> use a removable <em>tag</em> or <em>label</em> for this. Reclassifying a work type and toggling a tag are nearly identical effort — but a tag is a manual setting that's trivially and <em>accidentally</em> removed (a config change living outside version control), whereas a work type is closer to an immutable choice: changing it is deliberate. That friction is a <strong>feature</strong> — it resists silent reclassification, and a misclassification you <em>have</em> to consciously fix is itself a <strong>signal that intake (or the system being managed) needs attention</strong>. Use the tool's real capabilities; technology won't fix a behavioral failing, but a proper work type buys you organization, audit trail, and clean aggregation that a tag never will.</li>
+<li><strong>Advanced (separate boundary, our OPS/SED setup):</strong> once demand-driven work has its own project, <strong>"recurring toil" stops being a type you file and becomes a number you compute</strong> — aggregate SED items by their resolve-gated <strong>cause</strong> and rank by count and reclaimed hours. This is the <a href="#the-ops-outcome-catalog">Automation Ladder</a> pointed at the planning process itself.</li>
+</ul>
+</blockquote>
+<h3 id="the-toil-to-epic-rule-this-is-the-feedback-loop">The toil-to-epic rule (this is the feedback loop)</h3>
+<blockquote class="callout note">
+<p><strong>When a cause category crosses a threshold — e.g. <em>N occurrences</em> or <em>X hours</em> in a rolling window — it spawns a roadmap epic (in OPS) whose outcome is "retire this demand source," measured back against the demand data (SED).</strong></p>
+</blockquote>
+<p>This is the mechanism that turns reactive pain into planned improvement, and it's exactly the narrative SLT wants to see — note that it <strong>crosses the boundary</strong> (demand data in → roadmap epic out → outcome verified against the same demand data):</p>
+<pre><code>demand-driven work (SED): incidents + requests
+        │  cause + time captured structurally (work type, resolve-gated field, worklog)
+        ▼
+top demand drivers, ranked by count × hours
+        │
+        ▼
+   spawn roadmap epic (OPS) to retire the driver
+        │                                   │
+        ▼                                   ▼
+   reported as %                  outcome measured in SED (Section 3)
+ roadmap vs demand     ◄──────  did the driver's volume actually shrink?
+</code></pre>
+<p>So the reporting story to leadership becomes digestible and honest: <em>here's our roadmap-vs-demand ratio → here are the top drivers of the demand half → here are the epics retiring those drivers → here's the outcome each one moved, read straight from the demand data.</em> That loop only works if (a) cause and time are captured <strong>structurally</strong>, and (b) the epics we spawn from it have <strong>real outcomes</strong> — which is the whole point of this document.</p>
+<blockquote class="callout example">
+<p><strong>Worked example — the loop crossing the boundary.</strong> Over a rolling 90 days, SED shows <strong>23 On-Premise Incidents</strong> sharing the resolve-gated cause <em>"manual capsule re-registration after capsule cert rotation,"</em> totalling ~31 hours. That crosses our threshold, so it spawns a roadmap epic in OPS — <em>not</em> another SED incident:</p>
+<ul>
+<li><strong>OPS epic outcome:</strong> <em>"No host requires manual capsule re-registration after a cert rotation; verified by zero SED incidents with this cause for 90 consecutive days post-rollout, and a successful automated re-registration observed across ≥2 capsules."</em></li>
+<li>The <strong>baseline (23/quarter, ~31 hrs)</strong> comes straight from SED; the <strong>outcome is measured back in SED</strong> (does the cause category go to zero?). The incident tickets themselves stay in SED as reactive work — they were never going to "become" the epic; they're the <em>evidence</em> that justified opening it.</li>
+</ul>
+</blockquote>
+<h3 id="what-the-demand-data-is-for">What the demand data is <em>for</em></h3>
+<p>The point of capturing demand-driven work this carefully is two specific payoffs:</p>
+<ol>
+<li><strong>A leading indicator.</strong> Aggregated incidents should surface a systemic problem <strong>before our customers feel it</strong>. (We hold a deliberate, <em>non-zero</em> tolerance for customers noticing first today — but that tolerance is a stated baseline we intend to drive down, not an accepted permanent state.)</li>
+<li><strong>A prioritization signal for the roadmap.</strong> Demand data is how we <em>rank</em> OPS bugs and improvements honestly: "this bug caused <strong>17 incidents in the last 30 days</strong>" or "this feature reclaims <strong>~<code>t</code> hours/month</strong>." Severity comes from incident count; value comes from reclaimed effort. Without this, prioritization is opinion.</li>
+</ol>
+<blockquote class="callout warn">
+<p><strong>The data is only as good as its weakest manual input.</strong> This loop drives leadership reporting and epic prioritization, so it cannot rest on anyone <em>remembering</em> to classify a ticket — voluntary tagging fails often enough to make the totals untrustworthy, and unreliable data here is worse than none because it gets acted on. Push the capture into the structure: <strong>work type</strong> chosen at creation, a <strong>cause</strong> field made <strong>required to resolve</strong> (the same resolve-gate mechanism as the standing gates in <a href="#5-three-things-people-confuse-dod-vs-acceptance-vs-outcome">Section 5</a>) and presented as a <strong>closed dropdown</strong> (not free text) so categories aggregate cleanly, and <strong>time from the worklog</strong> rather than a hand-typed estimate. Keep the human surface as small as possible, and treat any number that depends on optional input as an estimate, not a fact.</p>
+</blockquote>
+<h3 id="repeatable-requests-the-machinery-frozen-into-a-form">Repeatable requests: the machinery frozen into a form</h3>
+<p>A <strong>request</strong> (server build, RPM signing) is the limit case of everything in this document. Sections 2–5 are all machinery for managing <em>uncertainty</em> — outcomes because epic completion is divergent, acceptance criteria because each story's behavior must be pinned down, a Discovery work package because you don't yet know "how." A request is the case where <strong>variance from one instance to the next drops to nearly zero</strong>: the outcome is the same every time, and the procedure is known.</p>
+<p>So the rules don't disappear — they get <strong>authored once into the request <em>type</em></strong> instead of re-written on every ticket:</p>
+<table>
+<thead>
+<tr>
+<th>For bespoke work (an OPS story) you…</th>
+<th>For a request you…</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Write an outcome per epic</td>
+<td>Inherit a <strong>fixed outcome</strong> baked into the request type ("server built to spec, reachable, registered")</td>
+</tr>
+<tr>
+<td>Write acceptance criteria per story</td>
+<td>Reuse <strong>identical AC</strong> every instance — defined once on the type</td>
+</tr>
+<tr>
+<td>Enforce a Definition of Ready as a checklist</td>
+<td>Enforce DoR through <strong>required form fields</strong></td>
+</tr>
+<tr>
+<td>Pull out a Discovery WP when "how" is unknown</td>
+<td>Have <strong>no unknown</strong> — the "how" is the standard procedure</td>
+</tr>
+<tr>
+<td>Apply the single-intent test yourself</td>
+<td>Get single-intent <strong>guaranteed by the type</strong></td>
+</tr>
+</tbody>
+</table>
+<p>This is the same two ideas you've already met, taken to their limit: it's the <a href="#the-ops-outcome-catalog">Automation Ladder</a> applied to <em>work definition</em> (a bespoke outcome is tribal/per-instance; a request type is encoded and verifiable without re-authoring), and it's the <a href="#standing-gates-the-anti-weasel-rule">standing-gates</a> idea where <em>everything</em> is a standing gate and <em>nothing</em> is bespoke.</p>
+<blockquote class="callout note">
+<p><strong>The precondition is a stable outcome, not just tidy fields.</strong> Well-defined form fields are how you <em>encode</em> a repeatable request — they are not what <em>makes</em> it one. If two instances of the same request could legitimately have different success conditions, it isn't a request yet; it's bespoke work wearing a form, and you still need per-ticket outcome thinking. Fields are downstream of a stable outcome, never a substitute for one.</p>
+<p><strong>Where this lives for us:</strong> requests are <strong>SED work types</strong> (our instance), governed this way — standard ITIL service-request handling applied to a function that benefits from the model, in a place that doesn't require ITIL compliance.</p>
+</blockquote>
+<h3 id="the-three-modes-in-one-frame">The three modes, in one frame</h3>
+<p>Everything above resolves into three modes of work, and the right machinery follows from which mode you're in:</p>
+<table>
+<thead>
+<tr>
+<th>Mode</th>
+<th>Example</th>
+<th>Completion is defined…</th>
+<th>Governance</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Roadmap / bespoke</strong></td>
+<td>An OPS improvement epic</td>
+<td><strong>Authored per item</strong> (outcome → AC → DoD)</td>
+<td>Full machinery, Sections 2–5</td>
+</tr>
+<tr>
+<td><strong>Demand / reactive</strong></td>
+<td>A SED incident</td>
+<td>By <strong>resolution + structured capture</strong> (cause, time)</td>
+<td>Light; its <em>value</em> is as the evidence base feeding roadmap prioritization</td>
+</tr>
+<tr>
+<td><strong>Repeatable / request</strong></td>
+<td>A SED server-build request</td>
+<td><strong>Frozen into the work type</strong> once</td>
+<td>Authoring collapses to form-filling + field validation</td>
+</tr>
+</tbody>
+</table>
+<p>The portable claim — independent of OPS/SED or any tool — is that <strong>authoring effort should scale with uncertainty.</strong> Bespoke work earns the full machinery; repeatable work amortizes it into a form; reactive work is governed just enough to stay countable.</p>
+<hr>
+
+<h2 id="7-splitting--sizing">7. Splitting &amp; sizing</h2>
+<h3 id="invest--the-quick-gut-check-for-a-storywp">INVEST — the quick gut-check for a story/WP</h3>
+<p>A good story is:</p>
+<ul>
+<li><strong>I</strong>ndependent — can be built without waiting on a sibling</li>
+<li><strong>N</strong>egotiable — describes the <em>what</em>, leaves room on the <em>how</em></li>
+<li><strong>V</strong>aluable — delivers something observable to a user or system</li>
+<li><strong>E</strong>stimable — the team can size it; if not, it's too vague or too big</li>
+<li><strong>S</strong>mall — fits comfortably in a sprint</li>
+<li><strong>T</strong>estable — has acceptance criteria that pass/fail</li>
+</ul>
+<p>If it fails <strong>E</strong> or <strong>S</strong>, split it. If it fails <strong>T</strong>, you haven't defined done yet.</p>
+<h3 id="split-by-vertical-slice-not-by-layer">Split by vertical slice, not by layer</h3>
+<p>Prefer slices that each deliver a working end-to-end sliver (<em>"register in one region, end to end"</em>) over horizontal layers (<em>"write all the IAM,"</em> then <em>"write all the scripts,"</em> then <em>"test everything"</em>). Vertical slices each have a real acceptance criterion and can be called done independently. Horizontal layers can't be "done" until the last one lands.</p>
+<h3 id="separate-the-decision-from-the-delivery">Separate the decision from the delivery</h3>
+<p>If you don't yet know <em>how</em>, the unknown is its own work. Pull it out as a <strong>Discovery work package</strong> (Section 2) that:</p>
+<ul>
+<li>has the done-condition <strong>"a decision is recorded"</strong> (e.g. a comment, a short doc, a chosen approach) — <em>not</em> "code merged";</li>
+<li>is deliberately <strong>scoped small / time-boxed</strong>;</li>
+<li>produces the information needed to write the <em>real</em> story's acceptance criteria.</li>
+</ul>
+<p><strong>The Example Task should have been split:</strong></p>
+<ol>
+<li><strong>Discovery WP</strong> — "Decide how an instance determines its region/capsule (IMDSv1 vs v2, secret layout)." Done when the approach is written down.</li>
+<li><strong>Story</strong> — "Instance auto-registers to the correct regional capsule on first boot" (AC from <a href="#4-acceptance-criteria-for-stories--work-packages">Section 4</a>).</li>
+<li><strong>Task(s)</strong> — "Create per-region capsule secret," "Grant EC2 instance role read access to the secret."</li>
+</ol>
+<p>Three completion conditions, three (or more) items.</p>
+<hr>
+
+<h2 id="8-definition-of-ready">8. Definition of Ready</h2>
+<p>The mirror image of "done." <strong>Definition of Ready (DoR)</strong> is the gate an item must pass <em>before</em> anyone starts it. This is what lets us <strong>scope work before committing to it</strong> — our stated short-term need before we can move from scramble to predictable flow.</p>
+<blockquote class="callout scope">
+<p><strong>Scope:</strong> this DoR is for <strong>roadmap work</strong> (Section 6). Reactive demand items don't pass through it — an incident has no parent improvement epic and can't wait on a readiness gate; a standard request is "ready" by virtue of its work type's required fields being filled. Applying the gate below to either would be a category error.</p>
+</blockquote>
+<p><strong>A story/WP is Ready when:</strong></p>
+<ul>
+<li class="task"><input type="checkbox" disabled> It carries <strong>one intent</strong> (Section 2) — not a build <em>and</em> a migration in one ticket</li>
+<li class="task"><input type="checkbox" disabled> It has a clear <strong>acceptance criteria</strong> set (Section 4) — one line per measurable variable, and none say "PR submitted"</li>
+<li class="task"><input type="checkbox" disabled> <strong>Non-Goals are written</strong> — mandatory when the work touches anything cross-team</li>
+<li class="task"><input type="checkbox" disabled> <strong>Pre-conditions are met</strong> (or it's in <code>Blocked</code> with the unblock owner named)</li>
+<li class="task"><input type="checkbox" disabled> <strong>Standing gates</strong> are satisfiable — security/test/observability bar met or an approved exception linked (Section 5)</li>
+<li class="task"><input type="checkbox" disabled> It's a <strong>vertical slice</strong> that fits in a sprint (Section 7)</li>
+<li class="task"><input type="checkbox" disabled> Any genuine unknown has been pulled out into a <strong>Discovery work package</strong> and resolved first</li>
+<li class="task"><input type="checkbox" disabled> It links to its <strong>parent epic</strong>, and that epic has a real <strong>outcome statement</strong></li>
+</ul>
+<p><strong>An epic is Ready when:</strong></p>
+<ul>
+<li class="task"><input type="checkbox" disabled> It has an <strong>Outcome / Exit Condition</strong> (Section 3) — checkable, with a measure and a horizon (one or more conditions)</li>
+<li class="task"><input type="checkbox" disabled> The <strong>team DoD</strong> (the standing per-task quality bar) is linked/restated and is distinct from that outcome (Section 5) — you inherit it, you don't author one</li>
+<li class="task"><input type="checkbox" disabled> Its first slice of stories is drafted (you don't need them all up front)</li>
+</ul>
+<blockquote class="callout note">
+<p><strong>The discipline:</strong> nothing enters a sprint until it meets DoR. If we can't make it Ready, that's the signal we don't understand it yet — which is itself useful information, and far cheaper to learn now than mid-sprint.</p>
+</blockquote>
+<hr>
+</section>
+<section class="panel" id="tab-examples" data-tab="examples"><h2 id="the-example-tickets-as-written">The example tickets (as written)</h2>
+<blockquote class="callout note">
+<p><strong>Why these are here.</strong> This standard uses two of our own real work items as worked examples — one Epic, one Task — because the lessons land harder when the material is ours. Their <strong>as-written</strong> content is reproduced here so the rest of the document is self-contained; Sections 1–9 refer to them as the <strong>Example Epic</strong> and the <strong>Example Task</strong>. They're useful precisely because they show what to fix — not to single out whoever wrote them.</p>
+</blockquote>
+<h3 id="the-example-epic">The Example Epic</h3>
+<p><strong>Type:</strong> Epic</p>
+<p><strong>Description (as written):</strong></p>
+<blockquote class="callout note">
+<p>Epic to track work related to enabling and building a golden image. This focuses on the Image itself and not necessarily automating provisioning with GitHub Actions or existing self-service, which will be covered in the Golden Image Pipeline Epic.</p>
+<p>Note: Many of these configs are only applicable to on-premise machines. EC2's get a DHCP IP from within their host subnet. DHCP also provides nameservers and NTP servers for EC2 instances. As this image will eventually be used for provisioning all machines, there should be logic to skip configurations if it is being run on an EC2.</p>
+</blockquote>
+<p><strong>Definition of Done for all Jiras in this Epic (as written):</strong></p>
+<ul>
+<li>image-based configurations should be tracked in our Image Builder tool (RHIB/Packer) repo</li>
+<li>almost all of these configurations are for on-prem machines only, so additional logic for them to not run on EC2's should be included</li>
+<li>cloud-init scripts should be modular and managed in code</li>
+<li>scripts should have logging</li>
+<li>all configurations should have a regression test or validation test in a final post-build validation step</li>
+<li>the output of this test would be parsed by the VM-creation workflow to determine success/fail of the VM build</li>
+<li>these images will eventually be used for EC2, Nutanix, and hopefully Baremetal builds, so any hypervisor-specific logic should account for hypervisor or machine type. We don't need to make every function work in all hypervisors now, but the code should not be written in a way where significant refactor would be necessary to do so later.</li>
+</ul>
+<p><em>What's wrong with this — and the corrected version — is worked through in <a href="#1-why-this-exists">Section 1</a>, <a href="#3-writing-outcomes-for-epics">Section 3</a>, and <a href="#5-three-things-people-confuse-dod-vs-acceptance-vs-outcome">Section 5</a>; the corrected epic is in <a href="#91-epic-template">§9.1</a>.</em></p>
+<h3 id="the-example-task">The Example Task</h3>
+<p><strong>Type:</strong> Task — <em>mis-typed; it's really a Discovery work package, then a Story, then tasks (see <a href="#2-the-work-hierarchy">Section 2</a>).</em></p>
+<p><strong>Description (as written):</strong></p>
+<blockquote class="callout note">
+<p>This Jira will identify methodology for dynamically targeting a region- or VPC-specific RH Capsule server.</p>
+<p>I would propose we use a cloud-init script that will use IMDSv1 EC2 instance metadata (I do not believe we have IMDSv2 enabled on our EC2s) to determine its account number / VPC / region. Then, based on OS major version, it will fetch a secret which contains the capsule URL and RHEL-version activation key.</p>
+<p>The secret will be created in: <em>[internal reference]</em>. Updating EC2 instance role for permissions to access the secret: <em>[internal reference]</em>.</p>
+<p>Please note we are not using the subscription-manager registration command. We are pulling a script from the target capsule:</p>
+</blockquote>
+<pre><code>#/etc/cloud/cloud.cfg
+runcmd:
+# the '|' takes the following line as a string so ':' is not interpreted by the json as part of a key:value pair
+ - |
+   wget -O /root/anaconda-register.sh 'https://&lt;capsule_IP&gt;:9090/register?hostgroup_id=17&amp;organization_id=1&amp;update_packages=false' --header='&lt;Satellite registration auth token&gt;'
+ - sudo bash /root/anaconda-register.sh
+ - sudo subscription-manager repos --enable=Default_Organization* --enable=rhel*
+ - sudo yum-config-manager --disable *rhui*
+</code></pre>
+<blockquote class="callout note">
+<p>The methodology we use to dynamically get the capsule URL and activation key should be transportable to other accounts, so ideally we can share a single AMI to other accounts while only needing to worry about the secrets / KMS key / IAM permissions in the destination accounts.</p>
+</blockquote>
+<p><strong>Acceptance Criteria (as written):</strong></p>
+<blockquote class="callout note">
+<p>PR submitted with cloud-init script that can dynamically determine capsule URL and activation key.</p>
+</blockquote>
+<p><em>Why this is mis-leveled — and how to split it — is in <a href="#2-the-work-hierarchy">Section 2</a>, <a href="#4-acceptance-criteria-for-stories--work-packages">Section 4</a>, and <a href="#7-splitting--sizing">Section 7</a>; the extracted story is in <a href="#92-story--work-package-template">§9.2</a>.</em></p>
+<hr>
+</section>
+<section class="panel" id="tab-templates" data-tab="templates"><h2 id="9-templates">9. Templates</h2>
+<p>Copy-paste these. <strong>Bold fields are required.</strong> Delete the guidance in <em>italics</em>.</p>
+<details class="expand" id="91-epic-template"><summary>9.1 Epic template</summary><div class="expand-body">
+<pre><code class="language-markdown">**Summary:** &lt;Area&gt; | &lt;Capability or change, stated as a noun phrase&gt;
+
+**Outcome / Exit Condition (REQUIRED — the epic is done when this is true):**
+When this is done, &lt;capability now possible / failure mode now impossible&gt;,
+measured by &lt;metric or specific verification&gt;, by &lt;horizon&gt;.
+
+**Why now / Context:**
+&lt;What's driving this. If spawned from demand-driven work (Section 6), link the incidents it retires and the cause-category baseline.&gt;
+
+**Definition of Done (inherited from the TEAM DoD — restated here, not invented per epic; NOT the outcome):**
+*This is the team-wide quality bar that already applies to every task of this kind; list it (or link it) so authors see it — don't author a new one. Add an epic-specific item only if this epic genuinely needs one beyond the standard.*
+- &lt;e.g. tracked in the relevant repo&gt;
+- &lt;e.g. has logging&gt;
+- &lt;e.g. has a regression/validation test&gt;
+- &lt;complies with applicable governing standards, or links a documented non-applicability determination&gt;
+
+**In scope / Out of scope:**
+- In: &lt;...&gt;
+- Out: &lt;...&gt;   ← name what this epic deliberately does NOT cover
+
+**Linked work:** &lt;related epics, dependencies&gt;
+</code></pre>
+<h4 id="filled-example--the-example-epic-corrected">Filled example — the Example Epic, corrected</h4>
+<pre><code class="language-markdown">**Summary:** Golden image | one image, all platforms
+
+**Outcome / Exit Condition:**
+When this is done, a single golden image provisions RHEL9 hosts across EC2 and
+Nutanix with ZERO manual post-build steps, verified by ≥20 consecutive automated
+builds passing post-build validation, and the legacy PXE/kickstart path is
+decommissioned. Target: end of Q3.
+
+**Why now / Context:**
+Manual, per-hypervisor builds are slow and error-prone. (Link recurring build
+incidents here.)
+
+**Definition of Done (inherited from the team DoD — binary, universal, substitutable invariants only):**
+- Image content tracked in version control (the Image Builder — RHIB/Packer — repo)
+- Scripts have logging
+- Each config has a regression/validation test in the post-build step
+- Complies with the team's applicable governing standards, or links a documented non-applicability determination
+*(Dropped from the original ticket: &quot;skip on EC2&quot; — a base image holds only what all systems need, so env divergence belongs in layering/runtime, not the DoD; &quot;modular&quot; — an architecture choice for design review, not a requester-owned DoD bar. See [Section 5](#5-three-things-people-confuse-dod-vs-acceptance-vs-outcome).)*
+
+**In scope:** image content &amp; configuration.
+**Out of scope:** provisioning automation / self-service pipeline (separate epic).
+</code></pre>
+</div></details><details class="expand" id="92-story--work-package-template"><summary>9.2 Story / Work Package template</summary><div class="expand-body">
+<pre><code class="language-markdown">**Summary:** &lt;Outcome-oriented noun phrase&gt;
+
+**Intent (pick ONE — if you need two, it's two work packages):**
+Discovery / Migration / Redesign / Enablement / Optimization
+
+**Objective:** &lt;What question this answers / what outcome it delivers.&gt;
+  (For Optimization/Enablement, name the Automation Ladder transition, e.g. &quot;L1 → L3&quot;.)
+
+**Non-Goals (REQUIRED — what this explicitly does NOT decide/cover):**
+&lt;If a reviewer could plausibly expect an adjacent change here, say yes or no to it.&gt;
+
+**Pre-conditions (what must be true on day 1 before anyone starts):**
+&lt;Constraints, not solutions: security sign-off, IAM access, a vendor decision, an upstream API.&gt;
+
+**Acceptance Criteria (REQUIRED — story is done when these pass):**
+Given &lt;context&gt;, when &lt;action&gt;, then &lt;observable result + how it's verified&gt;.
+- [ ] &lt;one line PER measurable variable — don't lump latency+concurrency+scope together&gt;
+  ✗ Do NOT write &quot;PR submitted&quot; / &quot;script written&quot; — those are outputs, not behavior.
+  ✗ Do NOT compound (&quot;build X, then migrate Y to X&quot;) — that's two work packages.
+
+**Output Artifact (the thing that proves it's done):** &lt;not &quot;running code&quot; for Discovery&gt;
+**Downstream Enabled:** &lt;what work can now proceed without rework&gt;
+**Parent epic:** &lt;KEY&gt;
+</code></pre>
+<blockquote class="callout note">
+<p><strong>Why the extra fields vs. a bare user story:</strong> these come from our Work Package model — a work package is <em>outcome-oriented and independently estimable</em>, so it needs <strong>one intent</strong>, an explicit <strong>Non-Goals</strong> line (the #1 source of mid-sprint scope drift), and <strong>Pre-conditions</strong> (the reason "clean-looking" stories silently rot — they were never actually startable). A story missing <strong>Non-Goals</strong> fails readiness when the work touches anything cross-team (golden image, IAM, provisioning).</p>
+</blockquote>
+<h4 id="filled-example--the-delivery-story-extracted-from-the-example-task">Filled example — the delivery story extracted from the Example Task</h4>
+<pre><code class="language-markdown">**Summary:** EC2 instances auto-register to the correct regional RH capsule on first boot
+
+**Intent:** Enablement (one AMI usable across accounts/regions without rework)
+
+**Objective:** A launched instance registers itself against the capsule + activation
+key for its own region/VPC, so one AMI works across accounts with no per-account edits.
+
+**Non-Goals:** the IMDSv1-vs-v2 decision (settled in the preceding Discovery WP); creating the
+per-region secret and the IAM grant (separate tasks); IMDSv2 migration.
+
+**Pre-conditions:** per-region capsule secret exists; EC2 instance role can read it.
+
+**Acceptance Criteria:**
+Given an instance launches in VPC-X, when cloud-init runs on first boot, then it
+registers against the VPC-X regional capsule using the VPC-X activation key, and
+`subscription-manager identity` returns rc=0.
+- [ ] Region/account/VPC determined from instance metadata; no hard-coded values
+- [ ] Capsule URL + activation key fetched from the per-region secret
+- [ ] Verified end-to-end in at least 2 regions
+- [ ] Secret-fetch failure fails the build loudly (logged, non-zero exit)
+
+**Output Artifact:** merged, version-controlled cloud-init registration script + the
+2-region verification evidence.
+**Downstream Enabled:** golden AMI can be shared to other accounts (secret/KMS/IAM only).
+**Parent epic:** Example Epic
+</code></pre>
+</div></details><details class="expand" id="93-task-template"><summary>9.3 Task template</summary><div class="expand-body">
+<pre><code class="language-markdown">**Summary:** &lt;Concrete deliverable, e.g. &quot;Create per-region capsule secret&quot;&gt;
+
+**Deliverable (done when this objectively exists):**
+&lt;The merged code / created resource / applied config.&gt;
+
+**Parent story/WP:** &lt;KEY&gt;
+**Notes / how-to:** &lt;links, snippets, gotchas&gt;
+</code></pre>
+</div></details><details class="expand" id="94-discovery-work-package-template"><summary>9.4 Discovery work package template</summary><div class="expand-body">
+<p><em>Use this when the unknown is "how" — a decision must be made before the build can be specified. It's a Story/WP with the </em><em>Discovery</em><em> intent; its deliverable is a recorded decision, not code.</em></p>
+<pre><code class="language-markdown">**Summary:** &lt;the question to answer, e.g. &quot;Decide how an instance determines its region/capsule&quot;&gt;
+
+**Intent:** Discovery
+
+**Question:** &lt;What decision must we make?&gt;
+**Done when:** a decision is recorded (in a comment / linked doc) — NOT when code merges.
+**Scope / time-box:** &lt;keep it small, e.g. 1 day&gt;
+**Output feeds:** &lt;which story this unblocks&gt;
+</code></pre>
+<hr>
+</div></details></section>
+<section class="panel" id="tab-quickref" data-tab="quickref"><h2 id="10-quick-reference">10. Quick reference</h2>
+<p>Pin this.</p>
+<p><strong>The one rule:</strong> <em>An epic is not done when its child tickets close. It's done when its </em><em>outcome</em><em> is true.</em></p>
+<p><strong>Pick the level by completion condition:</strong></p>
+<ul>
+<li><strong>Epic</strong> → done when its <strong>outcome</strong> (measured change) is true → write the Outcome / Exit Condition (one or more checkable conditions)</li>
+<li><strong>Story/WP</strong> → done when <strong>acceptance criteria</strong> (observable behavior) pass</li>
+<li><strong>Task</strong> → done when a <strong>deliverable</strong> objectively exists</li>
+<li><strong>Discovery WP</strong> → done when a <strong>decision</strong> is recorded</li>
+</ul>
+<p><strong>Where to split (and which way):</strong></p>
+<ul>
+<li><em>Diverges across "ands" but worthless apart?</em> → <strong>still one epic.</strong> Epics are meant to diverge.</li>
+<li><em>A piece delivers value alone, independent of its siblings?</em> → it's its <strong>own epic</strong>.</li>
+<li><em>A work package carries two intents (decide + build, build + migrate)?</em> → <strong>two work packages.</strong> The single-intent rule lives at the story layer, not the epic layer.</li>
+</ul>
+<p><strong>Three fields people confuse:</strong></p>
+<ul>
+<li><strong>DoD</strong> = workmanship bar, same for every item (includes <strong>standing gates</strong>)</li>
+<li><strong>Acceptance</strong> = does <em>this</em> item behave as promised</li>
+<li><strong>Outcome</strong> = did the <em>epic</em> change what we wanted</li>
+</ul>
+<p><strong>Standing gates (anti-weasel — on by default, every item):</strong> security-compliant <em>or</em> approved+documented exception · test bar met · observability · docs updated. "It wasn't in the AC" is not a defense.</p>
+<p><strong>Banned acceptance criteria:</strong> "PR submitted," "code written," "script created." Describe the <strong>behavior</strong>, not the <strong>artifact</strong>.</p>
+<p><strong>Outcome formula (use either form — qualitative is the common case for ops):</strong></p>
+<blockquote class="callout note">
+<p><em>Quantitative:</em> We'll know this is done when [metric/state] moves from [baseline] to [target], measured by [method], by [horizon].
+<em>Qualitative:</em> When this is done, [capability] is now possible / [failure mode] is no longer possible, verified by [specific check].</p>
+</blockquote>
+<p><strong>Demand-driven work (Section 6):</strong> capture it by <strong>work type</strong> (not a removable tag) + a resolve-gated <strong>cause</strong> + time. When a cause category crosses the threshold → <strong>spawn a roadmap epic to retire it, with its outcome measured back against the demand data.</strong> That's the loop SLT sees. Roadmap vs demand is a clean two-way split; change/CAB is an audit overlay, not a third bucket.</p>
+<p><strong>Three modes (author effort scales with uncertainty):</strong> roadmap/bespoke → full machinery · demand/reactive → light, just enough to stay countable · repeatable/request → machinery frozen into the work type.</p>
+<p><strong>Definition of Ready (don't start until):</strong> one intent · acceptance criteria written · Non-Goals written · standing gates satisfiable · vertical slice · dependencies known · unknowns resolved up front · linked to an epic that has a real outcome.</p></section>
+</div>
+</main>
+</div>
+<button class="totop" id="totop" title="Back to top" aria-label="Back to top">↑</button>
+<script>
+(function(){
+  function activate(name){
+    document.querySelectorAll('.panel').forEach(function(p){
+      p.classList.toggle('active', p.dataset.tab===name);});
+    document.querySelectorAll('.toc-group').forEach(function(g){
+      g.classList.toggle('active', g.dataset.tab===name);});
+    document.querySelectorAll('.tabbtn').forEach(function(b){
+      b.classList.toggle('active', b.dataset.tab===name);});
+  }
+  function panelTabOf(el){ var p=el.closest('.panel'); return p?p.dataset.tab:null; }
+  // explicit tab controls (top bar + sidebar group headers)
+  document.querySelectorAll('.tabbtn, .toc-tab').forEach(function(b){
+    b.addEventListener('click', function(e){ e.preventDefault(); activate(b.dataset.tab); });
+  });
+  // smart anchors: works for ToC links AND in-prose cross-links into other tabs
+  function go(id, smooth){
+    var el=document.getElementById(id); if(!el) return false;
+    var t=panelTabOf(el); if(t) activate(t);
+    var det=el.closest('details'); if(det) det.open=true;
+    if(el.tagName==='DETAILS') el.open=true;
+    el.scrollIntoView(smooth?{behavior:'smooth',block:'start'}:{block:'start'});
+    return true;
+  }
+  document.addEventListener('click', function(e){
+    var a=e.target.closest('a[href^="#"]'); if(!a) return;
+    var id=decodeURIComponent(a.getAttribute('href').slice(1)); if(!id) return;
+    if(go(id, true)){ e.preventDefault(); history.replaceState(null,'','#'+id); }
+  });
+  if(location.hash){ if(!go(decodeURIComponent(location.hash.slice(1)),false)) activate('principles'); }
+  else activate('principles');
+
+  // back-to-top: appears after scrolling; window scrolls since content has normal flow
+  var top=document.getElementById('totop');
+  function onScroll(){ top.classList.toggle('show', window.scrollY>400); }
+  window.addEventListener('scroll', onScroll, {passive:true});
+  onScroll();
+  top.addEventListener('click', function(){
+    window.scrollTo({top:0, left:0, behavior:'smooth'});
+  });
+})();
+</script>
+</body>
+</html>

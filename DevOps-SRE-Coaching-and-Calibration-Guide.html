@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>DevOps & SRE Coaching and Calibration Guide</title>
+<style>
+:root{
+  --bg:#0f1419;--bg2:#161c24;--card:#1b232e;--card2:#212c39;--line:#2c3744;
+  --text:#e6edf3;--muted:#a9b7c6;--soft:#7d8ea0;
+  --accent:#4ea1ff;--accent2:#7c5cff;--good:#3fb950;
+  --ic:#4ea1ff;--mgr:#7c5cff;--ex:#f0883e;--shadow:0 6px 24px rgba(0,0,0,.35);
+}
+*{box-sizing:border-box}html{scroll-behavior:smooth}
+body{margin:0;background:linear-gradient(160deg,#0c1116,#0f1419 55%,#10161d);color:var(--text);
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;line-height:1.58;-webkit-font-smoothing:antialiased}
+.wrap{max-width:1120px;margin:auto;padding:8px 28px 90px}
+header.masthead{margin:36px 0 10px}
+.eyebrow{letter-spacing:.18em;text-transform:uppercase;font-size:12px;color:var(--soft);margin:0 0 10px}
+h1{font-size:clamp(30px,5vw,46px);line-height:1.06;margin:0 0 16px;font-weight:700;
+  background:linear-gradient(90deg,var(--accent),var(--accent2) 70%,#c9a6ff);-webkit-background-clip:text;background-clip:text;color:transparent}
+.sub{color:var(--muted);max-width:820px;font-size:16px;margin:0 0 6px}
+h2{font-size:27px;margin:56px 0 18px;padding-top:14px;border-top:1px solid var(--line);scroll-margin-top:60px}
+h3{font-size:21px;margin:32px 0 12px;color:#dfe9f3;scroll-margin-top:60px}
+h4{font-size:13px;letter-spacing:.09em;text-transform:uppercase;color:var(--accent);margin:22px 0 6px}
+p,li{color:#d6e0ea}p{margin:10px 0 14px}ul,ol{padding-left:24px}li{margin:5px 0}strong{color:#fff}
+em{color:#c8d7e7}
+hr{border:0;border-top:1px solid var(--line);margin:46px 0}
+table{width:100%;border-collapse:separate;border-spacing:0;margin:18px 0 28px;
+  background:linear-gradient(180deg,var(--card),var(--bg2));border:1px solid var(--line);border-radius:12px;overflow:hidden;box-shadow:0 6px 20px rgba(0,0,0,.25)}
+th,td{text-align:left;vertical-align:top;padding:12px 14px;border-bottom:1px solid var(--line);border-right:1px solid var(--line)}
+th{background:rgba(78,161,255,.10);font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:#c8d7e7}
+td{font-size:14px;color:#d6e0ea}tr:last-child td{border-bottom:0}th:last-child,td:last-child{border-right:0}
+tbody tr:hover td{background:rgba(255,255,255,.02)}
+blockquote{margin:20px 0;padding:14px 18px;border-left:4px solid var(--accent);background:rgba(78,161,255,.08);border-radius:0 10px 10px 0}
+blockquote p{margin:6px 0}
+code{background:#202a35;padding:2px 5px;border-radius:5px;font-size:.92em}
+.toc{position:sticky;top:0;background:rgba(15,20,25,.94);backdrop-filter:blur(10px);border-bottom:1px solid var(--line);z-index:5}
+.toc-inner{max-width:1120px;margin:auto;padding:10px 28px;display:flex;gap:16px;overflow:auto;white-space:nowrap}
+.toc a{color:var(--muted);text-decoration:none;font-size:13px}.toc a:hover{color:var(--text)}
+.badge{flex:0 0 auto;min-width:54px;display:inline-block;text-align:center;font-weight:800;font-size:13px;
+  padding:6px 10px;border-radius:9px;color:#0b0f14;letter-spacing:.02em;
+  background:linear-gradient(135deg,var(--accent),var(--accent2))}
+.badge.ic{background:linear-gradient(135deg,#4ea1ff,#7fc0ff)}
+.badge.mgr{background:linear-gradient(135deg,#7c5cff,#a98bff)}
+.badge.ex{background:linear-gradient(135deg,#f0883e,#ffb86b);color:#1a0f04}
+td .badge{min-width:46px;font-size:12px;padding:4px 8px}
+footer{margin-top:60px;padding-top:22px;border-top:1px solid var(--line);color:var(--soft);font-size:13px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px}
+.intro-note{color:var(--muted);font-style:italic;margin:0 0 26px}
+.planner{display:grid;gap:18px;margin:22px 0 8px}
+.pcard{background:linear-gradient(180deg,var(--card),var(--bg2));border:1px solid var(--line);border-radius:12px;padding:18px 20px 20px;box-shadow:0 6px 20px rgba(0,0,0,.25)}
+.pcard .pnum{display:inline-flex;align-items:center;justify-content:center;width:30px;height:30px;border-radius:8px;font-weight:800;font-size:14px;color:#0b0f14;background:linear-gradient(135deg,var(--accent),var(--accent2));margin-right:12px;flex:0 0 auto}
+.pcard .phead{display:flex;align-items:flex-start;gap:0;margin:0 0 4px}
+.pcard .ptitle{font-size:17px;font-weight:600;color:#eaf2fb;line-height:1.35}
+.pcard .psub{font-size:12px;letter-spacing:.09em;text-transform:uppercase;color:var(--accent);margin:8px 0 0 42px}
+.pcard .lines{margin:14px 0 0 42px;border:1px dashed var(--line);border-radius:8px;background:rgba(255,255,255,.015);min-height:104px;
+  background-image:repeating-linear-gradient(transparent,transparent 31px,rgba(124,140,160,.18) 31px,rgba(124,140,160,.18) 32px);}
+@media print{.pcard{box-shadow:none;background:#fff;border-color:#ccc}.pcard .ptitle{color:#111}.pcard .psub{color:#1a4a8a}
+  .pcard .pnum{color:#0b0f14!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .pcard .lines{border-color:#bbb;background-image:repeating-linear-gradient(transparent,transparent 31px,#ccc 31px,#ccc 32px)}
+  .intro-note{color:#333}}
+@media(max-width:760px){.wrap{padding:6px 16px 60px}.toc-inner{padding:10px 16px}table{display:block;overflow-x:auto}h2{font-size:23px}
+  .pcard .psub,.pcard .lines{margin-left:0}}
+@media print{
+  body{background:#fff;color:#111}.toc{display:none}.wrap{max-width:none;padding:18px}
+  h1{color:#123c66;-webkit-text-fill-color:initial}h2,h3,h4,p,li,td,strong,em{color:#111}
+  h4{color:#1a4a8a}
+  table{box-shadow:none;background:#fff;border-color:#ccc}
+  th{background:#eef4fa;color:#111}
+  blockquote{background:#f3f7fc;color:#111}
+  .badge{color:#0b0f14!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+}
+</style>
+</head>
+<body>
+<div class="toc"><div class="toc-inner">
+<a href="#purpose">Purpose</a>
+<a href="#part-1-describe-behavior-not-character">Part 1 — Behavior not Character</a>
+<a href="#part-2-the-evidence-ledger">Part 2 — Evidence Ledger</a>
+<a href="#part-3-separating-the-concerns">Part 3 — Separating Concerns</a>
+<a href="#how-this-guide-relates-to-the-ladder">Relation to Ladder</a>
+<a href="#conversation-planner">Conversation Planner</a>
+</div></div>
+<div class="wrap">
+<header class="masthead">
+  <p class="eyebrow">Engineering &middot; Specialization Career Framework</p>
+  <h1>DevOps & SRE Coaching and Calibration Guide</h1>
+  <p class="sub">A companion to the Career Progression Guide. The ladder defines what each level is; this guide is about the practice of judging people against it fairly, developing them toward it, and fixing the structures that make that judgment unreliable.</p>
+</header>
+<p><em>A companion to the Career Progression Guide. The ladder defines what each level is; this guide is about the practice of judging people against it fairly, developing them toward it, and fixing the structures that make that judgment unreliable.</em></p>
+<h2 id="purpose">Purpose</h2>
+<p>The Career Progression Guide is a measuring instrument. Like any instrument, it produces accurate readings only when used correctly, and most of the ways it is used incorrectly are not failures of the ladder — they are failures of feedback, of evidence, and of organizational design. This guide addresses those three.</p>
+<p>It is written for managers, calibration groups, and the engineers being calibrated. It assumes the reader has the seven dimensions of level — scope, complexity, autonomy, impact, influence, leverage, durability — already in hand.</p>
+<p>Three principles organize it:</p>
+<ol>
+<li><strong>Describe behavior, not character.</strong> Feedback that names what a person <em>is</em> cannot be verified, disputed, or improved. Feedback that names what a person <em>did</em>, and what it caused, can be all three.</li>
+<li><strong>Collect evidence continuously; never reconstruct it.</strong> A rating assembled from memory at year-end is a lossy summary of the wrong data. The fix is an append-only record kept as the work happens.</li>
+<li><strong>Separate the concerns one manager is asked to hold at once.</strong> Advocacy, throughput, and outcome-ownership conflict inside a single role, and that conflict is the root cause of most miscalibration.</li>
+</ol>
+<hr>
+<h2 id="part-1-describe-behavior-not-character">Part 1 — Describe Behavior, Not Character</h2>
+<h3 id="the-principle">The principle</h3>
+<p>Feedback must stay on <strong>observable behavior and its impact against the expectation.</strong> It must not cross into conclusions about the <em>drivers</em> of that behavior — personality, motive, disposition, or character.</p>
+<table>
+<thead>
+<tr>
+<th>Behavior Description</th>
+<th>Character Assessment</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>"Merged changes with failing tests three times in the quarter without flagging them."</td>
+<td>"Careless."</td>
+</tr>
+<tr>
+<td>"Restated his objection three times after the group had moved on."</td>
+<td>"Can't compromise."</td>
+</tr>
+<tr>
+<td>"Raised his voice and the conversation escalated."</td>
+<td>"Can't control his emotions."</td>
+</tr>
+</tbody>
+</table>
+<p>The left-hand column describes the same situations as the right-hand column. The difference is not severity or politeness. The difference is that the left can be confirmed, contested, and changed, and the right cannot.</p>
+<h3 id="why-the-line-matters">Why the line matters</h3>
+<p>Three reasons, in order of weight:</p>
+<ol>
+<li>
+<p><strong>Character claims are unfalsifiable, and therefore uncoachable.</strong> "Not detail-oriented" describes no event. The person cannot point to a counter-example that disproves it, cannot dispute it without sounding defensive, and — critically — cannot <em>do anything tomorrow</em> to change it, because no specific behavior was named. A trait is a sentence, not a development plan.</p>
+</li>
+<li>
+<p><strong>Character claims are where bias enters.</strong> Inferred dispositions — "abrasive," "lacks confidence," "too aggressive," "not leadership material" — correlate far more strongly with the rater's demographic and affinity reactions than behavioral descriptions do. The same behavior is read as "assertive" in one person and "abrasive" in another. Holding feedback to observable behavior is not only an accuracy control; it is a fairness control. It removes the surface that bias attaches to.</p>
+</li>
+<li>
+<p><strong>A surprising amount of "character" is actually unrecognized rigor or context.</strong> A great many character verdicts are surface impressions read straight through to a trait, when the same surface is just as consistent with the opposite of that trait — or with nothing more than the context the person was working in. (See <em>Surface impressions misread as character</em>, below, for the general pattern and a worked example.) If you rate the surface impression, you will sometimes punish your most capable people for the very thing that makes them capable.</p>
+</li>
+</ol>
+<h3 id="the-translation-drill">The translation drill</h3>
+<p>The skill is converting a trait claim into a behavioral one before it is ever written or spoken. The pattern:</p>
+<table>
+<thead>
+<tr>
+<th>Trait claim (do not use)</th>
+<th>Behavioral translation (use)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>"He's not collaborative."</td>
+<td>"In the X review, he re-argued his position after the group had decided, which extended the meeting and left two peers feeling unheard."</td>
+</tr>
+<tr>
+<td>"She's not strategic."</td>
+<td>"Her last three proposals optimized her own service without addressing the cross-team dependency that was the stated goal."</td>
+</tr>
+<tr>
+<td>"He thinks he's always right."</td>
+<td>"When challenged, he restates his original argument rather than engaging the specific objection raised."</td>
+</tr>
+<tr>
+<td>"She lacks executive presence."</td>
+<td>"In leadership reviews she presents implementation detail before the decision and recommendation, so the room loses the thread."</td>
+</tr>
+</tbody>
+</table>
+<p>Notice what the translation forces: a specific instance, the observable action, and the impact. If you cannot fill those in, you do not have feedback — you have an impression, and an impression is not calibration-grade evidence.</p>
+<p>A useful test is referential, not about truth: <strong>does the statement point to a specific event someone else could have witnessed — a datable action and its impact — or does it describe the kind of person the subject is?</strong> "Merged failing changes three times without flagging them" names events; you could pull up the three. "Careless" names the person; no single event is what it refers to. The test is whether the claim <em>locates</em> in time and observation, not whether it currently feels accurate.</p>
+<p>This is deliberately <em>not</em> the test "would the feedback still feel true after the behavior changed." Whether a claim feels true is about evidence and updates as evidence arrives — you can write "careless," then meet a counter-example and revise it. That revision tells you the verdict was wrong; it tells you nothing about whether it was behavioral or character. Both kinds of claim can be true, false, or revised. The line between them is what the claim is <em>about</em> — an event or the person — and that does not move when your confidence in it does.</p>
+<h3 id="delivering-it-verbally-without-it-landing-as-an-attack">Delivering it verbally without it landing as an attack</h3>
+<p>The behavioral standard is hardest to hold in live conversation, where the trait version is faster and more vivid. Three moves:</p>
+<ul>
+<li><strong>Lead with the behavior and its impact, not the label.</strong> "When the conversation escalated, the room stopped problem-solving" — not "you got defensive again."</li>
+<li><strong>Attribute impact, not intent.</strong> You can observe that a peer felt unheard. You cannot observe that the person <em>meant</em> to dismiss them. Claiming the intent is mind-reading, and it invites a fight about motive that no one can win.</li>
+<li><strong>Separate the observation from the ask.</strong> First the behavior and its effect; then the specific, different behavior you want next time. "Next time, when you've made your case once and the room leans another way, ask what they're weighing before restating" is coachable. "Be more collaborative" is not.</li>
+</ul>
+<h3 id="surface-impressions-misread-as-character">Surface impressions misread as character</h3>
+<p>There is a general failure mode behind most bad character verdicts: a rater observes a <em>surface signal</em> — output volume, tone, confidence, talk-time, speed — and reads it straight through to a trait, without noticing that the very same surface is equally consistent with the <em>opposite</em> trait, or with nothing about the person at all and everything about their context. The signal underdetermines the verdict, but the verdict gets written anyway, and it usually defaults to the less charitable reading.</p>
+<p>The same surface, two opposite explanations:</p>
+<table>
+<thead>
+<tr>
+<th>Surface signal</th>
+<th>Uncharitable reading (usually written)</th>
+<th>Equally-consistent alternative</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Low output / few visible commits</td>
+<td>"Lazy," "not technical enough," "coasting"</td>
+<td>Doing the hardest, least-divisible problem on the team; absorbing interrupts so others ship; deep in work that produces few artifacts (design, incident prevention, unblocking)</td>
+</tr>
+<tr>
+<td>Confident, exception-laden assertions</td>
+<td>"Arrogant," "thinks he's always right," "not coachable"</td>
+<td>Has already tried to falsify the claim and is reporting the conditions that survived; rigor, not closed-mindedness</td>
+</tr>
+<tr>
+<td>Quiet in meetings</td>
+<td>"Lacks confidence," "not a leader," "disengaged"</td>
+<td>Speaks only when it changes the outcome; processes before responding; reads the room rather than competing for air</td>
+</tr>
+<tr>
+<td>Frequent, blunt questions / pushback</td>
+<td>"Difficult," "negative," "not a team player"</td>
+<td>Surfacing risk others see and stay silent on; treating disagreement as cheaper now than in production</td>
+</tr>
+<tr>
+<td>Slow to deliver</td>
+<td>"Unproductive," "can't execute"</td>
+<td>Building for the change that's coming, not just the ticket; paying down a risk the deadline ignores</td>
+</tr>
+</tbody>
+</table>
+<p>In every row the surface is the same; the trait is not in the surface, it is in the explanation the rater supplied — and the rater rarely has the evidence to choose between the two columns. The discipline is to notice that you are choosing, and to go get the behavioral evidence that would actually distinguish them before you write either one down.</p>
+<h4>Worked example: the rigor/arrogance confusion</h4>
+<p>Take the confidence row, because it punishes good engineers and the tell is precise. A person who reasons by trying to <em>falsify</em> their own conclusions — asking "under what condition is this wrong?" repeatedly until they can't break it — produces an output that looks, from the outside, almost identical to arrogance: confident, exception-laden, "I already considered that and ruled it out." The signature of exhaustive rigor and the signature of a closed mind are nearly the same shape when you only see the output.</p>
+<p>The tell that distinguishes them is not in the delivery; it is in the response to a <em>new</em> objection. The rigorous person engages a genuinely new condition with interest, because finding a flaw is the goal. The closed mind restates. Before you write "thinks he's always right," check which one you actually observed. And if the person's confidence is the problem, the coaching is not "be less rigorous" — it is <strong>externalize the search</strong>: show the conditions you tried and failed to break it with, not just the verdict, so the humility in the method becomes visible and the confidence is not all that lands.</p>
+<hr>
+<h2 id="part-2-the-evidence-ledger">Part 2 — The Evidence Ledger</h2>
+<h3 id="the-problem-it-solves">The problem it solves</h3>
+<p>Most ratings are produced the same way: at review time, the manager reconstructs a year of work from memory and compresses it into a level and a score. This is <strong>lossy, recency-biased summarization.</strong> The most recent two months are overweighted, the quietly durable work of the spring is forgotten, and the events that survive into the summary are the ones that were emotionally vivid — usually conflicts — rather than the ones that were consequential.</p>
+<p>The ladder already names the consequence: <em>"the absence of stakeholder evidence in a packet is more often a failure of evidence collection than a failure of the engineer."</em> A person's apparent level can swing one or two full grades depending only on whether someone bothered to collect the evidence. That is not a property of the person. It is a property of the process, and it is fixable.</p>
+<h3 id="the-instrument">The instrument</h3>
+<p>Do not summarize as the work happens. <strong>Append.</strong> Keep a running, append-only record — one entry per consequential event — and run the analysis at review time against the full record, not against memory.</p>
+<p>Each entry is small and is written when the event occurs, not retrospectively:</p>
+<ul>
+<li><strong>Date</strong></li>
+<li><strong>Dimension(s)</strong> touched — scope, complexity, autonomy, impact, influence, leverage, durability</li>
+<li><strong>What happened</strong> — one or two behavioral sentences</li>
+<li><strong>Artifact</strong> — link to the PR, ADR, dashboard, doc, incident record, or message thread</li>
+<li><strong>Before/after</strong> — the metric that changed, where one exists (toil hours, failure rate, cost, lead time, blast radius)</li>
+</ul>
+<p>Organized by the seven dimensions, the ledger becomes a standing answer to the calibration table in the ladder. At review time you are not remembering; you are reading.</p>
+<h3 id="why-it-serves-both-sides">Why it serves both sides</h3>
+<ul>
+<li><strong>For the engineer:</strong> it removes dependence on whether anyone happened to be watching. The engineer who cannot advocate for themselves in a room — which is most engineers, and is itself unrelated to their level — is no longer penalized for it. The work is on the record as it happens.</li>
+<li><strong>For the manager:</strong> it converts the year-end scramble into a read. The packet assembles itself. The manager stops reconstructing twelve months from the last three weeks.</li>
+<li><strong>For calibration:</strong> it supplies exactly the artifact-linked, before/after, dimension-tagged evidence the ladder asks for, and it makes "I don't have evidence for that dimension" a visible gap to fill rather than a silent default to a lower level.</li>
+</ul>
+<h3 id="cadence">Cadence</h3>
+<p>The ledger is maintained continuously — ideally the entry is made the day the event happens, when the detail and the metric are still at hand. A brief monthly pass keeps it honest. The one thing it must never become is a document created the week before a review; at that point it is just the old lossy summary wearing a new format.</p>
+<hr>
+<h2 id="part-3-separating-the-concerns">Part 3 — Separating the Concerns</h2>
+<h3 id="the-structural-conflict">The structural conflict</h3>
+<p>A single line manager is typically asked to hold three jobs at once:</p>
+<ol>
+<li><strong>Advocate</strong> for the person's growth and advancement.</li>
+<li><strong>Optimize</strong> team process and throughput.</li>
+<li><strong>Own</strong> the outcomes of the work.</li>
+</ol>
+<p>These three loyalties conflict, and the conflict is not occasional — it is structural. The manager who must hit a delivery date has an incentive to keep a strong engineer in their current, productive scope rather than stretch them into the next-level work that would prove a promotion. That same manager then judges whether the engineer demonstrated next-level scope. <strong>The person who rations the opportunity is the person who scores its absence.</strong> This is a conflict of interest in the precise sense, and it is the root cause of the "scope-starvation" miscalibration the ladder warns about: next-level scope withheld, then its absence cited as evidence the person is not ready.</p>
+<p>It is also why evidence collection (Part 2) is chronically starved. Continuous evidence collection serves the <em>advocacy</em> concern, but it competes for the manager's time with the <em>throughput</em> concern — and throughput has a deadline while advocacy does not. The urgent crowds out the important, every cycle.</p>
+<h3 id="the-principle-one-role-should-not-own-conflicting-concerns">The principle: one role should not own conflicting concerns</h3>
+<p>This is single-responsibility applied to management. When one role bundles concerns that pull in different directions, the role optimizes whichever concern has the nearest deadline, and the others decay. The fix is to give the conflicting concerns to different owners.</p>
+<p><strong>Scrum is an existence proof that this decomposition is possible.</strong> Scrum splits <em>what to work on</em> (the Product Owner, who owns prioritization) from <em>how the team works</em> (the Scrum Master, who owns process and facilitation), and it deliberately removes the manager from both. What Scrum conspicuously leaves out of scope is the third concern — <em>people and career development</em> — which is precisely why that concern, orphaned by the framework and bundled back onto an already-conflicted line manager, tends to be the one done worst. The lesson is not "adopt Scrum." The lesson is that the concerns <em>are</em> separable, and the people/career concern is the one most starved of a dedicated owner.</p>
+<h3 id="the-data-analogy-stop-summarizing-start-sourcing">The data analogy: stop summarizing, start sourcing</h3>
+<p>The reason the year-end rating is unreliable is the same reason an in-memory cache drifts from the truth: it is a <strong>lossy summary recomputed from a decayed source.</strong> The manager compresses a year of events into a single rating from whatever is freshest in working memory, and the compression throws away most of the signal.</p>
+<p>The robust pattern is <strong>event sourcing.</strong> Do not store the summary; store the immutable stream of events as they occur, and compute the answer at read time from the full stream. The evidence ledger in Part 2 <em>is</em> that event log. Part 3 is what makes it usable: separating the concerns gives someone the time and the neutrality to read the log without judging their own scope-rationing decisions in the process. <strong>The ledger is the log; role-separation is the unconflicted reader.</strong> They are one system, not two ideas.</p>
+<h3 id="what-separation-can-look-like">What separation can look like</h3>
+<p>Full reorganization is rarely available, but the concerns can be separated in lighter ways:</p>
+<ul>
+<li><strong>Calibration by a body, not an advocate.</strong> The promotion decision is read off written evidence by a group, per the <em>Read, do not pitch</em> rule — explicitly so the outcome does not depend on one conflicted manager's live advocacy.</li>
+<li><strong>A development owner distinct from the delivery owner.</strong> A mentor, skip-level, or guild lead can own the growth/evidence concern even when the line manager owns delivery, so that advocacy has a dedicated owner who is not trading it against a deadline.</li>
+<li><strong>The ledger as shared infrastructure.</strong> Because the evidence is on a standing record rather than in one manager's memory, any of these owners can read the same source, and a manager change does not erase the engineer's history.</li>
+</ul>
+<hr>
+<h2 id="how-this-guide-relates-to-the-ladder">How this guide relates to the ladder</h2>
+<p>The Career Progression Guide tells you <em>what</em> the levels are. This guide is about the integrity of the <em>act of judging</em> against them:</p>
+<ul>
+<li><strong>Part 1</strong> keeps the evidence clean — behavior, not character — so the judgment is fair and the development is possible.</li>
+<li><strong>Part 2</strong> keeps the evidence complete — continuous, not reconstructed — so the judgment is accurate.</li>
+<li><strong>Part 3</strong> keeps the evidence read by someone able to read it honestly — separated concerns — so the judgment is unconflicted.</li>
+</ul>
+<p>Clean, complete, and honestly read. A rating that fails any one of the three is not a calibration; it is an impression with a number attached.</p>
+<hr>
+<h2 id="conversation-planner">Conversation Planner</h2>
+<p class="intro-note">Use this as a working worksheet before a difficult, high-stakes, or emotionally loaded conversation. Work through each prompt in order; the blanks are there to be filled in.</p>
+<div class="planner">
+<div class="pcard">
+<div class="phead"><span class="pnum">1</span><span class="ptitle">What are the relevant facts, feelings and context for this conversation?</span></div>
+<div class="lines"></div>
+</div>
+<div class="pcard">
+<div class="phead"><span class="pnum">2</span><span class="ptitle">What may be important to the other person in this conversation?</span></div>
+<div class="lines"></div>
+</div>
+<div class="pcard">
+<div class="phead"><span class="pnum">3</span><span class="ptitle">What is my desired outcome for this conversation?</span></div>
+<div class="psub">My purpose</div>
+<div class="lines"></div>
+</div>
+<div class="pcard">
+<div class="phead"><span class="pnum">4</span><span class="ptitle">What are the possible areas of alignment / misalignment for this conversation?</span></div>
+<div class="lines"></div>
+</div>
+<div class="pcard">
+<div class="phead"><span class="pnum">5</span><span class="ptitle">How am I going to open this conversation?</span></div>
+<div class="psub">Opening statements</div>
+<div class="lines"></div>
+</div>
+</div>
+<footer>
+  <span>DevOps & SRE Coaching and Calibration Guide</span>
+  <span>Internal calibration reference</span>
+</footer>
+</div>
+</body>
+</html>
