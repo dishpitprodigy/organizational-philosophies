@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Talent Development Architecture</title>
+<style>
+:root{
+  --nav:300px;
+  --rgutter:9vw;
+  --bg:#07080f;
+  --panel:#0d1020;
+  --panel-2:#11162b;
+  --ink:#ecf7ff;
+  --muted:#9fb2c8;
+  --line:#28314e;
+  --cyan:#21f6ff;
+  --magenta:#ff2bd6;
+  --yellow:#fcee54;
+  --green:#43ff9b;
+  --danger:#ff4f6d;
+  --code-bg:#151a31;
+  --code-ink:#ffe66d;
+  --shadow:0 0 24px rgba(33,246,255,.16), 0 0 36px rgba(255,43,214,.08);
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%; scroll-behavior:smooth}
+body{
+  margin:0;
+  background:
+    linear-gradient(rgba(33,246,255,.035) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,43,214,.03) 1px, transparent 1px),
+    radial-gradient(circle at 18% -10%, rgba(33,246,255,.12), transparent 26rem),
+    radial-gradient(circle at 100% 5%, rgba(255,43,214,.10), transparent 24rem),
+    var(--bg);
+  background-size:44px 44px,44px 44px,auto,auto,auto;
+  color:var(--ink);
+  font:16px/1.68 Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+}
+body::before{
+  content:"";
+  position:fixed; inset:0; pointer-events:none; z-index:1;
+  background:repeating-linear-gradient(0deg, rgba(255,255,255,.025) 0 1px, transparent 1px 4px);
+  mix-blend-mode:screen;
+  opacity:.28;
+}
+a{color:var(--cyan); text-decoration:none}
+a:hover{text-decoration:underline; text-decoration-color:var(--magenta)}
+.wrap{display:block}
+.toc{
+  position:fixed; top:0; left:0; width:var(--nav); height:100vh; overflow:auto;
+  padding:1.1rem .95rem 2rem; z-index:20;
+  background:rgba(7,8,15,.94);
+  border-right:1px solid var(--line);
+  box-shadow:12px 0 32px rgba(0,0,0,.34);
+  backdrop-filter:blur(10px);
+}
+.toc-title{
+  font-weight:800; line-height:1.18; color:var(--ink);
+  padding:.45rem .45rem .9rem; margin-bottom:.7rem;
+  border-bottom:1px solid var(--line);
+  text-transform:uppercase; letter-spacing:.06em;
+}
+.toc-kicker{display:block; color:var(--yellow); font-size:.72rem; margin-bottom:.25rem}
+.toc-list{list-style:none; margin:0; padding:0}
+.toc-list li{margin:.1rem 0}
+.toc-list a{
+  display:block; border-left:2px solid transparent; border-radius:6px;
+  padding:.34rem .55rem; color:#c7dcf2; font-size:.88rem; line-height:1.25;
+}
+.toc-list a:hover{background:rgba(33,246,255,.08); border-left-color:var(--cyan); text-decoration:none}
+.toc-list .sub a{padding-left:1.15rem; color:var(--muted); font-size:.8rem}
+.toc-list .section-break{height:.75rem}
+.content{
+  position:relative; z-index:2;
+  margin-left:var(--nav); margin-right:var(--rgutter);
+  min-width:0; padding:2.4rem clamp(1.3rem,4.5vw,4rem) 5rem;
+}
+.doc-header{
+  border:1px solid var(--line);
+  border-radius:8px;
+  padding:1.45rem clamp(1rem,2.5vw,2rem);
+  background:linear-gradient(135deg, rgba(17,22,43,.98), rgba(8,10,22,.98));
+  box-shadow:var(--shadow);
+}
+.eyebrow{
+  margin:0 0 .5rem; color:var(--yellow); font-size:.78rem; font-weight:800;
+  letter-spacing:.14em; text-transform:uppercase;
+}
+h1,h2,h3,h4{line-height:1.22; color:var(--ink); font-weight:800; letter-spacing:0}
+h1{font-size:clamp(2rem,4vw,3.55rem); margin:.05em 0 .2em; text-shadow:0 0 18px rgba(33,246,255,.28)}
+h2{
+  font-size:1.55rem; margin:2.25em 0 .72em; padding-bottom:.38em;
+  border-bottom:1px solid var(--line); scroll-margin-top:1rem;
+}
+h2::before{content:"// "; color:var(--magenta)}
+h3{font-size:1.17rem; margin:1.65em 0 .5em; color:#d7f8ff; scroll-margin-top:1rem}
+p{margin:.78em 0}
+strong{color:#fff}
+em{color:#d5e2ff}
+hr{border:0; border-top:1px solid var(--line); margin:2.2em 0}
+ul,ol{margin:.65em 0 1em; padding-left:1.45em}
+li{margin:.32em 0}
+li::marker{color:var(--cyan)}
+code{
+  font-family:"SF Mono",SFMono-Regular,ui-monospace,"Cascadia Code",Consolas,"Liberation Mono",Menlo,monospace;
+  font-size:.9em;
+}
+:not(pre)>code{
+  color:var(--code-ink); background:var(--code-bg); border:1px solid #39405f;
+  padding:.12em .42em; border-radius:5px;
+}
+section{
+  margin:1.2rem 0;
+}
+.principle,.block{
+  border:1px solid rgba(40,49,78,.95);
+  background:rgba(13,16,32,.92);
+  border-radius:8px;
+  padding:1.1rem clamp(1rem,2vw,1.4rem);
+  box-shadow:0 10px 30px rgba(0,0,0,.22);
+}
+.principle{border-left:4px solid var(--cyan)}
+.principle.hot{border-left-color:var(--magenta)}
+.principle.gold{border-left-color:var(--yellow)}
+.lead{
+  color:#cfe7ff; font-size:1.05rem; max-width:78ch;
+}
+.tagline{
+  font-size:1.18rem; color:#f8fcff; font-weight:700; margin-top:1rem;
+  border-left:4px solid var(--yellow); padding-left:1rem;
+}
+.callout{
+  margin:1.05em 0; padding:.9rem 1rem;
+  border:1px solid var(--line); border-left:5px solid var(--cyan);
+  background:rgba(17,22,43,.86); border-radius:8px;
+}
+.callout.warn{border-left-color:var(--yellow)}
+.callout.hot{border-left-color:var(--magenta)}
+.callout.success{border-left-color:var(--green)}
+.callout>:first-child{margin-top:0}
+.callout>:last-child{margin-bottom:0}
+table{
+  border-collapse:separate; border-spacing:0; width:100%; margin:1.1em 0;
+  font-size:.95rem; border:1px solid var(--line); border-radius:8px; overflow:hidden;
+  background:rgba(9,12,24,.9);
+}
+thead th{background:rgba(33,246,255,.12); color:#f7fdff; text-align:left; font-weight:800}
+th,td{padding:.68rem .82rem; vertical-align:top; border-bottom:1px solid var(--line); border-right:1px solid var(--line)}
+th:last-child,td:last-child{border-right:0}
+tbody tr:last-child td{border-bottom:0}
+tbody tr:nth-child(even){background:rgba(255,43,214,.045)}
+tbody tr:hover{background:rgba(252,238,84,.07)}
+.checklist{
+  display:grid; grid-template-columns:repeat(auto-fit,minmax(240px,1fr)); gap:.8rem;
+  margin:1rem 0;
+}
+.check{
+  border:1px solid var(--line); border-radius:8px; padding:.85rem .95rem;
+  background:rgba(17,22,43,.82);
+}
+.check b{display:block; color:var(--yellow); margin-bottom:.25rem}
+.question-list li{padding-left:.1rem}
+.totop{
+  position:fixed; right:1.5rem; bottom:1.5rem; z-index:30;
+  width:44px; height:44px; border-radius:50%; cursor:pointer;
+  border:1px solid rgba(33,246,255,.6);
+  background:#0d1020; color:var(--cyan); font-size:1.2rem; line-height:1;
+  display:flex; align-items:center; justify-content:center;
+  box-shadow:0 0 24px rgba(33,246,255,.24);
+  opacity:0; visibility:hidden; transition:opacity .2s ease, visibility .2s ease, transform .2s ease;
+}
+.totop.show{opacity:1; visibility:visible}
+.totop:hover{transform:translateY(-2px); color:var(--yellow); border-color:var(--yellow)}
+@media(max-width:920px){
+  body{background-size:34px 34px,34px 34px,auto,auto,auto}
+  .toc{position:static; width:auto; height:auto; overflow:visible; border-right:0; border-bottom:1px solid var(--line)}
+  .toc-list{columns:1}
+  .content{margin-left:0; margin-right:0; padding:1.15rem 1rem 4rem}
+  .doc-header{padding:1rem}
+  table{display:block; overflow-x:auto}
+}
+@media print{
+  body{background:#fff; color:#111}
+  body::before,.toc,.totop{display:none}
+  .content{margin:0; padding:0}
+  .doc-header,.principle,.block,.callout{box-shadow:none; background:#fff; color:#111}
+  h1,h2,h3,p,li,td,th{color:#111}
+  a{color:#0645ad}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+<nav class="toc" aria-label="Contents">
+<div class="toc-title"><span class="toc-kicker">TDA</span>Talent Development Architecture</div>
+<ul class="toc-list">
+<li><a href="#purpose">Purpose</a></li>
+<li><a href="#why-baseball">Why Baseball Is the Analogy</a></li>
+<li><a href="#core-model">The Core Model</a></li>
+<li class="section-break"></li>
+<li><a href="#preference">1. Preference Is Evidence</a></li>
+<li><a href="#elastic-limit">2. Forced Stretch Has an Elastic Limit</a></li>
+<li><a href="#utilization">3. Diagnose Utilization</a></li>
+<li><a href="#coaching">4. Coaching Updates the Mental Model</a></li>
+<li class="sub"><a href="#coaching-vs-conversation">Coaching vs Conversation</a></li>
+<li class="sub"><a href="#conversation-shape">Conversation Shape</a></li>
+<li><a href="#safe-reps">5. Safe-Reps Paths</a></li>
+<li class="section-break"></li>
+<li><a href="#stretch-proposals">Stretch Proposals</a></li>
+<li><a href="#farm-system">The Internal Farm System</a></li>
+<li><a href="#career-pathing">Career Pathing Needs Architecture</a></li>
+<li><a href="#career-stage">Career-Stage Development</a></li>
+<li class="sub"><a href="#early-mid">Earlier and Mid-Career</a></li>
+<li class="sub"><a href="#senior">Senior</a></li>
+<li class="sub"><a href="#staff-plus">Staff+</a></li>
+<li><a href="#one-on-ones">One-on-Ones</a></li>
+<li><a href="#technology">Technology Cannot Substitute</a></li>
+<li><a href="#hiring">Hiring and Free Agency</a></li>
+<li><a href="#changes">What TDA Changes</a></li>
+</ul>
+</nav>
+<main class="content">
+<header class="doc-header">
+<p class="eyebrow">Closed-Loop Organization</p>
+<h1>Talent Development Architecture</h1>
+<p><em>A companion to the Career Progression Guide and the Coaching and Calibration Guide. The ladder defines what growth looks like; coaching and calibration define how to judge it fairly; Talent Development Architecture defines how the organization creates the conditions for people to grow into it.</em></p>
+<p class="tagline">Talent gets better when the organization deliberately creates the right reps, the right feedback, the right assignments, and the right evidence.</p>
+</header>
+
+<section class="block" id="purpose">
+<h2>Purpose</h2>
+<p>Most organizations talk about talent development as if it were a manager trait: good managers coach, good employees grow, and good hiring fills the remaining gaps. That framing is too narrow. Development is not only a conversation skill or an HR process. It is an organizational design problem.</p>
+<p>Talent Development Architecture, or TDA, is the system for observing, coaching, placing, developing, and advancing people from evidence rather than impressions. It connects coaching, calibration, hiring, scope assignment, succession planning, and day-to-day work allocation into one operating model.</p>
+<p>Without that architecture, development depends on luck: who happens to get observed, who happens to find a mentor, who happens to volunteer for stretch work, who happens to be trusted before they can prove they deserve trust, and who happens to arrive with the needed experience already.</p>
+<p>TDA exists to make that work visible and intentional.</p>
+</section>
+
+<section class="block" id="why-baseball">
+<h2>Why Baseball Is the Analogy</h2>
+<p>Baseball is the cleanest sports analogy for Talent Development Architecture because its development pipeline is unusually explicit. Players move through structured levels of competition: Minor League A, AA, AAA, then Major League Baseball. Each tier exists to give players level-appropriate reps, expose skill gaps, generate evidence, and determine who is ready for the next level. The major-league roster is not the whole talent system; it is the visible tip of a much larger development architecture.</p>
+<p>Baseball is also the closest sports analogue to the business world's measurement fantasy. The Moneyball story is not just "sports with statistics." It is the endgame of every efficiency benchmark: turn scattered observation into structured evidence, use that evidence to find undervalued capability, and make better allocation decisions than competitors who are still relying on impressions.</p>
+<p>The difference is that baseball outcomes are unusually explicit. A pitch is a ball or a strike. A runner is safe or out. A plate appearance produces a countable result. Business outcomes are more ambiguous and more contextual. Frameworks like DORA work well in their intended domain because they isolate a meaningful slice of engineering performance, but they do not transfer cleanly to every function. TDA should borrow baseball's structured development pipeline and measurement ambition without pretending business outcomes are as clean as box scores.</p>
+</section>
+
+<section class="principle gold" id="core-model">
+<h2>The Core Model</h2>
+<p>Talent development has five connected loops:</p>
+<ol>
+<li><strong>Career alignment</strong> - understand what the person is good at, what they enjoy, what they want to grow toward, and what the organization needs.</li>
+<li><strong>Talent utilization review</strong> - inspect whether assignments, priorities, hidden work, constraints, support, and development goals match the reason the person was hired or trusted with the work.</li>
+<li><strong>Safe reps</strong> - create bounded opportunities for the person to practice the next operating mode without unacceptable organizational risk.</li>
+<li><strong>Coaching</strong> - use concrete performance or behavior gaps to understand the person's mental model and improve how they read the system.</li>
+<li><strong>Evidence</strong> - record what happened, what changed, what was learned, and what level of work the person actually demonstrated.</li>
+</ol>
+<p>These loops should not live only in annual review paperwork. They should show up in one-on-ones, planning, assignment decisions, stretch proposals, calibration packets, succession planning, and hiring strategy.</p>
+</section>
+
+<section class="principle" id="preference">
+<h2>Principle 1: Preference Is Evidence, Not a Perk</h2>
+<p>Employee preference is operational signal.</p>
+<p>What work energizes this person? What work drains them? What do they seek out without being asked? What do they avoid even when they are competent at it? What kind of problem causes their curiosity to turn on?</p>
+<p>Those answers matter because preference predicts:</p>
+<ul>
+<li>quality of output</li>
+<li>durability of motivation</li>
+<li>learning rate</li>
+<li>burnout risk</li>
+<li>cost of forced stretch</li>
+<li>likely long-term fit</li>
+<li>where the organization can get disproportionate return from the person</li>
+</ul>
+<p>Preference is not veto power. Sometimes the work is the work. A person on a team that owns both on-prem systems and cloud may need to support Terraform competently even if they hate writing it. Baseline competence matters, and nobody gets a role made entirely out of favorite tasks.</p>
+<p>But sustained misalignment is waste. If the same person is happiest and strongest writing Ansible, Python, Bash, or working on-prem, a wise manager should bias their long-term assignment mix toward that fit when the business allows it. The goal is not indulgence. The goal is better output from the talent the organization already has. Some necessary work will still be unpleasant; preference is signal, not exemption.</p>
+<p>Employees should be encouraged to discuss these preferences openly with their managers. Managers should treat the information as planning input, not as complaining.</p>
+<p>Managers should also use disliked work as a learning opportunity when the exposure is genuinely necessary. If an engineer strongly prefers one tool or operating model over another, the coaching question is not only "can you do the required work?" It is also "can you explain why reasonable people prefer the alternative?" The point is not to force false enthusiasm. The point is to build the ability to operate from another perspective when the business context requires it.</p>
+<p>A person who dislikes Terraform may still need to understand what Terraform users value: provider breadth, declarative workflow, common hiring market, ecosystem support, and familiar patterns across cloud teams. That same person may still prefer Ansible, Pulumi, Python, or another model after doing the work. That is fine. The development value is in learning to understand the opposing case well enough to apply the right tool in the narrow context where it is strongest, not in pretending every preference is equally aligned with every situation.</p>
+</section>
+
+<section class="principle hot" id="elastic-limit">
+<h2>Principle 2: Forced Stretch Has an Elastic Limit</h2>
+<p>Stretch work is necessary. Forced stretch work is sometimes necessary. But stretch is not free.</p>
+<p>There is an elastic limit: the boundary between healthy forced stretch and damaging misalignment. Inside that boundary, the person can recover, learn, and become more capable. Beyond it, the organization creates brittleness, burnout, reduced elasticity, or failure.</p>
+<p>The important distinction is not "liked work" versus "disliked work." The distinction is short-term exposure for baseline competence versus sustained assignment against durable strengths and preferences.</p>
+<div class="callout warn">
+<p><strong>Useful test:</strong> Is this assignment helping the person become more capable, or is it consuming their capability faster than it builds it?</p>
+</div>
+<p>If the answer is not clear, the manager needs more context before calling the assignment development.</p>
+</section>
+
+<section class="principle" id="utilization">
+<h2>Principle 3: Diagnose Utilization Before Judging Performance</h2>
+<p>When performance regresses, do not start with the assumption that the person changed. Start like a systems engineer investigating degradation.</p>
+<p>Did this used to work? What changed? Did load increase? Did priority conflict increase? Did a hidden workstream appear? Did another leader create side-channel work? Did the person lose support? Did the system around the person change while the visible assignment stayed nominally the same?</p>
+<p>That diagnostic step is the <strong>Talent Utilization Review</strong>.</p>
+<p>Use it proactively before major assignments and reactively when output drops below expectation.</p>
+<div class="checklist">
+<div class="check"><b>1. Map</b>Current assignments.</div>
+<div class="check"><b>2. Expose</b>Hidden work.</div>
+<div class="check"><b>3. Compare</b>Stated priorities.</div>
+<div class="check"><b>4. Inspect</b>Constraints and dependencies.</div>
+<div class="check"><b>5. Gather</b>The person's context.</div>
+<div class="check"><b>6. Reassess</b>The visible performance signal.</div>
+<div class="check"><b>7. Decide</b>What changes: the person, the work, the priorities, the support, or the system around them.</div>
+</div>
+<p>In team-sport terms, the organization should ask whether it is putting the player in a position to succeed. Too many disparate assignments of equal priority will invariably lead to delayed outputs, reduced quality, or both.</p>
+<p>The sports-franchise mentality is to create conditions where talent can produce, not to conclude that the talent failed while the organization was asking it to win from an impossible position.</p>
+</section>
+
+<section class="principle hot" id="coaching">
+<h2>Principle 4: Coaching Updates the Mental Model</h2>
+<p>Coaching is development. Sometimes development means expanding a strength. Sometimes it means correcting a mistake. Sometimes it means reducing scope temporarily so the person can reset, practice, or stop costing the team yards. A reprimand may accompany a coaching conversation when policy or severity requires it, but coaching and reprimand are separate mechanisms.</p>
+<p>Coaching is a diagnostic conversation that starts from a concrete behavior or performance gap and surfaces the map the person was using when they made the decision. That map includes the signals they noticed, the signals they missed, the constraints they believed mattered, the outcome they thought they were optimizing for, and the action they believed those conditions called for.</p>
+<p>Human learning is contextual. New information rarely updates every related belief at once. It updates the part of the mental model that is active in the moment, and later the correction has to be recalled when a similar-but-not-identical situation appears. Coaching works by attaching the correction to cues the person will actually see again: "when this signal appears, it usually means this condition exists, so these options become stronger and those options become weaker."</p>
+<h3 id="coaching-vs-conversation">Coaching vs Conversation</h3>
+<div class="callout hot">
+<p>Conversations shift to coaching when this question is asked:</p>
+<p><strong>What do you think would have made that situation a success?</strong></p>
+</div>
+<p>A conversation without that question, or its equivalent, is not really coaching. It may be feedback. It may be correction. It may be documentation. But coaching requires understanding the world as the person being coached saw it.</p>
+<p>The manager is looking for defects in the person's mental model:</p>
+<ul>
+<li>Did they miss a signal?</li>
+<li>Did they read the signal incorrectly?</li>
+<li>Did they optimize for the wrong outcome?</li>
+<li>Did they misunderstand the priority?</li>
+<li>Did they lack context?</li>
+<li>Did the organization give them contradictory instructions?</li>
+<li>Did the system make the desired behavior harder than leadership realizes?</li>
+</ul>
+<p>A sports analogy is useful here: a football coach does not say "you misread the defense; reading defenses is a requirement for this job, and you have to get better at that." A good coach explains what a defender's movement or action reveals about the defensive concept, how that informs where the exploitable space opens, which offensive player is expected to move through it, and the role the individual being coached is supposed to play in exploiting these weaknesses.</p>
+<p>That is to say that it is not every player's objective to score on every play. It is every player's objective to be in the optimal position for the team to score on every play. That subtle change of phrasing is what separates excellent teams from mediocre ones. Successful teams have a singular vision from the top down, and everyone understands the role they need to play for the team to achieve its goals.</p>
+<p>The business equivalent is teaching the person how to read systems: what signals reveal a resource constraint, dependency pressure, capacity issue, priority inversion, customer impact, or failure mode.</p>
+<h3 id="conversation-shape">A Coaching Conversation Shape</h3>
+<p>The exact language can vary by person, manager, culture, and severity. The conversation should have phases rather than a rigid script:</p>
+<div class="checklist">
+<div class="check"><b>Open with purpose and perspective</b>Mentally begin from the reason the person was hired or trusted with the work. Be plain about the concern, but establish immediately that their interpretation is integral to the outcome.</div>
+<div class="check"><b>Listen and orient</b>Let the person describe the situation in their own terms, then ask questions that reveal how they were interpreting the system.</div>
+<div class="check"><b>Follow connected context</b>If they raise another issue, listen long enough to determine whether it is connected. If it is not, table it respectfully.</div>
+<div class="check"><b>Name the gap clearly</b>State what happened, what outcome it caused, and why the outcome matters. Stay with behavior, evidence, and impact.</div>
+<div class="check"><b>Update the mental model</b>Identify the missing signal, incorrect read, stale assumption, or conflicting instruction. Attach the correction to future cues.</div>
+<div class="check"><b>Close with mutual commitments</b>Say what the employee will change and what the manager or organization will do.</div>
+</div>
+<p>If the conversation reveals a broken process, management owes a real response: fix the system, design a durable workaround, or explain why nothing can currently be changed. The point is not only to improve the person; it is to create a feedback loop that uncovers inefficiencies and risks throughout the organization.</p>
+<p>If formal documentation is required, it should come after the coaching loop has produced a shared path forward. Documentation is a record-control mechanism, not the coaching mechanism itself.</p>
+<p>Never lie, stretch, or massage facts in a coaching conversation. If notes are being taken, say why. If notes may be used in an incident document, performance record, or other formal artifact, say so. Distinguish facts from stories.</p>
+</section>
+
+<section class="principle gold" id="safe-reps">
+<h2>Principle 5: Every Career Transition Gate Needs a Safe-Reps Path</h2>
+<p>The hardest jumps in a technical career are often not knowledge jumps. They are operating-mode jumps.</p>
+<table>
+<thead><tr><th>From</th><th>To</th></tr></thead>
+<tbody>
+<tr><td>Seeing a problem</td><td>Reporting it clearly</td></tr>
+<tr><td>Reporting a problem</td><td>Helping fix it</td></tr>
+<tr><td>Fixing a problem</td><td>Preventing its recurrence</td></tr>
+<tr><td>Preventing one recurrence</td><td>Building reusable automation or standard work</td></tr>
+<tr><td>Owning a task</td><td>Owning an outcome</td></tr>
+<tr><td>Owning one outcome</td><td>Creating leverage for others</td></tr>
+</tbody>
+</table>
+<p>If the organization requires experience before granting opportunity, it must also provide bounded ways to gain that experience. Otherwise early and mid-career development depends on luck, off-book initiative, or unusually generous coworkers.</p>
+<p>A <strong>Safe-Reps Path</strong> is a bounded way to practice the next operating mode without unacceptable risk.</p>
+<ul>
+<li>A helpdesk employee spends four hours a week migrating low-risk scripts from Python 2 to Python 3.</li>
+<li>A junior operator shadows incident remediation, then owns a read-only diagnostic step, then owns a reversible fix under supervision.</li>
+<li>A systems administrator refactors repetitive conditional logic into a data structure with tests and review.</li>
+<li>A cloud-curious on-prem engineer contributes to a Terraform 0.x to 1.x migration in a constrained module.</li>
+<li>A strong implementer writes the runbook, then the checklist, then the automation for a recurring issue.</li>
+</ul>
+<p>The point is not the specific technology. The point is legitimate reps across the gate.</p>
+</section>
+
+<section class="block" id="stretch-proposals">
+<h2>Stretch Proposals</h2>
+<p>A <strong>Stretch Proposal</strong> is an employee-initiated request for a bounded development opportunity that moves them toward a desired skill, responsibility, or domain.</p>
+<p>It should be normal career-development language, not an exception or a favor.</p>
+<p>A good Stretch Proposal answers:</p>
+<ul>
+<li>What do I want to learn or practice?</li>
+<li>What real problem would this help solve?</li>
+<li>Who owns the work?</li>
+<li>How much time am I asking for?</li>
+<li>What is the expected value?</li>
+<li>What is explicitly out of scope?</li>
+<li>What can I do read-only?</li>
+<li>What actions require approval before I make changes?</li>
+<li>What is the risk if I make the situation worse?</li>
+<li>What evidence will show whether this was useful?</li>
+</ul>
+<p>For cross-team proposals, manager-to-manager coordination is required. The employee's manager, the receiving team's manager, and the work owner should agree on time box, priority impact, supervision, risk boundaries, and success criteria.</p>
+<p>This matters because self-directed stretch work is often how people become capable of the next thing. But unmanaged stretch work can become hidden risk. The formal version should preserve initiative while making the work visible, bounded, and legitimate.</p>
+</section>
+
+<section class="block" id="farm-system">
+<h2>The Internal Farm System</h2>
+<p>The sports-franchise analogy is strongest here. Strong franchises do not merely acquire talent. They scout, draft or sign, assign level-appropriate reps, coach specific skills, observe performance, move people through levels of competition, and build succession pipeline before a role becomes urgent. In the MLB, this is called a team's "farm system," and players develop through Minor League A to AA to AAA, and the best of the best get called up to the MLB.</p>
+<p>Businesses need the same pattern.</p>
+<p>An <strong>Internal Farm System</strong> is the practice of coordinating small, useful stretch assignments across teams so people can develop toward real organizational needs.</p>
+<ol>
+<li>The employee gets meaningful reps in a desired skill or domain.</li>
+<li>The receiving team gets real work done.</li>
+<li>The organization builds succession pipeline before it is forced to need it.</li>
+</ol>
+<p>This should not depend on a heroic employee finding after-hours work and hoping someone says yes. Employees should be encouraged to talk to people on other teams, compare patterns, and notice where one team's approach might apply to another team's problem. But when the work becomes real, it should move onto the books.</p>
+<p>Four hours a week can matter. It can be enough to give someone a path from support into systems work, from systems work into automation, from implementation into design, or from team-local work into cross-team influence.</p>
+</section>
+
+<section class="block" id="career-pathing">
+<h2>Career Pathing Needs Architecture</h2>
+<p>"Own your career" is useful advice only when the organization exposes enough map for the employee to navigate. Without guidance on actual departments, roles, skill sets, decision rights, and available development paths, career ownership becomes guesswork.</p>
+<p>A generic career tool does not solve that. If a "career compass" produces abstract advice, points toward roles that do not exist, or suggests paths the organization has not actually made available, it is not a development system. It is career-pathing theater: the organization appears to offer mobility while leaving employees to invent the path themselves.</p>
+<p>That creates several risks:</p>
+<ul>
+<li>employees leave to get the experience the organization could have helped them build</li>
+<li>employees form shadow development networks to discover work the official system does not surface</li>
+<li>stretch work happens through side channels instead of visible coordination</li>
+<li>people try unsafe tooling shortcuts to create opportunities for themselves</li>
+<li>managers lose sight of where capability and interest already exist inside the company</li>
+</ul>
+<p>The Internal Farm System is the formal answer. Employees should absolutely talk to people on other teams, compare patterns, and notice where their interests might create value. But the organization has to turn that curiosity into visible, bounded, legitimate work. A competent development system does not merely tell people to pave their own career. It shows them the roads that exist, the roads the company needs built, and the safe-reps paths for helping build them.</p>
+</section>
+
+<section class="block" id="career-stage">
+<h2>Career-Stage Development</h2>
+<p>TDA should reuse the Career Progression Guide's existing tiers rather than inventing a second leveling model.</p>
+<h3 id="early-mid">Earlier and Mid-Career</h3>
+<p>The development focus is safe reps across transition gates.</p>
+<ul>
+<li>What next operating mode is this person trying to learn?</li>
+<li>What bounded work would let them practice it?</li>
+<li>What support or supervision keeps the risk acceptable?</li>
+<li>What evidence would show readiness for more responsibility?</li>
+</ul>
+<p>This is where development culture matters most. Coaching, practice, feedback, and bounded stretch should be normal expectations of the company, not special events. Continuing the sports analogy, people in this stage of their career are the team's most recent draft class. Successful sports teams have staff dedicated to developing draft picks. Many companies will not staff this as a dedicated role, so it must be an explicit portion of any people manager's time.</p>
+<h3 id="senior">Senior</h3>
+<p>The development focus is scope fit, durable ownership, and leverage.</p>
+<ul>
+<li>Is this person assigned work that matches their durable strengths?</li>
+<li>Are they owning outcomes rather than only tasks?</li>
+<li>Are they building systems, standards, runbooks, automation, or practices that outlast their direct effort?</li>
+<li>Are they being given scope that can demonstrate the next level if the organization needs that level?</li>
+</ul>
+<p>Senior development is not just harder tickets. It is better placement against outcomes.</p>
+<h3 id="staff-plus">Staff+</h3>
+<p>The development focus is cross-team capability, succession, strategic placement, and organizational leverage.</p>
+<ul>
+<li>What capability is missing across teams?</li>
+<li>Who can create it?</li>
+<li>Who can be developed behind them?</li>
+<li>What work creates leverage through other engineers?</li>
+<li>Is the missing capability developable internally, or does the organization need free-agent hiring?</li>
+</ul>
+<p>External hiring becomes more like sports free-agency as you move higher up the ladder, especially when the company lacks principal or Staff+ capability in-house. That is not a failure by itself. It is a different tool. The failure is pretending external hiring is a substitute for a development culture at every level.</p>
+</section>
+
+<section class="block" id="one-on-ones">
+<h2>One-on-Ones</h2>
+<p>One-on-ones are the primary venue for proactive Talent Utilization Review.</p>
+<p>They are where career alignment, preference signals, constraints, coaching needs, hidden work, stretch proposals, and support gaps should surface before they become review-cycle surprises.</p>
+<p>The full practice of running one-on-ones well deserves its own, dedicated, piece. TDA only provides the operating requirement:</p>
+<ul>
+<li>one-on-ones are not status meetings</li>
+<li>one meaningful one-on-one per month is the floor</li>
+<li>higher frequency may be appropriate during forced stretch, role changes, performance regression, ambiguous work, or major scope changes</li>
+<li>the conversation should maintain an active picture of utilization, career direction, support, and evidence</li>
+</ul>
+<p>If a manager cannot describe what an employee wants to grow toward, what work drains them, what work energizes them, and what constraints are currently shaping their output, the manager does not have enough signal to manage the person's development well.</p>
+</section>
+
+<section class="block" id="technology">
+<h2>Technology Cannot Substitute for Development Architecture</h2>
+<p>Organizations often try to use technology to compensate for missing development architecture: career tools, skills platforms, workflow systems, dashboards, AI assistants, and intake portals. Those tools can augment well-designed behavior. They can make information easier to find, reduce administrative friction, and make patterns visible. They cannot create the underlying management behavior by themselves.</p>
+<p>Technology can support a process, but it cannot make a broken process healthy. A tool that routes work through a bad operating model mostly makes the bad operating model faster, more expensive, or harder to see. AI does not change that. Using LLMs to push through bad process may feel productive locally, but the cost can become invisible to the person authorizing the usage and difficult for the company to distinguish from legitimate work.</p>
+<p>This matters for TDA because career development is not solved by a portal that emits generic recommendations. The system still needs actual roles, actual skill needs, actual managers coordinating work, actual safe-reps paths, actual coaching, and actual evidence. The tool can help people navigate the architecture. It cannot replace the architecture.</p>
+</section>
+
+<section class="block" id="hiring">
+<h2>Hiring and Free Agency</h2>
+<p>TDA does not mean every capability must be grown internally, nor does it mean perfect employee retention.</p>
+<p>At all levels, external hiring can be the right move. If the organization does not have principal-level technical leadership, or lacks a specific senior capability, hiring externally may be the fastest honest path. This is the business equivalent of free agency.</p>
+<p>But the higher-level free-agency model should not erase the internal development expectation for earlier and mid-career employees. A company cannot be great if it is not trying to get better every day, and that includes building people. Fundamentally, all economies are human economies: the organization that has the highest capability for growing and developing good people will have the best outcomes in the long run.</p>
+<p>Hiring, development, and succession should answer different questions:</p>
+<ul>
+<li><strong>Hiring:</strong> what capability do we need that we do not have, or cannot grow in time?</li>
+<li><strong>Development:</strong> what capability can we create through coaching, reps, and placement?</li>
+<li><strong>Succession:</strong> what future responsibility should someone be preparing to take before we urgently need them to take it?</li>
+</ul>
+</section>
+
+<section class="principle gold" id="changes">
+<h2>What TDA Changes</h2>
+<p>Without TDA, managers tend to ask:</p>
+<ul>
+<li>Did this person perform?</li>
+<li>Are they ready?</li>
+<li>Do they have experience?</li>
+<li>Can we hire someone who already does?</li>
+</ul>
+<p>With TDA, managers ask better questions:</p>
+<ul class="question-list">
+<li>What was this person hired or trusted to do well?</li>
+<li>Is their current assignment mix using that strength?</li>
+<li>What changed around them?</li>
+<li>What does the person think would have made the situation successful?</li>
+<li>What defect exists in their mental model?</li>
+<li>What support or priority change does the organization owe?</li>
+<li>What transition gate are they trying to cross?</li>
+<li>What safe reps can we create?</li>
+<li>What evidence will show growth?</li>
+<li>What succession pipeline are we building?</li>
+</ul>
+<p>That is the difference between treating people like machines that need exact instructions and treating talent as something the organization is responsible for developing, placing, and coaching.</p>
+<p>The goal is not to make management softer. The goal is to make it more accurate.</p>
+</section>
+</main>
+</div>
+<button class="totop" id="totop" title="Back to top" aria-label="Back to top">↑</button>
+<script>
+(function(){
+  var top=document.getElementById('totop');
+  function onScroll(){ top.classList.toggle('show', window.scrollY>420); }
+  window.addEventListener('scroll', onScroll, {passive:true});
+  onScroll();
+  top.addEventListener('click', function(){
+    window.scrollTo({top:0, left:0, behavior:'smooth'});
+  });
+  document.addEventListener('click', function(e){
+    var a=e.target.closest('a[href^="#"]');
+    if(!a) return;
+    var id=decodeURIComponent(a.getAttribute('href').slice(1));
+    var el=document.getElementById(id);
+    if(!el) return;
+    e.preventDefault();
+    el.scrollIntoView({behavior:'smooth', block:'start'});
+    history.replaceState(null, '', '#' + id);
+  });
+})();
+</script>
+</body>
+</html>
