@@ -92,10 +92,14 @@ _Avoid_: Vague improvement, attitude change
 A metaphor for reducing unnecessary bloat in AI instruction files, process rules, or other guidance by replacing repeated special cases with a more general rule. Borrowed from network route aggregation, where several specific routes can be represented by one broader prefix when they share the same next hop.
 _Avoid_: Hardening by accumulation, more rules by default
 
+**Visual Format Directive**:
+A line beginning with `#%` that records stylistic preferences for a more advanced visual format than Markdown. These directives should be removed from the Markdown prose and used to inform later conversion to HTML, ePub, PDF, LaTeX, or another richer presentation format.
+_Avoid_: Prose comment, language preference, markdown content
+
 **Commit Boundary**:
 A coherent editing unit that should be saved as its own git commit so the document's evolution remains reviewable. Each round of substantive edits should preserve a clear Commit Boundary rather than blending unrelated changes together.
 _Avoid_: Batch of unrelated edits, catch-all save
 
-**Clean Index Check**:
-The pre-edit habit of confirming that nothing is staged before starting a new round of changes. It protects Commit Boundaries by preventing forgotten staged changes from being accidentally included in the next commit.
-_Avoid_: Starting from an unknown index
+**Clean Working Tree Check**:
+The pre-edit habit of confirming that the working tree has no staged or unstaged changes before starting a new round of edits. It protects Commit Boundaries by preventing forgotten work from being blended into the next change.
+_Avoid_: Starting from an unknown git state, clean index check
