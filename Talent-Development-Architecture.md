@@ -16,6 +16,16 @@ TDA exists to make that work visible and intentional.
 
 ---
 
+## Why Baseball Is the Analogy
+
+Baseball is the cleanest sports analogy for Talent Development Architecture because its development pipeline is unusually explicit. Players move through structured levels of competition: Minor League A, AA, AAA, then Major League Baseball. Each tier exists to give players level-appropriate reps, expose skill gaps, generate evidence, and determine who is ready for the next level. The major-league roster is not the whole talent system; it is the visible tip of a much larger development architecture.
+
+Baseball is also the closest sports analogue to the business world's measurement fantasy. The Moneyball story is not just "sports with statistics." It is the endgame of every efficiency benchmark: turn scattered observation into structured evidence, use that evidence to find undervalued capability, and make better allocation decisions than competitors who are still relying on impressions.
+
+The difference is that baseball outcomes are unusually explicit. A pitch is a ball or a strike. A runner is safe or out. A plate appearance produces a countable result. Business outcomes are more ambiguous and more contextual. In that sense, advanced business measurement often resembles football more than baseball: the outcome of a play depends heavily on assignments, spacing, timing, opponent behavior, and whether one person's apparently quiet contribution created the condition that let someone else succeed. Frameworks like DORA work well in their intended domain because they isolate a meaningful slice of engineering performance, but they do not transfer cleanly to every function. TDA should borrow baseball's structured development pipeline and measurement ambition without pretending business outcomes are as clean as box scores.
+
+---
+
 ## The Core Model
 
 Talent development has five connected loops:
@@ -23,7 +33,7 @@ Talent development has five connected loops:
 1. **Career alignment** - understand what the person is good at, what they enjoy, what they want to grow toward, and what the organization needs.
 2. **Talent utilization review** - inspect whether assignments, priorities, hidden work, constraints, support, and development goals match the reason the person was hired or trusted with the work.
 3. **Safe reps** - create bounded opportunities for the person to practice the next operating mode without unacceptable organizational risk.
-4. **Coaching** - use concrete performance or behavior gaps to understand the person's success model and improve how they read the system.
+4. **Coaching** - use concrete performance or behavior gaps to understand the person's mental model and improve how they read the system.
 5. **Evidence** - record what happened, what changed, what was learned, and what level of work the person actually demonstrated.
 
 These loops should not live only in annual review paperwork. They should show up in one-on-ones, planning, assignment decisions, stretch proposals, calibration packets, succession planning, and hiring strategy.
@@ -48,9 +58,14 @@ Those answers matter because preference predicts:
 
 Preference is not veto power. Sometimes the work is the work. A person on a team that owns both on-prem systems and cloud may need to support Terraform competently even if they hate writing it. Baseline competence matters, and nobody gets a role made entirely out of favorite tasks.
 
-But sustained misalignment is waste. If the same person is happiest and strongest writing Ansible, Python, Bash, or working on-prem, a wise manager should bias their long-term assignment mix toward that fit when the business allows it. The goal is not indulgence. The goal is better output from the talent the organization already has.
+But sustained misalignment is waste. If the same person is happiest and strongest writing Ansible, Python, Bash, or working on-prem, a wise manager should bias their long-term assignment mix toward that fit when the business allows it. The goal is not indulgence. The goal is better output from the talent the organization already has. Some necessary work will still be unpleasant; preference is signal, not exemption.
 
 Employees should be encouraged to discuss these preferences openly with their managers. Managers should treat the information as planning input, not as complaining.
+
+Managers should also use disliked work as a learning opportunity when the exposure is genuinely necessary. If an engineer strongly prefers one tool or operating model over another, the coaching question is not only "can you do the required work?" It is also "can you explain why reasonable people prefer the alternative?" The point is not to force false enthusiasm. The point is to build the ability to operate from another perspective when the business context requires it.
+
+A person who dislikes Terraform may still need to understand what Terraform users value: provider breadth, declarative workflow, common hiring market, ecosystem support, and familiar patterns across cloud teams. That same person may still prefer Ansible, Pulumi, Python, or another model after doing the work. That is fine. The development value is in learning to understand the opposing case well enough to apply the right tool in the narrow context where it is strongest, not in pretending every preference is equally aligned with every situation.
+
 
 ---
 
@@ -90,29 +105,28 @@ The loop:
 6. Reassess the visible performance signal.
 7. Decide what changes: the person, the work, the priorities, the support, or the system around them.
 
-Triple coverage for an engineer usually means too many disparate assignments of equal priority. Instead of delivering one item well, they produce many items below expectation. In that case, the coaching problem may not be the person's capability. It may be the play design.
-\# football analogy with no context, makes no sense; strong analogy, imo, but very US-centric
+In team-sport terms, the organization should ask whether it is putting the player in a position to succeed. Too many disparate assignments of equal priority will invariably lead to delayed outputs, reduced quality, or both. 
 
-The sports-franchise mentality is to call plays that get the star wideout open, not to conclude the wideout cannot perform while triple-covered.
-\# first mention of this: makes no sense without all the other context i gave in the discussion. the "sports-franchise" analogy is highly transferrable, though. It's the same for Premier League, and probably the same for cricket and lacrosse and all those other niche sports.
+The sports-franchise mentality is to create conditions where talent can produce, not to conclude that the talent failed while the organization was asking it to win from an impossible position.
 
 ---
 
-## Principle 4: Coaching Updates the Success Model
+## Principle 4: Coaching Updates the Mental Model
 
-Good coaching is not a nicer way to tell someone they failed. It is not a reprimand with developmental language wrapped around it.
+Coaching is development. Sometimes development means expanding a strength. Sometimes it means correcting a mistake. Sometimes it means reducing scope temporarily so the person can reset, practice, or stop costing the team yards. A reprimand may accompany a coaching conversation when policy or severity requires it, but coaching and reprimand are separate mechanisms.
 
-Coaching is a diagnostic conversation that starts from a concrete behavior or performance gap, exposes the person's view of the system around that gap, and updates the points of reference they use to make decisions.
-\# "exposes the person's view of the system around that gap" is terrible phrasing, and i don't think it's the phrasing i gave. i was also--albeit, poorly--trying to reference humanity's actual learning model. It's like how LLMs use backprop, humans have a model where, like, we store knowledge in nodes, and access them contextually, so when we get new information, we may do some backprop-like work up front, updating mental models that we have in memory already, but we stop at some point, and don't cover even 50% of scenarios in which $context_update applies, but when $unmapped_relevant_context appears, $context_update is applied in the moment, even though the two had never been linked before. That's a really poor explanation, I know, but we are trying to directly engage this model ... I think. I'm always missing something.
+Coaching is a diagnostic conversation that starts from a concrete behavior or performance gap and surfaces the map the person was using when they made the decision. That map includes the signals they noticed, the signals they missed, the constraints they believed mattered, the outcome they thought they were optimizing for, and the action they believed those conditions called for.
 
+Human learning is contextual. New information rarely updates every related belief at once. It updates the part of the mental model that is active in the moment, and later the correction has to be recalled when a similar-but-not-identical situation appears. Coaching works by attaching the correction to cues the person will actually see again: "when this signal appears, it usually means this condition exists, so these options become stronger and those options become weaker."
+
+### Coaching vs Conversation
 Conversations shift to coaching when this question is asked:
 
 **What do you think would have made that situation a success?**
 
-A conversation without that question, or its equivalent, is not really coaching. It may be feedback. It may be correction. It may be documentation. But coaching requires understanding the world as the pupil sees it.
-\# I changed 'person' to "pupil", but that's not really the word I want to use either. I'm trying to say the business coaching equivalent of "teachers need students". The same applies to every use of pupil heretofore.
+A conversation without that question, or its equivalent, is not really coaching. It may be feedback. It may be correction. It may be documentation. But coaching requires understanding the world as the person being coached saw it.
 
-The manager is looking for defects in the pupil's mental model:
+The manager is looking for defects in the person's mental model:
 
 - Did they miss a signal?
 - Did they read the signal incorrectly?
@@ -122,29 +136,29 @@ The manager is looking for defects in the pupil's mental model:
 - Did the organization give them contradictory instructions?
 - Did the system make the desired behavior harder than leadership realizes?
 
-A sports analogy is useful here: a football coach does not say "you misread the defense; reading defenses is a requirement for this job, and you have to get better at that." A good coach explains what a defender's movement or action reveals about the defensive concept, where the exploitable space opens, which offensive player is expected to move through it, and the role the individual being coached is supposed to play in exploiting these weaknesses. That is to say that it is _not_ every player's objective to score on every play: it's every player's objective to be in the optimal position for **the team** to score on every play. That subtle change of phrasing is what separates excellent teams from mediocre ones. Successful teams have a singular vision from the top down, and everyone understands the role they need to play for the **team** to achieve its goals.
+A sports analogy is useful here: a football coach does not say "you misread the defense; reading defenses is a requirement for this job, and you have to get better at that." A good coach explains what a defender's movement or action reveals about the defensive concept, how that informs where the exploitable space opens, which offensive player is expected to move through it, and the role the individual being coached is supposed to play in exploiting these weaknesses.
+
+That is to say that it is not every player's objective to score on every play. It is every player's objective to be in the optimal position for the team to score on every play. That subtle change of phrasing is what separates excellent teams from mediocre ones. Successful teams have a singular vision from the top down, and everyone understands the role they need to play for the team to achieve its goals.
 
 The business equivalent is teaching the person how to read systems: what signals reveal a resource constraint, dependency pressure, capacity issue, priority inversion, customer impact, or failure mode.
 
 ### A Coaching Conversation Shape
 
-The exact language can vary by person, manager, culture, and severity. The shape should remain stable:
+The exact language can vary by person, manager, culture, and severity. The conversation should have phases rather than a rigid script:
 
-1. Start from the reason the person was hired or trusted with the work. Assume there is a valid strength to preserve.
-2. Lead with the purpose of the meeting and the concrete issue.
-\# There's more nuance to this than this is capturing. Step 3 is how you should initiate step 2 because coaching requires more listening than talking. You want to establish very early that their perspective is integral to the outcome of this whole process; this isn't about telling them why or how they're wrong, it's about surfacing the misstep/logical fault that led to a negative outcome. You do that by listening. You do that by not being dismissive. You are aiming to create an environment in which they're troubleshooting themselves the way they'd troubleshoot the code they write (or analyzing themselves the way they'd analyze a business proposal, or financial sheet, or whatever the devil the kids are into these days). One critical component of this is asking questions . Maybe this should say "focus" instead of "lead"? Idk.
-3. Ask whether the person knows why the conversation is happening.
-4. Listen long enough to expose missing context.
-5. If they raise a different but important topic, hear enough to determine whether it is connected. If not, table it respectfully and commit to returning to it.
-\# this is 4a or something. making it a new number makes it seem like a logical separation, but they're part and parcel. Numbers are probably not optimal here.
-6. State the issue as behavior plus outcome plus need for a plan.
-\# Phrasing makes no sense here.
-7. Ask what they think would have made the situation successful.
-8. Identify defects, missing signals, or stale assumptions in the success model.
-\# I changed 'success model' to 'mental model' above, but i'm not sure i really like either of them. i feel like 'success model' is awkward phrasing, and i wonder "success of what?" 
-9. Agree on an action plan with evidence markers.
-10. Clearly state what the employee must change, and what the manager and/or organization will do to support the employee's growth.
-\# This is closer to what I want this to say. It's about saying "You have to change $behavior (or improve do $X or whatever), and this is what I will do to help you. But that doesn't capture that when broken systems are identified, management needs to create a real action plan to fix the system, or design a consistent workaround to things that can't be changed, or explain why nothing can be done. The point is to reduce the processual pain inflicted on employees without thought in most cases (that is to say, people who design processes often don't have to engage with their process, and they aren't incentivized to fix the process because they aren't experiencing the pain). This is part of the feedback loop on organizational efficiency, too.  
+**Open with purpose and perspective.** Mentally begin from the reason the person was hired or trusted with the work. Assume there is a valid strength to preserve. Be plain about the concern, but establish immediately that their interpretation is integral to the outcome: "I want to talk about X because it caused Y. Before I go further, what is your read on what happened?"
+
+**Listen and orient.** Coaching requires more listening than talking. Let the person describe the situation in their own terms, then ask questions that reveal how they were interpreting the system. You are trying to create the conditions for them to troubleshoot their own decision process the way they would troubleshoot code, analyze a business proposal, or inspect a financial sheet.
+
+**Follow connected context; table unrelated context.** If they raise a different issue, listen long enough to determine whether it is connected. It may be the hidden dependency that explains the visible failure. If it seems unconnected, ask them to explain the material connection. If they can't, table it respectfully and commit to returning to the other topic at a later time. The goal is not to dismiss the issue; the goal is to keep this coaching loop coherent. 
+
+**Name the gap clearly.** Once their perspective is on the table, state the concern as specifically as possible: what happened, what outcome it caused, and why the outcome matters. Stay with behavior, evidence, and impact. Do not turn the moment into a personality assessment.
+
+**Update the mental model.** Ask what they think would have made the situation successful. Identify the missing signal, incorrect read, stale assumption, or conflicting instruction. Then attach the correction to future cues: "when you see this pattern again, consider whether it is evidence of such-and-such condition, and adjust this way."
+
+**Close with mutual commitments.** The close must say what the employee will change and what the manager or organization will do. If the conversation reveals a broken process, management owes a real response: fix the system, design a durable workaround, or explain why nothing can currently be changed. The point is not only to improve the person; it is to create a feedback loop that uncovers inefficiencies and risks throughout the organization.
+
+If formal documentation is required, it should come after the coaching loop has produced a shared path forward. A clean version sounds like: "I think we are positioned to move forward from this. I do need to document what happened and what we agreed to, so there is a written record if the issue repeats. If we are not talking about this again in the next review period, it will not be treated as an ongoing concern." Documentation is a record-control mechanism, not the coaching mechanism itself.
 
 Never lie, stretch, or massage facts in a coaching conversation. If notes are being taken, say why. If notes may be used in an incident document, performance record, or other formal artifact, say so. Distinguish facts from stories.
 
@@ -226,6 +240,24 @@ Four hours a week can matter. It can be enough to give someone a path from suppo
 
 ---
 
+## Career Pathing Needs Architecture
+
+"Own your career" is useful advice only when the organization exposes enough map for the employee to navigate. Without guidance on actual departments, roles, skill sets, decision rights, and available development paths, career ownership becomes guesswork.
+
+A generic career tool does not solve that. If a "career compass" produces abstract advice, points toward roles that do not exist, or suggests paths the organization has not actually made available, it is not a development system. It is career-pathing theater: the organization appears to offer mobility while leaving employees to invent the path themselves.
+
+That creates several risks:
+
+- employees leave to get the experience the organization could have helped them build
+- employees form shadow development networks to discover work the official system does not surface
+- stretch work happens through side channels instead of visible coordination
+- people try unsafe tooling shortcuts to create opportunities for themselves
+- managers lose sight of where capability and interest already exist inside the company
+
+The Internal Farm System is the formal answer. Employees should absolutely talk to people on other teams, compare patterns, and notice where their interests might create value. But the organization has to turn that curiosity into visible, bounded, legitimate work. A competent development system does not merely tell people to pave their own career. It shows them the roads that exist, the roads the company needs built, and the safe-reps paths for helping build them.
+
+---
+
 ## Career-Stage Development
 
 TDA should reuse the Career Progression Guide's existing tiers rather than inventing a second leveling model.
@@ -241,7 +273,7 @@ The organization should ask:
 - What support or supervision keeps the risk acceptable?
 - What evidence would show readiness for more responsibility?
 
-This is where development culture matters most. Coaching, practice, feedback, and bounded stretch should be normal expectations of the company, not special events. Continuing the sports analogy, people in this stage of their career are the team's most recent draft class. Successful sports teams have staff dedicated to developing draft picks. It's impractical in the corporate world to have dedicated FTEs for this, but it should be a dedicated percentage of any people-manager's (as opposed to technical or process manager) time. 
+This is where development culture matters most. Coaching, practice, feedback, and bounded stretch should be normal expectations of the company, not special events. Continuing the sports analogy, people in this stage of their career are the team's most recent draft class. Successful sports teams have staff dedicated to developing draft picks. Many companies will not staff this as a dedicated role, so it must be an explicit portion of any people manager's time.
 
 ### Senior
 
@@ -289,6 +321,16 @@ If a manager cannot describe what an employee wants to grow toward, what work dr
 
 ---
 
+## Technology Cannot Substitute for Development Architecture
+
+Organizations often try to use technology to compensate for missing development architecture: career tools, skills platforms, workflow systems, dashboards, AI assistants, and intake portals. Those tools can augment well-designed behavior. They can make information easier to find, reduce administrative friction, and make patterns visible. They cannot create the underlying management behavior by themselves.
+
+Technology can support a process, but it cannot make a broken process healthy. A tool that routes work through a bad operating model mostly makes the bad operating model faster, more expensive, or harder to see. AI does not change that. Using LLMs to push through bad process may feel productive locally, but the cost can become invisible to the person authorizing the usage and difficult for the company to distinguish from legitimate work.
+
+This matters for TDA because career development is not solved by a portal that emits generic recommendations. The system still needs actual roles, actual skill needs, actual managers coordinating work, actual safe-reps paths, actual coaching, and actual evidence. The tool can help people navigate the architecture. It cannot replace the architecture.
+
+---
+
 ## Hiring and Free Agency
 
 TDA does not mean every capability must be grown internally, nor does it mean perfect employee retention.
@@ -320,7 +362,7 @@ With TDA, managers ask better questions:
 - Is their current assignment mix using that strength?
 - What changed around them?
 - What does the person think would have made the situation successful?
-- What defect exists in their success model?
+- What defect exists in their mental model?
 - What support or priority change does the organization owe?
 - What transition gate are they trying to cross?
 - What safe reps can we create?

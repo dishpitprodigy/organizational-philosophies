@@ -24,6 +24,10 @@ _Avoid_: Perk, comfort, preference as entitlement
 A Talent Development Architecture pattern where managers coordinate across teams to place employees into small, useful stretch assignments aligned with their interests. The assignment should create real value for the receiving team, give the employee meaningful reps in a desired skill or domain, and build succession pipeline for future roles.
 _Avoid_: Shadow work, side quest
 
+**Career-Pathing Theater**:
+A development anti-pattern where the organization tells employees to own their career, or gives them a generic career tool, without exposing real roles, departments, skill needs, safe-reps paths, or manager-coordinated opportunities. It creates the appearance of mobility while leaving employees to invent the path themselves.
+_Avoid_: Career ownership without architecture, generic career compass
+
 **Stretch Proposal**:
 An employee-initiated request for a bounded development opportunity that moves them toward a desired skill, responsibility, or domain. A good proposal clarifies the desired learning, the value to the team, the expected time box, the owner, the risk of making the situation worse, and what actions require explicit approval; cross-team proposals also require manager-to-manager coordination.
 _Avoid_: Unbounded volunteer work, unsanctioned fix
@@ -43,6 +47,10 @@ _Avoid_: Trial by fire, sink or swim
 **Development Culture**:
 The expectation that the organization and its employees are continuously trying to get better through coaching, practice, feedback, and bounded stretch. Development is part of how the company operates, not a special program reserved for promotion cycles.
 _Avoid_: Training as perk, annual development plan
+
+**Development Architecture Tooling**:
+Technology that helps people navigate an existing development architecture by surfacing roles, skills, opportunities, evidence, and paths. It can augment good process, but it cannot create the management behavior, role clarity, safe-reps paths, or coaching discipline by itself.
+_Avoid_: Tool as process substitute, AI as process fix
 
 **Free-Agent Hiring**:
 External hiring for senior capability the organization does not currently have in-house. The sports analogy becomes stronger higher on the seniority ladder; at early and mid career, the default expectation should be internal development, not replacing the development pipeline with external hiring.
@@ -69,12 +77,12 @@ A judgment about a person's inferred traits, motives, disposition, or identity. 
 _Avoid_: Character assessment
 
 **Coaching Conversation**:
-A diagnostic conversation that starts from a concrete performance or behavior gap, exposes the person's view of the system around the gap, and produces an agreed next action. It is not a reprimand disguised as development.
+A diagnostic conversation that starts from a concrete performance or behavior gap, surfaces the person's mental model of the situation, updates how they read similar conditions, and produces an agreed next action. It is not a reprimand disguised as development.
 _Avoid_: Difficult conversation, feedback sandwich
 
-**Success Model**:
-The person's internal explanation of what would have made a specific situation succeed. Coaching works by finding defects, missing signals, or stale assumptions in this model and updating those points of reference.
-_Avoid_: Right answer, manager's answer
+**Mental Model**:
+The person's internal map of signals, constraints, likely outcomes, and appropriate actions in a situation. Coaching works by finding missing signals, incorrect reads, stale assumptions, or conflicting instructions in this model and attaching the correction to future cues.
+_Avoid_: Success Model, right answer, manager's answer
 
 **Evidence Marker**:
 A specific observable signal that the agreed coaching plan is working. Evidence markers are agreed at the end of a coaching conversation and reviewed after a defined period.
@@ -83,3 +91,11 @@ _Avoid_: Vague improvement, attitude change
 **Route Summarization**:
 A metaphor for reducing unnecessary bloat in AI instruction files, process rules, or other guidance by replacing repeated special cases with a more general rule. Borrowed from network route aggregation, where several specific routes can be represented by one broader prefix when they share the same next hop.
 _Avoid_: Hardening by accumulation, more rules by default
+
+**Commit Boundary**:
+A coherent editing unit that should be saved as its own git commit so the document's evolution remains reviewable. Each round of substantive edits should preserve a clear Commit Boundary rather than blending unrelated changes together.
+_Avoid_: Batch of unrelated edits, catch-all save
+
+**Clean Index Check**:
+The pre-edit habit of confirming that nothing is staged before starting a new round of changes. It protects Commit Boundaries by preventing forgotten staged changes from being accidentally included in the next commit.
+_Avoid_: Starting from an unknown index
