@@ -112,6 +112,15 @@ Pairs with #3, shares a spine. **Build #3 first** — you can't compute advanced
 ### 6. Hiring guide — PLANNED (user believes he has a non-obvious view)
 **Thesis:** the world gets hiring intake wrong by *grossly undervaluing the contextual metadata a CV provides*, and builds the hiring system incorrectly because of it. Same shape as the rest of the family — the high-signal data gets thrown away and the system operates on the lossy remainder. *Open: pin down exactly what "contextual metadata" means to him before drafting.*
 
+### 7. Socratic Seminars for Leadership Development — PLANNED (periodic research-review forum)
+**Thesis:** leadership development should include a recurring, structured practice where leaders read and discuss selected research or practitioner articles about management, leadership, corporate development, and people development. The format is a Socratic seminar rather than a status meeting or training lecture: participants come prepared, discuss claims and implications, challenge assumptions, connect the material to current organizational behavior, and leave with sharper shared language.
+
+- **Starting source pool:** Harvard Business Review is the obvious first source. Gartner or other management/research providers may also fit. Open: identify credible sources that are practical enough for leaders to use but rigorous enough to avoid becoming trend-of-the-month theater.
+- **Operating model:** periodic meeting cadence; one or two selected articles per session; facilitator prepares framing questions; participants discuss the article's claims, limits, and application to the organization.
+- **Closed-loop hook:** each seminar should produce a short durable artifact: what claim was discussed, what the group agreed/disagreed with, what behavior or decision pattern it should change, and whether any follow-up experiment or policy review was created.
+- **Why it belongs in this family:** it is another way to keep leadership judgment from staying tacit. The seminar turns outside research into shared organizational language, then records whether that language changes how leaders make decisions.
+- **Failure modes to avoid:** book-club theater; performative agreement; article selection as ideology laundering; no connection to actual management behavior; no artifact; no follow-up.
+
 ---
 
 ## The auto-generated retro/review system (cross-cutting capability)
@@ -154,6 +163,7 @@ Not a document — the *capability* the keystone enables, and the thing several 
 3. **Risk Find:** confirm whether an org GRC/risk register already exists; design the record type + which existing severity model (likely FAIR-derived) to adapt; design the second-party scoring step.
 4. **Metrics framework:** decide the first expected-outcome baseline to attempt and at what *altitude* (class-level, not individual-play). Probably waits on Risk Find data accumulating.
 5. **Hiring guide:** interview the "CV contextual metadata" thesis into specifics.
-6. **Auto-retro system:** decide where it's specified (own doc vs. section), and lock the two-artifact-class wall into the design from day one.
-7. **Build order overall:** capture layers before analytics layers, everywhere. Record the plays before computing the leverage.
-8. **Packaging:** this document family may have enough scope to become a book-length artifact. Keep an eventual packaging path in mind: source Markdown may need a LaTeX/PDF route for print-quality output and an HTML-to-ePub or Markdown-to-ePub route for digital distribution.
+6. **Socratic Seminars for Leadership Development:** decide whether this is a standalone doc or part of a broader leadership-development operating cadence; sketch the first seminar format and source-selection criteria.
+7. **Auto-retro system:** decide where it's specified (own doc vs. section), and lock the two-artifact-class wall into the design from day one.
+8. **Build order overall:** capture layers before analytics layers, everywhere. Record the plays before computing the leverage.
+9. **Packaging:** this document family may have enough scope to become a book-length artifact. Keep an eventual packaging path in mind: source Markdown may need a LaTeX/PDF route for print-quality output and an HTML-to-ePub or Markdown-to-ePub route for digital distribution.
