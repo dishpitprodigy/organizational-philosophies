@@ -1,0 +1,620 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Personal Decision Framework</title>
+<style>
+:root{
+  --nav:300px;
+  --rgutter:9vw;
+  --bg:#000000;
+  --panel:#09080b;
+  --panel-2:#141014;
+  --ink:#f8f7df;
+  --muted:#b8b493;
+  --line:#3c2730;
+  --red:#c5003c;
+  --red-dark:#880425;
+  --yellow:#f3e600;
+  --cyan:#55ead4;
+  --purple:#6300ff;
+  --magenta:#ff008d;
+  --pink:#d14eea;
+  --coral:#f96363;
+  --green:#3fb950;
+  --code-bg:#171018;
+  --code-ink:#f3e600;
+  --shadow:0 0 0 1px rgba(243,230,0,.18), 0 16px 40px rgba(0,0,0,.48);
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%; scroll-behavior:smooth}
+body{
+  margin:0;
+  background:
+    linear-gradient(rgba(243,230,0,.045) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(197,0,60,.045) 1px, transparent 1px),
+    radial-gradient(circle at 18% -10%, rgba(85,234,212,.12), transparent 26rem),
+    radial-gradient(circle at 100% 5%, rgba(197,0,60,.18), transparent 24rem),
+    var(--bg);
+  background-size:44px 44px,44px 44px,auto,auto,auto;
+  color:var(--ink);
+  font:16px/1.68 Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+}
+body::before{
+  content:"";
+  position:fixed; inset:0; pointer-events:none; z-index:1;
+  background:repeating-linear-gradient(0deg, rgba(255,255,255,.025) 0 1px, transparent 1px 4px);
+  mix-blend-mode:screen;
+  opacity:.28;
+}
+a{color:var(--cyan); text-decoration:none}
+a:hover{text-decoration:underline; text-decoration-color:var(--yellow)}
+.wrap{display:block}
+.toc{
+  position:fixed; top:0; left:0; width:var(--nav); height:100vh; overflow:auto;
+  padding:1.1rem .95rem 2rem; z-index:20;
+  background:rgba(7,8,15,.94);
+  border-right:2px solid var(--red);
+  box-shadow:12px 0 32px rgba(0,0,0,.34);
+  backdrop-filter:blur(10px);
+}
+.toc-title{
+  font-weight:800; line-height:1.18; color:var(--ink);
+  padding:.45rem .45rem .9rem; margin-bottom:.7rem;
+  border-bottom:1px solid var(--line);
+  text-transform:uppercase; letter-spacing:.06em;
+}
+.toc-kicker{display:block; color:var(--yellow); font-size:.72rem; margin-bottom:.25rem}
+.toc-group{margin:.25rem 0 .35rem}
+.toc-tab{
+  display:block; width:100%; text-align:left; cursor:pointer; border:1px solid transparent;
+  border-radius:0; padding:.52rem .55rem; background:transparent;
+  color:var(--ink); font:inherit; font-size:.88rem; font-weight:800; line-height:1.2;
+  text-transform:uppercase; letter-spacing:.04em;
+}
+.toc-tab:hover{background:rgba(243,230,0,.08); border-color:rgba(243,230,0,.26)}
+.toc-group.active>.toc-tab{background:var(--yellow); color:#000; border-color:var(--yellow)}
+.toc-sub{display:block; font-size:.7rem; font-weight:700; color:var(--muted); margin-top:.12rem; text-transform:none; letter-spacing:0}
+.toc-group.active .toc-sub{color:#3a3100}
+.toc-list{list-style:none; margin:.2rem 0 .65rem; padding:0; display:none}
+.toc-group.active .toc-list{display:block}
+.toc-list li{margin:.1rem 0}
+.toc-list a{
+  display:block; border-left:2px solid transparent; border-radius:6px;
+  padding:.34rem .55rem; color:#c7dcf2; font-size:.88rem; line-height:1.25;
+}
+.toc-list a:hover{background:rgba(85,234,212,.08); border-left-color:var(--cyan); text-decoration:none}
+.toc-list .sub a,.toc-list .lvl3 a{padding-left:1.15rem; color:var(--muted); font-size:.8rem}
+.toc-list .lvl2 a{font-weight:800}
+.toc-list .section-break{height:.75rem}
+.content{
+  position:relative; z-index:2;
+  margin-left:var(--nav); margin-right:var(--rgutter);
+  min-width:0; padding:2.4rem clamp(1.3rem,4.5vw,4rem) 5rem;
+}
+.doc-header{
+  border:1px solid var(--red);
+  border-radius:0;
+  padding:1.45rem clamp(1rem,2.5vw,2rem);
+  background:linear-gradient(135deg, rgba(20,16,20,.98), rgba(0,0,0,.98));
+  box-shadow:var(--shadow);
+}
+.eyebrow{
+  margin:0 0 .5rem; color:var(--yellow); font-size:.78rem; font-weight:800;
+  letter-spacing:.14em; text-transform:uppercase;
+}
+.sub,.lead{color:#cfe7ff; font-size:1.05rem; max-width:78ch}
+.tagline{
+  font-size:1.18rem; color:#f8fcff; font-weight:700; margin-top:1rem;
+  border-left:4px solid var(--yellow); padding-left:1rem;
+}
+h1,h2,h3,h4{line-height:1.22; color:var(--ink); font-weight:800; letter-spacing:0}
+h1{font-size:clamp(2rem,4vw,3.55rem); margin:.05em 0 .2em; text-shadow:3px 0 0 var(--red), -2px 0 0 rgba(85,234,212,.55)}
+h2{
+  font-size:1.55rem; margin:2.25em 0 .72em; padding-bottom:.38em;
+  border-bottom:1px solid var(--line); scroll-margin-top:1rem;
+}
+h2::before{content:"// "; color:var(--red)}
+.panel>h2:first-child{margin-top:.3em}
+h3{font-size:1.17rem; margin:1.65em 0 .5em; color:#d7f8ff; scroll-margin-top:1rem}
+h4{font-size:.98rem; margin:1.35em 0 .4em; color:var(--yellow); text-transform:uppercase; letter-spacing:.04em}
+p{margin:.78em 0}
+strong{color:#fff}
+em{color:#d5e2ff}
+hr{border:0; border-top:1px solid var(--line); margin:2.2em 0}
+ul,ol{margin:.65em 0 1em; padding-left:1.45em}
+li{margin:.32em 0}
+li::marker{color:var(--cyan)}
+code{
+  font-family:"SF Mono",SFMono-Regular,ui-monospace,"Cascadia Code",Consolas,"Liberation Mono",Menlo,monospace;
+  font-size:.9em;
+}
+:not(pre)>code{
+  color:var(--code-ink); background:var(--code-bg); border:1px solid #39405f;
+  padding:.12em .42em; border-radius:5px;
+}
+pre{
+  background:#09080b; color:#f8f7df; padding:1.05rem 1.15rem; border-radius:0;
+  overflow-x:auto; line-height:1.5; border:1px solid rgba(85,234,212,.35);
+  box-shadow:inset 0 1px 0 rgba(243,230,0,.08);
+}
+pre code{background:none; color:inherit; padding:0; border:0; font-size:.86em}
+.tabbar{
+  position:sticky; top:0; z-index:15; display:flex; gap:.45rem; flex-wrap:wrap;
+  margin:1.1rem 0 1rem; padding:.65rem 0; background:rgba(0,0,0,.92);
+  border-bottom:1px solid var(--line); backdrop-filter:blur(8px);
+}
+.tabbtn{
+  cursor:pointer; border:1px solid var(--red); background:#080506; color:var(--ink);
+  font:inherit; font-weight:900; padding:.48rem .85rem; border-radius:0;
+  text-transform:uppercase; letter-spacing:.04em;
+}
+.tabbtn:hover{border-color:var(--yellow); color:var(--yellow)}
+.tabbtn.active{background:var(--yellow); color:#000; border-color:var(--yellow); box-shadow:0 0 20px rgba(243,230,0,.2)}
+.panel{display:none}
+.panel.active{display:block; animation:panelIn .16s ease-out}
+@keyframes panelIn{from{opacity:0; transform:translateY(4px)}to{opacity:1; transform:none}}
+section{margin:1.2rem 0}
+.principle,.block,.card,.pcard,.expand{
+  border:1px solid rgba(197,0,60,.48);
+  background:rgba(9,8,11,.94);
+  border-radius:0;
+  box-shadow:0 10px 30px rgba(0,0,0,.22);
+}
+.principle,.block{padding:1.1rem clamp(1rem,2vw,1.4rem)}
+.principle{border-left:4px solid var(--cyan)}
+.principle.hot{border-left-color:var(--red)}
+.principle.gold{border-left-color:var(--yellow)}
+blockquote.callout,.callout,blockquote:not(.callout){
+  margin:1.05em 0; padding:.9rem 1rem;
+  border:1px solid var(--line); border-left:5px solid var(--cyan);
+  background:rgba(20,16,20,.86); border-radius:0;
+}
+.callout.warn{border-left-color:var(--yellow)}
+.callout.hot,.callout.example{border-left-color:var(--magenta)}
+.callout.success{border-left-color:var(--green)}
+.callout.key,.callout.scope{border-left-color:var(--cyan)}
+.callout.danger{border-left-color:var(--red)}
+.callout.note{border-left-color:var(--muted)}
+.callout>:first-child,blockquote>:first-child{margin-top:0}
+.callout>:last-child,blockquote>:last-child{margin-bottom:0}
+.callout::before{display:block; font-size:.72rem; font-weight:900; letter-spacing:.08em; text-transform:uppercase; margin-bottom:.35rem; color:var(--yellow)}
+.callout.key::before{content:"Key rule"}
+.callout.note::before{content:"Note"}
+.callout.scope::before{content:"Scope"}
+.callout.example::before{content:"Worked example"}
+.callout.warn::before{content:"Watch out"}
+.callout.danger::before{content:"Anti-pattern"}
+.callout.success::before{content:"Do this"}
+table{
+  border-collapse:separate; border-spacing:0; width:100%; margin:1.1em 0;
+  font-size:.95rem; border:1px solid var(--line); border-radius:0; overflow:hidden;
+  background:rgba(9,8,11,.9);
+}
+thead th{background:rgba(243,230,0,.14); color:#fff8a6; text-align:left; font-weight:800}
+th,td{padding:.68rem .82rem; vertical-align:top; border-bottom:1px solid var(--line); border-right:1px solid var(--line); text-align:left}
+th:last-child,td:last-child{border-right:0}
+tbody tr:last-child td{border-bottom:0}
+tbody tr:nth-child(even){background:rgba(197,0,60,.11)}
+tbody tr:hover{background:rgba(252,238,84,.07)}
+/* Work-item expand boxes */
+.expand{margin:1em 0; overflow:hidden}
+.expand[open]{background:rgba(20,16,20,.92)}
+.expand>summary{cursor:pointer; list-style:none; padding:.8rem 1rem; font-weight:900; color:var(--ink); display:flex; align-items:center; gap:.6rem}
+.expand>summary::-webkit-details-marker{display:none}
+.expand>summary::before{content:"▸"; color:var(--yellow); font-size:.9em; transition:transform .15s ease}
+.expand[open]>summary::before{transform:rotate(90deg)}
+.expand>summary:hover{background:rgba(243,230,0,.08)}
+.expand-body{padding:0 1rem 1rem; border-top:1px solid var(--line)}
+li.task{list-style:none; margin-left:-1.4em}
+li.task input{margin-right:.55em; transform:translateY(1px)}
+li.task.done{color:var(--muted)}
+/* Career cards and modal */
+.cards{display:grid; grid-template-columns:repeat(auto-fill,minmax(330px,1fr)); gap:18px; margin:18px 0 28px}
+.card{overflow:hidden; transition:transform .18s,border-color .18s}
+.card:hover{transform:translateY(-3px); border-color:var(--yellow)}
+.card-head{display:flex; gap:14px; align-items:center; padding:16px 18px; background:linear-gradient(90deg,rgba(197,0,60,.18),rgba(85,234,212,.07)); border-bottom:1px solid var(--line)}
+.head-text{min-width:0}.level-name{margin:0; font-size:17px; font-weight:800; border:0; padding:0}.level-name::before{content:""}
+.job-title{margin:2px 0 0; font-size:13.5px; color:var(--cyan); font-weight:700}
+.card-body{padding:10px 18px 16px}.teaser{margin:0; font-size:14px; color:#cfe7ff}.more{display:inline-block; margin-top:10px; font-size:12px; font-weight:900; letter-spacing:.04em; color:var(--yellow); opacity:.9}
+.card.clickable{cursor:pointer}.card.clickable:focus-visible{outline:2px solid var(--yellow); outline-offset:2px}
+.attr{padding:12px 0}.attr-label{font-size:11px; letter-spacing:.1em; text-transform:uppercase; color:var(--yellow); margin-bottom:5px; font-weight:900}.attr-val{font-size:14px; color:#d6e0ea}
+.badge{flex:0 0 auto; min-width:54px; display:inline-block; text-align:center; font-weight:900; font-size:13px; padding:6px 10px; border-radius:0; color:#000; letter-spacing:.02em; background:var(--yellow)}
+.badge.ic{background:var(--cyan)}.badge.mgr{background:var(--magenta); color:#fff}.badge.ex{background:var(--coral); color:#130000}td .badge{min-width:46px; font-size:12px; padding:4px 8px}
+#details{display:none}.modal-overlay{position:fixed; inset:0; z-index:50; display:none; align-items:flex-start; justify-content:center; padding:6vh 16px 16px; background:rgba(0,0,0,.72); backdrop-filter:blur(4px); overflow:auto}.modal-overlay.open{display:flex; animation:ovl .2s ease}@keyframes ovl{from{opacity:0}to{opacity:1}}
+.modal{position:relative; width:min(720px,100%); background:linear-gradient(180deg,var(--panel),var(--panel-2)); border:1px solid var(--red); border-radius:0; box-shadow:0 24px 70px rgba(0,0,0,.68); animation:pop .22s cubic-bezier(.2,.8,.3,1.1)}@keyframes pop{from{opacity:0;transform:translateY(14px) scale(.97)}to{opacity:1;transform:none}}
+.modal-close{position:absolute; top:12px; right:12px; width:34px; height:34px; border-radius:0; border:1px solid var(--red); background:#080506; color:var(--ink); font-size:18px; line-height:1; cursor:pointer; transition:.15s}.modal-close:hover{color:#000; background:var(--yellow); border-color:var(--yellow)}
+.modal .modal-head{display:flex; gap:14px; align-items:center; padding:20px 22px; background:linear-gradient(90deg,rgba(197,0,60,.24),rgba(85,234,212,.08)); border-bottom:1px solid var(--line)}.modal .detail-body{padding:6px 24px 24px}.modal .detail-body h3{font-size:13px; letter-spacing:.09em; text-transform:uppercase; color:var(--yellow); margin:20px 0 6px; border:0}.modal .detail-body h4{margin:16px 0 4px}.modal .detail-body p,.modal .detail-body li{font-size:14.5px}body.modal-open{overflow:hidden}
+/* Coaching planner */
+.intro-note{color:var(--muted); font-style:italic; margin:0 0 26px}.planner{display:grid; gap:18px; margin:22px 0 8px}.pcard{padding:18px 20px 20px}.pcard .pnum{display:inline-flex; align-items:center; justify-content:center; width:30px; height:30px; border-radius:0; font-weight:900; font-size:14px; color:#000; background:var(--yellow); margin-right:12px; flex:0 0 auto}.pcard .phead{display:flex; align-items:flex-start; gap:0; margin:0 0 4px}.pcard .ptitle{font-size:17px; font-weight:800; color:#f8f7df; line-height:1.35}.pcard .psub{font-size:12px; letter-spacing:.09em; text-transform:uppercase; color:var(--cyan); margin:8px 0 0 42px}.pcard .lines{margin:14px 0 0 42px; border:1px dashed var(--line); border-radius:0; background:rgba(255,255,255,.015); min-height:104px; background-image:repeating-linear-gradient(transparent,transparent 31px,rgba(243,230,0,.2) 31px,rgba(243,230,0,.2) 32px)}
+footer{margin-top:60px; padding-top:22px; border-top:1px solid var(--line); color:var(--muted); font-size:13px; display:flex; justify-content:space-between; flex-wrap:wrap; gap:8px}
+.totop{position:fixed; right:1.5rem; bottom:1.5rem; z-index:30; width:44px; height:44px; border-radius:50%; cursor:pointer; border:1px solid rgba(85,234,212,.6); background:#0d1020; color:var(--cyan); font-size:1.2rem; line-height:1; display:flex; align-items:center; justify-content:center; box-shadow:0 0 24px rgba(85,234,212,.24); opacity:0; visibility:hidden; transition:opacity .2s ease, visibility .2s ease, transform .2s ease}.totop.show{opacity:1; visibility:visible}.totop:hover{transform:translateY(-2px); color:var(--yellow); border-color:var(--yellow)}
+@media(max-width:920px){body{background-size:34px 34px,34px 34px,auto,auto,auto}.toc{position:static; width:auto; height:auto; overflow:visible; border-right:0; border-bottom:1px solid var(--line)}.toc-list{columns:1}.content{margin-left:0; margin-right:0; padding:1.15rem 1rem 4rem}.doc-header{padding:1rem}table{display:block; overflow-x:auto}.cards{grid-template-columns:1fr}.pcard .psub,.pcard .lines{margin-left:0}}
+@media print{body{background:#fff; color:#111}body::before,.toc,.tabbar,.totop,.modal-overlay{display:none!important}.content{margin:0; padding:0}.panel{display:block!important}.doc-header,.principle,.block,.callout,blockquote,.card,.pcard,.expand{box-shadow:none; background:#fff; color:#111; border-color:#ccc}h1,h2,h3,h4,p,li,td,th,strong,em,.attr-val{color:#111}h1{text-shadow:none}h2::before{content:""}a{color:#0645ad}pre{background:#f4f6f8; color:#111; border:1px solid #ccc}table,.card{break-inside:avoid}#details{display:block; margin-top:30px}#details .detail{break-inside:avoid; border:1px solid #ccc; border-radius:0; margin:14px 0; padding:4px 16px 12px}#details .modal-head{display:flex; gap:12px; align-items:center; padding:10px 0}.more,.modal-close{display:none!important}.badge{color:#0b0f14!important; -webkit-print-color-adjust:exact; print-color-adjust:exact}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<nav class="toc" aria-label="Contents">
+<div class="toc-title"><span class="toc-kicker">Decision</span>Personal Decision Framework</div>
+<div class="toc-group active" data-tab="overview">
+<button class="toc-tab" data-tab="overview">Overview<span class="toc-sub">Rule and 5-box scaffold</span></button>
+<ul class="toc-list">
+<li><a href="#the-rule">The Rule</a></li>
+<li><a href="#the-5-box-scaffold">The 5-Box Scaffold</a></li>
+</ul>
+</div>
+<div class="toc-group" data-tab="concepts">
+<button class="toc-tab" data-tab="concepts">Concepts<span class="toc-sub">Planning and formal models</span></button>
+<ul class="toc-list">
+<li><a href="#planning-concepts">Planning Concepts</a></li>
+<li class="sub"><a href="#project-phases">Project Phases</a></li>
+<li class="sub"><a href="#tasks-vs-discovery-packages">Tasks vs Discovery Packages</a></li>
+<li class="sub"><a href="#discovery-package-usage">Discovery Package Usage</a></li>
+<li><a href="#formal-concepts">Formal Concepts</a></li>
+<li class="sub"><a href="#agile-vs-scrum">Agile vs Scrum</a></li>
+<li class="sub"><a href="#agile-and-traditional-project-management">Agile and Traditional Project Management</a></li>
+<li class="sub"><a href="#pmbok-wbs">PMBOK / WBS</a></li>
+<li class="sub"><a href="#cynefin-framework">Cynefin Framework</a></li>
+<li class="sub"><a href="#lean-and-theory-of-constraints">Lean and Theory of Constraints</a></li>
+</ul>
+</div>
+<div class="toc-group" data-tab="discovery">
+<button class="toc-tab" data-tab="discovery">Discovery<span class="toc-sub">Templates, heuristics, refactoring</span></button>
+<ul class="toc-list">
+<li><a href="#discovery-package-template">Discovery Package Template</a></li>
+<li><a href="#early-classification-heuristics">Early Classification Heuristics</a></li>
+<li class="sub"><a href="#safe-first-classification-rule">Safe-First Classification Rule</a></li>
+<li class="sub"><a href="#simple-decision-tree">Simple Decision Tree</a></li>
+<li><a href="#refactoring-vague-discovery-epics">Refactoring Vague Discovery Epics</a></li>
+<li class="sub"><a href="#instead-of-this">Instead of this</a></li>
+<li class="sub"><a href="#do-this">Do this</a></li>
+</ul>
+</div>
+</nav>
+<main class="content">
+<header class="doc-header">
+<p class="eyebrow">Closed-Loop Organization</p>
+<h1>Personal Decision Framework</h1>
+<p class="sub">A compact thinking scaffold for deciding what kind of work something is before prematurely decomposing it into tasks.</p>
+<p>Use this framework before discussing solutions for a complex project. The goal is to put the work into a stable planning scaffold before debating implementation details.</p>
+</header>
+<div class="tabbar"><button class="tabbtn active" data-tab="overview">Overview</button><button class="tabbtn" data-tab="concepts">Concepts</button><button class="tabbtn" data-tab="discovery">Discovery</button></div>
+<div class="panels">
+<section class="panel active" id="tab-overview" data-tab="overview">
+<h2 id="the-rule">The Rule</h2>
+<ul>
+<li>Do not decide details first.</li>
+<li>Decide what kind of thinking the work requires.</li>
+</ul>
+<h2 id="the-5-box-scaffold">The 5-Box Scaffold</h2>
+<p>When a new project appears, answer only these questions in writing.</p>
+<h4 id="1-what-kind-of-problem-is-this">1. What kind of problem is this?</h4>
+<p>Pick one:</p>
+<ul>
+<li>Discovery</li>
+<li>Migration</li>
+<li>Redesign</li>
+<li>Enablement</li>
+<li>Optimization</li>
+</ul>
+<p>If this is misclassified, the work usually becomes harder to scope, sequence, and explain later.</p>
+<h4 id="2-what-must-be-true-before-work-starts">2. What must be true before work starts?</h4>
+<p>List constraints, not solutions:</p>
+<ul>
+<li>Is security sign-off required?</li>
+<li>Are organizational boundaries fixed?</li>
+<li>Are timelines immovable?</li>
+</ul>
+<p>This prevents fantasy planning.</p>
+<h4 id="3-what-is-explicitly-not-being-solved">3. What is explicitly not being solved?</h4>
+<p>Write the non-goals early. If they remain implicit, they will be reintroduced later as assumed scope.</p>
+<h4 id="4-what-reusable-artifact-must-exist-at-the-end">4. What reusable artifact must exist at the end?</h4>
+<p>Examples:</p>
+<ul>
+<li>Taxonomy</li>
+<li>Decision record</li>
+<li>Capability list</li>
+<li>Trust model</li>
+<li>Reference pattern</li>
+</ul>
+<p>If the answer is only "running code," this framework is probably no longer enough on its own. You may already be in execution planning.</p>
+<h4 id="5-what-downstream-work-should-never-need-to-ask-why-again">5. What downstream work should never need to ask "why" again?</h4>
+<p>That is the success metric for the framing work.</p>
+</section>
+<section class="panel" id="tab-concepts" data-tab="concepts">
+<h2 id="planning-concepts">Planning Concepts</h2>
+<h3 id="project-phases">Project Phases</h3>
+<p>This framework is compatible with PMI-style phase thinking: initiation, planning, execution, monitoring and controlling, and closing.</p>
+<p>In practice, Agile and Scrum usually change how execution and feedback loops operate. They do not eliminate the need for initiation, planning, or scope control.</p>
+<p>Source:
+<a href="https://projectbliss.net/pmi-process-groups/">PMI Process Groups Overview</a></p>
+<h3 id="tasks-vs-discovery-packages">Tasks vs Discovery Packages</h3>
+<p>This document uses <strong>discovery package</strong> as an adapted term for ambiguous, early-phase technical work.</p>
+<p>It is intentionally not strict PMBOK terminology:</p>
+<ul>
+<li>In PMBOK/WBS language, a <strong>work package</strong> is the lowest level of a work breakdown structure.</li>
+<li>In discovery-heavy technical work, teams often need a planning unit that is still outcome-oriented but not yet decomposed into execution steps.</li>
+<li>A <strong>discovery package</strong> fills that role.</li>
+</ul>
+<p>You can think of the relationship this way:</p>
+<ul>
+<li>PMBOK work package: formal planning unit inside a WBS</li>
+<li>Discovery package: pre-execution planning unit for complex or uncertain work</li>
+<li>Story/task: execution unit once the ambiguity has been reduced</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Tasks</th>
+<th>Discovery Packages</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Describe actions</td>
+<td>Describe outcomes</td>
+</tr>
+<tr>
+<td>Ordered and prescriptive</td>
+<td>Loosely ordered or parallel</td>
+</tr>
+<tr>
+<td>Fragile when assumptions change</td>
+<td>Stable when assumptions change</td>
+</tr>
+<tr>
+<td>Easy to micromanage</td>
+<td>Easy to delegate</td>
+</tr>
+<tr>
+<td>Good for execution</td>
+<td>Good for discovery and alignment</td>
+</tr>
+</tbody>
+</table>
+<p>If the team does not yet know the right steps, it is usually in discovery-package territory, not task territory.</p>
+<h3 id="discovery-package-usage">Discovery Package Usage</h3>
+<p>Group discovery packages into stable categories.</p>
+<h4 id="operational-impact">Operational Impact</h4>
+<ul>
+<li>What happens when this system is unavailable?</li>
+<li>What is the tolerated duration of failure?</li>
+<li>Who is paged, and with what context?</li>
+</ul>
+<h4 id="lifecycle-and-change">Lifecycle and Change</h4>
+<ul>
+<li>How often does this system change?</li>
+<li>What other systems' changes invalidate work here?</li>
+<li>What must be retested when this changes?</li>
+</ul>
+<h4 id="coupling-and-dependencies">Coupling and Dependencies</h4>
+<ul>
+<li>What other systems assume this "just works"?</li>
+<li>What hidden contracts exist around timing, identity, or naming?</li>
+</ul>
+<h4 id="failure-and-recovery">Failure and Recovery</h4>
+<ul>
+<li>How do we recover from partial failure?</li>
+<li>What is the slowest acceptable recovery path?</li>
+<li>What breaks if recovery exceeds that window?</li>
+</ul>
+<h4 id="ownership-and-authority">Ownership and Authority</h4>
+<ul>
+<li>Who decides when change is allowed?</li>
+<li>Who can pause rollout?</li>
+<li>Who owns risk acceptance?</li>
+</ul>
+<h2 id="formal-concepts">Formal Concepts</h2>
+<p>These concepts inform the framework and help connect it to more formal delivery models.</p>
+<h3 id="agile-vs-scrum">Agile vs Scrum</h3>
+<p>Scrum is an opinionated implementation of Agile. It applies Agile principles through a defined set of roles, events, and artifacts rather than leaving each team to design its own operating model.</p>
+<p>Agile is the broader philosophy centered on iterative delivery, customer collaboration, and adaptability.</p>
+<p>Reference:
+<a href="https://www.scrumalliance.org/">Scrum Alliance</a></p>
+<h3 id="agile-and-traditional-project-management">Agile and Traditional Project Management</h3>
+<p>Agile is not a replacement for project structure. It shortens feedback loops and brings learning into execution earlier, but it does not eliminate the need to define goals, constraints, scope boundaries, and decision rights.</p>
+<p>One useful way to think about it:</p>
+<ul>
+<li>Traditional planning tries to reduce uncertainty before execution.</li>
+<li>Agile accepts that some uncertainty can only be reduced during execution.</li>
+<li>Scrum changes the cadence of planning, review, and adaptation.</li>
+<li>None of that removes the need for framing the work correctly up front.</li>
+</ul>
+<p>For novel technical work, customers and stakeholders often refine their understanding only after interacting with an early version of the solution. That is why iterative delivery matters. The plan still matters too; it simply needs to tolerate learning.</p>
+<h4 id="example">Example</h4>
+<p>Imagine building an automatic screwdriver for a customer. The initial requirement is simple: reduce the manual effort required to drive screws into wood.</p>
+<p>If the design is created without learning more, the first version may work only for small softwood boards. Later the customer reveals that the real use case involves hardwood, larger lumber, reverse operation for removing screws, and safety controls to prevent accidental activation.</p>
+<p>The point is not that the original planning was useless. The point is that the initial framing was incomplete. Agile methods help teams discover and respond to that gap sooner, but they do not remove the need for requirements, constraints, and explicit non-goals.</p>
+<h3 id="pmbok-wbs">PMBOK / WBS</h3>
+<p>In formal PMI terminology, a <strong>work package</strong> is the lowest level of a WBS and should be outcome-oriented and estimable.</p>
+<p>References:
+<a href="https://www.pmi.org/learning/library/work-breakdown-structure-basic-principles-4883">WBS Basic Principles</a>
+<a href="https://www.pmi.org/learning/library/effective-sizing-content-definition-work-packages-5387">Work Package Sizing and Definition</a></p>
+<p>This document borrows from that concept, but uses <strong>discovery package</strong> to distinguish ambiguous planning work from formally decomposed execution work.</p>
+<h3 id="cynefin-framework">Cynefin Framework</h3>
+<p>Cynefin classifies problems as:</p>
+<ul>
+<li>Clear / Obvious -&gt; best practices</li>
+<li>Complicated -&gt; expert analysis</li>
+<li>Complex -&gt; probe, sense, respond</li>
+<li>Chaotic -&gt; act to stabilize</li>
+</ul>
+<p>Tasks work well in clear and complicated domains.</p>
+<p>Discovery packages are more appropriate in complex domains, where teams need to reduce uncertainty before they can prescribe exact steps.</p>
+<h3 id="lean-and-theory-of-constraints">Lean and Theory of Constraints</h3>
+<p>Another useful framing:</p>
+<ul>
+<li>Discovery -&gt; reduce uncertainty</li>
+<li>Migration -&gt; move state A to state B</li>
+<li>Redesign -&gt; change structure</li>
+<li>Enablement -&gt; remove blockers for others</li>
+<li>Optimization -&gt; improve efficiency or flow</li>
+</ul>
+<p>These are not formal PMI categories. They are intent categories.</p>
+</section>
+<section class="panel" id="tab-discovery" data-tab="discovery">
+<h2 id="discovery-package-template">Discovery Package Template</h2>
+<p><strong>Name:</strong><br />
+Short, outcome-oriented noun phrase</p>
+<p><strong>Intent:</strong><br />
+Discovery / Enablement / Migration / Redesign / Optimization</p>
+<p><strong>Objective:</strong><br />
+What question this work answers</p>
+<p><strong>Non-Goals:</strong><br />
+What it explicitly does not decide</p>
+<p><strong>Inputs Required:</strong><br />
+Who must be involved and what information must exist</p>
+<p><strong>Output Artifact:</strong><br />
+The thing that proves it is done</p>
+<p><strong>Downstream Enabled:</strong><br />
+What work can now proceed without rework</p>
+<h2 id="early-classification-heuristics">Early Classification Heuristics</h2>
+<p>Use these when the work feels ambiguous and the team is tempted to jump straight into design or execution.</p>
+<h3 id="safe-first-classification-rule">Safe-First Classification Rule</h3>
+<p>When unsure, default to <strong>Discovery</strong> first.</p>
+<p>Why:</p>
+<ul>
+<li>Discovery packages do not lock in assumptions.</li>
+<li>They are politically safer than premature design commitments.</li>
+<li>They produce reusable artifacts.</li>
+<li>They justify later redesign without treating earlier learning as failure.</li>
+</ul>
+<h3 id="simple-decision-tree">Simple Decision Tree</h3>
+<p>Ask one question at a time:</p>
+<ol>
+<li>Do I already know what "done" looks like?</li>
+<li>Yes -&gt; probably not Discovery</li>
+<li>
+<p>No -&gt; Discovery</p>
+</li>
+<li>
+<p>Will doing this work constrain future options?</p>
+</li>
+<li>Yes -&gt; Redesign or Migration</li>
+<li>
+<p>No -&gt; Discovery or Enablement</p>
+</li>
+<li>
+<p>Is the primary value learning, moving state, unblocking others, or improving flow?</p>
+</li>
+<li>Learning -&gt; Discovery</li>
+<li>Moving -&gt; Migration</li>
+<li>Unblocking -&gt; Enablement</li>
+<li>Improving -&gt; Optimization</li>
+</ol>
+<p>If you are torn between two categories, choose the one that produces an artifact rather than a system change.</p>
+<h2 id="refactoring-vague-discovery-epics">Refactoring Vague Discovery Epics</h2>
+<p>Backlog epics filled with "determine X" or "research Y" are usually a sign that task-based thinking has been applied to discovery work.</p>
+<p>Those items feel weak because:</p>
+<ul>
+<li>They are vague.</li>
+<li>They do not feel like visible progress.</li>
+<li>They do not tell reviewers what artifact will exist at the end.</li>
+</ul>
+<h3 id="instead-of-this">Instead of this</h3>
+<ul>
+<li>Determine IAM requirements</li>
+<li>Research AWS authentication options</li>
+<li>Figure out directory structure</li>
+</ul>
+<h3 id="do-this">Do this</h3>
+<p><strong>Epic: Platform Identity Discovery</strong></p>
+<p>Discovery packages under it:</p>
+<ul>
+<li>
+<p><strong>Identity Surface Inventory</strong>
+  Output: documented list of identity consumers</p>
+</li>
+<li>
+<p><strong>Authorization Verbs Definition</strong>
+  Output: capability list of verbs rather than group names</p>
+</li>
+<li>
+<p><strong>Trust Boundary Definition</strong>
+  Output: written trust model and escalation paths</p>
+</li>
+</ul>
+<p>Each package:</p>
+<ul>
+<li>Has a finish line</li>
+<li>Creates a reviewable artifact</li>
+<li>Can be marked done without debate</li>
+</ul>
+<p>This makes the backlog more useful because:</p>
+<ul>
+<li>Progress becomes visible</li>
+<li>Discovery work stops pretending to be execution</li>
+<li>Stakeholders can review outcomes rather than activity</li>
+</ul>
+</section>
+</div>
+</main>
+</div>
+<button class="totop" id="totop" title="Back to top" aria-label="Back to top">↑</button>
+<script>
+(function(){
+  function activate(name){
+    document.querySelectorAll('.panel').forEach(function(p){
+      p.classList.toggle('active', p.dataset.tab === name);
+    });
+    document.querySelectorAll('.toc-group').forEach(function(g){
+      g.classList.toggle('active', g.dataset.tab === name);
+    });
+    document.querySelectorAll('.tabbtn').forEach(function(b){
+      b.classList.toggle('active', b.dataset.tab === name);
+    });
+  }
+  function panelTabOf(el){
+    var panel = el.closest('.panel');
+    return panel ? panel.dataset.tab : null;
+  }
+  function go(id, smooth){
+    var el = document.getElementById(id);
+    if(!el) return false;
+    var tab = panelTabOf(el);
+    if(tab) activate(tab);
+    var details = el.closest('details');
+    if(details) details.open = true;
+    if(el.tagName === 'DETAILS') el.open = true;
+    el.scrollIntoView(smooth ? {behavior:'smooth', block:'start'} : {block:'start'});
+    return true;
+  }
+  document.querySelectorAll('.tabbtn, .toc-tab').forEach(function(btn){
+    btn.addEventListener('click', function(e){
+      e.preventDefault();
+      activate(btn.dataset.tab);
+      window.scrollTo({top:0, left:0, behavior:'smooth'});
+      history.replaceState(null, '', location.pathname);
+    });
+  });
+  document.addEventListener('click', function(e){
+    var a=e.target.closest('a[href^="#"]');
+    if(!a) return;
+    var id=decodeURIComponent(a.getAttribute('href').slice(1));
+    if(!id) return;
+    if(go(id, true)){
+      e.preventDefault();
+      history.replaceState(null, '', '#' + id);
+    }
+  });
+  var top=document.getElementById('totop');
+  function onScroll(){ if(top) top.classList.toggle('show', window.scrollY>420); }
+  window.addEventListener('scroll', onScroll, {passive:true});
+  onScroll();
+  if(top){
+    top.addEventListener('click', function(){
+      window.scrollTo({top:0, left:0, behavior:'smooth'});
+    });
+  }
+  if(location.hash){
+    if(!go(decodeURIComponent(location.hash.slice(1)), false)) activate(document.querySelector('.panel.active')?.dataset.tab || document.querySelector('.tabbtn')?.dataset.tab || 'overview');
+  } else {
+    activate(document.querySelector('.panel.active')?.dataset.tab || document.querySelector('.tabbtn')?.dataset.tab || 'overview');
+  }
+  window.__docTabs = {activate: activate, go: go};
+})();
+</script>
+</body>
+</html>

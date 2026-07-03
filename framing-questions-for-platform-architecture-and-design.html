@@ -1,0 +1,612 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Framing Questions for Platform Architecture and Design</title>
+<style>
+:root{
+  --nav:300px;
+  --rgutter:9vw;
+  --bg:#000000;
+  --panel:#09080b;
+  --panel-2:#141014;
+  --ink:#f8f7df;
+  --muted:#b8b493;
+  --line:#3c2730;
+  --red:#c5003c;
+  --red-dark:#880425;
+  --yellow:#f3e600;
+  --cyan:#55ead4;
+  --purple:#6300ff;
+  --magenta:#ff008d;
+  --pink:#d14eea;
+  --coral:#f96363;
+  --green:#3fb950;
+  --code-bg:#171018;
+  --code-ink:#f3e600;
+  --shadow:0 0 0 1px rgba(243,230,0,.18), 0 16px 40px rgba(0,0,0,.48);
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%; scroll-behavior:smooth}
+body{
+  margin:0;
+  background:
+    linear-gradient(rgba(243,230,0,.045) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(197,0,60,.045) 1px, transparent 1px),
+    radial-gradient(circle at 18% -10%, rgba(85,234,212,.12), transparent 26rem),
+    radial-gradient(circle at 100% 5%, rgba(197,0,60,.18), transparent 24rem),
+    var(--bg);
+  background-size:44px 44px,44px 44px,auto,auto,auto;
+  color:var(--ink);
+  font:16px/1.68 Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+}
+body::before{
+  content:"";
+  position:fixed; inset:0; pointer-events:none; z-index:1;
+  background:repeating-linear-gradient(0deg, rgba(255,255,255,.025) 0 1px, transparent 1px 4px);
+  mix-blend-mode:screen;
+  opacity:.28;
+}
+a{color:var(--cyan); text-decoration:none}
+a:hover{text-decoration:underline; text-decoration-color:var(--yellow)}
+.wrap{display:block}
+.toc{
+  position:fixed; top:0; left:0; width:var(--nav); height:100vh; overflow:auto;
+  padding:1.1rem .95rem 2rem; z-index:20;
+  background:rgba(7,8,15,.94);
+  border-right:2px solid var(--red);
+  box-shadow:12px 0 32px rgba(0,0,0,.34);
+  backdrop-filter:blur(10px);
+}
+.toc-title{
+  font-weight:800; line-height:1.18; color:var(--ink);
+  padding:.45rem .45rem .9rem; margin-bottom:.7rem;
+  border-bottom:1px solid var(--line);
+  text-transform:uppercase; letter-spacing:.06em;
+}
+.toc-kicker{display:block; color:var(--yellow); font-size:.72rem; margin-bottom:.25rem}
+.toc-group{margin:.25rem 0 .35rem}
+.toc-tab{
+  display:block; width:100%; text-align:left; cursor:pointer; border:1px solid transparent;
+  border-radius:0; padding:.52rem .55rem; background:transparent;
+  color:var(--ink); font:inherit; font-size:.88rem; font-weight:800; line-height:1.2;
+  text-transform:uppercase; letter-spacing:.04em;
+}
+.toc-tab:hover{background:rgba(243,230,0,.08); border-color:rgba(243,230,0,.26)}
+.toc-group.active>.toc-tab{background:var(--yellow); color:#000; border-color:var(--yellow)}
+.toc-sub{display:block; font-size:.7rem; font-weight:700; color:var(--muted); margin-top:.12rem; text-transform:none; letter-spacing:0}
+.toc-group.active .toc-sub{color:#3a3100}
+.toc-list{list-style:none; margin:.2rem 0 .65rem; padding:0; display:none}
+.toc-group.active .toc-list{display:block}
+.toc-list li{margin:.1rem 0}
+.toc-list a{
+  display:block; border-left:2px solid transparent; border-radius:6px;
+  padding:.34rem .55rem; color:#c7dcf2; font-size:.88rem; line-height:1.25;
+}
+.toc-list a:hover{background:rgba(85,234,212,.08); border-left-color:var(--cyan); text-decoration:none}
+.toc-list .sub a,.toc-list .lvl3 a{padding-left:1.15rem; color:var(--muted); font-size:.8rem}
+.toc-list .lvl2 a{font-weight:800}
+.toc-list .section-break{height:.75rem}
+.content{
+  position:relative; z-index:2;
+  margin-left:var(--nav); margin-right:var(--rgutter);
+  min-width:0; padding:2.4rem clamp(1.3rem,4.5vw,4rem) 5rem;
+}
+.doc-header{
+  border:1px solid var(--red);
+  border-radius:0;
+  padding:1.45rem clamp(1rem,2.5vw,2rem);
+  background:linear-gradient(135deg, rgba(20,16,20,.98), rgba(0,0,0,.98));
+  box-shadow:var(--shadow);
+}
+.eyebrow{
+  margin:0 0 .5rem; color:var(--yellow); font-size:.78rem; font-weight:800;
+  letter-spacing:.14em; text-transform:uppercase;
+}
+.sub,.lead{color:#cfe7ff; font-size:1.05rem; max-width:78ch}
+.tagline{
+  font-size:1.18rem; color:#f8fcff; font-weight:700; margin-top:1rem;
+  border-left:4px solid var(--yellow); padding-left:1rem;
+}
+h1,h2,h3,h4{line-height:1.22; color:var(--ink); font-weight:800; letter-spacing:0}
+h1{font-size:clamp(2rem,4vw,3.55rem); margin:.05em 0 .2em; text-shadow:3px 0 0 var(--red), -2px 0 0 rgba(85,234,212,.55)}
+h2{
+  font-size:1.55rem; margin:2.25em 0 .72em; padding-bottom:.38em;
+  border-bottom:1px solid var(--line); scroll-margin-top:1rem;
+}
+h2::before{content:"// "; color:var(--red)}
+.panel>h2:first-child{margin-top:.3em}
+h3{font-size:1.17rem; margin:1.65em 0 .5em; color:#d7f8ff; scroll-margin-top:1rem}
+h4{font-size:.98rem; margin:1.35em 0 .4em; color:var(--yellow); text-transform:uppercase; letter-spacing:.04em}
+p{margin:.78em 0}
+strong{color:#fff}
+em{color:#d5e2ff}
+hr{border:0; border-top:1px solid var(--line); margin:2.2em 0}
+ul,ol{margin:.65em 0 1em; padding-left:1.45em}
+li{margin:.32em 0}
+li::marker{color:var(--cyan)}
+code{
+  font-family:"SF Mono",SFMono-Regular,ui-monospace,"Cascadia Code",Consolas,"Liberation Mono",Menlo,monospace;
+  font-size:.9em;
+}
+:not(pre)>code{
+  color:var(--code-ink); background:var(--code-bg); border:1px solid #39405f;
+  padding:.12em .42em; border-radius:5px;
+}
+pre{
+  background:#09080b; color:#f8f7df; padding:1.05rem 1.15rem; border-radius:0;
+  overflow-x:auto; line-height:1.5; border:1px solid rgba(85,234,212,.35);
+  box-shadow:inset 0 1px 0 rgba(243,230,0,.08);
+}
+pre code{background:none; color:inherit; padding:0; border:0; font-size:.86em}
+.tabbar{
+  position:sticky; top:0; z-index:15; display:flex; gap:.45rem; flex-wrap:wrap;
+  margin:1.1rem 0 1rem; padding:.65rem 0; background:rgba(0,0,0,.92);
+  border-bottom:1px solid var(--line); backdrop-filter:blur(8px);
+}
+.tabbtn{
+  cursor:pointer; border:1px solid var(--red); background:#080506; color:var(--ink);
+  font:inherit; font-weight:900; padding:.48rem .85rem; border-radius:0;
+  text-transform:uppercase; letter-spacing:.04em;
+}
+.tabbtn:hover{border-color:var(--yellow); color:var(--yellow)}
+.tabbtn.active{background:var(--yellow); color:#000; border-color:var(--yellow); box-shadow:0 0 20px rgba(243,230,0,.2)}
+.panel{display:none}
+.panel.active{display:block; animation:panelIn .16s ease-out}
+@keyframes panelIn{from{opacity:0; transform:translateY(4px)}to{opacity:1; transform:none}}
+section{margin:1.2rem 0}
+.principle,.block,.card,.pcard,.expand{
+  border:1px solid rgba(197,0,60,.48);
+  background:rgba(9,8,11,.94);
+  border-radius:0;
+  box-shadow:0 10px 30px rgba(0,0,0,.22);
+}
+.principle,.block{padding:1.1rem clamp(1rem,2vw,1.4rem)}
+.principle{border-left:4px solid var(--cyan)}
+.principle.hot{border-left-color:var(--red)}
+.principle.gold{border-left-color:var(--yellow)}
+blockquote.callout,.callout,blockquote:not(.callout){
+  margin:1.05em 0; padding:.9rem 1rem;
+  border:1px solid var(--line); border-left:5px solid var(--cyan);
+  background:rgba(20,16,20,.86); border-radius:0;
+}
+.callout.warn{border-left-color:var(--yellow)}
+.callout.hot,.callout.example{border-left-color:var(--magenta)}
+.callout.success{border-left-color:var(--green)}
+.callout.key,.callout.scope{border-left-color:var(--cyan)}
+.callout.danger{border-left-color:var(--red)}
+.callout.note{border-left-color:var(--muted)}
+.callout>:first-child,blockquote>:first-child{margin-top:0}
+.callout>:last-child,blockquote>:last-child{margin-bottom:0}
+.callout::before{display:block; font-size:.72rem; font-weight:900; letter-spacing:.08em; text-transform:uppercase; margin-bottom:.35rem; color:var(--yellow)}
+.callout.key::before{content:"Key rule"}
+.callout.note::before{content:"Note"}
+.callout.scope::before{content:"Scope"}
+.callout.example::before{content:"Worked example"}
+.callout.warn::before{content:"Watch out"}
+.callout.danger::before{content:"Anti-pattern"}
+.callout.success::before{content:"Do this"}
+table{
+  border-collapse:separate; border-spacing:0; width:100%; margin:1.1em 0;
+  font-size:.95rem; border:1px solid var(--line); border-radius:0; overflow:hidden;
+  background:rgba(9,8,11,.9);
+}
+thead th{background:rgba(243,230,0,.14); color:#fff8a6; text-align:left; font-weight:800}
+th,td{padding:.68rem .82rem; vertical-align:top; border-bottom:1px solid var(--line); border-right:1px solid var(--line); text-align:left}
+th:last-child,td:last-child{border-right:0}
+tbody tr:last-child td{border-bottom:0}
+tbody tr:nth-child(even){background:rgba(197,0,60,.11)}
+tbody tr:hover{background:rgba(252,238,84,.07)}
+/* Work-item expand boxes */
+.expand{margin:1em 0; overflow:hidden}
+.expand[open]{background:rgba(20,16,20,.92)}
+.expand>summary{cursor:pointer; list-style:none; padding:.8rem 1rem; font-weight:900; color:var(--ink); display:flex; align-items:center; gap:.6rem}
+.expand>summary::-webkit-details-marker{display:none}
+.expand>summary::before{content:"▸"; color:var(--yellow); font-size:.9em; transition:transform .15s ease}
+.expand[open]>summary::before{transform:rotate(90deg)}
+.expand>summary:hover{background:rgba(243,230,0,.08)}
+.expand-body{padding:0 1rem 1rem; border-top:1px solid var(--line)}
+li.task{list-style:none; margin-left:-1.4em}
+li.task input{margin-right:.55em; transform:translateY(1px)}
+li.task.done{color:var(--muted)}
+/* Career cards and modal */
+.cards{display:grid; grid-template-columns:repeat(auto-fill,minmax(330px,1fr)); gap:18px; margin:18px 0 28px}
+.card{overflow:hidden; transition:transform .18s,border-color .18s}
+.card:hover{transform:translateY(-3px); border-color:var(--yellow)}
+.card-head{display:flex; gap:14px; align-items:center; padding:16px 18px; background:linear-gradient(90deg,rgba(197,0,60,.18),rgba(85,234,212,.07)); border-bottom:1px solid var(--line)}
+.head-text{min-width:0}.level-name{margin:0; font-size:17px; font-weight:800; border:0; padding:0}.level-name::before{content:""}
+.job-title{margin:2px 0 0; font-size:13.5px; color:var(--cyan); font-weight:700}
+.card-body{padding:10px 18px 16px}.teaser{margin:0; font-size:14px; color:#cfe7ff}.more{display:inline-block; margin-top:10px; font-size:12px; font-weight:900; letter-spacing:.04em; color:var(--yellow); opacity:.9}
+.card.clickable{cursor:pointer}.card.clickable:focus-visible{outline:2px solid var(--yellow); outline-offset:2px}
+.attr{padding:12px 0}.attr-label{font-size:11px; letter-spacing:.1em; text-transform:uppercase; color:var(--yellow); margin-bottom:5px; font-weight:900}.attr-val{font-size:14px; color:#d6e0ea}
+.badge{flex:0 0 auto; min-width:54px; display:inline-block; text-align:center; font-weight:900; font-size:13px; padding:6px 10px; border-radius:0; color:#000; letter-spacing:.02em; background:var(--yellow)}
+.badge.ic{background:var(--cyan)}.badge.mgr{background:var(--magenta); color:#fff}.badge.ex{background:var(--coral); color:#130000}td .badge{min-width:46px; font-size:12px; padding:4px 8px}
+#details{display:none}.modal-overlay{position:fixed; inset:0; z-index:50; display:none; align-items:flex-start; justify-content:center; padding:6vh 16px 16px; background:rgba(0,0,0,.72); backdrop-filter:blur(4px); overflow:auto}.modal-overlay.open{display:flex; animation:ovl .2s ease}@keyframes ovl{from{opacity:0}to{opacity:1}}
+.modal{position:relative; width:min(720px,100%); background:linear-gradient(180deg,var(--panel),var(--panel-2)); border:1px solid var(--red); border-radius:0; box-shadow:0 24px 70px rgba(0,0,0,.68); animation:pop .22s cubic-bezier(.2,.8,.3,1.1)}@keyframes pop{from{opacity:0;transform:translateY(14px) scale(.97)}to{opacity:1;transform:none}}
+.modal-close{position:absolute; top:12px; right:12px; width:34px; height:34px; border-radius:0; border:1px solid var(--red); background:#080506; color:var(--ink); font-size:18px; line-height:1; cursor:pointer; transition:.15s}.modal-close:hover{color:#000; background:var(--yellow); border-color:var(--yellow)}
+.modal .modal-head{display:flex; gap:14px; align-items:center; padding:20px 22px; background:linear-gradient(90deg,rgba(197,0,60,.24),rgba(85,234,212,.08)); border-bottom:1px solid var(--line)}.modal .detail-body{padding:6px 24px 24px}.modal .detail-body h3{font-size:13px; letter-spacing:.09em; text-transform:uppercase; color:var(--yellow); margin:20px 0 6px; border:0}.modal .detail-body h4{margin:16px 0 4px}.modal .detail-body p,.modal .detail-body li{font-size:14.5px}body.modal-open{overflow:hidden}
+/* Coaching planner */
+.intro-note{color:var(--muted); font-style:italic; margin:0 0 26px}.planner{display:grid; gap:18px; margin:22px 0 8px}.pcard{padding:18px 20px 20px}.pcard .pnum{display:inline-flex; align-items:center; justify-content:center; width:30px; height:30px; border-radius:0; font-weight:900; font-size:14px; color:#000; background:var(--yellow); margin-right:12px; flex:0 0 auto}.pcard .phead{display:flex; align-items:flex-start; gap:0; margin:0 0 4px}.pcard .ptitle{font-size:17px; font-weight:800; color:#f8f7df; line-height:1.35}.pcard .psub{font-size:12px; letter-spacing:.09em; text-transform:uppercase; color:var(--cyan); margin:8px 0 0 42px}.pcard .lines{margin:14px 0 0 42px; border:1px dashed var(--line); border-radius:0; background:rgba(255,255,255,.015); min-height:104px; background-image:repeating-linear-gradient(transparent,transparent 31px,rgba(243,230,0,.2) 31px,rgba(243,230,0,.2) 32px)}
+footer{margin-top:60px; padding-top:22px; border-top:1px solid var(--line); color:var(--muted); font-size:13px; display:flex; justify-content:space-between; flex-wrap:wrap; gap:8px}
+.totop{position:fixed; right:1.5rem; bottom:1.5rem; z-index:30; width:44px; height:44px; border-radius:50%; cursor:pointer; border:1px solid rgba(85,234,212,.6); background:#0d1020; color:var(--cyan); font-size:1.2rem; line-height:1; display:flex; align-items:center; justify-content:center; box-shadow:0 0 24px rgba(85,234,212,.24); opacity:0; visibility:hidden; transition:opacity .2s ease, visibility .2s ease, transform .2s ease}.totop.show{opacity:1; visibility:visible}.totop:hover{transform:translateY(-2px); color:var(--yellow); border-color:var(--yellow)}
+@media(max-width:920px){body{background-size:34px 34px,34px 34px,auto,auto,auto}.toc{position:static; width:auto; height:auto; overflow:visible; border-right:0; border-bottom:1px solid var(--line)}.toc-list{columns:1}.content{margin-left:0; margin-right:0; padding:1.15rem 1rem 4rem}.doc-header{padding:1rem}table{display:block; overflow-x:auto}.cards{grid-template-columns:1fr}.pcard .psub,.pcard .lines{margin-left:0}}
+@media print{body{background:#fff; color:#111}body::before,.toc,.tabbar,.totop,.modal-overlay{display:none!important}.content{margin:0; padding:0}.panel{display:block!important}.doc-header,.principle,.block,.callout,blockquote,.card,.pcard,.expand{box-shadow:none; background:#fff; color:#111; border-color:#ccc}h1,h2,h3,h4,p,li,td,th,strong,em,.attr-val{color:#111}h1{text-shadow:none}h2::before{content:""}a{color:#0645ad}pre{background:#f4f6f8; color:#111; border:1px solid #ccc}table,.card{break-inside:avoid}#details{display:block; margin-top:30px}#details .detail{break-inside:avoid; border:1px solid #ccc; border-radius:0; margin:14px 0; padding:4px 16px 12px}#details .modal-head{display:flex; gap:12px; align-items:center; padding:10px 0}.more,.modal-close{display:none!important}.badge{color:#0b0f14!important; -webkit-print-color-adjust:exact; print-color-adjust:exact}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<nav class="toc" aria-label="Contents">
+<div class="toc-title"><span class="toc-kicker">Architecture</span>Framing Questions for Platform Architecture and Design</div>
+<div class="toc-group active" data-tab="overview">
+<button class="toc-tab" data-tab="overview">Overview<span class="toc-sub">Usage, gates, problem type</span></button>
+<ul class="toc-list">
+<li><a href="#usage">Usage</a></li>
+<li><a href="#design-gates-summary">Design Gates Summary</a></li>
+<li><a href="#problem-types-and-design-approach">Problem Types and Design Approach</a></li>
+</ul>
+</div>
+<div class="toc-group" data-tab="gates">
+<button class="toc-tab" data-tab="gates">Design Gates<span class="toc-sub">Discovery, requirements, failure, operations</span></button>
+<ul class="toc-list">
+<li><a href="#design-gate-discovery-packages-vs-tasks">Design Gate: Discovery Packages vs Tasks</a></li>
+<li class="sub"><a href="#example">Example</a></li>
+<li><a href="#design-gate-well-defined-requirements">Design Gate: Well-Defined Requirements</a></li>
+<li><a href="#design-gate-performance-and-failure-characteristics">Design Gate: Performance and Failure Characteristics</a></li>
+<li><a href="#design-gate-operational-impact">Design Gate: Operational Impact</a></li>
+</ul>
+</div>
+<div class="toc-group" data-tab="example">
+<button class="toc-tab" data-tab="example">DNS Example<span class="toc-sub">Consumption, management, ownership</span></button>
+<ul class="toc-list">
+<li><a href="#design-informing-example-designing-a-dns-service">Design-Informing Example: Designing a DNS Service</a></li>
+<li class="sub"><a href="#how-will-end-users-consume-the-dns-service">How will end users consume the DNS service?</a></li>
+<li class="sub"><a href="#who-will-manage-dns-and-how">Who will manage DNS, and how?</a></li>
+<li class="sub"><a href="#record-ownership">Record ownership</a></li>
+</ul>
+</div>
+<div class="toc-group" data-tab="operations">
+<button class="toc-tab" data-tab="operations">Operations<span class="toc-sub">Complexity, accountability, tooling</span></button>
+<ul class="toc-list">
+<li><a href="#managing-complexity">Managing Complexity</a></li>
+<li><a href="#operational-accountability">Operational Accountability</a></li>
+<li><a href="#tooling-decisions-and-maximum-flexibility">Tooling Decisions and Maximum Flexibility</a></li>
+<li><a href="#design-gate-pre-mortems">Design Gate: Pre-Mortems</a></li>
+</ul>
+</div>
+</nav>
+<main class="content">
+<header class="doc-header">
+<p class="eyebrow">Closed-Loop Organization</p>
+<h1>Framing Questions for Platform Architecture and Design</h1>
+<p class="sub">A design-gate checklist for reducing ambiguity before platform architecture turns into premature implementation.</p>
+<p>This is not a design document. It is a framing document.</p>
+<p>Its purpose is to force the right questions before design commitments, implementation promises, or timeline commitments are made.</p>
+</header>
+<div class="tabbar"><button class="tabbtn active" data-tab="overview">Overview</button><button class="tabbtn" data-tab="gates">Design Gates</button><button class="tabbtn" data-tab="example">DNS Example</button><button class="tabbtn" data-tab="operations">Operations</button></div>
+<div class="panels">
+<section class="panel active" id="tab-overview" data-tab="overview">
+<h2 id="usage">Usage</h2>
+<p>These questions are not a checklist to complete after design. If they cannot be answered with confidence, the design phase should pause until they are resolved.</p>
+<h2 id="design-gates-summary">Design Gates Summary</h2>
+<p>This document distinguishes between <strong>design-gate topics</strong> and <strong>design-informing topics</strong>.</p>
+<ul>
+<li><strong>Design Gate</strong>: Must be addressed before architectural decisions or delivery commitments are made.</li>
+<li><strong>Design Informing</strong>: Should shape design choices, but does not need to block early exploration.</li>
+</ul>
+<p>The distinction exists to prevent premature convergence and to make sure constraints, operational costs, and failure modes are understood before solutions are selected.</p>
+<h2 id="problem-types-and-design-approach">Problem Types and Design Approach</h2>
+<p>Not all problems benefit from the same planning approach. Some are well understood and can be designed largely up front. Others require discovery because requirements, coupling, and constraints become visible only during the work.</p>
+<p>Platform and identity initiatives often fall into the second category. Attempting to fully specify solutions before understanding trust boundaries, operational realities, and failure modes usually leads to rework and avoidable risk.</p>
+<p>This document assumes a discovery-first approach:</p>
+<ul>
+<li>Framing precedes design.</li>
+<li>Design precedes commitment.</li>
+<li>Commitment should follow explicit understanding of requirements, constraints, and operating model.</li>
+</ul>
+</section>
+<section class="panel" id="tab-gates" data-tab="gates">
+<h2 id="design-gate-discovery-packages-vs-tasks">Design Gate: Discovery Packages vs Tasks</h2>
+<p>Early-phase platform work is best organized around outcomes rather than prescribed steps. For that reason, discovery and framing work should usually be expressed as <strong>discovery packages</strong>, not task lists.</p>
+<p>A discovery package defines:</p>
+<ul>
+<li>The question being answered</li>
+<li>The constraints under which it is explored</li>
+<li>The artifact produced when the work is complete</li>
+</ul>
+<p>This allows progress without prematurely committing to implementation details, sequencing, or tooling choices.</p>
+<p>It also aligns well with the reality of technical planning:</p>
+<ul>
+<li>Discovery packages reduce ambiguity</li>
+<li>Design work translates that learning into architecture</li>
+<li>Execution work later decomposes into epics, stories, and tasks</li>
+</ul>
+<p>This term is intentionally adapted. It is not meant to replace formal PMBOK terminology; it is meant to make early technical planning legible without pretending discovery work is already executable.</p>
+<h3 id="example">Example</h3>
+<p>Instead of creating tasks such as:</p>
+<ul>
+<li>Design IAM roles</li>
+<li>Configure SSO</li>
+</ul>
+<p>An early discovery package might be:</p>
+<p><strong>Define identity types and lifecycles across platform systems</strong></p>
+<ul>
+<li><strong>Output:</strong> documented taxonomy of human, service, and workload identities</li>
+<li><strong>Non-goal:</strong> selecting tooling or access policies</li>
+</ul>
+<p>This lets downstream design proceed without re-litigating fundamentals.</p>
+<h2 id="design-gate-well-defined-requirements">Design Gate: Well-Defined Requirements</h2>
+<p>No system can be designed well without explicit requirements. Vague requirements create accidental complexity, unstable scope, and operational pain.</p>
+<p>Questions that must be answered explicitly include:</p>
+<ul>
+<li>What problem is this system solving?</li>
+<li>Who is it for?</li>
+<li>What scale must it support on day one?</li>
+<li>What scale must it tolerate later?</li>
+<li>What outcomes define success?</li>
+</ul>
+<p>Requirements are not optimization. They define whether the system is fit for purpose.</p>
+<p>At minimum:</p>
+<ul>
+<li>Performance characteristics must be stated explicitly</li>
+<li>Reliability expectations must be stated explicitly</li>
+<li>Requirements should be SMART where possible:</li>
+<li>Specific</li>
+<li>Measurable</li>
+<li>Achievable</li>
+<li>Relevant</li>
+<li>Time-bound</li>
+</ul>
+<p>Requirements should also be precise enough to distinguish the true target condition from nearby but misleading proxies. Specificity is not pedantry. It is how teams increase confidence that they are discussing the same system behavior, population, operating conditions, and exception model.</p>
+<p>For example, "the DNS service must be fast" is not a requirement. A useful requirement would define the operating envelope more precisely: how many queries per second must be supported, what the steady-state and peak load look like, what maximum response time is acceptable, and under what conditions those thresholds must hold. A requirement such as "the service must sustain 250,000 queries per second, tolerate burst traffic of 500,000 queries per second for 15 minutes, keep p99 response time under 2 ms for cached lookups and under 10 ms for uncached authoritative lookups within the same region, and continue serving authoritative responses during the loss of a single node" is much more useful because it defines the actual design target.</p>
+<p>"Fast enough" is not a requirement.</p>
+<p>Further reading:
+- Eric Brandwine, AWS re:Invent 2018. The entitlement exercise is a useful example of turning vague goals into precisely bounded requirements: https://www.youtube.com/watch?v=GXTvlQXVCOs&amp;t=24m16s</p>
+<h2 id="design-gate-performance-and-failure-characteristics">Design Gate: Performance and Failure Characteristics</h2>
+<p>Performance, reliability, and degradation behavior are design-gate topics, not implementation details.</p>
+<p>Questions to answer:</p>
+<ul>
+<li>How many requests per second must the system handle?</li>
+<li>What is the expected steady-state load?</li>
+<li>What is the peak load?</li>
+<li>What is the acceptable latency?</li>
+<li>For what percentage of requests?</li>
+<li>Under what conditions?</li>
+<li>What happens during failure or partial degradation?</li>
+<li>What are the recovery expectations?</li>
+<li>What are the RTO and RPO expectations, if applicable?</li>
+</ul>
+<p>Example answers:</p>
+<ul>
+<li>The system must handle 1,000,000 requests per second</li>
+<li>99% of requests must complete in under 1 ms</li>
+<li>100% of requests must complete in under 5 ms</li>
+</ul>
+<p>These thresholds define design fitness. They are not optional tuning targets to be discovered after implementation.</p>
+<h2 id="design-gate-operational-impact">Design Gate: Operational Impact</h2>
+<p>Before beginning a design, ask:</p>
+<p><strong>What is the operational cost of this system?</strong></p>
+<p>Every system carries operational cost:</p>
+<ul>
+<li>Human effort</li>
+<li>Cognitive load</li>
+<li>Process complexity</li>
+<li>Failure modes</li>
+<li>Long-term maintainability</li>
+</ul>
+<p>Operational impact should be treated as a first-class design constraint, not an afterthought.</p>
+<p>Questions to ask:</p>
+<ul>
+<li>Who operates this system day to day?</li>
+<li>How often do humans need to intervene?</li>
+<li>What happens when something fails at 02:00?</li>
+<li>How expensive is it to change or extend this system later?</li>
+<li>Can operators determine the required response with near-zero cognitive load from the dashboards, alerts, and procedures provided?</li>
+<li>Do the monitoring views make it immediately obvious whether action is required, by whom, and under what conditions?</li>
+</ul>
+<p>Also clarify whether this is:</p>
+<ul>
+<li>A net-new system</li>
+<li>An upgrade</li>
+<li>A replacement</li>
+</ul>
+<p>If an existing system is being replaced, the design must account for the transition in day-to-day operations, support ownership, and handoff expectations.</p>
+<p>Further reading:
+- Eric Brandwine, AWS re:Invent 2018. Useful background on reducing cognitive load in operational dashboards and decision-making: https://youtu.be/GXTvlQXVCOs?t=2075</p>
+</section>
+<section class="panel" id="tab-example" data-tab="example">
+<h2 id="design-informing-example-designing-a-dns-service">Design-Informing Example: Designing a DNS Service</h2>
+<p>If the problem is "design a new DNS service," these are the kinds of framing questions worth answering before solution selection.</p>
+<h3 id="how-will-end-users-consume-the-dns-service">How will end users consume the DNS service?</h3>
+<p>Will users interact through:</p>
+<ul>
+<li>UI</li>
+<li>API</li>
+<li>GitOps / IaC</li>
+</ul>
+<p>Additional questions:</p>
+<ul>
+<li>Are different consumption models supported for different users?</li>
+<li>Does the consumption model encourage safe, repeatable changes?</li>
+<li>Does it require deep DNS expertise from end users?</li>
+</ul>
+<h3 id="who-will-manage-dns-and-how">Who will manage DNS, and how?</h3>
+<p>Will DNS be managed by:</p>
+<ul>
+<li>A single team through service requests</li>
+<li>A shared service with enforced boundaries</li>
+<li>A self-service model for application teams</li>
+</ul>
+<p>Questions to answer:</p>
+<ul>
+<li>What boundaries exist?</li>
+<li>How are those boundaries enforced?</li>
+<li>Is the enforcement procedural, technical, or both?</li>
+<li>How does the model scale as the organization grows?</li>
+</ul>
+<p>If this is shared-service or self-service, also ask:</p>
+<ul>
+<li>What record types can a typical user modify?</li>
+<li>What record types should remain centrally managed?</li>
+</ul>
+<p>Examples of centrally managed record types may include MX, NS, and SOA records.</p>
+<h3 id="record-ownership">Record ownership</h3>
+<p>How do we ensure:</p>
+<ul>
+<li>Only approved users can modify a record?</li>
+<li>Team A cannot change records owned by Team B?</li>
+</ul>
+<p>Additional questions:</p>
+<ul>
+<li>Does this affect domain structure?</li>
+<li>Should ownership be delegated through subdomains?</li>
+<li>How are ownership and changes audited?</li>
+</ul>
+</section>
+<section class="panel" id="tab-operations" data-tab="operations">
+<h2 id="managing-complexity">Managing Complexity</h2>
+<p>In a necessarily complex design, where can complexity be tolerated, and where must it be minimized?</p>
+<p>Complexity can often be tolerated:</p>
+<ul>
+<li>Inside automation</li>
+<li>Inside platform code owned by a small expert team</li>
+<li>In systems that are rarely touched once deployed</li>
+</ul>
+<p>Complexity should usually be avoided:</p>
+<ul>
+<li>In day-to-day operational workflows</li>
+<li>In emergency procedures</li>
+<li>In systems touched by many teams with varied skill levels</li>
+</ul>
+<p>If an action must be performed under pressure, it should be:</p>
+<ul>
+<li>Boring</li>
+<li>Well documented</li>
+<li>Highly repeatable</li>
+</ul>
+<h2 id="operational-accountability">Operational Accountability</h2>
+<p>Questions to answer:</p>
+<ul>
+<li>Who uses the system?</li>
+<li>Are those users equipped to operate it safely?</li>
+<li>Who owns incident response?</li>
+<li>Who owns uptime?</li>
+<li>Who owns ongoing maintenance?</li>
+<li>Who owns upgrades and dependency changes?</li>
+<li>Who creates the automation?</li>
+<li>Who maintains the automation?</li>
+</ul>
+<h2 id="tooling-decisions-and-maximum-flexibility">Tooling Decisions and Maximum Flexibility</h2>
+<p>Ask:</p>
+<ul>
+<li>Does flexibility reduce risk, or increase support burden?</li>
+<li>Does standardization reduce incident resolution time?</li>
+<li>How many APIs and programming languages are required to support this model?</li>
+<li>Is it better to allow many DNS implementations, or standardize on one?</li>
+</ul>
+<p>Example question:</p>
+<ul>
+<li>Is it better to deploy Infoblox virtual appliances into cloud environments, or delegate to cloud-native DNS services?</li>
+</ul>
+<p>These decisions should be evaluated from both:</p>
+<ul>
+<li>An operational perspective</li>
+<li>An engineering perspective</li>
+</ul>
+<h2 id="design-gate-pre-mortems">Design Gate: Pre-Mortems</h2>
+<p>Before building a system, assume it has already failed.</p>
+<p>Ask:</p>
+<blockquote>
+<p>Some time after launch, this system caused a major incident. What went wrong?</p>
+</blockquote>
+<p>Use pre-mortems to identify likely failure modes early:</p>
+<ul>
+<li>Capacity exhaustion</li>
+<li>Latency degradation</li>
+<li>Operational overload</li>
+<li>Poor ownership or unclear accountability</li>
+<li>Automation failures</li>
+<li>Unexpected usage patterns</li>
+</ul>
+<p>Pre-mortems help teams:</p>
+<ul>
+<li>Surface hidden assumptions</li>
+<li>Expose operational risks not obvious in happy-path designs</li>
+<li>Validate whether the system is operable under stress</li>
+</ul>
+<p>Pre-mortems are most effective when they:</p>
+<ul>
+<li>Include operators, not just designers</li>
+<li>Happen before major architectural decisions are locked in</li>
+<li>Are treated as design input, not a box-checking exercise</li>
+</ul>
+</section>
+</div>
+</main>
+</div>
+<button class="totop" id="totop" title="Back to top" aria-label="Back to top">↑</button>
+<script>
+(function(){
+  function activate(name){
+    document.querySelectorAll('.panel').forEach(function(p){
+      p.classList.toggle('active', p.dataset.tab === name);
+    });
+    document.querySelectorAll('.toc-group').forEach(function(g){
+      g.classList.toggle('active', g.dataset.tab === name);
+    });
+    document.querySelectorAll('.tabbtn').forEach(function(b){
+      b.classList.toggle('active', b.dataset.tab === name);
+    });
+  }
+  function panelTabOf(el){
+    var panel = el.closest('.panel');
+    return panel ? panel.dataset.tab : null;
+  }
+  function go(id, smooth){
+    var el = document.getElementById(id);
+    if(!el) return false;
+    var tab = panelTabOf(el);
+    if(tab) activate(tab);
+    var details = el.closest('details');
+    if(details) details.open = true;
+    if(el.tagName === 'DETAILS') el.open = true;
+    el.scrollIntoView(smooth ? {behavior:'smooth', block:'start'} : {block:'start'});
+    return true;
+  }
+  document.querySelectorAll('.tabbtn, .toc-tab').forEach(function(btn){
+    btn.addEventListener('click', function(e){
+      e.preventDefault();
+      activate(btn.dataset.tab);
+      window.scrollTo({top:0, left:0, behavior:'smooth'});
+      history.replaceState(null, '', location.pathname);
+    });
+  });
+  document.addEventListener('click', function(e){
+    var a=e.target.closest('a[href^="#"]');
+    if(!a) return;
+    var id=decodeURIComponent(a.getAttribute('href').slice(1));
+    if(!id) return;
+    if(go(id, true)){
+      e.preventDefault();
+      history.replaceState(null, '', '#' + id);
+    }
+  });
+  var top=document.getElementById('totop');
+  function onScroll(){ if(top) top.classList.toggle('show', window.scrollY>420); }
+  window.addEventListener('scroll', onScroll, {passive:true});
+  onScroll();
+  if(top){
+    top.addEventListener('click', function(){
+      window.scrollTo({top:0, left:0, behavior:'smooth'});
+    });
+  }
+  if(location.hash){
+    if(!go(decodeURIComponent(location.hash.slice(1)), false)) activate(document.querySelector('.panel.active')?.dataset.tab || document.querySelector('.tabbtn')?.dataset.tab || 'overview');
+  } else {
+    activate(document.querySelector('.panel.active')?.dataset.tab || document.querySelector('.tabbtn')?.dataset.tab || 'overview');
+  }
+  window.__docTabs = {activate: activate, go: go};
+})();
+</script>
+</body>
+</html>

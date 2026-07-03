@@ -1,0 +1,713 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Process Improvement and Creating High-Performing Teams</title>
+<style>
+:root{
+  --nav:300px;
+  --rgutter:9vw;
+  --bg:#000000;
+  --panel:#09080b;
+  --panel-2:#141014;
+  --ink:#f8f7df;
+  --muted:#b8b493;
+  --line:#3c2730;
+  --red:#c5003c;
+  --red-dark:#880425;
+  --yellow:#f3e600;
+  --cyan:#55ead4;
+  --purple:#6300ff;
+  --magenta:#ff008d;
+  --pink:#d14eea;
+  --coral:#f96363;
+  --green:#3fb950;
+  --code-bg:#171018;
+  --code-ink:#f3e600;
+  --shadow:0 0 0 1px rgba(243,230,0,.18), 0 16px 40px rgba(0,0,0,.48);
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%; scroll-behavior:smooth}
+body{
+  margin:0;
+  background:
+    linear-gradient(rgba(243,230,0,.045) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(197,0,60,.045) 1px, transparent 1px),
+    radial-gradient(circle at 18% -10%, rgba(85,234,212,.12), transparent 26rem),
+    radial-gradient(circle at 100% 5%, rgba(197,0,60,.18), transparent 24rem),
+    var(--bg);
+  background-size:44px 44px,44px 44px,auto,auto,auto;
+  color:var(--ink);
+  font:16px/1.68 Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+}
+body::before{
+  content:"";
+  position:fixed; inset:0; pointer-events:none; z-index:1;
+  background:repeating-linear-gradient(0deg, rgba(255,255,255,.025) 0 1px, transparent 1px 4px);
+  mix-blend-mode:screen;
+  opacity:.28;
+}
+a{color:var(--cyan); text-decoration:none}
+a:hover{text-decoration:underline; text-decoration-color:var(--yellow)}
+.wrap{display:block}
+.toc{
+  position:fixed; top:0; left:0; width:var(--nav); height:100vh; overflow:auto;
+  padding:1.1rem .95rem 2rem; z-index:20;
+  background:rgba(7,8,15,.94);
+  border-right:2px solid var(--red);
+  box-shadow:12px 0 32px rgba(0,0,0,.34);
+  backdrop-filter:blur(10px);
+}
+.toc-title{
+  font-weight:800; line-height:1.18; color:var(--ink);
+  padding:.45rem .45rem .9rem; margin-bottom:.7rem;
+  border-bottom:1px solid var(--line);
+  text-transform:uppercase; letter-spacing:.06em;
+}
+.toc-kicker{display:block; color:var(--yellow); font-size:.72rem; margin-bottom:.25rem}
+.toc-group{margin:.25rem 0 .35rem}
+.toc-tab{
+  display:block; width:100%; text-align:left; cursor:pointer; border:1px solid transparent;
+  border-radius:0; padding:.52rem .55rem; background:transparent;
+  color:var(--ink); font:inherit; font-size:.88rem; font-weight:800; line-height:1.2;
+  text-transform:uppercase; letter-spacing:.04em;
+}
+.toc-tab:hover{background:rgba(243,230,0,.08); border-color:rgba(243,230,0,.26)}
+.toc-group.active>.toc-tab{background:var(--yellow); color:#000; border-color:var(--yellow)}
+.toc-sub{display:block; font-size:.7rem; font-weight:700; color:var(--muted); margin-top:.12rem; text-transform:none; letter-spacing:0}
+.toc-group.active .toc-sub{color:#3a3100}
+.toc-list{list-style:none; margin:.2rem 0 .65rem; padding:0; display:none}
+.toc-group.active .toc-list{display:block}
+.toc-list li{margin:.1rem 0}
+.toc-list a{
+  display:block; border-left:2px solid transparent; border-radius:6px;
+  padding:.34rem .55rem; color:#c7dcf2; font-size:.88rem; line-height:1.25;
+}
+.toc-list a:hover{background:rgba(85,234,212,.08); border-left-color:var(--cyan); text-decoration:none}
+.toc-list .sub a,.toc-list .lvl3 a{padding-left:1.15rem; color:var(--muted); font-size:.8rem}
+.toc-list .lvl2 a{font-weight:800}
+.toc-list .section-break{height:.75rem}
+.content{
+  position:relative; z-index:2;
+  margin-left:var(--nav); margin-right:var(--rgutter);
+  min-width:0; padding:2.4rem clamp(1.3rem,4.5vw,4rem) 5rem;
+}
+.doc-header{
+  border:1px solid var(--red);
+  border-radius:0;
+  padding:1.45rem clamp(1rem,2.5vw,2rem);
+  background:linear-gradient(135deg, rgba(20,16,20,.98), rgba(0,0,0,.98));
+  box-shadow:var(--shadow);
+}
+.eyebrow{
+  margin:0 0 .5rem; color:var(--yellow); font-size:.78rem; font-weight:800;
+  letter-spacing:.14em; text-transform:uppercase;
+}
+.sub,.lead{color:#cfe7ff; font-size:1.05rem; max-width:78ch}
+.tagline{
+  font-size:1.18rem; color:#f8fcff; font-weight:700; margin-top:1rem;
+  border-left:4px solid var(--yellow); padding-left:1rem;
+}
+h1,h2,h3,h4{line-height:1.22; color:var(--ink); font-weight:800; letter-spacing:0}
+h1{font-size:clamp(2rem,4vw,3.55rem); margin:.05em 0 .2em; text-shadow:3px 0 0 var(--red), -2px 0 0 rgba(85,234,212,.55)}
+h2{
+  font-size:1.55rem; margin:2.25em 0 .72em; padding-bottom:.38em;
+  border-bottom:1px solid var(--line); scroll-margin-top:1rem;
+}
+h2::before{content:"// "; color:var(--red)}
+.panel>h2:first-child{margin-top:.3em}
+h3{font-size:1.17rem; margin:1.65em 0 .5em; color:#d7f8ff; scroll-margin-top:1rem}
+h4{font-size:.98rem; margin:1.35em 0 .4em; color:var(--yellow); text-transform:uppercase; letter-spacing:.04em}
+p{margin:.78em 0}
+strong{color:#fff}
+em{color:#d5e2ff}
+hr{border:0; border-top:1px solid var(--line); margin:2.2em 0}
+ul,ol{margin:.65em 0 1em; padding-left:1.45em}
+li{margin:.32em 0}
+li::marker{color:var(--cyan)}
+code{
+  font-family:"SF Mono",SFMono-Regular,ui-monospace,"Cascadia Code",Consolas,"Liberation Mono",Menlo,monospace;
+  font-size:.9em;
+}
+:not(pre)>code{
+  color:var(--code-ink); background:var(--code-bg); border:1px solid #39405f;
+  padding:.12em .42em; border-radius:5px;
+}
+pre{
+  background:#09080b; color:#f8f7df; padding:1.05rem 1.15rem; border-radius:0;
+  overflow-x:auto; line-height:1.5; border:1px solid rgba(85,234,212,.35);
+  box-shadow:inset 0 1px 0 rgba(243,230,0,.08);
+}
+pre code{background:none; color:inherit; padding:0; border:0; font-size:.86em}
+.tabbar{
+  position:sticky; top:0; z-index:15; display:flex; gap:.45rem; flex-wrap:wrap;
+  margin:1.1rem 0 1rem; padding:.65rem 0; background:rgba(0,0,0,.92);
+  border-bottom:1px solid var(--line); backdrop-filter:blur(8px);
+}
+.tabbtn{
+  cursor:pointer; border:1px solid var(--red); background:#080506; color:var(--ink);
+  font:inherit; font-weight:900; padding:.48rem .85rem; border-radius:0;
+  text-transform:uppercase; letter-spacing:.04em;
+}
+.tabbtn:hover{border-color:var(--yellow); color:var(--yellow)}
+.tabbtn.active{background:var(--yellow); color:#000; border-color:var(--yellow); box-shadow:0 0 20px rgba(243,230,0,.2)}
+.panel{display:none}
+.panel.active{display:block; animation:panelIn .16s ease-out}
+@keyframes panelIn{from{opacity:0; transform:translateY(4px)}to{opacity:1; transform:none}}
+section{margin:1.2rem 0}
+.principle,.block,.card,.pcard,.expand{
+  border:1px solid rgba(197,0,60,.48);
+  background:rgba(9,8,11,.94);
+  border-radius:0;
+  box-shadow:0 10px 30px rgba(0,0,0,.22);
+}
+.principle,.block{padding:1.1rem clamp(1rem,2vw,1.4rem)}
+.principle{border-left:4px solid var(--cyan)}
+.principle.hot{border-left-color:var(--red)}
+.principle.gold{border-left-color:var(--yellow)}
+blockquote.callout,.callout,blockquote:not(.callout){
+  margin:1.05em 0; padding:.9rem 1rem;
+  border:1px solid var(--line); border-left:5px solid var(--cyan);
+  background:rgba(20,16,20,.86); border-radius:0;
+}
+.callout.warn{border-left-color:var(--yellow)}
+.callout.hot,.callout.example{border-left-color:var(--magenta)}
+.callout.success{border-left-color:var(--green)}
+.callout.key,.callout.scope{border-left-color:var(--cyan)}
+.callout.danger{border-left-color:var(--red)}
+.callout.note{border-left-color:var(--muted)}
+.callout>:first-child,blockquote>:first-child{margin-top:0}
+.callout>:last-child,blockquote>:last-child{margin-bottom:0}
+.callout::before{display:block; font-size:.72rem; font-weight:900; letter-spacing:.08em; text-transform:uppercase; margin-bottom:.35rem; color:var(--yellow)}
+.callout.key::before{content:"Key rule"}
+.callout.note::before{content:"Note"}
+.callout.scope::before{content:"Scope"}
+.callout.example::before{content:"Worked example"}
+.callout.warn::before{content:"Watch out"}
+.callout.danger::before{content:"Anti-pattern"}
+.callout.success::before{content:"Do this"}
+table{
+  border-collapse:separate; border-spacing:0; width:100%; margin:1.1em 0;
+  font-size:.95rem; border:1px solid var(--line); border-radius:0; overflow:hidden;
+  background:rgba(9,8,11,.9);
+}
+thead th{background:rgba(243,230,0,.14); color:#fff8a6; text-align:left; font-weight:800}
+th,td{padding:.68rem .82rem; vertical-align:top; border-bottom:1px solid var(--line); border-right:1px solid var(--line); text-align:left}
+th:last-child,td:last-child{border-right:0}
+tbody tr:last-child td{border-bottom:0}
+tbody tr:nth-child(even){background:rgba(197,0,60,.11)}
+tbody tr:hover{background:rgba(252,238,84,.07)}
+/* Work-item expand boxes */
+.expand{margin:1em 0; overflow:hidden}
+.expand[open]{background:rgba(20,16,20,.92)}
+.expand>summary{cursor:pointer; list-style:none; padding:.8rem 1rem; font-weight:900; color:var(--ink); display:flex; align-items:center; gap:.6rem}
+.expand>summary::-webkit-details-marker{display:none}
+.expand>summary::before{content:"▸"; color:var(--yellow); font-size:.9em; transition:transform .15s ease}
+.expand[open]>summary::before{transform:rotate(90deg)}
+.expand>summary:hover{background:rgba(243,230,0,.08)}
+.expand-body{padding:0 1rem 1rem; border-top:1px solid var(--line)}
+li.task{list-style:none; margin-left:-1.4em}
+li.task input{margin-right:.55em; transform:translateY(1px)}
+li.task.done{color:var(--muted)}
+/* Career cards and modal */
+.cards{display:grid; grid-template-columns:repeat(auto-fill,minmax(330px,1fr)); gap:18px; margin:18px 0 28px}
+.card{overflow:hidden; transition:transform .18s,border-color .18s}
+.card:hover{transform:translateY(-3px); border-color:var(--yellow)}
+.card-head{display:flex; gap:14px; align-items:center; padding:16px 18px; background:linear-gradient(90deg,rgba(197,0,60,.18),rgba(85,234,212,.07)); border-bottom:1px solid var(--line)}
+.head-text{min-width:0}.level-name{margin:0; font-size:17px; font-weight:800; border:0; padding:0}.level-name::before{content:""}
+.job-title{margin:2px 0 0; font-size:13.5px; color:var(--cyan); font-weight:700}
+.card-body{padding:10px 18px 16px}.teaser{margin:0; font-size:14px; color:#cfe7ff}.more{display:inline-block; margin-top:10px; font-size:12px; font-weight:900; letter-spacing:.04em; color:var(--yellow); opacity:.9}
+.card.clickable{cursor:pointer}.card.clickable:focus-visible{outline:2px solid var(--yellow); outline-offset:2px}
+.attr{padding:12px 0}.attr-label{font-size:11px; letter-spacing:.1em; text-transform:uppercase; color:var(--yellow); margin-bottom:5px; font-weight:900}.attr-val{font-size:14px; color:#d6e0ea}
+.badge{flex:0 0 auto; min-width:54px; display:inline-block; text-align:center; font-weight:900; font-size:13px; padding:6px 10px; border-radius:0; color:#000; letter-spacing:.02em; background:var(--yellow)}
+.badge.ic{background:var(--cyan)}.badge.mgr{background:var(--magenta); color:#fff}.badge.ex{background:var(--coral); color:#130000}td .badge{min-width:46px; font-size:12px; padding:4px 8px}
+#details{display:none}.modal-overlay{position:fixed; inset:0; z-index:50; display:none; align-items:flex-start; justify-content:center; padding:6vh 16px 16px; background:rgba(0,0,0,.72); backdrop-filter:blur(4px); overflow:auto}.modal-overlay.open{display:flex; animation:ovl .2s ease}@keyframes ovl{from{opacity:0}to{opacity:1}}
+.modal{position:relative; width:min(720px,100%); background:linear-gradient(180deg,var(--panel),var(--panel-2)); border:1px solid var(--red); border-radius:0; box-shadow:0 24px 70px rgba(0,0,0,.68); animation:pop .22s cubic-bezier(.2,.8,.3,1.1)}@keyframes pop{from{opacity:0;transform:translateY(14px) scale(.97)}to{opacity:1;transform:none}}
+.modal-close{position:absolute; top:12px; right:12px; width:34px; height:34px; border-radius:0; border:1px solid var(--red); background:#080506; color:var(--ink); font-size:18px; line-height:1; cursor:pointer; transition:.15s}.modal-close:hover{color:#000; background:var(--yellow); border-color:var(--yellow)}
+.modal .modal-head{display:flex; gap:14px; align-items:center; padding:20px 22px; background:linear-gradient(90deg,rgba(197,0,60,.24),rgba(85,234,212,.08)); border-bottom:1px solid var(--line)}.modal .detail-body{padding:6px 24px 24px}.modal .detail-body h3{font-size:13px; letter-spacing:.09em; text-transform:uppercase; color:var(--yellow); margin:20px 0 6px; border:0}.modal .detail-body h4{margin:16px 0 4px}.modal .detail-body p,.modal .detail-body li{font-size:14.5px}body.modal-open{overflow:hidden}
+/* Coaching planner */
+.intro-note{color:var(--muted); font-style:italic; margin:0 0 26px}.planner{display:grid; gap:18px; margin:22px 0 8px}.pcard{padding:18px 20px 20px}.pcard .pnum{display:inline-flex; align-items:center; justify-content:center; width:30px; height:30px; border-radius:0; font-weight:900; font-size:14px; color:#000; background:var(--yellow); margin-right:12px; flex:0 0 auto}.pcard .phead{display:flex; align-items:flex-start; gap:0; margin:0 0 4px}.pcard .ptitle{font-size:17px; font-weight:800; color:#f8f7df; line-height:1.35}.pcard .psub{font-size:12px; letter-spacing:.09em; text-transform:uppercase; color:var(--cyan); margin:8px 0 0 42px}.pcard .lines{margin:14px 0 0 42px; border:1px dashed var(--line); border-radius:0; background:rgba(255,255,255,.015); min-height:104px; background-image:repeating-linear-gradient(transparent,transparent 31px,rgba(243,230,0,.2) 31px,rgba(243,230,0,.2) 32px)}
+footer{margin-top:60px; padding-top:22px; border-top:1px solid var(--line); color:var(--muted); font-size:13px; display:flex; justify-content:space-between; flex-wrap:wrap; gap:8px}
+.totop{position:fixed; right:1.5rem; bottom:1.5rem; z-index:30; width:44px; height:44px; border-radius:50%; cursor:pointer; border:1px solid rgba(85,234,212,.6); background:#0d1020; color:var(--cyan); font-size:1.2rem; line-height:1; display:flex; align-items:center; justify-content:center; box-shadow:0 0 24px rgba(85,234,212,.24); opacity:0; visibility:hidden; transition:opacity .2s ease, visibility .2s ease, transform .2s ease}.totop.show{opacity:1; visibility:visible}.totop:hover{transform:translateY(-2px); color:var(--yellow); border-color:var(--yellow)}
+@media(max-width:920px){body{background-size:34px 34px,34px 34px,auto,auto,auto}.toc{position:static; width:auto; height:auto; overflow:visible; border-right:0; border-bottom:1px solid var(--line)}.toc-list{columns:1}.content{margin-left:0; margin-right:0; padding:1.15rem 1rem 4rem}.doc-header{padding:1rem}table{display:block; overflow-x:auto}.cards{grid-template-columns:1fr}.pcard .psub,.pcard .lines{margin-left:0}}
+@media print{body{background:#fff; color:#111}body::before,.toc,.tabbar,.totop,.modal-overlay{display:none!important}.content{margin:0; padding:0}.panel{display:block!important}.doc-header,.principle,.block,.callout,blockquote,.card,.pcard,.expand{box-shadow:none; background:#fff; color:#111; border-color:#ccc}h1,h2,h3,h4,p,li,td,th,strong,em,.attr-val{color:#111}h1{text-shadow:none}h2::before{content:""}a{color:#0645ad}pre{background:#f4f6f8; color:#111; border:1px solid #ccc}table,.card{break-inside:avoid}#details{display:block; margin-top:30px}#details .detail{break-inside:avoid; border:1px solid #ccc; border-radius:0; margin:14px 0; padding:4px 16px 12px}#details .modal-head{display:flex; gap:12px; align-items:center; padding:10px 0}.more,.modal-close{display:none!important}.badge{color:#0b0f14!important; -webkit-print-color-adjust:exact; print-color-adjust:exact}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<nav class="toc" aria-label="Contents">
+<div class="toc-title"><span class="toc-kicker">Process</span>Process Improvement and Creating High-Performing Teams</div>
+<div class="toc-group active" data-tab="overview">
+<button class="toc-tab" data-tab="overview">Overview<span class="toc-sub">Why, maturity, taxonomy</span></button>
+<ul class="toc-list">
+<li><a href="#1-why-process-improvement">1. Why Process Improvement</a></li>
+<li class="sub"><a href="#business-case">Business Case</a></li>
+<li class="sub"><a href="#define-the-problem-first">Define the Problem First</a></li>
+<li class="sub"><a href="#applicability">Applicability</a></li>
+<li><a href="#2-the-maturity-ladder">2. The Maturity Ladder</a></li>
+<li><a href="#3-work-taxonomy">3. Work Taxonomy</a></li>
+<li class="sub"><a href="#delivery-work-vs-improvement-work">Delivery Work vs Improvement Work</a></li>
+<li class="sub"><a href="#work-types">Work Types</a></li>
+</ul>
+</div>
+<div class="toc-group" data-tab="foundation">
+<button class="toc-tab" data-tab="foundation">Foundation<span class="toc-sub">Baselines, intake, operating reality</span></button>
+<ul class="toc-list">
+<li><a href="#4-establishing-the-foundation">4. Establishing the Foundation</a></li>
+<li class="sub"><a href="#problem-definition-and-baseline">Problem Definition and Baseline</a></li>
+<li class="sub"><a href="#organizational-goals">Organizational Goals</a></li>
+<li class="sub"><a href="#way-of-working-wow">Way of Working (WOW)</a></li>
+<li class="sub"><a href="#work-intake">Work Intake</a></li>
+<li class="sub"><a href="#evaluate-existing-processes">Evaluate Existing Processes</a></li>
+<li><a href="#5-handling-operational-reality">5. Handling Operational Reality</a></li>
+<li class="sub"><a href="#interrupt-budget">Interrupt Budget</a></li>
+<li class="sub"><a href="#rotating-shield">Rotating Shield</a></li>
+<li class="sub"><a href="#the-30-minute-rule">The 30-Minute Rule</a></li>
+<li class="sub"><a href="#standard-work-first-response">Standard-Work-First Response</a></li>
+<li><a href="#6-the-standardization-and-automation-ladder">6. The Standardization and Automation Ladder</a></li>
+<li class="sub"><a href="#getting-people-to-automate">Getting People to Automate</a></li>
+<li class="sub"><a href="#celebrating-wins">Celebrating Wins</a></li>
+</ul>
+</div>
+<div class="toc-group" data-tab="execution">
+<button class="toc-tab" data-tab="execution">Execution<span class="toc-sub">Planning, metrics, retrospectives</span></button>
+<ul class="toc-list">
+<li><a href="#7-planning-and-execution">7. Planning and Execution</a></li>
+<li class="sub"><a href="#current-state-mapping">Current State Mapping</a></li>
+<li class="sub"><a href="#backlog-management">Backlog Management</a></li>
+<li class="sub"><a href="#execution">Execution</a></li>
+<li><a href="#8-measuring-success">8. Measuring Success</a></li>
+<li class="sub"><a href="#leading-indicators-measure-effort">Leading Indicators (measure effort)</a></li>
+<li class="sub"><a href="#lagging-indicators-measure-outcomes">Lagging Indicators (measure outcomes)</a></li>
+<li class="sub"><a href="#the-executive-number">The Executive Number</a></li>
+<li class="sub"><a href="#forecasting-and-sizing">Forecasting and Sizing</a></li>
+<li><a href="#9-retrospectives">9. Retrospectives</a></li>
+</ul>
+</div>
+<div class="toc-group" data-tab="leadership">
+<button class="toc-tab" data-tab="leadership">Leadership<span class="toc-sub">Stakeholders, resistance, goals</span></button>
+<ul class="toc-list">
+<li><a href="#10-stakeholder-management">10. Stakeholder Management</a></li>
+<li class="sub"><a href="#the-productivity-dip">The Productivity Dip</a></li>
+<li class="sub"><a href="#what-do-we-stop-doing">"What Do We Stop Doing?"</a></li>
+<li class="sub"><a href="#visible-win-within-30-days">Visible Win Within 30 Days</a></li>
+<li class="sub"><a href="#director-level-air-cover">Director-Level Air Cover</a></li>
+<li><a href="#11-overcoming-resistance">11. Overcoming Resistance</a></li>
+<li><a href="#12-long-term-goals">12. Long-Term Goals</a></li>
+</ul>
+</div>
+</nav>
+<main class="content">
+<header class="doc-header">
+<p class="eyebrow">Closed-Loop Organization</p>
+<h1>Process Improvement and Creating High-Performing Teams</h1>
+<p class="sub">A practical framework for making work visible, measurable, repeatable, and improvable without pretending operational reality is cleaner than it is.</p>
+<p>A portable framework for introducing structured process improvement to service, operations, engineering, support, fulfillment, and other execution-focused teams. Originally developed as a conversation guide; expanded into a reference document for pitching to leadership and onboarding teams.</p>
+</header>
+<div class="tabbar"><button class="tabbtn active" data-tab="overview">Overview</button><button class="tabbtn" data-tab="foundation">Foundation</button><button class="tabbtn" data-tab="execution">Execution</button><button class="tabbtn" data-tab="leadership">Leadership</button></div>
+<div class="panels">
+<section class="panel active" id="tab-overview" data-tab="overview">
+<h2 id="1-why-process-improvement">1. Why Process Improvement</h2>
+<p>Process improvement is how to work better — a systematic approach to identify, analyze, and improve existing processes for more efficient, more predictable results.</p>
+<h3 id="business-case">Business Case</h3>
+<ul>
+<li><strong>Increase service level</strong> — happier customers, faster resolution</li>
+<li><strong>Increase opportunities to innovate</strong> — when operational toil is reduced, capacity opens for new services</li>
+<li><strong>Improve consistency</strong> — repeatability of outcomes via standard work, automation, and clear procedures</li>
+<li><strong>Improve quality</strong> — fewer manual errors, fewer repeat incidents</li>
+<li><strong>Increase efficiency</strong> — do the same work with less effort, or more work with the same effort</li>
+<li><strong>Control the narrative</strong> — at some point, senior leadership will come looking for metrics. If we have them ahead of time, we control the story from that point forward. If we don't, others will make headcount and capacity decisions based on incomplete data. We create the data now, or we get run over.</li>
+</ul>
+<h3 id="define-the-problem-first">Define the Problem First</h3>
+<p>Before changing process, define the problem clearly. Otherwise teams end up adopting ceremonies and tooling without proving that they are solving the right operational issue.</p>
+<p>At minimum, establish:</p>
+<ul>
+<li><strong>Customer and stakeholders</strong> — who experiences the problem, and who is affected by fixing it?</li>
+<li><strong>Problem statement</strong> — what is failing, and why does it matter?</li>
+<li><strong>Baseline</strong> — what is happening now, measured in current-state metrics</li>
+<li><strong>Scope</strong> — what is included, and what is explicitly out of scope?</li>
+<li><strong>Target condition</strong> — what outcome would represent a meaningful improvement?</li>
+</ul>
+<p>This is the difference between process theater and process improvement.</p>
+<h3 id="applicability">Applicability</h3>
+<p>This framework is not limited to infrastructure or software teams.</p>
+<p>It applies anywhere work is:</p>
+<ul>
+<li>repeatable enough to standardize</li>
+<li>variable enough to require triage or prioritization</li>
+<li>interrupt-driven or queue-driven</li>
+<li>measurable in terms of time, quality, throughput, rework, or wait states</li>
+</ul>
+<p>That includes environments such as:</p>
+<ul>
+<li>platform and infrastructure teams</li>
+<li>service desks and shared services</li>
+<li>warehouse and fulfillment operations</li>
+<li>logistics and distribution workflows</li>
+<li>customer support and back-office operations</li>
+</ul>
+<p>The examples in this document lean toward IT and technical operations because that is where the framework was used most heavily, but the underlying model is broader than that.</p>
+<h2 id="2-the-maturity-ladder">2. The Maturity Ladder</h2>
+<p>Most teams start at Level 0 or 1. The goal is steady, sustainable progress up the ladder — not a leap to the top.</p>
+<table>
+<thead>
+<tr>
+<th>Level</th>
+<th>What It Looks Like</th>
+<th>Key Metric</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0 — Reactive</td>
+<td>Work arrives via email, Slack, hallway conversations. Gets done when it gets done.</td>
+<td>No data</td>
+</tr>
+<tr>
+<td>1 — Visible</td>
+<td>All work is tracked. A board exists. WIP limits are in place.</td>
+<td>Cycle time is measurable</td>
+</tr>
+<tr>
+<td>2 — Measured</td>
+<td>Flow metrics tracked weekly. Unplanned work ratio known.</td>
+<td>Cycle time is improving</td>
+</tr>
+<tr>
+<td>3 — Managed</td>
+<td>Standard work and automation exist for recurring work. Interrupt budget is explicit.</td>
+<td>Manual work ratio declining</td>
+</tr>
+<tr>
+<td>4 — Optimizing</td>
+<td>Retrospectives drive policy changes. Capacity planning is data-driven.</td>
+<td>Predictable delivery</td>
+</tr>
+</tbody>
+</table>
+<p>C-levels don't care which framework you use. They care that Level 0 costs them money (slow, unpredictable, key-person risk) and Level 4 doesn't. The maturity ladder gives them a map without requiring them to understand ITIL.</p>
+<p>ITIL, ISO 20000, and CMMI are bodies of knowledge that <em>inform</em> this approach — the bibliography, not the curriculum. You can adopt their concepts selectively without adopting the full framework.</p>
+<h2 id="3-work-taxonomy">3. Work Taxonomy</h2>
+<h3 id="delivery-work-vs-improvement-work">Delivery Work vs Improvement Work</h3>
+<p>Same people, different hats. The split is not about headcount; it is about capacity allocation.</p>
+<ul>
+<li><strong>Delivery work</strong>: keeping the service, workflow, or operation running. This may include incident response, order fulfillment, exception handling, customer response, or daily execution.</li>
+<li><strong>Improvement work</strong>: automation, tooling, standardization, process redesign, training, and systemic fixes that make delivery work more repeatable and scalable.</li>
+</ul>
+<p>In infrastructure teams this often maps cleanly to <strong>operations vs engineering</strong>. In other environments it may map to <strong>daily execution vs process improvement</strong>, <strong>production vs continuous improvement</strong>, or <strong>service delivery vs enablement</strong>.</p>
+<p>"This week, 60% of our capacity went to delivery work and 40% to improvement work" is a sentence leadership can understand and act on.</p>
+<h3 id="work-types">Work Types</h3>
+<p>Minimally, the team must understand and consistently classify its incoming work.</p>
+<p>In ITSM environments, common categories are:</p>
+<ul>
+<li><strong>Incident</strong> — something is broken or degraded. Restore service.</li>
+<li><strong>Request</strong> — someone needs something done. Fulfill it.</li>
+<li><strong>Change</strong> — we decided to modify something. Approve and execute it.</li>
+</ul>
+<p>In other environments the equivalent categories may be things like:</p>
+<ul>
+<li>unplanned issue / exception</li>
+<li>standard request / order / intake</li>
+<li>planned process or system change</li>
+</ul>
+<p>The exact names matter less than the consistency of classification. The point is to avoid throwing unlike work into one generic bucket and then wondering why the data is useless.</p>
+<p>Ideally, the intake form or work record forces the submitter to categorize the work at entry time. Keep the taxonomy short. If the list of work types is too long, the team probably does not yet understand its service model clearly enough.</p>
+</section>
+<section class="panel" id="tab-foundation" data-tab="foundation">
+<h2 id="4-establishing-the-foundation">4. Establishing the Foundation</h2>
+<h3 id="problem-definition-and-baseline">Problem Definition and Baseline</h3>
+<p>Before selecting tools, ceremonies, or boards, define the current state.</p>
+<ol>
+<li>Identify the service or workflow being improved</li>
+<li>Define the customer impact</li>
+<li>Establish a baseline:</li>
+<li>cycle time</li>
+<li>error rate or repeat-incident rate</li>
+<li>unplanned work ratio</li>
+<li>queue depth, rework, or wait time</li>
+<li>Define the target condition</li>
+<li>Define what evidence will show that the change worked</li>
+</ol>
+<p>This is the "Define" and "Measure" portion of the work. Without it, teams tend to confuse visible activity with improvement.</p>
+<h3 id="organizational-goals">Organizational Goals</h3>
+<ol>
+<li>Define organizational goals</li>
+<li>Define and understand service offerings — what are we doing, and why?</li>
+<li>Define Service Level Objectives (SLOs) and Service Level Agreements (SLAs)</li>
+</ol>
+<h3 id="way-of-working-wow">Way of Working (WOW)</h3>
+<p>There are many ways to meet any given objective. Establishing a WOW defines how the team works within an agreed-upon structure:</p>
+<ul>
+<li>Ensures everyone works the same way — helps stay organized</li>
+<li>Defines how and where we track time/effort (can be as simple as time estimates on work items)</li>
+<li>Defines project monitoring and control: understand progress, correct course, improve delivery time and quality</li>
+<li>Defines meeting cadence — frequency and format</li>
+</ul>
+<p><strong>Framework recommendation:</strong> For teams doing largely independent, continuous work, <strong>Kanban</strong> is usually the better operating model. It does not force artificial sprint boundaries onto work that continues to arrive every day. What you need:</p>
+<ol>
+<li><strong>Visualize work</strong> — a board with columns (Backlog, In Progress, Review, Done). This alone is transformative for teams that track work in a system of record but do not visualize flow.</li>
+<li><strong>Limit WIP</strong> — start with WIP = 1 per person, then tune.</li>
+<li><strong>Measure flow</strong> — cycle time, throughput (work items/week), aging (oldest in-progress item).</li>
+<li><strong>Improve policies</strong> — explicit rules for when work moves between columns.</li>
+</ol>
+<p>Scrum may still appear in the environment because leadership often wants a two-week reporting rhythm, sprint reviews, or commitment checkpoints. That does not mean the underlying work must be managed as sprint-batch execution.</p>
+<p>A practical hybrid model often works best:</p>
+<ul>
+<li>Use <strong>Kanban</strong> to manage the actual flow of work</li>
+<li>Use <strong>sprint reviews or regular checkpoints</strong> as reporting and stakeholder-alignment cadences</li>
+<li>Use <strong>flow metrics</strong> as the primary operational measurement system</li>
+<li>Treat sprint boundaries as communication boundaries, not as permission boundaries</li>
+</ul>
+<p>If standups are used, consider async formats (board walk, written update, or chat thread) to avoid turning them into status meetings for people who are not collaborating on the same work.</p>
+<h3 id="work-intake">Work Intake</h3>
+<p>Two rules:</p>
+<ol>
+<li><strong>No work gets done without a work record</strong>, except extreme cases (for example, a critical outage or safety event where the paperwork follows the response).</li>
+<li><strong>All new work requests flow through a single channel</strong> (intake workflow, scrum master, or designated queue).</li>
+</ol>
+<p>Framing for the team: "You know how management said you must have a record for everything, and you get a million side requests by message, hallway conversation, or drive-by interruption? This means you get to tell people: <em>please submit this through the intake channel.</em> If they have questions about the process or need something handled urgently, refer them to the sponsoring leader." Most people are not willing to escalate trivial work to senior leadership. This assumes leader-level buy-in on the intake model.</p>
+<h3 id="evaluate-existing-processes">Evaluate Existing Processes</h3>
+<p>Before improving anything, map what exists. Process mapping is one tool for this. Identify areas of opportunity — these become work projects.</p>
+<h2 id="5-handling-operational-reality">5. Handling Operational Reality</h2>
+<p>Many service, support, and fulfillment teams live in a world of interrupts. If we do not explicitly account for this, planned work will always lose to urgent work, and process improvement will be the first casualty.</p>
+<h3 id="interrupt-budget">Interrupt Budget</h3>
+<p>Reserve a fixed percentage of team capacity for unplanned work. Measure the current ratio first by tracking planned versus unplanned work for at least two weeks. Many interrupt-driven teams land around 40-60% unplanned.</p>
+<h3 id="rotating-shield">Rotating Shield</h3>
+<p>One person per rotation (day or week, depending on volume) is the designated interrupt handler. Everyone else works planned items. The shield absorbs urgent requests, exceptions, escalations, and "hey can you help me" interruptions. This does not require everyone to be excellent; it requires everyone to take a turn.</p>
+<h3 id="the-30-minute-rule">The 30-Minute Rule</h3>
+<p>If an interrupt takes less than 30 minutes, the shield handles it. If it takes more, it becomes a tracked work item. But <strong>this only works with a feedback loop on the backlog</strong>:</p>
+<ul>
+<li><strong>Recurring interrupt = improvement project, not backlog clutter.</strong> If the same type of interrupt shows up 3 times in a month, it graduates from "observed work item" to "prioritized improvement work."</li>
+<li>The backlog isn't where interrupts go to live — it's where they go to be <em>observed</em>. The observation period is short (one month), and the exit condition is clear: automate it, or explicitly decide it's rare enough to keep manual.</li>
+<li>Anything that sits in the backlog for 60 days without action gets reviewed — either it matters enough to schedule, or it doesn't matter and you close it. No 10,000-item graveyard.</li>
+</ul>
+<blockquote>
+<p><strong>Implementation note:</strong> The "recurring interrupt → improvement project" concept needs a concrete implementation in the team's work-management tool — automation rules, dashboards, or saved filters to surface recurring patterns. To be designed separately.</p>
+</blockquote>
+<h3 id="standard-work-first-response">Standard-Work-First Response</h3>
+<p>When the shield handles an interrupt, step one is checking whether documented standard work exists. If yes, follow it. If no, handle it manually <em>and create the documentation as part of the resolution</em>. Every interrupt is a standardization opportunity, and many become automation opportunities later.</p>
+<h2 id="6-the-standardization-and-automation-ladder">6. The Standardization and Automation Ladder</h2>
+<p>The long-term goal is that nothing done regularly should remain ad hoc. Some work should end up fully automated; some should end up as standardized checklists or documented procedures. The point is to move recurring work upward, incrementally.</p>
+<table>
+<thead>
+<tr>
+<th>Level</th>
+<th>Description</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0 — Undocumented</td>
+<td>"Ask the one person who knows how"</td>
+<td>Tribal knowledge</td>
+</tr>
+<tr>
+<td>1 — Documented</td>
+<td>Written procedure with clear steps</td>
+<td>SOP, wiki page, runbook</td>
+</tr>
+<tr>
+<td>2 — Checklist</td>
+<td>Step-by-step with verification at each stage</td>
+<td>Checklist a new team member can follow</td>
+</tr>
+<tr>
+<td>3 — Semi-Automated</td>
+<td>Tooling does the work, human runs it and validates</td>
+<td>Script, macro, workflow, playbook</td>
+</tr>
+<tr>
+<td>4 — Fully Automated</td>
+<td>Triggered by event, human notified of result</td>
+<td>Scheduled job, system workflow, webhook-triggered process</td>
+</tr>
+</tbody>
+</table>
+<p>The goal is to move everything at least one level up. Not everything needs to be Level 4. Some things are fine at Level 3 forever. But <strong>nothing should be Level 0</strong> — that's key-person risk, and it's the argument that resonates at every level of the organization.</p>
+<h3 id="getting-people-to-automate">Getting People to Automate</h3>
+<p>Modeling the behavior, showing results, and making it visible is necessary but not sufficient. If the barrier were awareness, watching someone else automate would be enough. It usually isn't. Common barriers and fixes:</p>
+<p><strong>They don't know how.</strong> For someone who came up through GUI-based administration, "just write a script" is like telling someone who's never cooked to "just make dinner." The fix isn't training classes — it's pairing. Pick one recurring manual task, sit with them for 90 minutes, co-author the first script together. Them driving, you navigating. They need the "I made the computer do the thing" moment firsthand. The first script is the wall; the second is dramatically easier.</p>
+<p><strong>There's no incentive (and there might be a disincentive).</strong> Automate a 2-hour weekly task and what happens? You get 2 more hours of other work. No reward, no recognition. Meanwhile, the person doing it manually looks busy and needed. Automation can feel like automating yourself out of relevance. The fix: make automation the valued output (see Celebrating Wins below).</p>
+<p><strong>The ROI is invisible.</strong> Building a tool or workflow takes 4 hours. Doing the task manually takes 20 minutes. The breakeven is 12 occurrences. But people do not think in breakeven — they think "I can do this in 20 minutes or spend my afternoon fighting with tooling." The fix: make cumulative cost visible. Track manual task time. When someone does something manually for the 10th time, the work record should show "total time spent on this task type: 3.3 hours." Now the 4-hour investment has a number next to it.</p>
+<p><strong>Not everyone needs to write code.</strong> People who move a task from Level 0 (undocumented) to Level 2 (checklist) are doing valuable work. That checklist is the artifact someone else can later automate or formalize further. Meet people where they are and move them one level up.</p>
+<h3 id="celebrating-wins">Celebrating Wins</h3>
+<p>Behavior that gets celebrated gets repeated. Behavior that gets ignored doesn't. This isn't soft feel-good stuff — it's operant conditioning. Concrete mechanisms:</p>
+<ul>
+<li><strong>Demo slot</strong> — 10 minutes at the end of a weekly meeting. Someone shows what they automated. Not a polished presentation — just "here's the thing, here's what it does, here's how much time it saves."</li>
+<li><strong>Automation scoreboard</strong> — a visible counter (wiki page, team channel, whiteboard) tracking: task name, who improved it, estimated time saved per month. The number only goes up. People like making numbers go up.</li>
+<li><strong>"First script" recognition</strong> — the first time someone who's never automated anything writes a working script, name it. "A teammate wrote their first playbook this week; it handles X and saves us Y hours a month." This creates social proof that automation isn't one person's thing.</li>
+<li><strong>Blameless failure</strong> — if someone writes a script and it breaks, the response is "good, you tried, let's fix it together." One punishment kills a year of encouragement.</li>
+</ul>
+</section>
+<section class="panel" id="tab-execution" data-tab="execution">
+<h2 id="7-planning-and-execution">7. Planning and Execution</h2>
+<h3 id="current-state-mapping">Current State Mapping</h3>
+<ol>
+<li>Map current processes</li>
+<li>Identify responsibilities and ownership (internal and external)</li>
+<li>Get the right people working on the right things (skills matrix, self-selection, or manager assignment — pick one and be explicit)</li>
+<li>Identify roadblocks and process impediments (wait time)</li>
+<li>Identify cycle time (work time + wait time)</li>
+<li>Identify value-added vs non-value-added activities. Example: are there things senior admins are doing that could be done by junior staff or automated entirely?</li>
+<li>Map ideal state processes</li>
+<li>Identify process gaps and inefficiencies</li>
+<li>Identify skill gaps</li>
+<li>Identify tech debt (things we can do but don't because we deployed them hastily)</li>
+<li>Identify infrastructure gaps (things we can't do because we lack the infrastructure)</li>
+</ol>
+<h3 id="backlog-management">Backlog Management</h3>
+<ol>
+<li>Enter all work required to move from current state to ideal state into the project backlog</li>
+<li>Prioritize the backlog:</li>
+<li><strong>Themes</strong> — project types aligned with business objectives</li>
+<li><strong>Initiatives</strong> — large categories working toward business objectives</li>
+<li><strong>Epics</strong> — workable projects (may span multiple cycles)</li>
+<li><strong>Stories</strong> — small enough to complete within a normal review cadence</li>
+<li><strong>Tasks</strong> — steps required to complete stories</li>
+</ol>
+<p>If the work is still too ambiguous to estimate or sequence confidently, stop decomposing and create a discovery package first. Execution artifacts should not be used to disguise unresolved uncertainty.</p>
+<h3 id="execution">Execution</h3>
+<p>This is the hardest part. Everything before it is planning; everything after it is review. Key concerns during execution:</p>
+<ul>
+<li><strong>WIP limits are sacred.</strong> Do not start new work until current work is done or explicitly blocked. Starting everything and finishing nothing is the default failure mode.</li>
+<li><strong>Scope changes get new work items.</strong> If requirements shift mid-task, the original item stays scoped as-is. New scope = new item = goes through prioritization.</li>
+<li><strong>Blocked work gets flagged immediately</strong>, not at the next standup. Blockers are the team lead's (or scrum master's, or manager's) problem to remove.</li>
+<li><strong>Dependencies between team members</strong> are visible on the board. If your work item is blocked by someone else's work item, link them. The board should make this obvious.</li>
+<li><strong>When to escalate:</strong> if a work item has been in progress for more than 2x its estimate with no path to completion, escalate. Do not let work quietly stall.</li>
+</ul>
+<h2 id="8-measuring-success">8. Measuring Success</h2>
+<p>Establish at least one metric <em>before</em> starting, so we can tell whether the process improvement is actually improving anything.</p>
+<h3 id="leading-indicators-measure-effort">Leading Indicators (measure effort)</h3>
+<ul>
+<li><strong>Automation coverage</strong> — percentage of recurring tasks at each level of the automation ladder. Track monthly. Target: 0% at Level 0 within 6 months.</li>
+<li><strong>Unplanned work ratio</strong> — unplanned work items / total work items per week. Track weekly. If this is not declining, the process improvement is not working.</li>
+<li><strong>Mean time to standard work</strong> — when a new recurring task is identified, how long until a documented procedure exists? Target: by the end of the week it is first performed.</li>
+</ul>
+<h3 id="lagging-indicators-measure-outcomes">Lagging Indicators (measure outcomes)</h3>
+<ul>
+<li><strong>Cycle time</strong> — median time from ticket creation to resolution. Segment by type (incident vs request vs project).</li>
+<li><strong>Repeat incident rate</strong> — how often do we get paged for the same thing twice? If automation is working, this trends toward zero.</li>
+<li><strong>Time to production</strong> — how long from "we decided to do this" to "it's in production." Captures the full cost of process overhead, approvals, and queuing.</li>
+</ul>
+<h3 id="the-executive-number">The Executive Number</h3>
+<p>Pick one metric for C-level reporting. <strong>Cycle time</strong> is the best single number. "Our average time to deliver a change went from X weeks to Y weeks" is a sentence any executive understands. Everything else is internal instrumentation that supports that one number.</p>
+<h3 id="forecasting-and-sizing">Forecasting and Sizing</h3>
+<p>If the organization requires sprint-level planning or periodic progress reporting, use a lightweight sizing approach for forecast conversations. Keep it secondary to flow metrics.</p>
+<p>Guidelines:</p>
+<ul>
+<li>Primary operational measures should remain cycle time, throughput, aging, and unplanned work ratio</li>
+<li>Sizing should support planning conversations, not replace evidence</li>
+<li>If points are used, keep them internally consistent</li>
+<li>If time-box estimates are used, treat them as planning aids rather than promises</li>
+</ul>
+<p>The goal is not to optimize for velocity theater. The goal is to create forecasting data that helps teams make better capacity decisions.</p>
+<h2 id="9-retrospectives">9. Retrospectives</h2>
+<ol>
+<li>Review the outcomes of the cycle, sprint, or reporting window</li>
+<li>Identify ways to improve outcomes in the next iteration:</li>
+<li>What worked?</li>
+<li>What didn't work?</li>
+<li>Even better if...</li>
+<li>Include domain-relevant operational metrics reports</li>
+<li>High unplanned work utilization helps us understand shortcomings in planned work</li>
+<li>Review the Delivery vs Improvement capacity split — are we spending our time the way we intended?</li>
+<li>Present the results of our work to key stakeholders</li>
+</ol>
+<p>For more information: <a href="https://www.scrum.org/resources/what-is-a-sprint-review">Scrum.org — What is a Sprint Review</a></p>
+</section>
+<section class="panel" id="tab-leadership" data-tab="leadership">
+<h2 id="10-stakeholder-management">10. Stakeholder Management</h2>
+<h3 id="the-productivity-dip">The Productivity Dip</h3>
+<p>When a team adopts structured process, throughput <em>drops</em> for the first 2–4 weeks while people learn the workflow. If leadership doesn't expect this, they'll see the dip and kill the initiative. The pitch must include: "Weeks 1–3 will be slower. This is expected. Here's why, and here's when it recovers." A J-curve chart (dip then rise) is worth a thousand words.</p>
+<h3 id="what-do-we-stop-doing">"What Do We Stop Doing?"</h3>
+<p>Process improvement adds overhead. If the team is already at capacity, the overhead has to come from somewhere. Leadership must explicitly say which existing work gets deprioritized during the transition. If they won't, the initiative is unfunded — it will happen in people's spare time, which means it won't happen.</p>
+<h3 id="visible-win-within-30-days">Visible Win Within 30 Days</h3>
+<p>Pick one painful, visible, recurring task and automate it in the first month. Not the hardest thing — the most annoying thing that everyone knows about. When the C-level hears "that thing that used to take 4 hours every week now takes zero," they'll fund the rest.</p>
+<h3 id="director-level-air-cover">Director-Level Air Cover</h3>
+<p>The intake model ("submit the work through the intake channel; if you have questions, ask the sponsoring leader") only works with explicit buy-in at the director level. This has never been a problem in practice, but it must be established before rolling out the intake process.</p>
+<h2 id="11-overcoming-resistance">11. Overcoming Resistance</h2>
+<p>If a team has operated without structured process improvement, there's a reason. It's usually not a knowledge problem ("here's how to do it") — it's an incentive and capacity problem ("here's why we haven't, and here's what changes to make it possible"). Common objections and responses:</p>
+<p><strong>"I'm already good at my job."</strong> The best individual contributors resist process because they see it as overhead that slows them down — and <em>for them personally</em>, it does. Frame it as reducing their personal burden, not constraining their autonomy: "Process isn't for you. It's so that when you're on vacation, someone else can do what you do without calling you." Also: "You know how you get a million side requests? This means you get to tell people <em>please submit it through the intake channel</em> and point them there."</p>
+<p><strong>"We tried this before and it didn't stick."</strong> If there's a failed attempt in the team's history, everyone remembers. Name it explicitly: "We tried X, it didn't work because Y, here's what's different this time." If you don't address it, people will quietly assume this is the same thing with a new name.</p>
+<p><strong>"I don't have time for this."</strong> The most honest objection, and usually the most valid. If the team is drowning in operational work, asking them to also do process improvement is asking them to work more. The interrupt budget, rotating shield, and "what do we stop doing" conversation with leadership address this mechanically and politically.</p>
+<p><strong>"This is management's job, not mine."</strong> Don't pitch process — pitch toil reduction: "I'm not asking you to adopt a process. I'm asking you to help me document what we already do, so we can automate the boring parts." The process improvement happens as a side effect. For the more strategically minded: "At some point, someone at the top will come looking for metrics. If we have them ahead of time, we get to control the narrative. Imagine what we can do with that kind of leverage — but we have to create the data now."</p>
+<p><strong>The nuclear option:</strong> "We have N people and no bus factor. If any one of us left tomorrow, the team would lose capabilities that take months to rebuild. This is how we fix that." Key-person risk is the argument that works at every level — ICs understand it personally, managers understand it operationally, C-levels understand it financially.</p>
+<h2 id="12-long-term-goals">12. Long-Term Goals</h2>
+<ul>
+<li>Formalize selection criteria — ensure projects are consistently working toward organizational goals</li>
+<li>Train on new technologies to reduce or eliminate skill gaps</li>
+<li>Improve documentation and knowledge management across the organization</li>
+<li>Build toward predictable capacity planning based on historical flow and delivery data</li>
+</ul>
+</section>
+</div>
+</main>
+</div>
+<button class="totop" id="totop" title="Back to top" aria-label="Back to top">↑</button>
+<script>
+(function(){
+  function activate(name){
+    document.querySelectorAll('.panel').forEach(function(p){
+      p.classList.toggle('active', p.dataset.tab === name);
+    });
+    document.querySelectorAll('.toc-group').forEach(function(g){
+      g.classList.toggle('active', g.dataset.tab === name);
+    });
+    document.querySelectorAll('.tabbtn').forEach(function(b){
+      b.classList.toggle('active', b.dataset.tab === name);
+    });
+  }
+  function panelTabOf(el){
+    var panel = el.closest('.panel');
+    return panel ? panel.dataset.tab : null;
+  }
+  function go(id, smooth){
+    var el = document.getElementById(id);
+    if(!el) return false;
+    var tab = panelTabOf(el);
+    if(tab) activate(tab);
+    var details = el.closest('details');
+    if(details) details.open = true;
+    if(el.tagName === 'DETAILS') el.open = true;
+    el.scrollIntoView(smooth ? {behavior:'smooth', block:'start'} : {block:'start'});
+    return true;
+  }
+  document.querySelectorAll('.tabbtn, .toc-tab').forEach(function(btn){
+    btn.addEventListener('click', function(e){
+      e.preventDefault();
+      activate(btn.dataset.tab);
+      window.scrollTo({top:0, left:0, behavior:'smooth'});
+      history.replaceState(null, '', location.pathname);
+    });
+  });
+  document.addEventListener('click', function(e){
+    var a=e.target.closest('a[href^="#"]');
+    if(!a) return;
+    var id=decodeURIComponent(a.getAttribute('href').slice(1));
+    if(!id) return;
+    if(go(id, true)){
+      e.preventDefault();
+      history.replaceState(null, '', '#' + id);
+    }
+  });
+  var top=document.getElementById('totop');
+  function onScroll(){ if(top) top.classList.toggle('show', window.scrollY>420); }
+  window.addEventListener('scroll', onScroll, {passive:true});
+  onScroll();
+  if(top){
+    top.addEventListener('click', function(){
+      window.scrollTo({top:0, left:0, behavior:'smooth'});
+    });
+  }
+  if(location.hash){
+    if(!go(decodeURIComponent(location.hash.slice(1)), false)) activate(document.querySelector('.panel.active')?.dataset.tab || document.querySelector('.tabbtn')?.dataset.tab || 'overview');
+  } else {
+    activate(document.querySelector('.panel.active')?.dataset.tab || document.querySelector('.tabbtn')?.dataset.tab || 'overview');
+  }
+  window.__docTabs = {activate: activate, go: go};
+})();
+</script>
+</body>
+</html>
