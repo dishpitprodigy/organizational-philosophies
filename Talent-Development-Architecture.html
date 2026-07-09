@@ -98,6 +98,13 @@ a:hover{text-decoration:underline; text-decoration-color:var(--yellow)}
   background:linear-gradient(135deg, rgba(20,16,20,.98), rgba(0,0,0,.98));
   box-shadow:var(--shadow);
 }
+.home-link{
+  display:inline-flex; align-items:center; margin:0 0 .85rem;
+  color:var(--cyan); font-size:.82rem; font-weight:900;
+  letter-spacing:.08em; text-transform:uppercase;
+}
+.home-link::before{content:"<-"; margin-right:.45rem; color:var(--yellow)}
+.home-link:hover{color:var(--yellow); text-decoration:none}
 .eyebrow{
   margin:0 0 .5rem; color:var(--yellow); font-size:.78rem; font-weight:800;
   letter-spacing:.14em; text-transform:uppercase;
@@ -266,7 +273,8 @@ tbody tr:hover{background:rgba(252,238,84,.07)}
 </nav>
 <main class="content">
 <header class="doc-header">
-<p class="eyebrow">Closed-Loop Organization</p>
+<a class="home-link" href="index.html">Return to home</a>
+<p class="eyebrow">Thoughts on Fostering Organizational Excellence</p>
 <h1>Talent Development Architecture</h1>
 <p><em>A companion to the Career Progression Guide and the Coaching and Calibration Guide. The ladder defines what growth looks like; coaching and calibration define how to judge it fairly; Talent Development Architecture defines how the organization creates the conditions for people to grow into it.</em></p>
 <p class="tagline">Talent gets better when the organization deliberately creates the right reps, the right feedback, the right assignments, and the right evidence.</p>

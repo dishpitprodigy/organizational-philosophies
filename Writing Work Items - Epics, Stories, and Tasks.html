@@ -100,6 +100,13 @@ a:hover{text-decoration:underline; text-decoration-color:var(--yellow)}
   background:linear-gradient(135deg, rgba(20,16,20,.98), rgba(0,0,0,.98));
   box-shadow:var(--shadow);
 }
+.home-link{
+  display:inline-flex; align-items:center; margin:0 0 .85rem;
+  color:var(--cyan); font-size:.82rem; font-weight:900;
+  letter-spacing:.08em; text-transform:uppercase;
+}
+.home-link::before{content:"<-"; margin-right:.45rem; color:var(--yellow)}
+.home-link:hover{color:var(--yellow); text-decoration:none}
 .eyebrow{
   margin:0 0 .5rem; color:var(--yellow); font-size:.78rem; font-weight:800;
   letter-spacing:.14em; text-transform:uppercase;
@@ -291,6 +298,7 @@ footer{margin-top:60px; padding-top:22px; border-top:1px solid var(--line); colo
 </nav>
 <main class="content">
 <div class="doc-header">
+<a class="home-link" href="index.html">Return to home</a>
 <h1 id="writing-work-items-epics-stories--tasks">Writing Work Items: Epics, Stories &amp; Tasks</h1>
 <p><em>A standard for pre-task project planning - how to describe the work and how to know when it's done.</em></p>
 <p><strong>Audience:</strong> everyone who writes work items in Jira - across every tech-related department. No project-management background assumed.

@@ -100,6 +100,13 @@ a:hover{text-decoration:underline; text-decoration-color:var(--yellow)}
   background:linear-gradient(135deg, rgba(20,16,20,.98), rgba(0,0,0,.98));
   box-shadow:var(--shadow);
 }
+.home-link{
+  display:inline-flex; align-items:center; margin:0 0 .85rem;
+  color:var(--cyan); font-size:.82rem; font-weight:900;
+  letter-spacing:.08em; text-transform:uppercase;
+}
+.home-link::before{content:"<-"; margin-right:.45rem; color:var(--yellow)}
+.home-link:hover{color:var(--yellow); text-decoration:none}
 .eyebrow{
   margin:0 0 .5rem; color:var(--yellow); font-size:.78rem; font-weight:800;
   letter-spacing:.14em; text-transform:uppercase;
@@ -288,6 +295,7 @@ footer{margin-top:60px; padding-top:22px; border-top:1px solid var(--line); colo
 </nav>
 <main class="content">
 <header class="doc-header">
+  <a class="home-link" href="index.html">Return to home</a>
   <p class="eyebrow">Engineering &middot; Specialization Career Framework</p>
   <h1>DevOps & Site Reliability Engineering Career Progression Guide</h1>
   <p class="sub">A shared scope-and-impact ladder for DevOps, Site Reliability, Platform, Cloud, Infrastructure, and Security Engineering &mdash; built to help managers and calibration groups apply the grade scale consistently.</p>
