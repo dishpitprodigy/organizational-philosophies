@@ -48,6 +48,10 @@ _Avoid_: Trial by fire, sink or swim
 The expectation that the organization and its employees are continuously trying to get better through coaching, practice, feedback, and bounded stretch. Development is part of how the company operates, not a special program reserved for promotion cycles.
 _Avoid_: Training as perk, annual development plan
 
+**Spot Bonus Signal**:
+A discretionary recognition payment that serves two purposes at once: rewarding truly exceptional work and creating a negative signal to senior leadership about heroism the operating system required. A spot bonus should not only say "this person did something valuable." It should also ask why the organization needed exceptional effort, whether the work exposed an underfunded process, missing ownership, brittle tooling, unclear priority, or preventable emergency, and whether the heroic act should become durable prevention.
+_Avoid_: Spot bonus as morale candy, rewarding heroism without learning from it
+
 **Development Architecture Tooling**:
 Technology that helps people navigate an existing development architecture by surfacing roles, skills, opportunities, evidence, and paths. It can augment good process, but it cannot create the management behavior, role clarity, safe-reps paths, or coaching discipline by itself.
 _Avoid_: Tool as process substitute, AI as process fix

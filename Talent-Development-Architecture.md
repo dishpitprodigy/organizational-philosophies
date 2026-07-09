@@ -22,7 +22,56 @@ Baseball is the cleanest sports analogy for Talent Development Architecture beca
 
 Baseball is also the closest sports analogue to the business world's measurement fantasy. The Moneyball story is not just "sports with statistics." It is the endgame of every efficiency benchmark: turn scattered observation into structured evidence, use that evidence to find undervalued capability, and make better allocation decisions than competitors who are still relying on impressions.
 
+The ideal is that the organization can tell when someone is ready for the next level from accumulated evidence. Baseball gets unusually close to that ideal. A team looking at a player in AAA is usually not asking whether that player can bring leadership to a struggling major-league roster. It is asking whether the player has demonstrated enough level-appropriate capability to face the next level of competition. The progression model is clean, and the evidence system is mature.
+
 The difference is that baseball outcomes are unusually explicit. A pitch is a ball or a strike. A runner is safe or out. A plate appearance produces a countable result. Business outcomes are more ambiguous and more contextual. Frameworks like DORA work well in their intended domain because they isolate a meaningful slice of engineering performance, but they do not transfer cleanly to every function. TDA should borrow baseball's structured development pipeline and measurement ambition without pretending business outcomes are as clean as box scores.
+
+---
+
+## How This Guide Uses Sports Analogies
+
+The main argument should stand without sports knowledge. Sports analogies are useful only when they reveal an organizational pattern more clearly than ordinary business language.
+
+The point is not sports. The point is cross-domain pattern recognition. A reader should be able to say, "I do not care about baseball or football, but I understand the organizational pattern this is trying to expose."
+
+In this guide, the sports language does three jobs:
+
+1. **Baseball explains progression.** A real development system gives people level-appropriate reps, observes performance, and decides readiness from evidence.
+2. **Team captains explain tactical authority.** Senior ICs can translate intent into live execution without becoming managers.
+3. **Training analogies explain preparation.** Managers are responsible for asking whether a person has been prepared for the challenge being placed in front of them.
+
+### Recommended Language Pattern
+
+Use this distinction when the guide needs to separate tactical IC leadership from compressed management roles:
+
+> Team captain model: good. Player-coach management model: usually bad.
+
+A **team captain model** means:
+
+- senior ICs have tactical authority
+- people closest to the work help translate intent into execution
+- leadership trusts qualified people to make live adjustments
+- feedback from the field changes the plan
+
+A **player-coach management model** means:
+
+- one person is expected to manage people and carry normal IC output
+- management work is underfunded
+- execution work is underfunded
+- role conflict is disguised as empowerment
+- failure is blamed on individual prioritization instead of incoherent design
+
+This distinction should be explainable without sports: tactical authority is not management authority. A senior IC may lead execution from the field, but that is not the same thing as owning staffing, coaching, development, performance management, priority negotiation, and long-term organizational health.
+
+### Levels of Field Authority
+
+"Team captain" is a category, not a single career level. Different IC levels imply different amounts of field authority.
+
+- A **senior IC** may lead execution inside a bounded scope. They help the team read the situation, make local tradeoffs, and keep work moving.
+- A **staff-level IC** creates leverage across a broader field. They may not own the whole operating concept, but their judgment changes how multiple people coordinate, sequence work, and respond under pressure.
+- A **principal-level IC** may have unusual authority to shape the operating concept itself. They are rare because the organization is trusting them not only to execute inside the system, but to help decide what the system should become.
+
+This is why "captain" language has to stay attached to decision rights. Some players are trusted to make adjustments within the called play. A much smaller number are trusted to change the play, reshape the plan, or challenge the operating concept. Organizations create confusion when they hand out the language of leadership without clarifying which decisions the person is actually allowed to make.
 
 ---
 
@@ -65,6 +114,14 @@ Employees should be encouraged to discuss these preferences openly with their ma
 Managers should also use disliked work as a learning opportunity when the exposure is genuinely necessary. If an engineer strongly prefers one tool or operating model over another, the coaching question is not only "can you do the required work?" It is also "can you explain why reasonable people prefer the alternative?" The point is not to force false enthusiasm. The point is to build the ability to operate from another perspective when the business context requires it.
 
 A person who dislikes Terraform may still need to understand what Terraform users value: provider breadth, declarative workflow, common hiring market, ecosystem support, and familiar patterns across cloud teams. That same person may still prefer Ansible, Pulumi, Python, or another model after doing the work. That is fine. The development value is in learning to understand the opposing case well enough to apply the right tool in the narrow context where it is strongest, not in pretending every preference is equally aligned with every situation.
+
+### Small Wins and Enjoyment Are Signal
+
+Trying to have fun with the work is not childish, unserious, or separate from performance. Enjoyment is one way people stay connected to the work long enough to improve at it.
+
+Managers should notice whether people still celebrate each other's wins. A resolved incident, a removed source of toil, a clean handoff, a useful runbook, a fast recovery, a better test, or a small automation improvement may not look like a major business milestone. But small wins compound into large outcomes, and celebration reinforces the behaviors that create them.
+
+Lack of celebration is also signal. It may mean the team is exhausted, afraid to show enthusiasm, disconnected from the outcome, too siloed to notice each other's contributions, or operating in a culture where visible enjoyment is treated as unprofessional. That is a management problem. The goal is not performative cheerleading. The goal is a team that recognizes progress, learns from it, and wants to keep playing well together.
 
 
 ---
@@ -139,6 +196,7 @@ The manager is looking for defects in the person's mental model:
 A sports analogy is useful here: a football coach does not say "you misread the defense; reading defenses is a requirement for this job, and you have to get better at that." A good coach explains what a defender's movement or action reveals about the defensive concept, how that informs where the exploitable space opens, which offensive player is expected to move through it, and the role the individual being coached is supposed to play in exploiting these weaknesses.
 
 That is to say that it is not every player's objective to score on every play. It is every player's objective to be in the optimal position for the team to score on every play. That subtle change of phrasing is what separates excellent teams from mediocre ones. Successful teams have a singular vision from the top down, and everyone understands the role they need to play for the team to achieve its goals.
+\# Callout box on the last sentence for emphasis in the HTML.
 
 The business equivalent is teaching the person how to read systems: what signals reveal a resource constraint, dependency pressure, capacity issue, priority inversion, customer impact, or failure mode.
 
@@ -161,6 +219,29 @@ The exact language can vary by person, manager, culture, and severity. The conve
 If formal documentation is required, it should come after the coaching loop has produced a shared path forward. A clean version sounds like: "I think we are positioned to move forward from this. I do need to document what happened and what we agreed to, so there is a written record if the issue repeats. If we are not talking about this again in the next review period, it will not be treated as an ongoing concern." Documentation is a record-control mechanism, not the coaching mechanism itself.
 
 Never lie, stretch, or massage facts in a coaching conversation. If notes are being taken, say why. If notes may be used in an incident document, performance record, or other formal artifact, say so. Distinguish facts from stories.
+\# add something to 'dishpitprodigy/organizational-philosophies/0.Organizational-Excellence-Book-Gaps.md' about facts vs stories. Maybe it belongs here, but idk. Either way, it deserves more than a single sentence.
+
+### Manager Readiness Questions
+
+Before a manager assigns meaningful stretch, the manager has a preparation duty. These questions are not optional reflection prompts. If the manager has not asked them, the manager has not done the job.
+
+- Did I do enough to prepare this person for the challenge I am putting in front of them?
+- Am I sure they are ready?
+- What are the consequences if I am wrong about their readiness?
+- If this fails, what part of the failure belongs to me, what part belongs to the employee, and what part belongs to the system around them?
+- What would reasonable struggle look like?
+- What would unacceptable risk look like?
+- If things begin going badly, what intervention options do I have?
+
+For consequential work, the manager should begin from the assumption that a preventable employee failure is a management failure unless proven otherwise. The manager does not get to treat failure as evidence that the employee was unfit until the manager can show that the assignment was bounded, the expectations were clear, the person was prepared, the support model existed, the risks were understood, and intervention options were available.
+
+\# If this fails ... call out in the HTML.
+
+This matters because employee accountability is not abstract. Performance consequences affect income, reputation, family stability, health, confidence, and future opportunity. Sometimes an employee truly owns the failure, and sometimes termination or role removal is the right outcome. But a manager should be able to sleep at night knowing they did not put an unprepared person into a situation where failure was predictable, then let the person absorb the consequences alone.
+
+A boxing analogy is useful here only if it is kept in the right frame. The lesson is not toughness or punishment. The lesson is preparation, mechanics, trust, readiness, and intervention. A trainer does not send someone into sparring because struggle sounds developmental. A trainer asks whether the person has practiced enough mechanics to face that level of intensity without unacceptable harm.
+
+Managers owe the same kind of thinking in business terms. Stretch work should be challenging enough to build capability, but bounded enough that failure becomes evidence and learning rather than avoidable damage.
 
 ---
 
