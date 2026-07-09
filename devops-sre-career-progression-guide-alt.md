@@ -4,7 +4,7 @@
 
 ## Purpose
 
-This guide translates the company’s IC1–IC9, MGR4–MGR8, and EX9–EX11 grade scale into observable expectations for DevOps, Site Reliability, Platform, Cloud, Infrastructure, and Security Engineering roles.
+This guide translates an IC1–IC9, MGR4–MGR8, and EX9–EX11 grade scale into observable expectations for DevOps, Site Reliability, Platform, Cloud, Infrastructure, and Security Engineering roles.
 
 The grade reflects the **scope, ambiguity, autonomy, influence, and durable impact** of the work a person consistently performs. It is not determined by tenure, ticket volume, technical trivia, or title.
 
@@ -752,4 +752,3 @@ Examples of evidence that **do not** meet this bar, even though they are sometim
 - Volume of cross-team conversations, introductions, or facilitation without a documented change in decisions or outcomes.
 
 Calibration groups and managers should request the specific, attributable form when they are uncertain. The absence of stakeholder evidence in a packet is more often a failure of evidence collection than a failure of the engineer; the correct response is to gather it, not to default to a lower level.
-

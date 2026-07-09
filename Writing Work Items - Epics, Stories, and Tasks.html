@@ -603,7 +603,7 @@ e.g. <em>"Move pipeline-X provisioning from L1 (runbook) to L3 (Ansible playbook
 </blockquote>
 <p>Think of a ticketing boundary the way you'd think of a service boundary: separating two concerns that are owned, reviewed, and reported differently buys you clean signal; collapsing them buys you noise. (Sometimes one bucket genuinely <em>is</em> right - a small team with low interrupt volume. Deciding <strong>where to draw your own boundaries</strong> is out of scope for this document; what follows assumes you've decided you need one.)</p>
 <blockquote class="callout note">
-<p><strong>Example boundary.</strong> One common setup is to split the boundary across two work queues: <strong>ROADMAP</strong> for roadmap-driven work, and <strong>DEMAND</strong> for demand-driven work. The examples in this doc are roadmap items. Your organization will have its own names; the <em>pattern</em> is what is portable, not the queue labels.</p>
+<p><strong>Example boundary.</strong> One common setup is to split the boundary across two work queues: <strong>roadmap</strong> for roadmap-driven work, and <strong>demand</strong> for demand-driven work. The examples in this doc are roadmap items. Your organization will have its own names; the <em>pattern</em> is what is portable, not the queue labels.</p>
 <p><strong>A note on change management.</strong> Changes are roadmap-driven by definition, and here a separate change/CAB system governs them - but that system is an <strong>audit overlay</strong>, not a third category of work: no central board can assess a change's impact independently of the experts who own it, so CAB exists to confirm the i's are dotted, not to own the work. It does not affect the roadmap-vs-demand split, which stays a clean <strong>two-way</strong> cut. (We borrow ITIL as a shared vocabulary for these ideas; we are not a strict ITIL shop, and nothing here requires ITIL compliance.)</p>
 </blockquote>
 <h3 id="the-work-taxonomy">The work taxonomy</h3>
@@ -652,10 +652,10 @@ e.g. <em>"Move pipeline-X provisioning from L1 (runbook) to L3 (Ansible playbook
 </blockquote>
 <h3 id="the-toil-to-epic-rule-this-is-the-feedback-loop">The toil-to-epic rule (this is the feedback loop)</h3>
 <blockquote class="callout note">
-<p><strong>When a cause category crosses a threshold - e.g. <em>N occurrences</em> or <em>X hours</em> in a rolling window - it spawns a roadmap epic (in ROADMAP) whose outcome is "retire this demand source," measured back against the demand data (DEMAND).</strong></p>
+<p><strong>When a cause category crosses a threshold - e.g. <em>N occurrences</em> or <em>X hours</em> in a rolling window - it spawns a roadmap epic whose outcome is "retire this demand source," measured back against the demand data.</strong></p>
 </blockquote>
 <p>This is the mechanism that turns reactive pain into planned improvement, and it's exactly the narrative leadership wants to see - note that it <strong>crosses the boundary</strong> (demand data in -> roadmap epic out -> outcome verified against the same demand data):</p>
-<pre><code>demand-driven work (DEMAND): incidents + requests
+<pre><code>demand queue: incidents + requests
         │  cause + time captured structurally (work type, resolve-gated field, worklog)
         ▼
 top demand drivers, ranked by count × hours
@@ -1014,7 +1014,7 @@ registers against the region-X endpoint using the region-X registration token, a
 <p><em>Quantitative:</em> We'll know this is done when [metric/state] moves from [baseline] to [target], measured by [method], by [horizon].
 <em>Qualitative:</em> When this is done, [capability] is now possible / [failure mode] is no longer possible, verified by [specific check].</p>
 </blockquote>
-<p><strong>Demand-driven work (Section 6):</strong> capture it by <strong>work type</strong> (not a removable tag) + a resolve-gated <strong>cause</strong> + time. When a cause category crosses the threshold -> <strong>spawn a roadmap epic to retire it, with its outcome measured back against the demand data.</strong> That is the loop leadership sees. Roadmap vs demand is a clean two-way split; change/CAB is an audit overlay, not a third bucket.</p>
+<p><strong>Demand-driven work (Section 6):</strong> capture it by <strong>work type</strong> (not a removable tag) + a resolve-gated <strong>cause</strong> + time. When a cause category crosses the threshold -> <strong>spawn a roadmap epic to retire it, with its outcome measured back against the demand data.</strong> That is the loop leadership needs to see. Roadmap vs demand is a clean two-way split; change/CAB is an audit overlay, not a third bucket.</p>
 <p><strong>Three modes (author effort scales with uncertainty):</strong> roadmap/bespoke -> full machinery · demand/reactive -> light, just enough to stay countable · repeatable/request -> machinery frozen into the work type.</p>
 <p><strong>Definition of Ready (don't start until):</strong> one intent · acceptance criteria written · Non-Goals written · standing gates satisfiable · vertical slice · dependencies known · unknowns resolved up front · linked to an epic that has a real outcome.</p></section>
 </div>

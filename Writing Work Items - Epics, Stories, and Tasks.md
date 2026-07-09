@@ -316,7 +316,7 @@ Throughout this section, distinguish two things people lump together:
 
 Think of a ticketing boundary the way you'd think of a service boundary: separating two concerns that are owned, reviewed, and reported differently buys you clean signal; collapsing them buys you noise. (Sometimes one bucket genuinely *is* right - a small team with low interrupt volume. Deciding **where to draw your own boundaries** is out of scope for this document; what follows assumes you've decided you need one.)
 
-> **Example boundary.** One common setup is to split the boundary across two work queues: **ROADMAP** for roadmap-driven work, and **DEMAND** for demand-driven work. The examples in this doc are roadmap items. Your organization will have its own names; the *pattern* is what is portable, not the queue labels.
+> **Example boundary.** One common setup is to split the boundary across two work queues: **roadmap** for roadmap-driven work, and **demand** for demand-driven work. The examples in this doc are roadmap items. Your organization will have its own names; the *pattern* is what is portable, not the queue labels.
 
 > **A note on change management.** Changes are roadmap-driven by definition, and here a separate change/CAB system governs them - but that system is an **audit overlay**, not a third category of work: no central board can assess a change's impact independently of the experts who own it, so CAB exists to confirm the i's are dotted, not to own the work. It does not affect the roadmap-vs-demand split, which stays a clean **two-way** cut. (We borrow ITIL as a shared vocabulary for these ideas; we are not a strict ITIL shop, and nothing here requires ITIL compliance.)
 
@@ -340,7 +340,7 @@ Think of a ticketing boundary the way you'd think of a service boundary: separat
 This is the mechanism that turns reactive pain into planned improvement, and it's exactly the narrative leadership wants to see - note that it **crosses the boundary** (demand data in -> roadmap epic out -> outcome verified against the same demand data):
 
 ```
-demand-driven work (DEMAND): incidents + requests
+demand queue: incidents + requests
         │  cause + time captured structurally (work type, resolve-gated field, worklog)
         ▼
 top demand drivers, ranked by count × hours
@@ -635,7 +635,7 @@ Pin this.
 > *Quantitative:* We'll know this is done when [metric/state] moves from [baseline] to [target], measured by [method], by [horizon].
 > *Qualitative:* When this is done, [capability] is now possible / [failure mode] is no longer possible, verified by [specific check].
 
-**Demand-driven work (Section 6):** capture it by **work type** (not a removable tag) + a resolve-gated **cause** + time. When a cause category crosses the threshold -> **spawn a roadmap epic to retire it, with its outcome measured back against the demand data.** That is the loop leadership sees. Roadmap vs demand is a clean two-way split; change/CAB is an audit overlay, not a third bucket.
+**Demand-driven work (Section 6):** capture it by **work type** (not a removable tag) + a resolve-gated **cause** + time. When a cause category crosses the threshold -> **spawn a roadmap epic to retire it, with its outcome measured back against the demand data.** That is the loop leadership needs to see. Roadmap vs demand is a clean two-way split; change/CAB is an audit overlay, not a third bucket.
 
 **Three modes (author effort scales with uncertainty):** roadmap/bespoke -> full machinery · demand/reactive -> light, just enough to stay countable · repeatable/request -> machinery frozen into the work type.
 

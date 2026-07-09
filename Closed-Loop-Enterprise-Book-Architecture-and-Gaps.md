@@ -155,12 +155,7 @@ Missing chapters:
 - **AI and Organizational Leverage**
   - Needs its own chapter or chapter cluster.
   - Source material to incorporate later:
-    - `/home/wroblewj/Documents/code/docs/talk-prep/jon-segment-slide-script.md`
-    - `/home/wroblewj/Documents/code/docs/talk-prep/Jon-AI-Segment.pptx`
-    - `/home/wroblewj/Documents/code/docs/talk-prep/viz/1_activation_energy.png`
-    - `/home/wroblewj/Documents/code/docs/talk-prep/viz/2_stranded_toil_roi.png`
-    - `/home/wroblewj/Documents/code/docs/talk-prep/viz/3_tax_to_investment.png`
-    - `/home/wroblewj/Documents/code/docs/talk-prep/viz/4_half_measures_mountain.png`
+    - AI talk-prep notes and visuals maintained outside this repository.
   - Likely themes:
     - AI collapses the activation energy of high-value, deferred-payoff documentation work.
     - AI is best aimed at economically stranded toil.
@@ -181,7 +176,7 @@ Working title: **RFPs and Vendor Selection as Evidence Systems**
 
 Working thesis: **An RFP is not a purchasing ritual. It is a structured method for recording organizational need, vendor claims, evaluation criteria, assumptions, tradeoffs, and risk acceptance before money changes hands.**
 
-Source note: the user's RFP model is derived from, or at least strongly informed by, the US Government / US Navy RFP process as taught by a former manager. No research is needed before drafting the first version; the task is to organize the already-known framework into the broader closed-loop model.
+Source note: the RFP model is strongly informed by federal-style acquisition practice, especially the strict process discipline used in high-risk infrastructure procurement. No research is needed before drafting the first version; the task is to organize the already-known framework into the broader closed-loop model.
 
 ### 1. Why RFPs Fail
 
@@ -342,7 +337,7 @@ Highest-leverage missing docs:
    - External talent intake; pairs with Talent Development Architecture.
 
 7. **AI and Organizational Leverage**
-   - Should incorporate `/home/wroblewj/Documents/code/docs/talk-prep`.
+   - Should incorporate the AI talk-prep notes and visuals maintained outside this repository.
 
 8. **Executive Translation Layer**
    - Makes the framework usable above team level without destroying learning loops.
@@ -392,4 +387,3 @@ Highest-leverage missing docs:
 4. Should vendor selection and hiring be explicitly paired as two forms of external capability acquisition?
 5. Does the implementation roadmap become its own chapter, or does `Process-Improvement-Framework.md` expand enough to own that role?
 6. Which artifacts should be published as HTML pages immediately, and which should remain internal planning docs until they become reader-facing chapters?
-
