@@ -305,9 +305,9 @@ This matters because self-directed stretch work is often how people become capab
 
 The sports-franchise analogy is strongest here. Strong franchises do not merely acquire talent. They scout, draft or sign, assign level-appropriate reps, coach specific skills, observe performance, move people through levels of competition, and build succession pipeline before a role becomes urgent. In the MLB, this is called a team's "farm system," and players develop through Minor League A to AA to AAA, and the best of the best get called up to the MLB (the corporate equivalent is IC9 - Fellow; almost no one gets that far).
 
-Businesses need the same pattern.
+**Businesses need the same pattern.**
 
-An **Internal Farm System** is the practice of coordinating small, useful stretch assignments across teams so people can develop toward real organizational needs.
+An *Internal Farm System* is the practice of coordinating small, useful stretch assignments across teams so people can develop toward real organizational needs.
 
 It creates three kinds of value at once:
 
@@ -425,6 +425,8 @@ Hiring, development, and succession should answer different questions:
 - **Hiring:** what capability do we need that we do not have, or cannot grow in time?
 - **Development:** what capability can we create through coaching, reps, and placement?
 - **Succession:** what future responsibility should someone be preparing to take before we urgently need them to take it?
+
+\# emphasis callout reminding people that "Fundamentally, all economies are human economies ..." from line 421
 
 ---
 
