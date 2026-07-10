@@ -11,6 +11,25 @@ Raw transcription of handwritten notes outlining the structure of an RFP process
 - Goals for replacement
 - RFP Response
   - Formal contact — unattached from the project
+  - Eligibility to Participate
+  - Formal Contact Information
+  - Proposal Submission
+  - Electronic Proposals
+  - Ownership and Confidentiality of Proposals
+  - Clarity Within Proposals
+  - Supporting Material
+  - Vendor Briefing
+  - Proposal to Remain Valid
+  - Language and Measurement
+  - Vendor Responsibility
+  - Required Documentation
+  - Options
+  - Evaluation Methodology
+  - Partial/Non-Compliance
+  - Contact Information
+  - Target Schedule and Delivery
+  - Definitions
+  - Requirements Structure
 - Always define language & measurement
 - Req. Docs
   - Line item costs
