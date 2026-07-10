@@ -11,12 +11,12 @@ What can this person currently demonstrate, what does the next operating mode re
 3. Define each competency in observable behavior.
 4. The employee completes a self assessment with evidence.
 5. The manager completes calibration with evidence.
-6. The employee and manager discuss the difference between the two reads.
+6. The employee and manager discuss the difference between the two interpretations.
 7. Confirm development targets and move them into a 70-20-10 plan.
 
 ## Proficiency Stages
 
-Use stages that describe observable work. Rename them if the organization has an existing level model, but keep the evidence discipline.
+Use stages that describe observable work. Rename them if the organization already has a level model, but keep the evidence discipline.
 
 | Stage | Meaning | Evidence Pattern |
 |---|---|---|
@@ -86,4 +86,3 @@ What risks must stay bounded?
 What work is explicitly out of scope until readiness improves?
 
 What will trigger a checkpoint before the next scheduled review?
-

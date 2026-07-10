@@ -42,7 +42,7 @@ Write objectives that are specific, measurable, attainable, relevant, and time b
 
 ## 70 Percent: Learning Through Real Work
 
-Choose work that creates legitimate reps without hiding risk.
+Choose work that creates legitimate reps without hiding risk or turning development into unsupervised production work.
 
 Possible real-work reps:
 
@@ -58,7 +58,7 @@ Possible real-work reps:
 - run a post-incident improvement item
 - build a runbook, checklist, test, automation, or standard work artifact
 
-| Objective | Real Work Rep | Boundaries | Risk If It Goes Badly | Intervention Plan | Start | End |
+| Objective | Real Work Rep | Boundaries | Risk If It Starts To Fail | Intervention Plan | Start | End |
 |---|---|---|---|---|---|---|
 |  |  |  |  |  |  |  |
 |  |  |  |  |  |  |  |
@@ -66,7 +66,7 @@ Possible real-work reps:
 
 ## 20 Percent: Learning From Others
 
-Feedback should exist before, during, and after the rep. Do not wait until the end to discover that the person practiced the wrong thing.
+Feedback should exist before, during, and after the rep. Do not wait until the end to discover that the person practiced the wrong capability.
 
 Possible feedback sources:
 
@@ -139,4 +139,3 @@ What is the next safe rep?
 |  | Yes / No / Partly |  | Continue / Adjust / Add Support / Increase Scope / Change Path |
 |  | Yes / No / Partly |  | Continue / Adjust / Add Support / Increase Scope / Change Path |
 |  | Yes / No / Partly |  | Continue / Adjust / Add Support / Increase Scope / Change Path |
-

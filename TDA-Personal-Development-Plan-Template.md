@@ -1,13 +1,13 @@
 # TDA Personal Development Plan
 
-This template is the employee-facing front door into Talent Development Architecture. It gives the employee and manager one clean place to discuss role context, career direction, preferences, constraints, demonstrated strengths, development needs, and the work that should become the person's next safe reps.
+This template is the employee-facing entry point into Talent Development Architecture. It gives the employee and manager one clean place to discuss role context, career direction, preferences, constraints, demonstrated strengths, development needs, and the work that should become the person's next safe reps.
 
 The purpose is not to produce a polished career narrative. The purpose is to create a shared operating picture.
 
 ## Use
 
 1. The employee completes the first draft.
-2. The manager adds calibration notes and missing context.
+2. The manager adds calibration notes, organizational context, and missing evidence.
 3. The employee and manager review it in a one-on-one.
 4. The agreed development targets move into the TDA 70-20-10 Development Plan.
 5. The plan is reviewed at least quarterly, and after major stretch assignments, role changes, or performance regressions.
@@ -67,7 +67,7 @@ Roles, domains, systems, or operating modes the person wants to explore:
 
 ## 4. Preferences, Constraints, And Energy
 
-Preference is operational signal, not veto power. Capture it honestly so the manager can place talent accurately.
+Preference is operational signal, not veto power. Capture it honestly so the manager can place talent more accurately.
 
 | Signal | Employee Notes | Manager Notes |
 |---|---|---|
@@ -142,4 +142,3 @@ What support is not currently available?
 - [ ] Adjust current assignment mix.
 - [ ] Add mentoring, coaching, shadowing, or peer review.
 - [ ] Capture evidence in the TDA Performance Evidence Ledger.
-

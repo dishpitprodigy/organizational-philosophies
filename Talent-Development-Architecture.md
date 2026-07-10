@@ -65,7 +65,7 @@ A **player-coach management model** means:
 - role conflict is disguised as empowerment
 - failure is blamed on individual prioritization instead of incoherent design
 
-This distinction should be explainable without sports: tactical authority is not management authority. A senior IC may lead execution from the field, but that is not the same thing as owning staffing, coaching, development, performance management, priority negotiation, and long-term organizational health.
+The same distinction works without sports: tactical authority is not management authority. A senior IC may lead execution from the field, but that is not the same thing as owning staffing, coaching, development, performance management, priority negotiation, and long-term organizational health.
 
 ### Levels of Field Authority
 
@@ -111,7 +111,7 @@ That sequence matters because it turns scattered artifacts into an actual develo
 
 The practical implementation of TDA is a small packet of connected artifacts. The organization does not need a sprawling HR platform to begin. It needs a repeatable way to move from career intent, to competency target, to development plan, to real work, to evidence.
 
-The packet should be boring on purpose. No elaborate presentation shell, no decorative self-marketing exercise, and no giant form that makes people perform career seriousness instead of thinking clearly. The artifacts should be easy enough for an IC to fill out before a one-on-one and structured enough that the manager cannot dodge the actual calibration work.
+The packet should be plain on purpose. No elaborate presentation shell, no decorative self-marketing exercise, and no giant form that makes people perform career seriousness instead of thinking clearly. The artifacts should be easy enough for an IC to fill out before a one-on-one and structured enough that the manager cannot avoid the actual calibration work.
 
 The public templates are here:
 
@@ -133,7 +133,7 @@ This is where the employee gets to say, in concrete terms:
 - what they think they need next
 - which movement type they are pursuing: upward, sideways, deeper in role, or discovery
 
-The manager's job is not to rubber-stamp the plan. The manager adds organizational reality: what opportunities exist, what business needs are real, which goals are plausible, which constraints matter, what support can be provided, and where the employee's self-read differs from observed evidence.
+The manager's job is not to approve the plan by default. The manager adds organizational reality: what opportunities exist, what business needs are real, which goals are plausible, which constraints matter, what support can be provided, and where the employee's self-read differs from observed evidence.
 
 That distinction matters. A PDP that only captures employee aspiration becomes private journaling with corporate branding. A PDP that only captures manager judgment becomes a verdict. The TDA version is a working agreement.
 
@@ -309,8 +309,7 @@ The manager is looking for defects in the person's mental model:
 
 A sports analogy is useful here: a football coach does not say "you misread the defense; reading defenses is a requirement for this job, and you have to get better at that." A good coach explains what a defender's movement or action reveals about the defensive concept, how that informs where the exploitable space opens, which offensive player is expected to move through it, and the role the individual being coached is supposed to play in exploiting these weaknesses.
 
-That is to say that it is not every player's objective to score on every play. It is every player's objective to be in the optimal position for the team to score on every play. That subtle change of phrasing is what separates excellent teams from mediocre ones. Successful teams have a singular vision from the top down, and everyone understands the role they need to play for the team to achieve its goals.
-\# Callout box on the last sentence for emphasis in the HTML.
+The lesson is not that every player should try to score on every play. The lesson is that every player should understand the position that gives the team the best chance to score. That difference separates excellent teams from mediocre ones: the team has a coherent operating concept, and each person understands the role they need to play for the system to work.
 
 The business equivalent is teaching the person how to read systems: what signals reveal a resource constraint, dependency pressure, capacity issue, priority inversion, customer impact, or failure mode.
 
@@ -322,18 +321,19 @@ The exact language can vary by person, manager, culture, and severity. The conve
 
 **Listen and orient.** Coaching requires more listening than talking. Let the person describe the situation in their own terms, then ask questions that reveal how they were interpreting the system. You are trying to create the conditions for them to troubleshoot their own decision process the way they would troubleshoot code, analyze a business proposal, or inspect a financial sheet.
 
-**Follow connected context; table unrelated context.** If they raise a different issue, listen long enough to determine whether it is connected. It may be the hidden dependency that explains the visible failure. If it seems unconnected, ask them to explain the material connection. If they can't, table it respectfully and commit to returning to the other topic at a later time. The goal is not to dismiss the issue; the goal is to keep this coaching loop coherent. 
+**Follow connected context; table unrelated context.** If they raise a different issue, listen long enough to determine whether it is connected. It may be the hidden dependency that explains the visible failure. If it seems unconnected, ask them to explain the material connection. If they cannot, table it respectfully and commit to returning to the other topic at a later time. The goal is not to dismiss the issue; the goal is to keep this coaching loop coherent.
 
 **Name the gap clearly.** Once their perspective is on the table, state the concern as specifically as possible: what happened, what outcome it caused, and why the outcome matters. Stay with behavior, evidence, and impact. Do not turn the moment into a personality assessment.
 
-**Update the mental model.** Ask what they think would have made the situation successful. Identify the missing signal, incorrect read, stale assumption, or conflicting instruction. Then attach the correction to future cues: "when you see this pattern again, consider whether it is evidence of such-and-such condition, and adjust this way."
+**Update the mental model.** Ask what they think would have made the situation successful. Identify the missing signal, incorrect read, stale assumption, or conflicting instruction. Then attach the correction to future cues: "when you see this pattern again, consider whether it is evidence of the relevant condition, and adjust this way."
 
 **Close with mutual commitments.** The close must say what the employee will change and what the manager or organization will do. If the conversation reveals a broken process, management owes a real response: fix the system, design a durable workaround, or explain why nothing can currently be changed. The point is not only to improve the person; it is to create a feedback loop that uncovers inefficiencies and risks throughout the organization.
 
 If formal documentation is required, it should come after the coaching loop has produced a shared path forward. A clean version sounds like: "I think we are positioned to move forward from this. I do need to document what happened and what we agreed to, so there is a written record if the issue repeats. If we are not talking about this again in the next review period, it will not be treated as an ongoing concern." Documentation is a record-control mechanism, not the coaching mechanism itself.
 
-Never lie, stretch, or massage facts in a coaching conversation. If notes are being taken, say why. If notes may be used in an incident document, performance record, or other formal artifact, say so. Distinguish facts from stories.
-\# add something to 'dishpitprodigy/organizational-philosophies/0.Organizational-Excellence-Book-Gaps.md' about facts vs stories. Maybe it belongs here, but idk. Either way, it deserves more than a single sentence.
+Never lie, stretch, or massage facts in a coaching conversation. If notes are being taken, say why. If notes may be used in an incident document, performance record, or other formal artifact, say so.
+
+Facts and stories are both useful, but they are not the same kind of material. The fact may be that a handoff was missed, an incident update was late, or a stakeholder left the meeting with the wrong expectation. The story is the explanation attached to that fact: carelessness, overload, unclear ownership, weak judgment, hidden dependency, or conflicting instruction. Coaching becomes more accurate when the manager labels which parts were observed, which parts were inferred, and which parts still need testing.
 
 ### Manager Readiness Questions
 
@@ -345,11 +345,9 @@ Before a manager assigns meaningful stretch, the manager has a preparation duty.
 - If this fails, what part of the failure belongs to me, what part belongs to the employee, and what part belongs to the system around them?
 - What would reasonable struggle look like?
 - What would unacceptable risk look like?
-- If things begin going badly, what intervention options do I have?
+- If things begin to fail, what intervention options do I have?
 
-For consequential work, the manager should begin from the assumption that a preventable employee failure is a management failure unless proven otherwise. The manager does not get to treat failure as evidence that the employee was unfit until the manager can show that the assignment was bounded, the expectations were clear, the person was prepared, the support model existed, the risks were understood, and intervention options were available.
-
-\# If this fails ... call out in the HTML.
+> For consequential work, the manager should begin from the assumption that a preventable employee failure is a management failure unless proven otherwise. The manager should not treat failure as evidence that the employee was unfit until the manager can show that the assignment was bounded, the expectations were clear, the person was prepared, the support model existed, the risks were understood, and intervention options were available.
 
 This matters because employee accountability is not abstract. Performance consequences affect income, reputation, family stability, health, confidence, and future opportunity. Sometimes an employee truly owns the failure, and sometimes termination or role removal is the right outcome. But a manager should be able to sleep at night knowing they did not put an unprepared person into a situation where failure was predictable, then let the person absorb the consequences alone.
 
@@ -425,7 +423,7 @@ This matters because self-directed stretch work is often how people become capab
 
 ## The Internal Farm System
 
-The sports-franchise analogy is strongest here. Strong franchises do not merely acquire talent. They scout, draft or sign, assign level-appropriate reps, coach specific skills, observe performance, move people through levels of competition, and build succession pipeline before a role becomes urgent. In the MLB, this is called a team's "farm system," and players develop through Minor League A to AA to AAA, and the best of the best get called up to the MLB (the corporate equivalent is IC9 - Fellow; almost no one gets that far).
+The sports-franchise analogy is strongest here. Strong franchises do not merely acquire talent. They scout, draft or sign, assign level-appropriate reps, coach specific skills, observe performance, move people through levels of competition, and build succession pipeline before a role becomes urgent. In MLB, this is called a team's "farm system." Players develop through Minor League A, AA, and AAA, and the most capable eventually get called up to the major-league roster. The corporate equivalent is the rare Fellow-level individual contributor role.
 
 **Businesses need the same pattern.**
 
@@ -566,7 +564,9 @@ TDA does not mean every capability must be grown internally, nor does it mean pe
 
 At all levels, external hiring can be the right move. If the organization does not have principal-level technical leadership, or lacks a specific senior capability, hiring externally may be the fastest honest path. This is the business equivalent of free agency.
 
-But the higher-level free-agency model should not erase the internal development expectation for earlier and mid-career employees. A company cannot be great if it is not trying to get better every day, and that includes building people. Fundamentally, all economies are human economies: the organization that has the highest capability for growing and developing good people will have the best outcomes in the long run.
+But the higher-level free-agency model should not erase the internal development expectation for earlier and mid-career employees. An organization that stops building people eventually becomes dependent on the external market for every meaningful capability gap.
+
+> Fundamentally, all economies are human economies: the organization with the strongest capability for growing and developing good people will have the best long-term outcomes.
 
 Hiring and internal development are two answers to the same capability question. Hiring is external capability acquisition. Development is internal capability creation. Both should preserve evidence about the decision: what capability was needed, what assumptions were made, what signals were observed, what gaps remained, and what support the person will need after the decision.
 
@@ -577,8 +577,6 @@ Hiring, development, and succession should answer different questions:
 - **Hiring:** what capability do we need that we do not have, or cannot grow in time?
 - **Development:** what capability can we create through coaching, reps, and placement?
 - **Succession:** what future responsibility should someone be preparing to take before we urgently need them to take it?
-
-\# emphasis callout reminding people that "Fundamentally, all economies are human economies ..." from line 421
 
 ---
 

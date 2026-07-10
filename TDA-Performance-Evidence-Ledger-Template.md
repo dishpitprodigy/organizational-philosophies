@@ -9,7 +9,7 @@ The ledger is not a surveillance file. It is a reconciliation tool. It should pr
 1. Define accountabilities and expected evidence early.
 2. Update the ledger when meaningful work, feedback, scope changes, or development reps occur.
 3. Label evidence types.
-4. Reconcile mid-cycle and end-cycle.
+4. Reconcile evidence at mid-cycle and end-cycle.
 5. Feed the result into the next Personal Development Plan, 70-20-10 plan, assignment decision, promotion decision, or support change.
 
 ## Evidence Labels
@@ -88,7 +88,7 @@ What capability became visible?
 
 What capability still needs reps?
 
-What changed around the person?
+What changed around the person or the work?
 
 What should the next plan preserve?
 
@@ -104,4 +104,3 @@ What should the next plan change?
 - [ ] Promote the person.
 - [ ] Hire externally.
 - [ ] Change the system because the blocker is not the person.
-
