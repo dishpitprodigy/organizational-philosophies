@@ -10,6 +10,10 @@ Talent Development Architecture, or TDA, is the system for observing, coaching, 
 
 The thesis is simple: **talent gets better when the organization deliberately creates the right reps, the right feedback, the right assignments, and the right evidence.**
 
+The failure mode is not always a total absence of people-development tools. Many organizations already have fragments: career maps, competency rubrics, development goals, interview guides, performance reviews, mobility conversations, and succession lists. The problem is that each fragment lives in its own container. The employee is expected to integrate the system alone.
+
+TDA makes the organization own the integration.
+
 Without that architecture, development depends on luck: who happens to get observed, who happens to find a mentor, who happens to volunteer for stretch work, who happens to be trusted before they can prove they deserve trust, and who happens to arrive with the needed experience already.
 
 TDA exists to make that work visible and intentional.
@@ -86,6 +90,20 @@ Talent development has five connected loops:
 5. **Evidence** - record what happened, what changed, what was learned, and what level of work the person actually demonstrated.
 
 These loops should not live only in annual review paperwork. They should show up in one-on-ones, planning, assignment decisions, stretch proposals, calibration packets, succession planning, and hiring strategy.
+
+A more complete loop looks like this:
+
+| Stage | Operating Question |
+|---|---|
+| Role context | What is the person's current role, and what role, scope, domain, or operating mode might come next? |
+| Competency target | What capability does the next step require, and what does better performance look like in observable terms? |
+| Evidence baseline | What has the person already demonstrated, what do they believe they can do, and what has the manager observed? |
+| Development plan | What real work will provide the rep, who will provide feedback, and what formal support helps the person prepare? |
+| Safe-reps assignment | What can the person do independently, what requires approval, and what must remain shadowed or supervised? |
+| Checkpoint | What changed, what evidence was produced, what support was missing, and what should be adjusted? |
+| Reconciliation | Did the person build the intended capability, was the target right, and is the next decision more scope, more practice, a different assignment, promotion, external hiring, or a system change? |
+
+That sequence matters because it turns scattered artifacts into an actual development system. A career map without assignments is theater. A competency rubric without observation is vocabulary theater. A development plan without work allocation is self-improvement theater. A review without preserved context is memory theater. The architecture is the loop that prevents those artifacts from becoming performance props.
 
 ---
 
@@ -264,6 +282,8 @@ If the organization requires experience before granting opportunity, it must als
 
 A **Safe-Reps Path** is a bounded way to practice the next operating mode without unacceptable risk.
 
+Competency language is useful only when it becomes this kind of gate. A rubric that says someone needs "strategic thinking," "ownership," or "cross-functional influence" does not help much by itself. The useful version names observable stages: awareness, routine execution, independent execution, broader coordination, and system-level ownership. Then the organization can ask which stage the person has demonstrated, which stage the next role requires, and what bounded work would let them practice the difference.
+
 Examples:
 
 - A helpdesk employee spends four hours a week migrating low-risk scripts from Python 2 to Python 3.
@@ -273,6 +293,12 @@ Examples:
 - A strong implementer writes the runbook, then the checklist, then the automation for a recurring issue.
 
 The point is not the specific technology. The point is legitimate reps across the gate.
+
+Development plans should make those reps visible. A useful plan does not treat training completion as proof of readiness. Training is input. Readiness comes from observed behavior under realistic conditions.
+
+| Development Need | Real Work Rep | Feedback Source | Formal Support | Evidence |
+|---|---|---|---|---|
+| What the person is trying to build | The bounded assignment where the skill will be practiced | Manager, mentor, peer, work owner, or community | Course, reading, lab, certification, or reference material | What will show that the person has actually improved |
 
 ---
 
@@ -319,11 +345,31 @@ This should not depend on a heroic employee finding after-hours work and hoping 
 
 Four hours a week can matter. It can be enough to give someone a path from support into systems work, from systems work into automation, from implementation into design, or from team-local work into cross-team influence.
 
+The farm system also needs a portable internal talent packet. That packet should not be a self-marketing deck or a popularity contest. It should help managers and receiving teams discuss readiness, fit, supervision, and risk from shared evidence:
+
+- current role and scope
+- demonstrated accomplishments
+- current operating level
+- desired next operating mode
+- strengths to preserve
+- gaps to close
+- experiences needed
+- systems or domains to learn
+- proposed assignments
+- manager or panel assessment
+
 ---
 
 ## Career Pathing Needs Architecture
 
 "Own your career" is useful advice only when the organization exposes enough map for the employee to navigate. Without guidance on actual departments, roles, skill sets, decision rights, and available development paths, career ownership becomes guesswork.
+
+A real career map explains more than promotion. People need several kinds of movement:
+
+- **Move upward:** increased scope, responsibility, complexity, or decision rights.
+- **Move sideways:** broader experience at a similar level.
+- **Build in place:** new responsibility inside the current role.
+- **Discover:** short-term exposure used to test interest, fit, and usefulness.
 
 A generic career tool does not solve that. If a "career compass" produces abstract advice, points toward roles that do not exist, or suggests paths the organization has not actually made available, it is not a development system. It is career-pathing theater: the organization appears to offer mobility while leaving employees to invent the path themselves.
 
@@ -400,6 +446,12 @@ The full practice of running one-on-ones well deserves its own, dedicated, piece
 
 If a manager cannot describe what an employee wants to grow toward, what work drains them, what work energizes them, and what constraints are currently shaping their output, the manager does not have enough signal to manage the person's development well.
 
+One-on-ones are also where self assessment and manager calibration should meet. Self-reflection matters, but it is incomplete by itself. Manager judgment matters, but it becomes dangerous when it arrives as a unilateral verdict. The useful signal is often the difference between the two reads.
+
+The employee's self assessment reveals their mental model. The manager's assessment reveals the organization's expectation. The one-on-one should inspect the gap without turning it into a personality trial. A competency gap is not the coaching conversation. It is the opening evidence for one.
+
+People records should also label evidence. An observed behavior, self report, manager interpretation, secondhand claim, outcome measure, and assumption are not the same kind of fact. Narrative context is necessary in people decisions, but the organization should know which parts of the story were observed, which parts were inferred, and which parts still need testing.
+
 ---
 
 ## Technology Cannot Substitute for Development Architecture
@@ -419,6 +471,10 @@ TDA does not mean every capability must be grown internally, nor does it mean pe
 At all levels, external hiring can be the right move. If the organization does not have principal-level technical leadership, or lacks a specific senior capability, hiring externally may be the fastest honest path. This is the business equivalent of free agency.
 
 But the higher-level free-agency model should not erase the internal development expectation for earlier and mid-career employees. A company cannot be great if it is not trying to get better every day, and that includes building people. Fundamentally, all economies are human economies: the organization that has the highest capability for growing and developing good people will have the best outcomes in the long run.
+
+Hiring and internal development are two answers to the same capability question. Hiring is external capability acquisition. Development is internal capability creation. Both should preserve evidence about the decision: what capability was needed, what assumptions were made, what signals were observed, what gaps remained, and what support the person will need after the decision.
+
+If an interview process discovers likely development needs, those needs should not disappear after the offer. They should become early manager context, onboarding support, and safe-reps planning. Otherwise the organization pays to acquire talent, throws away the evidence it gathered, and asks the new hire to rediscover the support model alone.
 
 Hiring, development, and succession should answer different questions:
 
@@ -449,6 +505,7 @@ With TDA, managers ask better questions:
 - What support or priority change does the organization owe?
 - What transition gate are they trying to cross?
 - What safe reps can we create?
+- What evidence type are we looking at: observed behavior, self report, manager interpretation, outcome measure, or assumption?
 - What evidence will show growth?
 - What succession pipeline are we building?
 
