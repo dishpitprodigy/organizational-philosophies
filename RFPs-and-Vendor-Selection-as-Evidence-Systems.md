@@ -16,9 +16,9 @@ The core rule is simple:
 
 That is the real job of an RFP. It turns operational risk into visible requirements, testable evidence, enforceable obligations, and recorded decisions. It gives the organization a way to say what it needs, how it will decide, what it believes the vendor has promised, what evidence will count, and which risks it knowingly accepted.
 
-The strict version of this model borrows from federal-style acquisition thinking, but the point is not to turn every company into a government procurement office. The point is to start from a complete map, then subtract deliberately when the risk is lower.
+The strictest version of this model borrows from federal-style acquisition thinking, but the point is not to turn every company into a government procurement office. The point is to start from a complete map, then subtract deliberately when the risk is lower.
 
-Strict process is not always necessary. A strict model is still useful because it gives people something coherent to tailor.
+Draconian process is not always necessary. A very strict model is still useful because it gives people something coherent to tailor.
 
 ---
 
@@ -208,7 +208,7 @@ A high-risk technology purchase should move through stages. Each stage produces 
 
 A strict model looks like this:
 
-1. Need definition
+1. Problem definition
 2. Market research or RFI
 3. Acquisition strategy
 4. Requirements package
@@ -238,9 +238,9 @@ A strict model looks like this:
 28. Post-implementation review
 29. Lessons learned
 
-Most organizations will not need every stage for every purchase. That is fine. The important habit is that omitted stages are consciously omitted because the risk is low, not accidentally omitted because nobody had a complete model.
+Most organizations will not need every stage for every purchase. That is fine. The important habit is that omitted stages are consciously omitted because the risk is low, not accidentally omitted because nobody had a complete model. 
 
-For foundational infrastructure, the strict model is often appropriate because the cost of late discovery is high. Storage, HPC, virtualization, backup, identity, and network core purchases can reshape operations for years. They deserve more than a quote comparison and a vendor lunch.
+For foundational infrastructure, the strict model is often appropriate because the cost of late discovery is high. Storage, HPC, virtualization, backup, identity, and network core purchases can reshape operations for years. They deserve a lot more than quote comparisons and vendor lunches.
 
 ---
 
@@ -289,9 +289,11 @@ Both matter. A numeric score without explanation hides judgment. A narrative wit
 
 A demo is not evidence by default.
 
-A good demo can clarify workflow, expose product assumptions, reveal support maturity, and help operators understand how the system behaves. A bad demo is theater: a vendor-controlled path through a happy-case environment with no realistic load, no buyer data, no integration pressure, no failure mode, and no operational handoff.
+A good demo can clarify workflow, expose product assumptions, reveal support maturity, and help operators understand how the system behaves. A vendor-controlled path through a happy-case environment with no realistic load, no buyer data, no integration pressure, no failure mode, and no operational handoff can be useful during discovery (RFI), but remains insufficient for the RFP process.
 
-Before a demo, define what the demo is supposed to prove.
+Before a demo, define what the demo is supposed to prove. If you don't know what the demo is supposed to prove, then you are likely operating in the wrong stage. RFI and RFP processes are closely related, but pure discovery work remains part of the RFI process, not the RFP process. It's important to distinguish this because not recognizing the stage you're actually in might lead to spending money on a bad solution. 
+
+\# I don't know this, but I suspect that because "demo" gets reused at different stages, its meaning gets confused and compressed. I removed "A bad demo is theater:" because that's only true if it happens in the RFP phase. If it happens in the RFI, it's useful. As written, it was overly negative. I'm not sure this captures everything I'm trying to say here. 
 
 At minimum, record:
 
@@ -327,11 +329,7 @@ A POC should define:
 - what support model is exercised
 - what assumptions remain afterward
 
-The closed-loop rule is that demonstrations and POCs produce evidence against pre-stated claims, not vibes.
-
-This matters for open-source tools as much as vendor products. A free license does not make a tool low-risk. The organization may still be choosing an operating model, a staffing profile, an integration burden, a support path, an upgrade lifecycle, a state-management problem, and a future migration cost. No serious platform decision should be made only because the tool is popular, widely adopted, well-marketed, or already common in large companies.
-
-Tool adoption should distinguish between reducing accidental complexity and relocating it. A tool that replaces bespoke automation may still impose a new operating model, hiring profile, workflow, state-management burden, and ecosystem dependency. The question is not only "does this tool have market adoption?" The question is "what complexity does it remove, what complexity does it introduce, and is the organization prepared to operate the model it requires?"
+The closed-loop rule is that demonstrations and POCs produce evidence against pre-stated claims.
 
 If the vendor says a storage platform can sustain a required workload, the POC should preserve what workload was tested, what scale was used, what results were observed, what tuning was required, and what remains unproven.
 
@@ -340,6 +338,13 @@ If the vendor says an HPC cluster can support a workload profile, the POC should
 If the organization is replacing an internal system, the POC should test the candidate against the operating burden that caused replacement to be considered in the first place. A metrics platform replacement, for example, should not be evaluated only by feature checklist. It should be tested with representative metrics volume, retention expectations, query patterns, ingestion behavior, operational architecture, failure modes, and the team's ability to run it. The selected solution may still require redesign later; evidence does not eliminate risk. It makes the decision educated enough to learn from.
 
 The demonstration should never become the whole evaluation. It is one evidence source.
+
+### Application to Open Source Tooling
+This matters for open-source tools as much as vendor products. A free license does not make a tool low-risk. The organization may still be choosing an operating model, a staffing profile, an integration burden, a support path, an upgrade lifecycle, a state-management problem, and a future migration cost. No serious platform decision should be made only because the tool is popular, widely adopted, well-marketed, or already common in large companies.
+
+Tool adoption should distinguish between reducing accidental complexity and relocating it. A tool that replaces bespoke automation may still impose a new operating model, hiring profile, workflow, state-management burden, and ecosystem dependency. The question is not only "does this tool have market adoption?" The question is "what complexity does it remove, what complexity does it introduce, and is the organization prepared to operate the model it requires?"
+
+Jane Street's Mailcore story is a useful example. The firm had been using a widely deployed open-source mail server that could perform the required work, but its bespoke configuration language made critical compliance behavior hard to reason about, hard to test in smaller units, and dependent on specialist knowledge. Building a replacement in OCaml was not a rejection of external tools on principle. It was a decision that the real long-term cost sat in operability, staffing, testability, and change safety. The replacement still required evidence: they shadowed the old and new systems, diffed real mail behavior for months, found classes of mismatches, and migrated users gradually.
 
 ---
 
@@ -406,7 +411,7 @@ Acceptance criteria are not ceremony. They are the buyer's defense against ambig
 
 If the RFP does not define how success will be tested, success becomes whatever the vendor can persuade the buyer to accept.
 
-Acceptance should be planned before award or finalized before implementation. It should not be improvised after the system starts failing.
+Acceptance should be planned before award and finalized before implementation. It should not be improvised after the system starts failing.
 
 Useful acceptance layers include:
 
@@ -465,7 +470,7 @@ The lightweight process should be a conscious reduction of the strict process, n
 
 ### Tier 1: Low-Risk Purchase
 
-Examples include commodity hardware, small non-critical tools, easily reversible purchases, and purchases where failure creates limited operational impact.
+Examples include small non-critical tools, easily reversible purchases, and purchases where failure creates limited operational impact.
 
 Minimum process:
 
@@ -507,7 +512,7 @@ Minimum process:
 
 Usually stripped down:
 
-- broad market RFI
+- broad market RFI (in practice, this is frequently senior+ engineers researching capabilities)
 - highly formal source-selection procedure
 - extensive contract remedies
 - 60- or 90-day burn-in
