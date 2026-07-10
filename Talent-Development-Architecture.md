@@ -107,6 +107,102 @@ That sequence matters because it turns scattered artifacts into an actual develo
 
 ---
 
+## The Implementation Packet
+
+The practical implementation of TDA is a small packet of connected artifacts. The organization does not need a sprawling HR platform to begin. It needs a repeatable way to move from career intent, to competency target, to development plan, to real work, to evidence.
+
+The packet should be boring on purpose. No elaborate presentation shell, no decorative self-marketing exercise, and no giant form that makes people perform career seriousness instead of thinking clearly. The artifacts should be easy enough for an IC to fill out before a one-on-one and structured enough that the manager cannot dodge the actual calibration work.
+
+The public templates are here:
+
+- [TDA Personal Development Plan](docs/templates/tda-personal-development-plan.html)
+- [TDA Competency Calibration](docs/templates/tda-competency-calibration.html)
+- [TDA 70-20-10 Development Plan](docs/templates/tda-70-20-10-development-plan.html)
+- [TDA Performance Evidence Ledger](docs/templates/tda-performance-evidence-ledger.html)
+
+### 1. TDA Personal Development Plan
+
+The Personal Development Plan is the employee-facing front door. It captures current role, scope, informal work, preferences, constraints, career direction, current capabilities, development needs, and proposed targets.
+
+This is where the employee gets to say, in concrete terms:
+
+- what they want to grow toward
+- what work gives them energy
+- what work drains them
+- what they have already demonstrated
+- what they think they need next
+- which movement type they are pursuing: upward, sideways, deeper in role, or discovery
+
+The manager's job is not to rubber-stamp the plan. The manager adds organizational reality: what opportunities exist, what business needs are real, which goals are plausible, which constraints matter, what support can be provided, and where the employee's self-read differs from observed evidence.
+
+That distinction matters. A PDP that only captures employee aspiration becomes private journaling with corporate branding. A PDP that only captures manager judgment becomes a verdict. The TDA version is a working agreement.
+
+### 2. TDA Competency Calibration
+
+The Competency Calibration turns a desired role or operating mode into observable evidence. It asks:
+
+- which competencies actually matter for the current or target role
+- what those competencies look like in behavior
+- what stage the target requires
+- what the employee believes they can demonstrate
+- what the manager has actually observed
+- which difference between those two views matters
+- what safe rep would close the gap
+
+The key move is replacing personality language with operating-mode language. "Needs more executive presence" is usually too vague to develop. "Can explain a technical tradeoff to a nontechnical decision-maker, name the risk, recommend a path, and handle objections without losing the thread" is developmental. It gives the person something to practice, the manager something to observe, and the organization something to evaluate.
+
+Competency calibration should feed one-on-ones. A competency gap is not the coaching conversation. It is the opening evidence for one.
+
+### 3. TDA 70-20-10 Development Plan
+
+The 70-20-10 plan is the safe-reps engine.
+
+The ratio should not be treated as accounting. The point is design:
+
+- **70 percent real work:** challenging experiences, stretch assignments, shadowing, projects, process improvement, ownership reps, and other work that creates actual practice.
+- **20 percent learning from others:** coaching, mentoring, peer feedback, work-owner review, communities of practice, and conversations with people who already perform the capability well.
+- **10 percent formal support:** courses, labs, reading, certifications, internal guides, documentation, reference implementations, or structured study.
+
+This is the piece many companies get backward. They send someone to training and quietly treat completion as readiness. TDA treats formal learning as support for the rep. The rep is where the evidence comes from.
+
+A strong 70-20-10 plan answers:
+
+- what capability the person is trying to build
+- what real assignment will create the rep
+- what risk boundaries make the assignment legitimate
+- who will give feedback before, during, and after the work
+- what formal learning supports the work
+- what evidence will show whether capability improved
+- when the manager and employee will reconcile the plan
+
+That reconciliation is where development becomes architecture. The plan is not complete when the activity is complete. It is complete when the organization can say what capability became visible and what decision should follow.
+
+### 4. TDA Performance Evidence Ledger
+
+The Performance Evidence Ledger prevents review cycles from becoming memory reconstruction. It connects accountabilities, measures, changed conditions, development actions, employee reflection, manager observation, and next decisions.
+
+This is not a surveillance file. It is a record-control mechanism. People decisions need narrative context, but narrative context has to be labeled. The organization should know whether it is looking at observed behavior, outcome measure, work artifact, self report, manager interpretation, stakeholder input, or assumption.
+
+That is especially important when conditions change. If load increased, priorities conflicted, support disappeared, hidden work appeared, or the system around the person changed, the ledger should preserve that fact before the organization converts degraded output into a story about the employee.
+
+### How The Packet Works As A Loop
+
+The artifacts should be used in sequence:
+
+1. The employee drafts the Personal Development Plan.
+2. The employee and manager calibrate role context, preference signal, constraints, and career direction.
+3. The employee and manager complete Competency Calibration for the current role, target role, or next operating mode.
+4. The selected gaps become a 70-20-10 Development Plan.
+5. The manager creates or negotiates real safe-reps assignments.
+6. Feedback is gathered before, during, and after those reps.
+7. Evidence is captured in the Performance Evidence Ledger.
+8. The plan is reconciled quarterly, after meaningful stretch work, and during review cycles.
+9. The next decision is made from evidence: continue, adjust, add support, increase scope, change assignment, promote, hire externally, or change the system.
+
+This is the precise implementation pattern: aspiration becomes role context, role context becomes competency target, competency target becomes safe-reps plan, safe reps produce evidence, and evidence feeds the next decision.
+
+---
+
 ## Principle 1: Preference Is Evidence, Not a Perk
 
 Employee preference is operational signal.
