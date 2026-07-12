@@ -127,9 +127,9 @@ It does not replace:
 - board governance
 - every mechanism required to educate or develop managers
 
-The useful boundary is straightforward: TDA produces evidence and makes patterns visible. Accountable leaders and adjacent organizational systems decide what to do with those patterns.
+*The useful boundary is straightforward: TDA produces evidence and makes patterns visible. Accountable leaders and adjacent organizational systems decide what to do with those patterns.*
 
-> *"when capability genuinely isn't built, the discussion changes, and becomes a separate topic: the evidence ledger you built here is what makes that conversation on that topic an honest one."*
+> **"when capability genuinely isn't built, the discussion changes, and becomes a separate topic: the evidence ledger you built here is what makes that conversation on that topic an honest one."**
 
 ---
 
