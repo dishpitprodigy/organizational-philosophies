@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Socratic Leadership Seminar</title>
+<style>
+:root{
+  --nav:300px;
+  --rgutter:9vw;
+  --bg:#000000;
+  --panel:#09080b;
+  --panel-2:#141014;
+  --ink:#f8f7df;
+  --muted:#b8b493;
+  --line:#3c2730;
+  --red:#c5003c;
+  --red-dark:#880425;
+  --yellow:#f3e600;
+  --cyan:#55ead4;
+  --purple:#6300ff;
+  --magenta:#ff008d;
+  --pink:#d14eea;
+  --coral:#f96363;
+  --code-bg:#171018;
+  --code-ink:#f3e600;
+  --shadow:0 0 0 1px rgba(243,230,0,.18), 0 16px 40px rgba(0,0,0,.48);
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%; scroll-behavior:smooth}
+body{
+  margin:0;
+  background:
+    linear-gradient(rgba(243,230,0,.045) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(197,0,60,.045) 1px, transparent 1px),
+    radial-gradient(circle at 18% -10%, rgba(85,234,212,.12), transparent 26rem),
+    radial-gradient(circle at 100% 5%, rgba(197,0,60,.18), transparent 24rem),
+    var(--bg);
+  background-size:44px 44px,44px 44px,auto,auto,auto;
+  color:var(--ink);
+  font:16px/1.68 Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+}
+body::before{
+  content:"";
+  position:fixed; inset:0; pointer-events:none; z-index:1;
+  background:repeating-linear-gradient(0deg, rgba(255,255,255,.025) 0 1px, transparent 1px 4px);
+  mix-blend-mode:screen;
+  opacity:.28;
+}
+a{color:var(--cyan); text-decoration:none}
+a:hover{text-decoration:underline; text-decoration-color:var(--yellow)}
+.wrap{display:block}
+.toc{
+  position:fixed; top:0; left:0; width:var(--nav); height:100vh; overflow:auto;
+  padding:1.1rem .95rem 2rem; z-index:20;
+  background:rgba(7,8,15,.94);
+  border-right:2px solid var(--red);
+  box-shadow:12px 0 32px rgba(0,0,0,.34);
+  backdrop-filter:blur(10px);
+}
+.toc-title{
+  font-weight:800; line-height:1.18; color:var(--ink);
+  padding:.45rem .45rem .9rem; margin-bottom:.7rem;
+  border-bottom:1px solid var(--line);
+  text-transform:uppercase; letter-spacing:.06em;
+}
+.toc-kicker{display:block; color:var(--yellow); font-size:.72rem; margin-bottom:.25rem}
+.toc-group{margin:.25rem 0 .35rem}
+.toc-tab{
+  display:block; width:100%; text-align:left; cursor:pointer; border:1px solid transparent;
+  border-radius:0; padding:.52rem .55rem; background:transparent;
+  color:var(--ink); font:inherit; font-size:.88rem; font-weight:800; line-height:1.2;
+  text-transform:uppercase; letter-spacing:.04em;
+}
+.toc-tab:hover{background:rgba(243,230,0,.08); border-color:rgba(243,230,0,.26)}
+.toc-group.active>.toc-tab{background:var(--yellow); color:#000; border-color:var(--yellow)}
+.toc-sub{display:block; font-size:.7rem; font-weight:700; color:var(--muted); margin-top:.12rem; text-transform:none; letter-spacing:0}
+.toc-group.active .toc-sub{color:#3a3100}
+.toc-list{list-style:none; margin:.2rem 0 .65rem; padding:0; display:none}
+.toc-group.active .toc-list{display:block}
+.toc-list li{margin:.1rem 0}
+.toc-list a{
+  display:block; border-left:2px solid transparent; border-radius:6px;
+  padding:.34rem .55rem; color:#c7dcf2; font-size:.88rem; line-height:1.25;
+}
+.toc-list a:hover{background:rgba(85,234,212,.08); border-left-color:var(--cyan); text-decoration:none}
+.toc-list .sub a{padding-left:1.15rem; color:var(--muted); font-size:.8rem}
+.toc-list .section-break{height:.75rem}
+.content{
+  position:relative; z-index:2;
+  margin-left:var(--nav); margin-right:var(--rgutter);
+  min-width:0; padding:2.4rem clamp(1.3rem,4.5vw,4rem) 5rem;
+}
+.doc-header{
+  border:1px solid var(--red);
+  border-radius:0;
+  padding:1.45rem clamp(1rem,2.5vw,2rem);
+  background:linear-gradient(135deg, rgba(20,16,20,.98), rgba(0,0,0,.98));
+  box-shadow:var(--shadow);
+}
+.home-link{
+  display:inline-flex; align-items:center; margin:0 0 .85rem;
+  color:var(--cyan); font-size:.82rem; font-weight:900;
+  letter-spacing:.08em; text-transform:uppercase;
+}
+.home-link::before{content:"<-"; margin-right:.45rem; color:var(--yellow)}
+.home-link:hover{color:var(--yellow); text-decoration:none}
+.eyebrow{
+  margin:0 0 .5rem; color:var(--yellow); font-size:.78rem; font-weight:800;
+  letter-spacing:.14em; text-transform:uppercase;
+}
+h1,h2,h3,h4{line-height:1.22; color:var(--ink); font-weight:800; letter-spacing:0}
+h1{font-size:clamp(2rem,4vw,3.55rem); margin:.05em 0 .2em; text-shadow:3px 0 0 var(--red), -2px 0 0 rgba(85,234,212,.55)}
+h2{
+  font-size:1.55rem; margin:2.25em 0 .72em; padding-bottom:.38em;
+  border-bottom:1px solid var(--line); scroll-margin-top:1rem;
+}
+h2::before{content:"// "; color:var(--red)}
+h3{font-size:1.17rem; margin:1.65em 0 .5em; color:#d7f8ff; scroll-margin-top:1rem}
+p{margin:.78em 0}
+strong{color:#fff}
+em{color:#d5e2ff}
+hr{border:0; border-top:1px solid var(--line); margin:2.2em 0}
+ul,ol{margin:.65em 0 1em; padding-left:1.45em}
+li{margin:.32em 0}
+li::marker{color:var(--cyan)}
+code{
+  font-family:"SF Mono",SFMono-Regular,ui-monospace,"Cascadia Code",Consolas,"Liberation Mono",Menlo,monospace;
+  font-size:.9em;
+}
+:not(pre)>code{
+  color:var(--code-ink); background:var(--code-bg); border:1px solid #39405f;
+  padding:.12em .42em; border-radius:5px;
+}
+.tabbar{
+  position:sticky; top:0; z-index:15; display:flex; gap:.45rem; flex-wrap:wrap;
+  margin:1.1rem 0 1rem; padding:.65rem 0; background:rgba(0,0,0,.92);
+  border-bottom:1px solid var(--line); backdrop-filter:blur(8px);
+}
+.tabbtn{
+  cursor:pointer; border:1px solid var(--red); background:#080506; color:var(--ink);
+  font:inherit; font-weight:900; padding:.48rem .85rem; border-radius:0;
+  text-transform:uppercase; letter-spacing:.04em;
+}
+.tabbtn:hover{border-color:var(--yellow); color:var(--yellow)}
+.tabbtn.active{background:var(--yellow); color:#000; border-color:var(--yellow); box-shadow:0 0 20px rgba(243,230,0,.2)}
+.panel{display:none}
+.panel.active{display:block; animation:panelIn .16s ease-out}
+@keyframes panelIn{from{opacity:0; transform:translateY(4px)}to{opacity:1; transform:none}}
+section{margin:1.2rem 0}
+.principle,.block{
+  border:1px solid rgba(197,0,60,.48);
+  background:rgba(9,8,11,.94);
+  border-radius:0;
+  padding:1.1rem clamp(1rem,2vw,1.4rem);
+  box-shadow:0 10px 30px rgba(0,0,0,.22);
+}
+.principle{border-left:4px solid var(--cyan)}
+.principle.hot{border-left-color:var(--red)}
+.principle.gold{border-left-color:var(--yellow)}
+.lead{
+  color:#cfe7ff; font-size:1.05rem; max-width:78ch;
+}
+.tagline{
+  font-size:1.18rem; color:#f8fcff; font-weight:700; margin-top:1rem;
+  border-left:4px solid var(--yellow); padding-left:1rem;
+}
+.callout{
+  margin:1.05em 0; padding:.9rem 1rem;
+  border:1px solid var(--line); border-left:5px solid var(--cyan);
+  background:rgba(20,16,20,.86); border-radius:0;
+}
+.callout.warn{border-left-color:var(--yellow)}
+.callout.hot{border-left-color:var(--magenta)}
+.callout.success{border-left-color:var(--green)}
+.callout>:first-child{margin-top:0}
+.callout>:last-child{margin-bottom:0}
+table{
+  border-collapse:separate; border-spacing:0; width:100%; margin:1.1em 0;
+  font-size:.95rem; border:1px solid var(--line); border-radius:0; overflow:hidden;
+  background:rgba(9,8,11,.9);
+}
+thead th{background:rgba(243,230,0,.14); color:#fff8a6; text-align:left; font-weight:800}
+th,td{padding:.68rem .82rem; vertical-align:top; border-bottom:1px solid var(--line); border-right:1px solid var(--line)}
+th:last-child,td:last-child{border-right:0}
+tbody tr:last-child td{border-bottom:0}
+tbody tr:nth-child(even){background:rgba(197,0,60,.11)}
+tbody tr:hover{background:rgba(252,238,84,.07)}
+.checklist{
+  display:grid; grid-template-columns:repeat(auto-fit,minmax(240px,1fr)); gap:.8rem;
+  margin:1rem 0;
+}
+.check{
+  border:1px solid var(--line); border-radius:0; padding:.85rem .95rem;
+  background:rgba(20,16,20,.86);
+}
+.check b{display:block; color:var(--yellow); margin-bottom:.25rem}
+.question-list li{padding-left:.1rem}
+.totop{
+  position:fixed; right:1.5rem; bottom:1.5rem; z-index:30;
+  width:44px; height:44px; border-radius:50%; cursor:pointer;
+  border:1px solid rgba(33,246,255,.6);
+  background:#0d1020; color:var(--cyan); font-size:1.2rem; line-height:1;
+  display:flex; align-items:center; justify-content:center;
+  box-shadow:0 0 24px rgba(33,246,255,.24);
+  opacity:0; visibility:hidden; transition:opacity .2s ease, visibility .2s ease, transform .2s ease;
+}
+.totop.show{opacity:1; visibility:visible}
+.totop:hover{transform:translateY(-2px); color:var(--yellow); border-color:var(--yellow)}
+@media(max-width:920px){
+  body{background-size:34px 34px,34px 34px,auto,auto,auto}
+  .toc{position:static; width:auto; height:auto; overflow:visible; border-right:0; border-bottom:1px solid var(--line)}
+  .toc-list{columns:1}
+  .content{margin-left:0; margin-right:0; padding:1.15rem 1rem 4rem}
+  .doc-header{padding:1rem}
+  table{display:block; overflow-x:auto}
+}
+@media print{
+  body{background:#fff; color:#111}
+  body::before,.toc,.totop{display:none}
+  .content{margin:0; padding:0}
+  .doc-header,.principle,.block,.callout{box-shadow:none; background:#fff; color:#111}
+  h1,h2,h3,p,li,td,th{color:#111}
+  a{color:#0645ad}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+<nav class="toc" aria-label="Contents">
+<div class="toc-title"><span class="toc-kicker">TDA</span>Socratic Leadership Seminar</div>
+<div class="toc-group active" data-tab="concept">
+<button class="toc-tab" data-tab="concept">Concept<span class="toc-sub">Purpose, fit, cohorts, sources</span></button>
+<ul class="toc-list">
+<li><a href="#purpose">Purpose</a></li>
+<li><a href="#where-it-fits-in-talent-development-architecture">Where It Fits in TDA</a></li>
+<li><a href="#cohorts">Cohorts</a></li>
+<li><a href="#source-selection">Source Selection</a></li>
+</ul>
+</div>
+<div class="toc-group" data-tab="practice">
+<button class="toc-tab" data-tab="practice">Practice<span class="toc-sub">Facilitation, structure, boundaries</span></button>
+<ul class="toc-list">
+<li><a href="#rotating-facilitation">Rotating Facilitation</a></li>
+<li><a href="#session-shape">Session Shape</a></li>
+<li class="sub"><a href="#open-with-genuine-curiosity">Open with curiosity</a></li>
+<li class="sub"><a href="#let-the-discussion-find-its-energy">Let the discussion move</a></li>
+<li class="sub"><a href="#close-with-an-open-question">Close with a question</a></li>
+<li><a href="#elmo-enough-lets-move-on">ELMO</a></li>
+<li><a href="#the-whiteboard">The Whiteboard</a></li>
+<li><a href="#facilitator-discipline">Facilitator Discipline</a></li>
+<li><a href="#measurement-boundary">Measurement Boundary</a></li>
+<li><a href="#the-long-game">The Long Game</a></li>
+</ul>
+</div>
+</nav>
+<main class="content">
+<header class="doc-header">
+<a class="home-link" href="index.html">Return to home</a>
+<p class="eyebrow">Talent Development Architecture Companion</p>
+<h1>Socratic Leadership Seminar</h1>
+<p class="tagline">Create a recurring place where leadership thinking happens.</p>
+</header>
+<div class="tabbar">
+<button class="tabbtn active" data-tab="concept">Concept</button>
+<button class="tabbtn" data-tab="practice">Practice</button>
+</div>
+<div class="panels">
+<div class="panel active" id="tab-concept" data-tab="concept">
+<section class="block">
+<p><em>An implementation guide for creating a recurring place where
+leadership thinking happens.</em></p>
+<h2 id="purpose">Purpose</h2>
+<p>The Socratic Leadership Seminar is a leadership reading group, not a
+class, a change initiative, or a disguised planning meeting.</p>
+<p>Participants read credible leadership and management research, then
+meet periodically to explore what the material reveals, where it
+contradicts their experience, and which questions remain unresolved. The
+seminar does not attempt to force agreement or produce an action plan.
+It creates repeated opportunities for leaders to encounter serious
+ideas, test those ideas against experience, and update their mental
+models over time.</p>
+<p>The fixing, if it happens, is a byproduct.</p>
+<h2 id="where-it-fits-in-talent-development-architecture">Where It Fits
+in Talent Development Architecture</h2>
+<p>Talent Development Architecture treats growth as a combination of
+real work, learning from other people, and formal support. For leaders,
+the seminar is one mechanism for learning from others:</p>
+<ul>
+<li><strong>70 percent real work:</strong> coaching people and carrying
+actual management responsibility</li>
+<li><strong>20 percent learning from others:</strong> peer exploration,
+mentoring, observation, and the seminar</li>
+<li><strong>10 percent formal support:</strong> reading, courses, case
+studies, and other structured study</li>
+</ul>
+<p>The ratios are design guidance, not timekeeping requirements.</p>
+<p>The seminar cannot replace real management practice or direct
+coaching. It gives leaders a place to examine the mental models they
+bring to that work.</p>
+<h2 id="cohorts">Cohorts</h2>
+<p>Begin with a voluntary group. A useful starting cohort may be current
+directors and senior leaders, prospective managers, or another
+leadership population appropriate to the organization.</p>
+<p>Current and prospective leaders do not have to be placed in the same
+cohort. Established-leader seminars can draw heavily on management
+experience. Leadership-discovery cohorts can help people test whether
+facilitation, coaching, and the development of others are work they
+genuinely enjoy.</p>
+<p>As participation grows, multiple groups can operate in parallel.
+Participants should be able to move among compatible groups rather than
+becoming permanently assigned to one circle.</p>
+<h2 id="source-selection">Source Selection</h2>
+<p>The material should come from credible sources: peer-reviewed
+research, university departments, established research organizations,
+serious management publications, or well-documented organizational case
+studies.</p>
+<p>Source credibility does not require agreement. A polished article may
+overstate its evidence. A widely used framework may collapse under lived
+experience. Those tensions are discussion material.</p>
+<p>The group should agree on:</p>
+<ul>
+<li>the meeting cadence</li>
+<li>a realistic reading load</li>
+<li>the standard for acceptable sources</li>
+<li>who selects each session’s material</li>
+<li>how far in advance the material must be distributed</li>
+</ul>
+<p>Two weeks is a useful minimum for distributing the reading. The
+reading load should be small enough that preparation remains realistic
+for the full group.</p>
+
+</section>
+</div>
+<div class="panel" id="tab-practice" data-tab="practice">
+<section class="block">
+<h2 id="rotating-facilitation">Rotating Facilitation</h2>
+<p>One participant facilitates each session, with responsibility
+rotating through the group.</p>
+<p>The facilitator selects and distributes the material, opens the
+discussion, notices connections, surfaces tensions, and protects the
+purpose of the meeting. Rotation serves two purposes: everyone has to
+stretch their leadership thinking far enough to choose material worth
+discussing, and everyone receives practice facilitating a room.</p>
+<p>The facilitator is a co-explorer, not a guide leading the group
+toward a predetermined conclusion.</p>
+<p>A useful opening sounds like:</p>
+<blockquote>
+<p>These articles challenged some assumptions I had about change
+communication. I am curious what everyone else made of them.</p>
+</blockquote>
+<p>The wrong opening is a disguised argument:</p>
+<ul>
+<li>“I found research that proves my view.”</li>
+<li>“Let us decide how to apply this.”</li>
+<li>“Here is what everyone should take away.”</li>
+</ul>
+<h2 id="session-shape">Session Shape</h2>
+<p>A 60-minute session is a useful default. Extend it only when group
+size and discussion quality justify the additional time.</p>
+<h3 id="open-with-genuine-curiosity">Open with genuine curiosity</h3>
+<p>Spend the first few minutes asking what struck people, what seemed
+true, what felt overstated, and what created disagreement.</p>
+<p>Useful prompts include:</p>
+<ul>
+<li>What jumped out at you?</li>
+<li>Did anything surprise you?</li>
+<li>Where do you disagree?</li>
+<li>Does this match your experience or contradict it?</li>
+</ul>
+<p>Do not organize the answers too early. Let the group’s first
+reactions reveal where the energy is.</p>
+<h3 id="let-the-discussion-find-its-energy">Let the discussion find its
+energy</h3>
+<p>The facilitator should:</p>
+<ol type="1">
+<li><strong>Notice connections.</strong> Bring earlier comments back
+when two participants appear to be describing related ideas.</li>
+<li><strong>Surface tensions.</strong> Make competing interpretations
+visible without rushing to resolve them.</li>
+<li><strong>Invite lived experience.</strong> Ask where participants
+have seen the idea play out without turning one person’s experience into
+a referendum on the whole organization.</li>
+<li><strong>Return to the research.</strong> Introduce a provocative
+claim, method, or finding when the discussion loses energy.</li>
+<li><strong>Let disagreement breathe.</strong> Ask people to explain
+what they do not accept instead of defending the material.</li>
+</ol>
+<p>Real workplace examples are welcome when they deepen the discussion.
+One person’s current problem should not take over the session or turn
+the group into an ad hoc working meeting.</p>
+<h3 id="close-with-an-open-question">Close with an open question</h3>
+<p>Do not end by asking what everyone will do differently.</p>
+<p>Ask instead:</p>
+<ul>
+<li>What are you still thinking about?</li>
+<li>What question did we leave unresolved?</li>
+<li>Which idea became less clear after discussing it?</li>
+</ul>
+<p>The seminar succeeds when participants leave with a better question,
+a productive disagreement, or an idea that returns to them later.</p>
+<h2 id="elmo-enough-lets-move-on">ELMO: Enough, Let’s Move On</h2>
+<p>It is a sign of success when participants begin imagining practical
+applications. It is also the point where the seminar can accidentally
+become a planning meeting.</p>
+<p>Any participant may say <strong>ELMO: Enough, Let’s Move On</strong>
+when the discussion has moved from exploring the material into designing
+a solution. ELMO is not used to suppress disagreement or prevent real
+examples. It protects the seminar from being consumed by implementation
+work that belongs somewhere else.</p>
+<p>If someone wants to try an idea, the facilitator can ask what they
+imagine trying. The group does not have to design the experiment during
+the seminar.</p>
+<h2 id="the-whiteboard">The Whiteboard</h2>
+<p>Use the whiteboard minimally. Its purpose is to hold threads of
+thought while the conversation unfolds.</p>
+<p>Useful entries include:</p>
+<ul>
+<li>themes participants notice</li>
+<li>questions that surface</li>
+<li>tensions or contradictions</li>
+<li>brief examples from experience</li>
+<li>a parking lot for important topics that do not fit the session</li>
+</ul>
+<p>The board should not drive toward decisions, owners, deadlines, or
+action items. At the end of the session, it is evidence of thinking, not
+a plan.</p>
+<p>A photograph of the board may be shared with the next session’s
+topic. No additional artifact is required.</p>
+<h2 id="facilitator-discipline">Facilitator Discipline</h2>
+<p>The hardest facilitation requirement is genuine curiosity. The
+facilitator must be willing for experienced leaders to reject the
+material, interpret it differently, or reach no conclusion at all.</p>
+<p>The useful stance is not “these people need to learn this.” It is
+“these people have experience the research may not capture; I want to
+understand what happens when the two meet.”</p>
+<p>Questions that preserve that stance include:</p>
+<ul>
+<li>What systemic pressure makes the recommended behavior
+difficult?</li>
+<li>What does lived experience reveal that the research does not?</li>
+<li>Why might a reasonable leader choose the apparently weaker
+approach?</li>
+<li>Which assumption does the disagreement expose?</li>
+</ul>
+<h2 id="measurement-boundary">Measurement Boundary</h2>
+<p>The seminar is a deliberately unmeasured input. Attendance proves
+presence. A worksheet proves that a worksheet was completed. Neither
+proves that a leader’s mental model changed.</p>
+<p>That does not make the seminar unfalsifiable. Its effects, if any,
+should eventually appear downstream: better coaching behavior, more
+thoughtful allocation of developmental reps, stronger facilitation,
+useful references to earlier discussions, or participants voluntarily
+requesting the next reading.</p>
+<p>Do not attribute those outcomes directly to the seminar. The causal
+claim would be stronger than the evidence. The honest signal is that
+ideas return without being forced.</p>
+<p>The failure mode is not that the seminar lacks a score. The failure
+mode is measuring everything so aggressively that the organization stops
+investing in forms of learning that do not measure cleanly.</p>
+<h2 id="the-long-game">The Long Game</h2>
+<p>The value compounds across sessions.</p>
+<p>After several meetings, participants may begin connecting new
+material to earlier conversations. Later, they may bring their own
+research, test an idea in real work, or recognize a management pattern
+they previously lacked language for.</p>
+<p>The seminar does not exist to fix leaders. It creates a recurring
+place where leadership thinking happens. That is enough work for one
+room.</p>
+
+</section>
+</div>
+</div>
+</main>
+</div>
+<button class="totop" id="totop" title="Back to top" aria-label="Back to top">↑</button>
+<script>
+(function(){
+  function activate(name){
+    document.querySelectorAll('.panel').forEach(function(p){
+      p.classList.toggle('active', p.dataset.tab === name);
+    });
+    document.querySelectorAll('.toc-group').forEach(function(g){
+      g.classList.toggle('active', g.dataset.tab === name);
+    });
+    document.querySelectorAll('.tabbtn').forEach(function(b){
+      b.classList.toggle('active', b.dataset.tab === name);
+    });
+  }
+  function panelTabOf(el){
+    var panel = el.closest('.panel');
+    return panel ? panel.dataset.tab : null;
+  }
+  function go(id, smooth){
+    var el = document.getElementById(id);
+    if(!el) return false;
+    var tab = panelTabOf(el);
+    if(tab) activate(tab);
+    el.scrollIntoView(smooth ? {behavior:'smooth', block:'start'} : {block:'start'});
+    return true;
+  }
+  document.querySelectorAll('.tabbtn, .toc-tab').forEach(function(btn){
+    btn.addEventListener('click', function(e){
+      e.preventDefault();
+      activate(btn.dataset.tab);
+      window.scrollTo({top:0, left:0, behavior:'smooth'});
+      history.replaceState(null, '', location.pathname);
+    });
+  });
+  var top=document.getElementById('totop');
+  function onScroll(){ top.classList.toggle('show', window.scrollY>420); }
+  window.addEventListener('scroll', onScroll, {passive:true});
+  onScroll();
+  top.addEventListener('click', function(){
+    window.scrollTo({top:0, left:0, behavior:'smooth'});
+  });
+  document.addEventListener('click', function(e){
+    var a=e.target.closest('a[href^="#"]');
+    if(!a) return;
+    var id=decodeURIComponent(a.getAttribute('href').slice(1));
+    if(!id) return;
+    if(go(id, true)){
+      e.preventDefault();
+      history.replaceState(null, '', '#' + id);
+    }
+  });
+  if(location.hash){
+    if(!go(decodeURIComponent(location.hash.slice(1)), false)) activate('concept');
+  } else {
+    activate('concept');
+  }
+})();
+</script>
+</body>
+</html>

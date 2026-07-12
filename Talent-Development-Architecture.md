@@ -105,6 +105,49 @@ A more complete loop looks like this:
 
 That sequence matters because it turns scattered artifacts into an actual development system. A career map without assignments is theater. A competency rubric without observation is vocabulary theater. A development plan without work allocation is self-improvement theater. A review without preserved context is memory theater. The architecture is the loop that prevents those artifacts from becoming performance props.
 
+The stages collapse into a compact decision sequence that can be carried from one development cycle to the next:
+
+> aspiration → target capability → real work → coaching and feedback → evidence → reconciliation → next decision
+
+TDA operates at two connected scales. At the individual scale, it helps a person and manager decide what development should happen next. At the organizational scale, it makes recurring patterns visible: where opportunity is uneven, where capability gaps repeat, where managers are or are not developing people, and where the system around the employee needs to change.
+
+---
+
+## What TDA Owns—and Where It Stops
+
+TDA owns the architecture that connects development intent, work allocation, coaching, evidence, and the next talent decision. It should help the organization create safe reps, preserve context, identify recurring patterns, and make those patterns visible to people with the authority to act.
+
+It does not replace:
+
+- formal performance management
+- Legal or employment review
+- compensation governance
+- workforce planning
+- executive organization design
+- board governance
+- every mechanism required to educate or develop managers
+
+The useful boundary is straightforward: TDA produces evidence and makes patterns visible. Accountable leaders and adjacent organizational systems decide what to do with those patterns.
+
+> *"when capability genuinely isn't built, the discussion changes, and becomes a separate topic: the evidence ledger you built here is what makes that conversation on that topic an honest one."*
+
+---
+
+## Two Levels of Evidence
+
+The Performance Evidence Ledger preserves individual context. It records what a person was asked to do, what conditions shaped the work, what was observed, what changed, and what decision followed.
+
+A **Behavioral Scoreboard** works one level above the ledger. It aggregates a deliberately limited set of patterns so the organization can tell whether development behavior is real or merely documented. It should help answer:
+
+- Who receives stretch opportunities, and who repeatedly does not?
+- Which managers consistently develop people, and which managers have developed no one?
+- Are developmental reps distributed equitably?
+- Do coaching, reconciliation, and assignment changes occur, or do the artifacts merely exist?
+- Which capability gaps recur across teams?
+- Where does the evidence point to a role, structure, or management problem rather than an employee problem?
+
+The scoreboard is not a fifth employee-facing form, and it should not reduce individual development to a composite score. The ledger preserves the case. The scoreboard reveals the pattern. Accountable leaders still have to interpret the pattern and decide what to do.
+
 ---
 
 ## The Implementation Packet
@@ -525,6 +568,42 @@ External hiring becomes more like sports free-agency as you move higher up the l
 
 ---
 
+## Leadership Discovery and Development
+
+Leadership is a distinct craft. Technical excellence, ambition, seniority, visibility, reliability, and willingness to accept a promotion do not prove that someone wants to develop people.
+
+The first leadership-development question is therefore not "could this person manage?" It is "does this person actually want to be accountable for other people's growth and success?"
+
+Leadership discovery should use the same architecture as any other career transition:
+
+> interest → exposure → education → bounded leadership practice → feedback → evidence → informed decision
+
+Useful discovery reps may include mentoring, facilitation, project leadership, temporary leadership assignments, participation in planning or calibration, and carefully bounded exposure to coaching, hiring, and people-development work.
+
+The process must allow someone to conclude, "I enjoy technical leadership, systems leadership, or project leadership, but I do not want people management." That is successful discovery, not failure. A permanent, respected IC path is what makes the answer honest. Without that path, leadership discovery becomes a forced march toward the only promotion the organization appears to value.
+
+### Development Is Recursive
+
+Managers should be developed by their own managers and leadership chain through the same underlying model they are expected to provide for everyone else. The work is self-similar:
+
+- **70 percent real work:** coaching people, allocating developmental reps, handling calibration, facilitating decisions, and learning through actual management responsibility
+- **20 percent learning from others:** mentoring, observation, peer discussion, and structured exploration with other leaders
+- **10 percent formal support:** reading, courses, case studies, and other structured study
+
+The ratios are still design guidance rather than accounting. The important point is that managers need real practice, useful feedback, and deliberate opportunities to update their own mental models. Promotion into management does not complete leadership development. It creates a new development obligation one layer up.
+
+### Socratic Leadership Seminar
+
+The **Socratic Leadership Seminar** is one mechanism for the leaders' 20 percent. A voluntary group of current or prospective leaders reads credible leadership and management research, then meets periodically to explore what the material reveals, where it contradicts experience, and which questions remain unresolved.
+
+The seminar is not a class, a change initiative, or a disguised planning meeting. Facilitation rotates so participants practice selecting material, asking useful questions, making disagreement productive, and holding a room without forcing it toward the facilitator's preferred conclusion. The discussion produces no required action items. Its purpose is to create a recurring place where leadership thinking happens.
+
+That makes the seminar a deliberately unmeasured input. Attendance and worksheets would prove compliance, not learning. Its downstream effects may eventually appear in better coaching, better allocation of developmental reps, stronger mental-model updates, and leaders voluntarily returning to ideas from earlier sessions. The seminar itself should not claim credit for those outcomes.
+
+See the [Socratic Leadership Seminar implementation guide](docs/Socratic-Leadership-Seminar.html) for cohort design, source selection, facilitation, meeting structure, the use of ELMO, and the limited role of the whiteboard.
+
+---
+
 ## One-on-Ones
 
 One-on-ones are the primary venue for proactive Talent Utilization Review.
@@ -548,6 +627,32 @@ People records should also label evidence. An observed behavior, self report, ma
 
 ---
 
+## Organizational Learning From Talent Evidence
+
+Individual development evidence becomes organizationally useful when recurring patterns can be seen without stripping away the context that made the evidence honest.
+
+The loop is:
+
+> individual evidence → recurring pattern → organizational visibility → accountable leader decision
+
+Patterns worth surfacing may include:
+
+- the same capability gap appearing across many teams
+- high performers repeatedly lacking appropriate scope
+- promotion evidence existing without matching roles
+- employees repeatedly seeking a career path the organization has not created
+- some managers routinely developing internal talent while others rely on external hiring
+- strong people repeatedly leaving the same management chain
+- invisible work accumulating around a small number of people
+- managers being unable to identify safe developmental assignments
+- developmental reps being concentrated among already-visible or well-connected employees
+
+TDA should make those patterns visible. It should not pretend to own every response. A repeated capability gap may require training, hiring, role redesign, or a strategic decision. Uneven access to stretch work may require management intervention. Promotion evidence without available scope may require workforce planning or organization design. The evidence should reach someone accountable for the decision instead of disappearing because the response belongs to another discipline.
+
+Not every useful input can or should receive a direct metric. **Unmeasurable is not unfalsifiable.** Some practices, including the Socratic Leadership Seminar, are better evaluated through downstream behavior and revealed preference than through an activity score. The goal is not to measure everything. It is to know what is measured, what is deliberately unmeasured, and where evidence should eventually appear if the system is healthy.
+
+---
+
 ## Technology Cannot Substitute for Development Architecture
 
 Organizations often try to use technology to compensate for missing development architecture: career tools, skills platforms, workflow systems, dashboards, AI assistants, and intake portals. Those tools can augment well-designed behavior. They can make information easier to find, reduce administrative friction, and make patterns visible. They cannot create the underlying management behavior by themselves.
@@ -555,6 +660,28 @@ Organizations often try to use technology to compensate for missing development 
 Technology can support a process, but it cannot make a broken process healthy. A tool that routes work through a bad operating model mostly makes the bad operating model faster, more expensive, or harder to see. AI does not change that. Using LLMs to push through bad process may feel productive locally, but the cost can become invisible to the person authorizing the usage and difficult for the company to distinguish from legitimate work.
 
 This matters for TDA because career development is not solved by a portal that emits generic recommendations. The system still needs actual roles, actual skill needs, actual managers coordinating work, actual safe-reps paths, actual coaching, and actual evidence. The tool can help people navigate the architecture. It cannot replace the architecture.
+
+---
+
+## Adoption, Pilot, and Stewardship
+
+TDA should begin as a small operating practice, not a large transformation program.
+
+A useful pilot has:
+
+- one function
+- one or two willing managers
+- one development cycle
+- minimal new tooling
+- existing work used as evidence
+- quarterly reconciliation
+- a retrospective at the end
+
+The pilot should test behavior and usefulness before the organization invests in platforms, mandates, or elaborate governance. Did career goals become clearer? Did capability gaps turn into meaningful assignments? Did employees receive useful feedback? Did managers uncover hidden work or role mismatch? Did the process improve development, mobility, promotion, hiring, or system decisions? Which steps created value, and which became theater?
+
+Adoption should be pulled by visible usefulness rather than pushed through compliance. A few managers who genuinely want to coach can establish the practice, produce legible results, and give adjacent teams a reason to ask what they are doing. Metrics may help skeptical managers see the pattern, but a mandate cannot manufacture the behavior the system depends on.
+
+Small does not mean ownerless. Even a lightweight implementation needs someone accountable for maintaining the framework, enabling managers, reviewing aggregate evidence, protecting the boundary between evidence and surveillance, and revising the system when the pilot exposes a defect. The right owner will vary by organization. The responsibility cannot remain implicit.
 
 ---
 
@@ -602,6 +729,10 @@ With TDA, managers ask better questions:
 - What evidence type are we looking at: observed behavior, self report, manager interpretation, outcome measure, or assumption?
 - What evidence will show growth?
 - What succession pipeline are we building?
+- Who is receiving developmental reps, and who is not?
+- What patterns are recurring across teams?
+- Who is accountable for acting on the pattern?
+- Is TDA producing useful behavior, or only completed artifacts?
 
 That is the difference between treating people like machines that need exact instructions and treating talent as something the organization is responsible for developing, placing, and coaching.
 
