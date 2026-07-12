@@ -1,2 +1,4 @@
 *.jpg
 context_artifacts/
+0.*
+CONTEXT.md
