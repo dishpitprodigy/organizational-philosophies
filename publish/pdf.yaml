@@ -1,0 +1,39 @@
+# Pandoc defaults for a single Markdown document -> PDF.
+# Usage: pandoc -d publish/pdf.yaml -M title="..." -o out.pdf chapter.md
+# Requires: xelatex + the tex-gyre font collection (ships with any
+# reasonably complete TeX Live install, e.g. texlive-fonts-recommended).
+
+from: markdown+smart+gfm_auto_identifiers
+pdf-engine: xelatex
+
+variables:
+  documentclass: article
+  secnumdepth: 2
+  mainfont: "TeX Gyre Pagella"
+  sansfont: "TeX Gyre Heros"
+  monofont: "TeX Gyre Cursor"
+  monofontoptions: "Scale=0.92"
+  fontsize: "11pt"
+  papersize: letter
+  geometry: "margin=1.15in"
+  colorlinks: true
+  linkcolor: accent
+  citecolor: accent
+  urlcolor: accent
+  filecolor: accent
+  toccolor: accent
+  microtypeoptions:
+    - "protrusion=false"
+
+# Source docs open with a level-1 '# Title' heading that build-doc.sh
+# strips and promotes to the title block; shift the remaining headings up
+# one level so '## Section' becomes \section instead of \subsection.
+shift-heading-level-by: -1
+
+toc: true
+toc-depth: 2
+number-sections: true
+standalone: true
+
+include-in-header:
+  - publish/preamble.tex

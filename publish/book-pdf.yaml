@@ -1,0 +1,34 @@
+# Pandoc defaults for the combined-book PDF build.
+# Chapters keep their existing H1 as a LaTeX \chapter (top-level-division).
+# Usage: pandoc -d publish/book-pdf.yaml -o out.pdf chapter1.md chapter2.md ...
+
+from: markdown+smart+gfm_auto_identifiers
+pdf-engine: xelatex
+top-level-division: chapter
+
+variables:
+  documentclass: book
+  secnumdepth: 1
+  mainfont: "TeX Gyre Pagella"
+  sansfont: "TeX Gyre Heros"
+  monofont: "TeX Gyre Cursor"
+  monofontoptions: "Scale=0.92"
+  fontsize: "11pt"
+  papersize: letter
+  geometry: "margin=1.15in"
+  colorlinks: true
+  linkcolor: accent
+  citecolor: accent
+  urlcolor: accent
+  filecolor: accent
+  toccolor: accent
+  microtypeoptions:
+    - "protrusion=false"
+
+toc: true
+toc-depth: 2
+number-sections: true
+standalone: true
+
+include-in-header:
+  - publish/preamble.tex

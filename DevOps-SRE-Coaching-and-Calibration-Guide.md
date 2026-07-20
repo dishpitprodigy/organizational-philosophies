@@ -1,4 +1,4 @@
-# DevOps & SRE Coaching and Calibration Guide
+# Coaching and Calibration Guide
 
 *A companion to the Career Progression Guide. The ladder defines what each level is; this guide is about the practice of judging people against it fairly, developing them toward it, and fixing the structures that make that judgment unreliable.*
 

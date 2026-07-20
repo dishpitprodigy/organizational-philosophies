@@ -1,6 +1,6 @@
-# DevOps & Site Reliability Engineering Career Progression Guide
+# Career Progression Guide
 
-*“DevOps & SRE” in the title is shorthand; the ladder applies equally to Platform, Cloud, Infrastructure, and Security Engineering.*
+*The ladder applies equally to DevOps, Site Reliability, Platform, Cloud, Infrastructure, and Security Engineering roles.*
 
 ## Purpose
 

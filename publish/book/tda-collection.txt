@@ -1,0 +1,14 @@
+title: Talent Development Architecture
+subtitle: How an Organization Creates the Reps, Feedback, Assignments, and Evidence That Let People Grow Deliberately
+author: Jon Wroblewski
+slug: tda-collection
+chapters:
+The-Open-Loop-Enterprise.md
+Talent-Development-Architecture.md
+TDA-Personal-Development-Plan-Template.md
+TDA-Competency-Calibration-Template.md
+TDA-70-20-10-Development-Plan-Template.md
+TDA-Performance-Evidence-Ledger-Template.md
+Socratic-Leadership-Seminar.md
+DevOps-SRE-Career-Progression-Guide.md
+DevOps-SRE-Coaching-and-Calibration-Guide.md

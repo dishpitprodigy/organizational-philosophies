@@ -1,0 +1,117 @@
+/* EPUB stylesheet -- mirrors the PDF's print-book typography
+   (TeX Gyre Pagella/Heros/Cursor, muted oxblood accent) rather than the
+   website's dark theme. Font families below match the family names baked
+   into publish/fonts/*.otf, which Pandoc embeds and wires up via
+   auto-generated @font-face rules (epub-embed-font in publish/epub.yaml). */
+
+body {
+  font-family: "TeX Gyre Pagella", Palatino, "Palatino Linotype", Georgia, serif;
+  line-height: 1.5;
+  color: #1a1a1a;
+  margin: 0 5%;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: "TeX Gyre Heros", Helvetica, Arial, sans-serif;
+  color: #1a1a1a;
+  line-height: 1.25;
+  page-break-after: avoid;
+}
+
+h1 {
+  font-size: 1.8em;
+  margin-top: 0;
+  padding-bottom: 0.3em;
+}
+
+h2 {
+  font-size: 1.4em;
+  margin-top: 1.8em;
+  padding-bottom: 0.25em;
+  border-bottom: 1px solid #cccccc;
+}
+
+h3 {
+  font-size: 1.15em;
+  margin-top: 1.4em;
+}
+
+h4 {
+  font-size: 1em;
+  font-style: italic;
+  margin-top: 1.2em;
+}
+
+p, li {
+  orphans: 2;
+  widows: 2;
+}
+
+a {
+  color: #7a1f2b;
+  text-decoration: none;
+}
+
+blockquote {
+  margin: 1em 0;
+  padding: 0.2em 0 0.2em 1em;
+  border-left: 3px solid #cccccc;
+  color: #555555;
+  font-style: italic;
+}
+
+code, pre, kbd, samp {
+  font-family: "TeX Gyre Cursor", "Courier New", monospace;
+}
+
+pre {
+  background: #f4f3ef;
+  border: 1px solid #cccccc;
+  padding: 0.7em 0.9em;
+  overflow-x: auto;
+  font-size: 0.9em;
+}
+
+code {
+  background: #f4f3ef;
+  padding: 0.1em 0.3em;
+}
+
+pre code {
+  background: transparent;
+  padding: 0;
+}
+
+table {
+  border-collapse: collapse;
+  width: 100%;
+  margin: 1em 0;
+  font-size: 0.92em;
+}
+
+th, td {
+  border: 1px solid #cccccc;
+  padding: 0.5em 0.6em;
+  text-align: left;
+  vertical-align: top;
+}
+
+th {
+  font-family: "TeX Gyre Heros", Helvetica, Arial, sans-serif;
+  background: #f4f3ef;
+}
+
+hr {
+  border: none;
+  border-top: 1px solid #cccccc;
+  margin: 2em 0;
+}
+
+nav#toc ol {
+  list-style: none;
+  padding-left: 1em;
+}
+
+nav#toc a {
+  color: #1a1a1a;
+}

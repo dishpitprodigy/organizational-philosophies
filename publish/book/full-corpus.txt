@@ -1,0 +1,15 @@
+title: Thoughts on Fostering Organizational Excellence
+subtitle: A Collected Library on Evidence-Led Planning, Coaching, and Talent Development
+author: Jon Wroblewski
+slug: organizational-philosophies-collected
+chapters:
+Talent-Development-Architecture.md
+Socratic-Leadership-Seminar.md
+DevOps-SRE-Career-Progression-Guide.md
+DevOps-SRE-Coaching-and-Calibration-Guide.md
+Writing Work Items - Epics, Stories, and Tasks.md
+Process-Improvement-Framework.md
+Managed-Runoff-for-Deprecated-Services.md
+RFPs-and-Vendor-Selection-as-Evidence-Systems.md
+personal-decision-framework.md
+framing-questions-for-platform-architecture-and-design.md

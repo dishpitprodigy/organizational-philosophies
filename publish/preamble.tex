@@ -1,0 +1,126 @@
+% Shared LaTeX styling for the organizational-philosophies PDF pipeline.
+% Loaded via `include-in-header` on top of Pandoc's default template.
+% Goal: quiet, well-set nonfiction-book typography (Pagella/Heros/Cursor,
+% generous leading, a single restrained accent color) rather than a reskin
+% of the website theme.
+
+\usepackage{titlesec}
+\usepackage{titling}
+\usepackage{fancyhdr}
+\usepackage{booktabs}
+\usepackage{longtable}
+\usepackage{array}
+\usepackage{enumitem}
+\usepackage{mdframed}
+\usepackage{etoolbox}
+
+\definecolor{inkblack}{HTML}{1A1A1A}
+\definecolor{bodygray}{HTML}{333333}
+\definecolor{accent}{HTML}{7A1F2B}   % muted oxblood -- rules, chapter numerals, links
+\definecolor{rulegray}{HTML}{CCCCCC}
+\definecolor{quotegray}{HTML}{555555}
+\definecolor{shadecolor}{HTML}{F4F3EF}
+
+% --- Unicode glyphs missing from Pagella/Heros/Cursor --------------------
+% Some source docs use box-drawing diagrams, checkmarks, or subscripts
+% that the TeX Gyre trio doesn't include. Route just those characters
+% through a fallback font instead of silently dropping them. Add more
+% \newunicodechar lines here if a future doc introduces a new symbol and
+% a "Missing character" warning shows up in the build log.
+\usepackage{newunicodechar}
+\newfontfamily\dejavufallback{DejaVu Sans Mono}
+\newfontfamily\emojifallback{Noto Emoji}
+\newunicodechar{✗}{{\dejavufallback ✗}}
+\newunicodechar{│}{{\dejavufallback │}}
+\newunicodechar{▼}{{\dejavufallback ▼}}
+\newunicodechar{◄}{{\dejavufallback ◄}}
+\newunicodechar{─}{{\dejavufallback ─}}
+\newunicodechar{₂}{{\dejavufallback ₂}}
+\newunicodechar{✅}{{\emojifallback ✅}}
+\newunicodechar{❌}{{\emojifallback ❌}}
+
+\color{bodygray}
+\linespread{1.2}\selectfont
+
+% --- Headings -----------------------------------------------------------
+\titleformat{\section}
+  {\normalfont\sffamily\Large\bfseries\color{inkblack}}
+  {\thesection}{0.65em}{}
+  [{\color{rulegray}\titlerule}]
+\titlespacing*{\section}{0pt}{2.2em}{1em}
+
+\titleformat{\subsection}
+  {\normalfont\sffamily\large\bfseries\color{inkblack}}
+  {\thesubsection}{0.6em}{}
+\titlespacing*{\subsection}{0pt}{1.6em}{0.6em}
+
+\titleformat{\subsubsection}
+  {\normalfont\sffamily\normalsize\bfseries\color{inkblack}}
+  {\thesubsubsection}{0.5em}{}
+\titlespacing*{\subsubsection}{0pt}{1.3em}{0.5em}
+
+% Chapter styling only takes effect when documentclass=book/report (the
+% book build); article-class single-document builds never define \chapter.
+\makeatletter
+\@ifclassloaded{book}{\input{publish/chapter-style.tex}}{}
+\@ifclassloaded{report}{\input{publish/chapter-style.tex}}{}
+\makeatother
+
+% --- Title block (article class / single-document builds) --------------
+\pretitle{\begin{flushleft}\sffamily\huge\bfseries\color{inkblack}}
+\posttitle{\end{flushleft}\vspace{-0.4em}}
+\preauthor{\begin{flushleft}\large\sffamily\color{quotegray}}
+\postauthor{\end{flushleft}}
+\predate{\begin{flushleft}\normalsize\sffamily\color{quotegray}}
+\postdate{\end{flushleft}\vspace{1.2em}\color{rulegray}\hrule\thispagestyle{empty}\clearpage}
+
+% Give the table of contents its own page, matching chapter/section
+% openers instead of running body text directly beneath it.
+\let\oldtableofcontents\tableofcontents
+\renewcommand{\tableofcontents}{\oldtableofcontents\clearpage}
+
+% --- Running headers/footers --------------------------------------------
+\pagestyle{fancy}
+\fancyhf{}
+\renewcommand{\headrulewidth}{0.4pt}
+\renewcommand{\footrulewidth}{0pt}
+\fancyhead[LE,RO]{\thepage}
+\fancyhead[RE]{\small\sffamily\nouppercase{\leftmark}}
+\fancyhead[LO]{\small\sffamily\nouppercase{\rightmark}}
+\fancypagestyle{plain}{\fancyhf{}\fancyhead[LE,RO]{\thepage}\renewcommand{\headrulewidth}{0pt}}
+
+% Link colors are set via the linkcolor/citecolor/urlcolor variables in
+% publish/pdf.yaml and publish/book-pdf.yaml -- Pandoc's own \hypersetup
+% call runs after header-includes, so setting it here directly would fire
+% before the hyperref package pandoc loads is available.
+
+% --- Blockquotes: thin left rule + italic, print-book convention --------
+\newmdenv[
+  topline=false, bottomline=false, rightline=false,
+  linewidth=2pt, linecolor=rulegray,
+  leftmargin=0pt, innerleftmargin=1.1em, innertopmargin=0.4em, innerbottommargin=0.4em,
+  skipabove=1em, skipbelow=1em,
+  font=\itshape\color{quotegray}
+]{quotebox}
+\renewenvironment{quote}{\begin{quotebox}}{\end{quotebox}}
+
+% --- Tables: booktabs with a touch of breathing room ---------------------
+\renewcommand{\arraystretch}{1.25}
+\setlength{\tabcolsep}{8pt}
+
+% --- Lists: slightly tighter than LaTeX defaults, matches body rhythm ---
+\setlist{topsep=0.4em, itemsep=0.2em, parsep=0pt}
+
+% --- Code blocks: quiet monospace box instead of pandoc's default -------
+\makeatletter
+\@ifpackageloaded{framed}{%
+  \renewenvironment{Shaded}{%
+    \begin{mdframed}[
+      backgroundcolor=shadecolor, linecolor=rulegray, linewidth=0.5pt,
+      innerleftmargin=0.8em, innerrightmargin=0.8em,
+      innertopmargin=0.6em, innerbottommargin=0.6em,
+      skipabove=1em, skipbelow=1em
+    ]
+  }{\end{mdframed}}
+}{}
+\makeatother

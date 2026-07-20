@@ -1,0 +1,15 @@
+# Pandoc defaults for the combined-book EPUB build.
+# Each chapter's H1 starts a new EPUB chapter/xhtml file.
+# Usage: pandoc -d publish/book-epub.yaml -o out.epub chapter1.md chapter2.md ...
+
+from: markdown+smart+gfm_auto_identifiers
+toc: true
+toc-depth: 2
+number-sections: false
+epub-chapter-level: 1
+
+css:
+  - publish/epub.css
+
+epub-fonts:
+  - "publish/fonts/*.otf"
