@@ -1,0 +1,657 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Work Intake Is an Organizational System</title>
+<style>
+
+:root{
+  --nav:310px;
+  --rgutter:8vw;
+  --bg:#000000;
+  --panel:#09080b;
+  --panel-2:#141014;
+  --ink:#f8f7df;
+  --muted:#b8b493;
+  --line:#3c2730;
+  --red:#c5003c;
+  --red-dark:#880425;
+  --yellow:#f3e600;
+  --cyan:#55ead4;
+  --purple:#6300ff;
+  --magenta:#ff008d;
+  --pink:#d14eea;
+  --coral:#f96363;
+  --green:#3fb950;
+  --code-bg:#171018;
+  --code-ink:#f3e600;
+  --shadow:0 0 0 1px rgba(243,230,0,.18), 0 16px 40px rgba(0,0,0,.48);
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%; scroll-behavior:smooth}
+body{
+  margin:0;
+  background:
+    linear-gradient(rgba(243,230,0,.045) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(197,0,60,.045) 1px, transparent 1px),
+    radial-gradient(circle at 18% -10%, rgba(85,234,212,.12), transparent 26rem),
+    radial-gradient(circle at 100% 5%, rgba(197,0,60,.18), transparent 24rem),
+    var(--bg);
+  background-size:44px 44px,44px 44px,auto,auto,auto;
+  color:var(--ink);
+  font:16px/1.68 Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+}
+body::before{
+  content:"";
+  position:fixed; inset:0; pointer-events:none; z-index:1;
+  background:repeating-linear-gradient(0deg, rgba(255,255,255,.025) 0 1px, transparent 1px 4px);
+  mix-blend-mode:screen;
+  opacity:.28;
+}
+a{color:var(--cyan); text-decoration:none}
+a:hover{text-decoration:underline; text-decoration-color:var(--yellow)}
+.wrap{display:block}
+.toc{
+  position:fixed; top:0; left:0; width:var(--nav); height:100vh; overflow:auto;
+  padding:1.1rem .95rem 2rem; z-index:20;
+  background:rgba(7,8,15,.94);
+  border-right:2px solid var(--red);
+  box-shadow:12px 0 32px rgba(0,0,0,.34);
+  backdrop-filter:blur(10px);
+}
+.toc-title{
+  font-weight:800; line-height:1.18; color:var(--ink);
+  padding:.45rem .45rem .9rem; margin-bottom:.7rem;
+  border-bottom:1px solid var(--line);
+  text-transform:uppercase; letter-spacing:.06em;
+}
+.toc-kicker{display:block; color:var(--yellow); font-size:.72rem; margin-bottom:.25rem}
+.toc-group{margin:.25rem 0 .35rem}
+.toc-tab{
+  display:block; width:100%; text-align:left; cursor:pointer; border:1px solid transparent;
+  border-radius:0; padding:.52rem .55rem; background:transparent;
+  color:var(--ink); font:inherit; font-size:.88rem; font-weight:800; line-height:1.2;
+  text-transform:uppercase; letter-spacing:.04em;
+}
+.toc-tab:hover{background:rgba(243,230,0,.08); border-color:rgba(243,230,0,.26)}
+.toc-group.active>.toc-tab{background:var(--yellow); color:#000; border-color:var(--yellow)}
+.toc-sub{display:block; font-size:.7rem; font-weight:700; color:var(--muted); margin-top:.12rem; text-transform:none; letter-spacing:0}
+.toc-group.active .toc-sub{color:#3a3100}
+.toc-list{list-style:none; margin:.2rem 0 .65rem; padding:0; display:none}
+.toc-group.active .toc-list{display:block}
+.toc-list li{margin:.1rem 0}
+.toc-list a{
+  display:block; border-left:2px solid transparent; border-radius:6px;
+  padding:.34rem .55rem; color:#c7dcf2; font-size:.88rem; line-height:1.25;
+}
+.toc-list a:hover{background:rgba(85,234,212,.08); border-left-color:var(--cyan); text-decoration:none}
+.content{
+  position:relative; z-index:2;
+  margin-left:var(--nav); margin-right:var(--rgutter);
+  min-width:0; padding:2.4rem clamp(1.3rem,4.5vw,4rem) 5rem;
+}
+.doc-header{
+  border:1px solid var(--red);
+  border-radius:0;
+  padding:1.45rem clamp(1rem,2.5vw,2rem);
+  background:linear-gradient(135deg, rgba(20,16,20,.98), rgba(0,0,0,.98));
+  box-shadow:var(--shadow);
+}
+.home-link{
+  display:inline-flex; align-items:center; margin:0 0 .85rem;
+  color:var(--cyan); font-size:.82rem; font-weight:900;
+  letter-spacing:.08em; text-transform:uppercase;
+}
+.home-link::before{content:"<-"; margin-right:.45rem; color:var(--yellow)}
+.home-link:hover{color:var(--yellow); text-decoration:none}
+.eyebrow{
+  margin:0 0 .5rem; color:var(--yellow); font-size:.78rem; font-weight:800;
+  letter-spacing:.14em; text-transform:uppercase;
+}
+h1,h2,h3,h4{line-height:1.22; color:var(--ink); font-weight:800; letter-spacing:0}
+h1{font-size:clamp(2rem,4vw,3.55rem); margin:.05em 0 .2em; text-shadow:3px 0 0 var(--red), -2px 0 0 rgba(85,234,212,.55)}
+h2{
+  font-size:1.55rem; margin:2.25em 0 .72em; padding-bottom:.38em;
+  border-bottom:1px solid var(--line); scroll-margin-top:1rem;
+}
+h2::before{content:"// "; color:var(--red)}
+.panel>h2:first-child{margin-top:.3em}
+h3{font-size:1.17rem; margin:1.65em 0 .5em; color:#d7f8ff; scroll-margin-top:1rem}
+p{margin:.78em 0}
+strong{color:#fff}
+em{color:#d5e2ff}
+hr{border:0; border-top:1px solid var(--line); margin:2.2em 0}
+ul,ol{margin:.65em 0 1em; padding-left:1.45em}
+li{margin:.32em 0}
+li::marker{color:var(--cyan)}
+blockquote{
+  margin:1.05em 0; padding:.8rem 1rem;
+  border-left:5px solid var(--yellow);
+  background:rgba(20,16,20,.86);
+  color:#f8fcff;
+}
+blockquote>:first-child{margin-top:0}
+blockquote>:last-child{margin-bottom:0}
+code{
+  font-family:"SF Mono",SFMono-Regular,ui-monospace,"Cascadia Code",Consolas,"Liberation Mono",Menlo,monospace;
+  font-size:.9em;
+}
+:not(pre)>code{
+  color:var(--code-ink); background:var(--code-bg); border:1px solid #39405f;
+  padding:.12em .42em; border-radius:5px;
+}
+.tabbar{
+  position:sticky; top:0; z-index:15; display:flex; gap:.45rem; flex-wrap:wrap;
+  margin:1.1rem 0 1rem; padding:.65rem 0; background:rgba(0,0,0,.92);
+  border-bottom:1px solid var(--line); backdrop-filter:blur(8px);
+}
+.tabbtn{
+  cursor:pointer; border:1px solid var(--red); background:#080506; color:var(--ink);
+  font:inherit; font-weight:900; padding:.48rem .85rem; border-radius:0;
+  text-transform:uppercase; letter-spacing:.04em;
+}
+.tabbtn:hover{border-color:var(--yellow); color:var(--yellow)}
+.tabbtn.active{background:var(--yellow); color:#000; border-color:var(--yellow); box-shadow:0 0 20px rgba(243,230,0,.2)}
+.panel{display:none}
+.panel.active{display:block; animation:panelIn .16s ease-out}
+@keyframes panelIn{from{opacity:0; transform:translateY(4px)}to{opacity:1; transform:none}}
+.lead{color:#cfe7ff; font-size:1.05rem; max-width:78ch}
+.tagline{
+  font-size:1.18rem; color:#f8fcff; font-weight:700; margin-top:1rem;
+  border-left:4px solid var(--yellow); padding-left:1rem;
+}
+.status-row{display:flex; flex-wrap:wrap; gap:.55rem; margin:1rem 0 0}
+.status-pill{border:1px solid var(--line); background:rgba(20,16,20,.86); color:var(--muted); padding:.26rem .55rem; font-size:.86rem}
+.callout{
+  margin:1.05em 0; padding:.9rem 1rem;
+  border:1px solid var(--line); border-left:5px solid var(--cyan);
+  background:rgba(20,16,20,.86); border-radius:0;
+}
+.callout.warn{border-left-color:var(--yellow)}
+.callout.hot{border-left-color:var(--magenta)}
+.callout.success{border-left-color:var(--green)}
+.callout>:first-child{margin-top:0}
+.callout>:last-child{margin-bottom:0}
+table{
+  border-collapse:separate; border-spacing:0; width:100%; margin:1.1em 0;
+  font-size:.95rem; border:1px solid var(--line); border-radius:0; overflow:hidden;
+  background:rgba(9,8,11,.9);
+}
+thead th{background:rgba(243,230,0,.14); color:#fff8a6; text-align:left; font-weight:800}
+th,td{padding:.68rem .82rem; vertical-align:top; border-bottom:1px solid var(--line); border-right:1px solid var(--line); text-align:left}
+th:last-child,td:last-child{border-right:0}
+tbody tr:last-child td{border-bottom:0}
+tbody tr:nth-child(even){background:rgba(197,0,60,.11)}
+tbody tr:hover{background:rgba(252,238,84,.07)}
+.totop{
+  position:fixed; right:1.5rem; bottom:1.5rem; z-index:30; width:44px; height:44px;
+  border-radius:50%; cursor:pointer; border:1px solid rgba(85,234,212,.6);
+  background:#0d1020; color:var(--cyan); font-size:1.2rem; line-height:1;
+  display:flex; align-items:center; justify-content:center;
+  box-shadow:0 0 24px rgba(85,234,212,.24);
+  opacity:0; visibility:hidden; transition:opacity .2s ease, visibility .2s ease, transform .2s ease;
+}
+.totop.show{opacity:1; visibility:visible}
+.totop:hover{transform:translateY(-2px); color:var(--yellow); border-color:var(--yellow)}
+@media(max-width:920px){
+  body{background-size:34px 34px,34px 34px,auto,auto,auto}
+  .toc{position:static; width:auto; height:auto; overflow:visible; border-right:0; border-bottom:1px solid var(--line)}
+  .content{margin-left:0; margin-right:0; padding:1.15rem 1rem 4rem}
+  .doc-header{padding:1rem}
+  table{display:block; overflow-x:auto}
+}
+@media print{
+  body{background:#fff; color:#111}
+  body::before,.toc,.totop{display:none}
+  .content{margin:0; padding:0}
+  .doc-header,.callout,blockquote{box-shadow:none; background:#fff; color:#111}
+  h1,h2,h3,p,li,td,th{color:#111}
+  a{color:#0645ad}
+}
+
+
+</style>
+</head>
+<body>
+<div class="wrap">
+<nav class="toc" aria-label="Contents">
+<div class="toc-title"><span class="toc-kicker">Organizational Governance</span>Work Intake Is an Organizational System</div>
+<div class="toc-group active" data-tab="foundations">
+<button class="toc-tab" data-tab="foundations">Foundations<span class="toc-sub">Front door, provenance, demand</span></button>
+<ul class="toc-list">
+<li><a href="#thesis">Thesis</a></li>
+<li><a href="#the-receiving-team-trap">The Receiving-Team Trap</a></li>
+<li><a href="#start-with-the-front-door">Start With the Front Door</a></li>
+<li><a href="#provenance-before-convenience">Provenance Before Convenience</a></li>
+</ul>
+</div><div class="toc-group" data-tab="proposal">
+<button class="toc-tab" data-tab="proposal">Proposal<span class="toc-sub">Evidence, discovery, classification</span></button>
+<ul class="toc-list">
+<li><a href="#what-a-work-proposal-must-prove">What a Work Proposal Must Prove</a></li>
+<li><a href="#discovery-and-implementation-are-different-commitments">Discovery and Implementation Are Different Commitments</a></li>
+<li><a href="#requesters-supply-facts-the-system-derives-consequences">Requesters Supply Facts; the System Derives Consequences</a></li>
+</ul>
+</div><div class="toc-group" data-tab="review">
+<button class="toc-tab" data-tab="review">Review<span class="toc-sub">Sequence, authority, decisions</span></button>
+<ul class="toc-list">
+<li><a href="#review-is-ordered-modular-and-decisive">Review Is Ordered, Modular, and Decisive</a></li>
+<li><a href="#review-decisions">Review Decisions</a></li>
+</ul>
+</div><div class="toc-group" data-tab="authorization">
+<button class="toc-tab" data-tab="authorization">Authorization<span class="toc-sub">Execution, capacity, forecasts</span></button>
+<ul class="toc-list">
+<li><a href="#preparation-buys-execution-freedom">Preparation Buys Execution Freedom</a></li>
+<li><a href="#from-proposal-to-authorized-work">From Proposal to Authorized Work</a></li>
+<li><a href="#capacity-is-an-acceptance-decision">Capacity Is an Acceptance Decision</a></li>
+<li><a href="#delivery-changes-the-forecast-not-the-past">Delivery Changes the Forecast, Not the Past</a></li>
+</ul>
+</div><div class="toc-group" data-tab="learning">
+<button class="toc-tab" data-tab="learning">Learning<span class="toc-sub">Reconciliation, practice, adoption</span></button>
+<ul class="toc-list">
+<li><a href="#close-the-loop">Close the Loop</a></li>
+<li><a href="#relationship-to-established-practice">Relationship to Established Practice</a></li>
+<li><a href="#common-failure-modes">Common Failure Modes</a></li>
+<li><a href="#starting-with-one-team">Starting With One Team</a></li>
+<li><a href="#appendix-scope-and-related-documents">Appendix: Scope and Related Documents</a></li>
+</ul>
+</div>
+</nav>
+<main class="content">
+<header class="doc-header">
+<a class="home-link" href="index.html">Library Home</a>
+<p class="eyebrow">Operations / Governance / Work Intake</p>
+<h1>Work Intake Is an Organizational System</h1>
+<p class="lead">A framework for turning demand into authorized work without making receiving teams invent the organization around it.</p>
+<p class="tagline">Work intake is the organizational system that turns authenticated demand into service, bounded discovery, or authorized change.</p>
+<div class="status-row">
+<span class="status-pill">Live draft</span>
+<span class="status-pill">Organizational operating model</span>
+<span class="status-pill">Rendered from Markdown source</span>
+</div>
+</header>
+<div class="tabbar">
+<button class="tabbtn active" data-tab="foundations">Foundations</button><button class="tabbtn" data-tab="proposal">Proposal</button><button class="tabbtn" data-tab="review">Review</button><button class="tabbtn" data-tab="authorization">Authorization</button><button class="tabbtn" data-tab="learning">Learning</button>
+</div>
+<div class="panels">
+<section class="panel active" id="tab-foundations" data-tab="foundations">
+<h2 id="thesis">Thesis</h2>
+<p>Most work-intake processes begin too late.</p>
+<p>They begin when a request reaches a team: Systems Engineering, Network Engineering, Security, Platform Operations, Finance, or another function expected to turn somebody else’s need into work. The receiving team adds a form, renames its queues, publishes new ticket types, and declares that intake has improved. The labels change. The underlying problem does not.</p>
+<p>The team still has to determine whether the request is real, who asked for it, who approved it, where it ranks against other work, which risks the organization will accept, which teams must participate, and what outcome would justify the cost. Those are not team-level intake questions. They are organizational questions that happen to become visible when the work reaches a team.</p>
+<p>This is why so many intake reforms produce half-measures. They start with the place where demand lands instead of the system that created, authorized, and routed the demand.</p>
+<p>Work intake is not merely a form or a queue. It is the organizational system that turns an authenticated request into one of three things:</p>
+<ol type="1">
+<li>a known service delivered through an existing path;</li>
+<li>bounded help or discovery that produces an answer; or</li>
+<li>an authorized change with evidence, ownership, review, capacity, and a later reconciliation point.</li>
+</ol>
+<hr />
+<h2 id="the-receiving-team-trap">The Receiving-Team Trap</h2>
+<p>A football team does not ask a quarterback to decide whether the game should be played, whether the opponent is worth playing, how much the organization should spend on the trip, which risks the front office will accept, and whether the roster can support the plan. The player is responsible for executing within a role, recognizing what changes on the field, and escalating when the play no longer fits reality. The organization around the player supplies the authority, resources, and decision structure.</p>
+<p>Technology organizations routinely reverse that arrangement. A business area asks for a change, then the receiving engineering team is expected to:</p>
+<ul>
+<li>recover the actual need from a proposed solution;</li>
+<li>determine whether the requester has authority;</li>
+<li>locate a sponsor;</li>
+<li>discover hidden dependencies;</li>
+<li>decide whether the work is important;</li>
+<li>estimate work other teams have not accepted;</li>
+<li>identify security, financial, legal, and operational consequences;</li>
+<li>negotiate those consequences informally; and</li>
+<li>absorb the work if the organization never resolves them.</li>
+</ul>
+<p>The team is then blamed for moving slowly, asking too many questions, or inventing process. Yet the questions exist whether the team asks them or not. Skipping them does not make the work simpler. It moves uncertainty out of the planning and pre-planning phases, and into the implementation (execution) phase, where discovery is more expensive and the pressure to accept a bad answer is much higher.</p>
+<p>Local intake still matters. A team should have a clear channel, published services, readiness standards, capacity rules, and a defensible way to reject work it cannot responsibly accept. What local intake cannot do is manufacture missing organizational authority. A Systems Engineering queue cannot decide enterprise priority, accept another function’s risk, commit another team’s capacity, or prove that the business still wants an outcome after the original requester disappears.</p>
+<p>The right team-level answer therefore begins one level higher: define how the organization creates authorized work, then let each team implement its part of that model.</p>
+<hr />
+<h2 id="start-with-the-front-door">Start With the Front Door</h2>
+<p>Not every request is a proposal. Treating every contact as project intake creates ceremony around ordinary service work and teaches requesters to avoid the official path.</p>
+<p>The first decision is categorical:</p>
+<h3 id="incident-or-breakfix">Incident or Break/Fix</h3>
+<p>Something is broken, degraded, unsafe, or actively failing. Response begins through the operational path. An incident does not wait for proposal review. When delaying the first stabilizing action would increase harm, response may begin before a work record exists; the record follows once the immediate danger is controlled.</p>
+<h3 id="standard-service-request">Standard Service Request</h3>
+<p>The organization already provides the capability through a documented, repeatable path. The outcome, required inputs, acceptance conditions, and normal operating procedure have already been decided. The requester supplies the facts needed to instantiate the service.</p>
+<h3 id="general-inquiry">General Inquiry</h3>
+<p>The requester needs time-bounded expert assistance because they do not yet know whether a capability exists or which path applies. The servicing function decides how much inquiry work it can provide under current capacity.</p>
+<p>A General Inquiry may end with an answer, facilitation, or directions to another workflow. It does not become a Work Proposal, and it does not prepopulate one. The customer must knowingly initiate the new request because authorship and accountability are part of the evidence.</p>
+<h3 id="assisted-intake">Assisted Intake</h3>
+<p>The request appears to involve real change, but the customer cannot complete the intake path without help interpreting the process. Assisted Intake answers questions such as: Does this requirement apply? What kind of evidence will satisfy it? Which decision should already have been made? Which function owns the next step?</p>
+<p>This is process navigation, not discovery work. Assisted Intake may explain a requirement, identify a missing prerequisite, or redirect the requester to Security, Architecture, Finance, or another responsible function. It may not perform the research, architecture, design, testing, product comparison, or sustained coordination needed to answer the requester’s underlying question.</p>
+<p>The distinction matters because receiving teams routinely inherit decisions that nobody actually made. A request for a one-terabyte PostgreSQL server is not yet a Systems Engineering provisioning problem merely because somebody submitted it that way. Assisted Intake first asks who approved the platform choice, capacity requirement, operating model, and organizational cost. If those decisions do not exist, the request returns to the workflow that owns them. Systems Engineering does not convert an unsupported implementation assumption into an approved architecture by explaining how it might be built.</p>
+<p>When the missing answer requires substantive work, Assisted Intake has reached its stop condition. The requester must knowingly initiate sponsored discovery through the appropriate path, with a decision-critical question, committed capacity, a timebox, and an expected artifact. Assisted Intake may identify that path, but it does not remain open for months as the container for vendor meetings, technical investigation, or cross-team design. That would make discovery invisible and prevent the organization from distinguishing legitimate research demand from a broken intake question.</p>
+<p>Assisted Intake should record why assistance was necessary: unclear requirement, disputed applicability, missing prerequisite, incorrect route, or discovery needed. If many requesters fail at the same question, the organization should inspect the question, its order, and the level at which it is being applied. Repeated confusion is evidence about the process; it should not be converted into permanent demand for more intake assistance.</p>
+<h3 id="work-proposal">Work Proposal</h3>
+<p>The requester seeks to evaluate or deliver a change that cannot be fulfilled through an existing service request path. The request requires sponsorship, evidence, review, capacity, and an explicit decision before implementation begins.</p>
+<p>These paths should remain separate because they preserve different facts. Converting an inquiry into a proposal or asking a receiving team to submit on a customer’s behalf may feel efficient, but it destroys the cleanest evidence of who knowingly asked the organization to act.</p>
+<hr />
+<h2 id="provenance-before-convenience">Provenance Before Convenience</h2>
+<p>Every request needs an immutable, authenticated record of who initiated it and when. A reporter field that anyone can edit is not authorship. A copied chat message is not approval. A ticket created by the receiving team is evidence that the team created a ticket, not that the customer accepted responsibility for the demand it contains.</p>
+<p>This rule is stricter than common practice because common practice routinely creates fictional accountability. A team member tries to be helpful, translates a conversation into a request, names the customer in a mutable field, and begins work. Months later, the customer disputes the scope, the sponsor says they never approved it, or leadership asks why the team chose this work over something else. The record cannot answer because it never captured the original act of asking.</p>
+<p>Receiving teams may create child work, review modules, implementation records, and other artifacts derived from an authentic parent request. Those records do not pretend to be new customer submissions.</p>
+<blockquote>
+<p>A team may derive work from authenticated demand. It may not manufacture the demand itself.</p>
+</blockquote>
+<hr />
+</section><section class="panel" id="tab-proposal" data-tab="proposal">
+<h2 id="what-a-work-proposal-must-prove">What a Work Proposal Must Prove</h2>
+<p>A Work Proposal is not a project charter in miniature, nor a solution description with approval fields attached. It records enough about the proposed change to support a responsible decision.</p>
+<p>At minimum, it must establish:</p>
+<ul>
+<li><strong>Current State:</strong> what capability, constraint, failure, cost, or operating condition exists now;</li>
+<li><strong>Desired Outcome:</strong> what should become true;</li>
+<li><strong>Required Difference:</strong> the material gap between the current and desired states;</li>
+<li><strong>Requirements:</strong> what the result must do or preserve;</li>
+<li><strong>Acceptance Conditions:</strong> what observable evidence will show that the outcome is real;</li>
+<li><strong>Non-Goals:</strong> what the proposal deliberately does not solve;</li>
+<li><strong>Dependencies:</strong> which systems, teams, vendors, decisions, and external events affect the work;</li>
+<li><strong>Known Uncertainty:</strong> what remains unknown, why it matters, and how the organization expects to resolve it;</li>
+<li><strong>Timing Evidence:</strong> the event or date that matters and the consequence of missing it;</li>
+<li><strong>Operational Ownership:</strong> who will operate, support, and maintain the result; and</li>
+<li><strong>Sponsorship:</strong> who accepts the proposal’s priority claim and organizational tradeoffs.</li>
+</ul>
+<p>The proposal must govern exactly one top-level outcome. That outcome may require one Epic or an Initiative containing several independently valuable Epics. The hierarchy follows the completion condition, not the amount of effort: an Initiative is complete when its organizational outcome becomes true, not merely when every child ticket closes.</p>
+<h3 id="sponsorship-is-an-act">Sponsorship Is an Act</h3>
+<p>A Work Sponsor is not a manager copied on the request. Sponsorship means knowingly authorizing the proposal to consume evaluation or discovery capacity and accepting responsibility for its priority claim and organizational tradeoffs.</p>
+<p>That acceptance must be durable and tied to a specific proposal revision. The organization may capture it through an authenticated workflow action, a retained comment, correspondence, or another record allowed by policy. The tool is negotiable. The evidence is not.</p>
+<p>A sponsor who is also the requester may satisfy both roles through the same authenticated submission when the record explicitly accepts the sponsor obligation. Merely putting a leader’s name in a field proves nothing.</p>
+<hr />
+<h2 id="discovery-and-implementation-are-different-commitments">Discovery and Implementation Are Different Commitments</h2>
+<p>One of the easiest ways to corrupt intake is to treat learning and building as the same authorization.</p>
+<p>Pure discovery exists to produce decision-ready knowledge: an inventory, taxonomy, comparison, architecture, threat model, decision record, or another artifact that reduces uncertainty. It does not authorize implementation. Reviewing existing systems, reading current authoritative guidance, interviewing operators, or comparing external products should not require the entire implementation-governance sequence when the discovery itself creates no comparable operational risk.</p>
+<p>Discovery still needs boundaries. It requires a sponsor, a decision-critical question, an expected artifact, a timebox, and a decision when the timebox ends. If the work touches production, exposes sensitive data, commits material spend, or creates another real consequence, the activity is no longer risk-free merely because somebody called it research.</p>
+<p>Implementation is different. An implementation-ready proposal arrives with architecture and design evidence already available. The organization is no longer deciding what it should believe: it is deciding whether to commit money, technical capacity, operational ownership, and risk to making the proposed change real.</p>
+<p>This produces two distinct readiness states:</p>
+<ul>
+<li><strong>Proposal Readiness:</strong> enough is known to justify evaluation or bounded discovery. Material unknowns may remain, but they are visible.</li>
+<li><strong>Delivery Readiness:</strong> dependencies, ownership, design, risk, capacity, and acceptance responsibilities are confirmed well enough to authorize implementation.</li>
+</ul>
+<p>Sponsorship does not create Delivery Readiness. Architecture does not create budget. Approval does not commit another team’s capacity. Each decision has its own owner because each decision spends or risks something different.</p>
+<p>The <a href="./personal-decision-framework.html">Personal Decision Framework</a> supplies the lighter discovery framing. The <a href="./framing-questions-for-platform-architecture-and-design.html">platform architecture framing guide</a> supplies the architecture and design questions that must be answered before implementation commitments are made. Work intake owns the transition between them; it should not copy either document into a larger form.</p>
+<hr />
+<h2 id="requesters-supply-facts-the-system-derives-consequences">Requesters Supply Facts; the System Derives Consequences</h2>
+<p>Requesters know their current condition, desired outcome, constraints, affected users, timing pressure, and business consequences. They are not necessarily qualified to classify the work those facts create.</p>
+<p>A requester should not select:</p>
+<ul>
+<li>project size;</li>
+<li>enterprise priority;</li>
+<li>required reviewers;</li>
+<li>risk class;</li>
+<li>employee grade;</li>
+<li>named delivery staff; or</li>
+<li>another team’s capacity commitment.</li>
+</ul>
+<p>Those choices create organizational consequences. The intake system should derive them from structured facts using published, auditable rules, then present the result for human review.</p>
+<p>This deterministic core controls classification, required fields, routing, state changes, clocks, escalation, and readiness. AI may help a person write clearly, inspect a rule, or implement an approved workflow change. It should not decide whether a governed condition is true. A probabilistic model is useful when the task tolerates interpretation; it is a poor authority for deciding whether Security Review is mandatory or whether an overdue review clock should escalate.</p>
+<h3 id="keep-unlike-questions-separate">Keep Unlike Questions Separate</h3>
+<p>One universal “project score” collapses unlike concerns and produces false confidence. Intake should preserve at least four separate views:</p>
+<ul>
+<li><strong>Delivery Capacity Profile:</strong> expected labor, elapsed duration, and coordination burden;</li>
+<li><strong>Delivery Size Class:</strong> the highest XS-through-XL band reached by any capacity dimension;</li>
+<li><strong>Financial Commitment Class:</strong> money committed or placed at risk;</li>
+<li><strong>Work Proposal Risk Profile:</strong> likelihood, consequence, blast radius, criticality, reversibility, and affected authority boundaries.</li>
+</ul>
+<p>Priority is separate again. The requester and sponsor provide the priority claim and its evidence. The accountable portfolio authority assigns queue position against existing commitments and available capacity.</p>
+<p>Uncertainty should widen an estimate’s range and lower confidence. It should not automatically make work “large,” nor should lower dimensions average away one material burden. A proposal that consumes little labor but creates a difficult enterprise coordination problem is not small merely because the spreadsheet average says so.</p>
+<p>The sizing model should use one published organizational matrix so portfolio comparisons mean the same thing across teams. An organization may recalibrate the thresholds as it learns, but it should version the rule and preserve the historical classification that governed the original decision.</p>
+<hr />
+</section><section class="panel" id="tab-review" data-tab="review">
+<h2 id="review-is-ordered-modular-and-decisive">Review Is Ordered, Modular, and Decisive</h2>
+<p>An implementation proposal should not explode into an all-reviewer meeting where every function reads the same document at once and waits for somebody else to identify the missing evidence or decision.</p>
+<p>Every participating function should know which decision it owns, what evidence it needs, and which upstream decisions must be complete before its review begins. The organization publishes that sequence. The exact stages differ because companies distribute authority differently, but the order follows the dependencies among the decisions:</p>
+<ol type="1">
+<li>administrative authority decides that the proposal may consume evaluation capacity;</li>
+<li>the Security Review Board evaluates cross-cutting organizational risk;</li>
+<li>financial and technical functions review the proposal after the earlier gates clear; and</li>
+<li>accepted review records assemble into the authoritative proposal artifact.</li>
+</ol>
+<p>Not every review can or should run in parallel. Finance should not spend time constructing a budget for work that Security will reject the next day. Systems Engineering and Network Engineering should not design delivery around a proposal that lacks organizational authority. A rejection at an earlier gate prevents dependent review from beginning.</p>
+<h3 id="authority-and-clocks">Authority and Clocks</h3>
+<p>Every review needs someone responsible for moving it and someone authorized to decide it. The <strong>Review Facilitator</strong> assembles the right reviewers, tracks unknowns and objections, prevents unresolved questions from disappearing, and records the result. The <strong>Decision Owner</strong> has the competence and organizational authority to make the decision across the boundaries under review. One person may perform both jobs, but facilitating the review never grants decision authority.</p>
+<p>Reviews also need published targets for acknowledgement and decision. When a review misses its target, the facilitator escalates it to a named owner or records an extension with a reason and new date. Reassignment, research, and scheduling difficulty inside the reviewing function do not restart the clock. When the review depends on information from somewhere else, the record identifies the missing input, who must supply it, what they must produce, and when it is due.</p>
+<p>Silence authorizes nothing, and the escalation path prevents it from becoming a permanent veto.</p>
+<h3 id="the-security-review-board">The Security Review Board</h3>
+<p>Security is often broader than application security. Depending on the organization, its remit may include information security, physical security, continuity, logistics, environmental threats, fraud, supply-chain exposure, and other risks capable of harming the company or the people who depend on it.</p>
+<p>Security’s position in the sequence follows from the authority it carries. It decides whether the proposal has identified, evidenced, and acceptably treated the risks within its charter before later functions commit money or design delivery around it. When Security decides that the risk exceeds the organization’s tolerance, preference from Finance, Architecture, or an executive does not reverse that decision.</p>
+<p>Security does not receive a separate intake packet. It reviews the same Work Proposal, using the architecture, system boundaries, data flows, applicable standards, control evidence, exception requests, threat model, testable mitigations, and operating responsibilities that its charter requires. Its decision returns to that proposal so downstream teams can verify what Security examined and what it decided.</p>
+<p>The exact questions belong in a companion guide built from the organization’s risk model and authoritative sources. <a href="https://www.nist.gov/publications/nist-cybersecurity-framework-csf-20">NIST Cybersecurity Framework 2.0</a>, <a href="https://csrc.nist.gov/pubs/sp/800/37/r2/final">NIST’s Risk Management Framework</a>, <a href="https://csrc.nist.gov/pubs/sp/800/18/r2/final">system security planning guidance</a>, <a href="https://owaspsamm.org/model/verification/architecture-assessment/">OWASP SAMM</a>, and verification standards such as <a href="https://owasp.org/www-project-application-security-verification-standard/">OWASP ASVS</a> can inform that guide; they do not define this organizational workflow.</p>
+<h3 id="one-contract-different-review-records">One Contract, Different Review Records</h3>
+<p>Each review function keeps the specialist record its decision requires. Security may need a threat model and control evidence; Finance may need a cost model and funding conditions. Forcing both into one universal schema would erase information that only one function is qualified to interpret.</p>
+<p>The intake system still needs a small set of shared facts so it can identify:</p>
+<ul>
+<li>what the review examined;</li>
+<li>which proposal revision it examined;</li>
+<li>who had authority to decide;</li>
+<li>the decision and its timestamp;</li>
+<li>the evidence and assumptions that mattered;</li>
+<li>which boundaries the review did not cover;</li>
+<li>any required next action; and</li>
+<li>whether the record has been superseded.</li>
+</ul>
+<p>Those shared facts allow the system to prove that a decision belongs to the correct proposal revision, came from someone authorized to make it, and has not been replaced by a later decision. The specialist record remains intact.</p>
+<hr />
+<h2 id="review-decisions">Review Decisions</h2>
+<p>Every reviewing function must return a state that tells dependent teams whether they may proceed, perform a bounded test, or stop. The common model has three decisions.</p>
+<h3 id="approved">Approved</h3>
+<p>The proposal satisfies the function’s requirements for the decision under review. Approval applies only to the recorded proposal revision and the facts, evidence, assumptions, and boundaries the function actually examined.</p>
+<h3 id="conditional-approval">Conditional Approval</h3>
+<p>A critical variable cannot be known until later, but the concern is specific and testable. Conditional Approval authorizes only the bounded discovery work needed to produce the missing evidence.</p>
+<p>The condition must state:</p>
+<ul>
+<li>the variable being tested;</li>
+<li>the evidence that counts as passing or failing;</li>
+<li>the work permitted to produce that evidence;</li>
+<li>the owner and timebox; and</li>
+<li>the decision that follows each possible result.</li>
+</ul>
+<p>Conditional Approval is not approval with cleanup attached. The review remains unresolved, and general implementation remains unauthorized. After the test, the original reviewing authority approves, rejects, or authorizes another bounded test with a new question, expected result, owner, and timebox.</p>
+<h3 id="review-rejection">Review Rejection</h3>
+<p>The current proposal revision fails a governing standard, risk decision, requirement, or other mandatory condition. Reviews and delivery decisions that depend on the rejected result stop. Other approvals cannot offset it.</p>
+<p>A request for more testing is not Review Rejection. If bounded proof could responsibly resolve the question, the correct state is Conditional Approval.</p>
+<h3 id="the-proposer-carries-the-evidence">The Proposer Carries the Evidence</h3>
+<p>The proposer must identify applicable standards, supply evidence of conformance, or explain why a standard does not apply and why an exception should be granted.</p>
+<p>If the proposal supplies no credible compliance case, the reviewing function may reject it categorically. The reviewer is not responsible for proving every possible failure or building the proposal on the requester’s behalf.</p>
+<p>Specific evidence changes the reviewer’s obligation. If the proposer claims one control satisfies several requirements, the reviewer must identify why that control does not satisfy them. If the proposal maps some requirements but omits another, the reviewer must identify the material omission. The required specificity follows the case actually presented:</p>
+<blockquote>
+<p>If no compliance case exists, categorical rejection is enough. Once the proposer makes a specific case, the reviewer must identify a specific defect.</p>
+</blockquote>
+<p>This is not a courtroom. The organization is deciding whether to spend money and capacity, and whether to accept the risk. The burden belongs to the person asking it to act.</p>
+<hr />
+</section><section class="panel" id="tab-authorization" data-tab="authorization">
+<h2 id="preparation-buys-execution-freedom">Preparation Buys Execution Freedom</h2>
+<p>Upfront review gives downstream teams the decisions they need to execute without reopening the proposal. When an authorized request reaches Infrastructure, “Did Security approve this?” should be answered by inspecting the artifact, not by scheduling another round of meetings. The same is true of architecture, finance, procurement, ownership, and every other prerequisite represented in the approved state. The receiving team verifies the record; it does not relitigate the decisions that produced it.</p>
+<p>That trust applies only within the approved boundaries. Materially changing the outcome, requirement, risk, or operating model still requires the appropriate new decision. Inside those boundaries, however, the organization should be able to move. Requirements do not need to be re-proven at every handoff, downstream teams do not have to reconstruct the history from chat messages, and implementation does not repeatedly double back to answer questions that belonged in discovery.</p>
+<p>This does not repeal Murphy’s Law. Estimates will change, dependencies will fail, implementation will expose new constraints, and people will still make mistakes. Work Intake cannot guarantee smooth execution. It prevents a different class of failure: predictable cycles of requirements reverification, accidental scope expansion, and late discovery that a supposedly settled decision was never actually made.</p>
+<p>A security-tool replacement, for example, can complete its technical migration and still fail its users because a dashboard from the old system was never captured as a requirement. “No one thought to ask the question” is not merely an implementation problem when the missing question changes whether the replacement satisfies the original need. It is evidence that discovery and review did not follow the consequence tree far enough before the organization committed to an answer.</p>
+<p>Golf makes the same point with less paperwork. A tiny change in the clubface angle at contact can separate a shot down the fairway from one deep in the woods. The visible failure happens far from the original deviation, but that does not mean the deviation was unimportant. Early questions work the same way: a small correction before commitment can change the entire downstream tree.</p>
+<p>Developing a process that consistently produces authorized, implementation-ready work takes effort. Enforcing it takes more. Developing a swing that consistently finds the fairway also takes effort. The organization has to decide what game it is playing. Are we playing for beers, or are we playing for Majors? It cannot prepare for the former and demand the results of the latter.</p>
+<hr />
+<h2 id="from-proposal-to-authorized-work">From Proposal to Authorized Work</h2>
+<p>Human review should produce durable records, not a trail of comments that somebody later summarizes from memory.</p>
+<p>An accepted review record enters the final Work Proposal only after the system verifies that it belongs to the correct proposal revision, carries an approved decision, and has not been altered or duplicated. Assembly preserves the specialist conclusion as written. It does not replace disagreements with an AI-generated consensus that no reviewer approved.</p>
+<p>Once every required review has cleared, the proposal becomes an <strong>Authorized Work Proposal</strong>. That revision does not change. It governs one top-level outcome and records the scope, constraints, acceptance authority, review decisions, and organizational commitments that permit delivery to begin.</p>
+<p>Delivery records refine execution. They do not rewrite authority.</p>
+<p>An Epic, story, work package, task, sprint backlog, or implementation plan may change the sequence, approach, estimate, or local decomposition as evidence improves. None may silently change the approved outcome, boundary, constraint, or acceptance condition. Those changes require an approved superseding proposal revision.</p>
+<p>Initiative approval is not blanket implementation permission for every child Epic. Each child begins only when it reaches Delivery Readiness and receives the capacity and specialized approvals its work requires. This permits adaptive delivery without converting “Agile” into an exemption from planning or authority.</p>
+<p>Authorization also needs a sponsor. If the sponsor leaves or withdraws, discretionary work does not continue forever through momentum. The existing rules determine whether a replacement sponsor accepts the work, the work pauses, or delivery ends. Anything left running must have an owner and an exit plan under <a href="./Managed-Runoff-for-Deprecated-Services.html">Managed Runoff</a>.</p>
+<p>The authoritative source belongs in a central, version-controlled repository. Ticket attachments, rendered pages, dashboards, and published copies link back to it. Accepted artifacts should be readable across the organization by default. Restricted work must identify why access is limited, who owns the restriction, when it will be reviewed, and what coordination information can be published safely.</p>
+<hr />
+<h2 id="capacity-is-an-acceptance-decision">Capacity Is an Acceptance Decision</h2>
+<p>Routing work to a team does not commit that team’s capacity.</p>
+<p>A dependency may be known without being planned. Discovery may require a team to provide access or expertise without committing it to later implementation. Delivery begins only when the receiving team accepts named work, ownership, and capacity within a Planning Interval.</p>
+<p>Where an approved Initiative cannot provide an exact handoff date, a dependency team may hold a Conditional Dependency Reservation for a defined interval and cutoff. If upstream work fails to activate or renew the reservation, the team releases the capacity. A late arrival does not automatically jump the queue.</p>
+<p>If leadership directs a team to drop committed work for something new, that choice must be visible. The record identifies who made it, what got displaced, why the normal queue was bypassed, and which delay or consequence they accepted. This is an <strong>Accountable Priority Override</strong>.</p>
+<p>Routing work to a team does not mean that any available engineer can do it. The team’s technical reviewer decides what expertise, ownership, and support the work requires; the capacity owner decides whether the team can provide them.</p>
+<p>If the team cannot provide what the work requires, the organization must change the staffing, schedule, scope, or source of expertise. It cannot pretend the work became easier because the right people were unavailable.</p>
+<p>The <a href="./DevOps-SRE-Career-Progression-Guide.html">Career Progression Guide</a> explains how the team makes the staffing decision. The <a href="./Writing Work Items - Epics, Stories, and Tasks.html">work-item guide</a> explains how the approved outcome becomes Epics, stories, work packages, and tasks. Work Intake only needs the answers: has the team accepted the staffing and capacity, and does the delivery work still match what was approved?</p>
+<hr />
+<h2 id="delivery-changes-the-forecast-not-the-past">Delivery Changes the Forecast, Not the Past</h2>
+<p>When implementation is approved, the organization records the estimate it used to commit capacity. That becomes the <strong>Approved Delivery Baseline</strong>: a record of what everyone believed when the decision was made.</p>
+<p>As the team learns more, it updates the <strong>Delivery Forecast</strong>. The baseline records what the organization thought then; the forecast records what it thinks now. Keeping both allows the organization to plan honestly without erasing whether its original assumptions were any good.</p>
+<p>If the new forecast requires substantially more capacity, someone with authority over the affected priorities must accept the larger commitment. If the desired outcome, scope, requirement, boundary, or acceptance condition changes, the proposal must change.</p>
+<p>The delivery team may change how it builds the approved thing. It may not quietly decide to build a different thing.</p>
+<hr />
+</section><section class="panel" id="tab-learning" data-tab="learning">
+<h2 id="close-the-loop">Close the Loop</h2>
+<p>Authorization is a prediction. The organization is saying that the proposed change is worth making, the design can work, the risks are acceptable, the required capacity is available, and everyone will be able to recognize success when they see it.</p>
+<p>Completion should test those predictions.</p>
+<h3 id="did-the-work-do-what-we-approved">Did the Work Do What We Approved?</h3>
+<p>When delivery ends, compare the state at the end with the state at the beginning. Did the desired outcome become true? Did the result meet its requirements and remain inside its approved boundaries? How did the actual labor, time, and coordination compare with the original estimate and later forecasts? Which assumptions held, which risks appeared, and what operating burden remains?</p>
+<p>Do not rewrite the approved proposal to make the original decision look better. Preserve it, then attach a record of what happened, what the organization learned, and what should change before similar work is approved again.</p>
+<h3 id="is-work-intake-working">Is Work Intake Working?</h3>
+<p>Every proposal also produces evidence about the process that handled it. Record where requests were returned, which questions caused confusion, which reviews discovered missing information, how much rework followed, and which exceptions kept recurring.</p>
+<p>A repeated problem from one submitter calls for a different response than the same problem appearing across many submissions. When failures remain concentrated around one submitter after guidance, education or additional review may be appropriate. When many people fail at the same point, the process often needs refinement.</p>
+<p>Suppose an application team submits evidence as JSON documents, but Compliance requires the data in XML, so a compliance analyst manually transforms every request. The compliance review may be mandatory; manually translating the same fields for every request is not. The organization could preserve the control while changing the interface, automating the conversion, or collecting the evidence in the required format from the beginning. Until someone separates the requirement from the handoff, every request carries the same avoidable delay.</p>
+<p>Recurring rework is not merely the cost of doing business. Fix the confusing step, automate the mechanical part, remove the unnecessary requirement, or make an explicit decision that the remaining effort is worth its cost.</p>
+<hr />
+<h2 id="relationship-to-established-practice">Relationship to Established Practice</h2>
+<p>Work Intake sits at the intersection of several established bodies of practice:</p>
+<ul>
+<li>from <strong>ITIL</strong>, the distinction among events, incidents, service requests, catalogs, and request management;</li>
+<li>from <strong>PMI-style project governance</strong>, sponsorship, formal authorization, estimation, change control, decision records, and closure;</li>
+<li>from <strong>Lean and Six Sigma</strong>, visible waste, defect evidence, feedback loops, and process correction;</li>
+<li>from <strong>Agile</strong>, adaptive execution and shorter evidence-producing loops;</li>
+<li>from <strong>Scrum and Scrumban</strong>, possible Planning Interval implementations rather than universal intake requirements;</li>
+<li>from <strong>NIST</strong>, risk governance, accountable authorization, security planning, control evidence, and reauthorization after meaningful change; and</li>
+<li>from <strong>OWASP</strong>, threat modeling, architecture assessment, and testable security requirements.</li>
+</ul>
+<p>Each discipline addresses part of the problem. This model connects them around the Work Proposal so that authorization, architecture, risk, funding, capacity, delivery, and acceptance do not become separate conversations whose conclusions disappear before the next team begins its work.</p>
+<p>I have reviewed proposed work, evaluated security-related concerns, challenged whether solutions were viable and appropriate, and decided whether work was ready to continue within my authority. That is the class of work this document describes. Performing it does not require one person to know every question that Security, Finance, Procurement, Privacy, Legal, Architecture, and each delivery function must ask.</p>
+<p>The document therefore stops at the shared structure of review: which function must decide, when it must decide, what evidence it receives, what its decision authorizes, and how that decision reaches the teams that depend on it. Specialist teams should define their own questions, standards, and evidence in companion guides. Work Intake makes those reviews part of one traceable decision process without pretending their expertise is interchangeable.</p>
+<hr />
+<h2 id="common-failure-modes">Common Failure Modes</h2>
+<h3 id="the-new-form-is-the-old-process">The New Form Is the Old Process</h3>
+<p>The organization renames request types and adds required fields, but the same team still reconstructs sponsorship, priority, architecture, risk, and dependencies after submission.</p>
+<h3 id="the-receiving-team-creates-the-request">The Receiving Team Creates the Request</h3>
+<p>A helpful engineer converts a conversation into customer demand. Authorship disappears, and the team inherits responsibility for a need it did not create.</p>
+<h3 id="requesters-select-consequential-labels">Requesters Select Consequential Labels</h3>
+<p>The form asks for project size, urgency, required reviewers, or staff grade. Preference becomes classification.</p>
+<h3 id="approval-is-treated-as-readiness">Approval Is Treated as Readiness</h3>
+<p>A sponsor supports the outcome, so implementation begins around unresolved dependencies, design questions, ownership, or acceptance conditions.</p>
+<h3 id="every-review-starts-at-once">Every Review Starts at Once</h3>
+<p>The organization creates an all-reviewer firehose. Downstream functions spend time on work an earlier gate later rejects.</p>
+<h3 id="security-is-added-at-go-live">Security Is Added at Go-Live</h3>
+<p>The work becomes operationally and politically expensive before the organization asks whether the risk is acceptable. Review still occurs, but leverage has disappeared.</p>
+<h3 id="conditional-approval-becomes-soft-approval">Conditional Approval Becomes Soft Approval</h3>
+<p>The team begins general implementation while a vague condition remains open. The minimum proof step quietly becomes sunk cost.</p>
+<h3 id="review-rejection-becomes-a-vote">Review Rejection Becomes a Vote</h3>
+<p>Several approvals are treated as enough to outweigh one mandatory no. The organization averages unlike authorities until it gets the answer it wanted.</p>
+<h3 id="dependencies-are-mistaken-for-commitments">Dependencies Are Mistaken for Commitments</h3>
+<p>A proposal lists another team, so planning assumes that team’s capacity. The receiving team discovers the promise only when the handoff arrives.</p>
+<h3 id="delivery-records-rewrite-authority">Delivery Records Rewrite Authority</h3>
+<p>Backlog refinement, implementation learning, or a stakeholder comment changes the outcome or boundary without a superseding proposal revision.</p>
+<h3 id="nobody-reconciles-the-outcome">Nobody Reconciles the Outcome</h3>
+<p>The project closes, the original prediction disappears, and the next proposal begins with the same organizational amnesia.</p>
+<hr />
+<h2 id="starting-with-one-team">Starting With One Team</h2>
+<p>A single team cannot create the missing parts of an organization’s governance system, but it can stop pretending that missing decisions have been made. Systems Engineering can enforce the conditions under which it will accept work without claiming the authority to decide priorities, approve architectures, accept security risk, commit funding, or promise another team’s capacity.</p>
+<p>A local process can begin with six rules:</p>
+<ol type="1">
+<li><strong>Require an authenticated request.</strong> A conversation may clarify what someone needs, but it does not authorize planned work. The customer must create the record that asks the team to act.</li>
+<li><strong>Route the request before evaluating it.</strong> Incidents belong in the operational path, repeatable services belong in the service catalog, and bounded questions belong in General Inquiry. A Work Proposal is reserved for a proposed change, irrespective of whether the change requires formal CAB processes.</li>
+<li><strong>Require enough information to make a decision.</strong> The proposal identifies the current condition, the desired outcome, the evidence that will demonstrate success, the known dependencies and uncertainties, and the sponsor asking the organization to spend capacity on it.</li>
+<li><strong>Return missing decisions to their owners.</strong> If priority, architecture, security approval, funding, or another team’s commitment is unresolved, Systems Engineering records the gap and routes it to the function authorized to decide. The team does not infer approval from silence or create it on someone else’s behalf.</li>
+<li><strong>Publish what the team needs before it will accept work.</strong> Requesters should be able to see which standards apply, what evidence Systems Engineering reviews, who must accept operational ownership, and how the team decides whether it has capacity.</li>
+<li><strong>Record exceptions without rewriting the history.</strong> If someone with the necessary authority orders the team to bypass a condition, the record identifies who made the decision, which work they displaced, which risk they accepted, and what Systems Engineering declined to certify as true.</li>
+</ol>
+<p>Assisted Intake also requires experienced ownership. IC5 engineers should be able to recognize properly approved work, identify missing decisions, and explain the route back to them. Late-IC4 engineers may participate in bounded cases under guidance. IC6 engineers should be able to explain and coordinate the process across team and sub-organizational boundaries because those boundaries are part of the work they are expected to navigate.</p>
+<p>A team that quietly reconstructs missing context makes the organizational failure disappear into engineering labor. Leadership sees a slow delivery team, not the missing sponsor, unmade decision, or unresolved dependency that consumed the time. Recording the gap, its owner, and its consequence preserves evidence that the organization can use to repair the larger process.</p>
+<blockquote>
+<p>This process governs what Systems Engineering can responsibly accept. It does not authorize Systems Engineering to make decisions assigned to other functions.</p>
+</blockquote>
+<p>Claiming more would recreate the original failure: Systems Engineering would once again be inventing the organization around the request.</p>
+<hr />
+<h2 id="appendix-scope-and-related-documents">Appendix: Scope and Related Documents</h2>
+<p>This document defines the architecture of Work Intake:</p>
+<ul>
+<li>front-door classification;</li>
+<li>submission provenance;</li>
+<li>sponsorship;</li>
+<li>proposal and delivery readiness;</li>
+<li>deterministic classification and routing;</li>
+<li>ordered, modular review;</li>
+<li>common review decisions;</li>
+<li>artifact assembly and authority;</li>
+<li>capacity acceptance; and</li>
+<li>outcome and process reconciliation.</li>
+</ul>
+<p>It does not define every function’s internal procedure.</p>
+<ul>
+<li><a href="./framing-questions-for-platform-architecture-and-design.html">Framing Questions for Platform Architecture and Design</a> owns architecture and design framing.</li>
+<li><a href="./RFPs-and-Vendor-Selection-as-Evidence-Systems.html">RFPs and Vendor Selection as Evidence Systems</a> owns external capability acquisition, vendor claims, proofs of concept, acceptance, and operational risk transfer.</li>
+<li><a href="./personal-decision-framework.html">Personal Decision Framework</a> owns lightweight discovery framing and early intent categories.</li>
+<li><a href="./DevOps-SRE-Career-Progression-Guide.html">Career Progression Guide</a> owns operating levels, technical-review expectations, and Staff+ responsibilities.</li>
+<li><a href="./Writing Work Items - Epics, Stories, and Tasks.html">Writing Work Items</a> owns delivery hierarchy and work-item construction.</li>
+<li><a href="./Managed-Runoff-for-Deprecated-Services.html">Managed Runoff</a> owns deprecated systems and live remnants after discretionary investment ends.</li>
+</ul>
+<p>Security, Finance, Procurement, Privacy, Legal, and technical-delivery functions may require companion guides and templates. Those guides should use the same Work Proposal and add their decisions to it. They should not recreate intake as a collection of disconnected departmental forms.</p>
+</section>
+</div>
+</main>
+</div>
+<button class="totop" id="totop" title="Back to top" aria-label="Back to top">↑</button>
+<script>
+
+(function(){
+  function activate(name){
+    document.querySelectorAll('.panel').forEach(function(p){
+      p.classList.toggle('active', p.dataset.tab === name);
+    });
+    document.querySelectorAll('.toc-group').forEach(function(g){
+      g.classList.toggle('active', g.dataset.tab === name);
+    });
+    document.querySelectorAll('.tabbtn').forEach(function(b){
+      b.classList.toggle('active', b.dataset.tab === name);
+    });
+  }
+  function panelTabOf(el){
+    var panel = el.closest('.panel');
+    return panel ? panel.dataset.tab : null;
+  }
+  function go(id, smooth){
+    var el = document.getElementById(id);
+    if(!el) return false;
+    var tab = panelTabOf(el);
+    if(tab) activate(tab);
+    el.scrollIntoView(smooth ? {behavior:'smooth', block:'start'} : {block:'start'});
+    return true;
+  }
+  document.querySelectorAll('.tabbtn, .toc-tab').forEach(function(btn){
+    btn.addEventListener('click', function(e){
+      e.preventDefault();
+      activate(btn.dataset.tab);
+      window.scrollTo({top:0, left:0, behavior:'smooth'});
+      history.replaceState(null, '', location.pathname);
+    });
+  });
+  document.addEventListener('click', function(e){
+    var a=e.target.closest('a[href^="#"]');
+    if(!a) return;
+    var id=decodeURIComponent(a.getAttribute('href').slice(1));
+    if(!id) return;
+    if(go(id, true)){
+      e.preventDefault();
+      history.replaceState(null, '', '#' + id);
+    }
+  });
+  var top=document.getElementById('totop');
+  function onScroll(){ if(top) top.classList.toggle('show', window.scrollY>420); }
+  window.addEventListener('scroll', onScroll, {passive:true});
+  onScroll();
+  if(top){
+    top.addEventListener('click', function(){
+      window.scrollTo({top:0, left:0, behavior:'smooth'});
+    });
+  }
+  if(location.hash){
+    if(!go(decodeURIComponent(location.hash.slice(1)), false)) activate(document.querySelector('.panel.active')?.dataset.tab || document.querySelector('.tabbtn')?.dataset.tab || 'overview');
+  } else {
+    activate(document.querySelector('.panel.active')?.dataset.tab || document.querySelector('.tabbtn')?.dataset.tab || 'overview');
+  }
+  window.__docTabs = {activate: activate, go: go};
+})();
+
+
+</script>
+</body>
+</html>
