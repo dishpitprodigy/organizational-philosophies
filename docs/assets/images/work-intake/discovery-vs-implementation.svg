@@ -1,0 +1,109 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 760" role="img" aria-labelledby="title desc">
+<title id="title">Learning and building require different authority</title>
+<desc id="desc">Discovery may produce evidence for an implementation proposal, but it never authorizes implementation by itself.</desc>
+
+<defs>
+  <marker id="arrow-ink" markerWidth="10" markerHeight="10" refX="8" refY="3"
+          orient="auto" markerUnits="strokeWidth">
+    <path d="M0,0 L0,6 L9,3 z" fill="#111111"/>
+  </marker>
+  <marker id="arrow-red" markerWidth="10" markerHeight="10" refX="8" refY="3"
+          orient="auto" markerUnits="strokeWidth">
+    <path d="M0,0 L0,6 L9,3 z" fill="#ad0034"/>
+  </marker>
+  <marker id="arrow-cyan" markerWidth="10" markerHeight="10" refX="8" refY="3"
+          orient="auto" markerUnits="strokeWidth">
+    <path d="M0,0 L0,6 L9,3 z" fill="#007f7b"/>
+  </marker>
+  <marker id="arrow-green" markerWidth="10" markerHeight="10" refX="8" refY="3"
+          orient="auto" markerUnits="strokeWidth">
+    <path d="M0,0 L0,6 L9,3 z" fill="#2f7d32"/>
+  </marker>
+  <pattern id="hatch" width="10" height="10" patternUnits="userSpaceOnUse"
+           patternTransform="rotate(45)">
+    <rect width="10" height="10" fill="#fffdf5"/>
+    <line x1="0" y1="0" x2="0" y2="10" stroke="#111111" stroke-width="2" opacity=".22"/>
+  </pattern>
+  <pattern id="grid" width="24" height="24" patternUnits="userSpaceOnUse">
+    <rect width="24" height="24" fill="#f5efdc"/>
+    <path d="M24 0H0V24" fill="none" stroke="#111111" stroke-width="1" opacity=".08"/>
+  </pattern>
+  <style>
+    text { font-family: "Helvetica Neue", Arial, sans-serif; }
+    .label { font-size: 15px; font-weight: 800; letter-spacing: 1.8px; }
+    .title { font-size: 34px; font-weight: 800; }
+    .subtitle { font-size: 17px; fill: #5f5a4e; }
+    .box-title { font-size: 20px; font-weight: 800; }
+    .box-copy { font-size: 16px; fill: #3f3b34; }
+    .small { font-size: 14px; fill: #5f5a4e; }
+    .tiny { font-size: 12px; fill: #5f5a4e; letter-spacing: .5px; }
+  </style>
+</defs>
+
+<rect width="1200" height="760" fill="#f5efdc"/>
+<rect x="18" y="18" width="1164" height="724" fill="none" stroke="#111111" stroke-width="2"/>
+<rect x="30" y="30" width="1140" height="700" fill="none" stroke="none"/>
+<text x="58" y="60" font-size="15" font-weight="800" fill="#ad0034" text-anchor="start" letter-spacing="1.8"><tspan x="58" dy="0">WORK INTAKE / SYSTEM FIGURE</tspan></text>
+<text x="58" y="102" font-size="34" font-weight="800" fill="#111111" text-anchor="start" letter-spacing="0"><tspan x="58" dy="0">Learning and building require different authority</tspan></text>
+<text x="58" y="132" font-size="17" font-weight="400" fill="#5f5a4e" text-anchor="start" letter-spacing="0"><tspan x="58" dy="0">Discovery may produce evidence for an implementation proposal, but it never authorizes implementation by itself.</tspan></text>
+<line x1="58" y1="151" x2="1142" y2="151" stroke="#111111" stroke-width="2"/>
+<text x="60" y="197" font-size="16" font-weight="800" fill="#007f7b" text-anchor="start" letter-spacing="1.2"><tspan x="60" dy="0">BOUNDED DISCOVERY</tspan></text>
+<rect x="60" y="220" width="185" height="105" rx="0" fill="#fffdf5" stroke="#007f7b" stroke-width="3"/>
+<rect x="60" y="220" width="42" height="35" rx="0" fill="#007f7b" stroke="#007f7b" stroke-width="2"/>
+<text x="81" y="244" font-size="16" font-weight="800" fill="#fffdf5" text-anchor="middle" letter-spacing="0"><tspan x="81" dy="0">1</tspan></text>
+<text x="114" y="248" font-size="19" font-weight="800" fill="#111111" text-anchor="start" letter-spacing="0"><tspan x="114" dy="0">QUESTION</tspan></text>
+<text x="76" y="275" font-size="15" font-weight="400" fill="#5f5a4e" text-anchor="start" letter-spacing="0"><tspan x="76" dy="0">Decision-critical</tspan></text>
+<line x1="245" y1="272" x2="285" y2="272" stroke="#007f7b" stroke-width="3" marker-end="url(#arrow-cyan)"/>
+<rect x="285" y="220" width="185" height="105" rx="0" fill="#fffdf5" stroke="#007f7b" stroke-width="3"/>
+<rect x="285" y="220" width="42" height="35" rx="0" fill="#007f7b" stroke="#007f7b" stroke-width="2"/>
+<text x="306" y="244" font-size="16" font-weight="800" fill="#fffdf5" text-anchor="middle" letter-spacing="0"><tspan x="306" dy="0">2</tspan></text>
+<text x="339" y="248" font-size="19" font-weight="800" fill="#111111" text-anchor="start" letter-spacing="0"><tspan x="339" dy="0">TIMEBOX</tspan></text>
+<text x="301" y="275" font-size="15" font-weight="400" fill="#5f5a4e" text-anchor="start" letter-spacing="0"><tspan x="301" dy="0">Capacity bounded</tspan></text>
+<line x1="470" y1="272" x2="510" y2="272" stroke="#007f7b" stroke-width="3" marker-end="url(#arrow-cyan)"/>
+<rect x="510" y="220" width="185" height="105" rx="0" fill="#fffdf5" stroke="#007f7b" stroke-width="3"/>
+<rect x="510" y="220" width="42" height="35" rx="0" fill="#007f7b" stroke="#007f7b" stroke-width="2"/>
+<text x="531" y="244" font-size="16" font-weight="800" fill="#fffdf5" text-anchor="middle" letter-spacing="0"><tspan x="531" dy="0">3</tspan></text>
+<text x="564" y="248" font-size="19" font-weight="800" fill="#111111" text-anchor="start" letter-spacing="0"><tspan x="564" dy="0">ARTIFACT</tspan></text>
+<text x="526" y="275" font-size="15" font-weight="400" fill="#5f5a4e" text-anchor="start" letter-spacing="0"><tspan x="526" dy="0">Evidence produced</tspan></text>
+<line x1="695" y1="272" x2="735" y2="272" stroke="#007f7b" stroke-width="3" marker-end="url(#arrow-cyan)"/>
+<rect x="735" y="220" width="185" height="105" rx="0" fill="#fffdf5" stroke="#007f7b" stroke-width="3"/>
+<rect x="735" y="220" width="42" height="35" rx="0" fill="#007f7b" stroke="#007f7b" stroke-width="2"/>
+<text x="756" y="244" font-size="16" font-weight="800" fill="#fffdf5" text-anchor="middle" letter-spacing="0"><tspan x="756" dy="0">4</tspan></text>
+<text x="789" y="248" font-size="19" font-weight="800" fill="#111111" text-anchor="start" letter-spacing="0"><tspan x="789" dy="0">DECISION</tspan></text>
+<text x="751" y="275" font-size="15" font-weight="400" fill="#5f5a4e" text-anchor="start" letter-spacing="0"><tspan x="751" dy="0">Stop, continue,</tspan><tspan x="751" dy="20">or propose change</tspan></text>
+<path d="M920,325 L920,385 L600,385 L600,438" fill="none" stroke="#111111" stroke-width="3" stroke-dasharray="9 7" marker-end="url(#arrow-ink)"/>
+<rect x="472" y="365" width="256" height="34" rx="17" fill="#fff8e0" stroke="#ad0034" stroke-width="2"/>
+<text x="600.0" y="388" font-size="13" font-weight="800" fill="#111111" text-anchor="middle" letter-spacing="0.4"><tspan x="600.0" dy="0">NEW AUTHORIZATION REQUIRED</tspan></text>
+<text x="60" y="447" font-size="16" font-weight="800" fill="#ad0034" text-anchor="start" letter-spacing="1.2"><tspan x="60" dy="0">IMPLEMENTATION</tspan></text>
+<rect x="60" y="470" width="180" height="110" rx="0" fill="#fffdf5" stroke="#ad0034" stroke-width="3"/>
+<rect x="60" y="470" width="42" height="35" rx="0" fill="#ad0034" stroke="#ad0034" stroke-width="2"/>
+<text x="81" y="494" font-size="16" font-weight="800" fill="#fffdf5" text-anchor="middle" letter-spacing="0"><tspan x="81" dy="0">1</tspan></text>
+<text x="114" y="498" font-size="16" font-weight="800" fill="#111111" text-anchor="start" letter-spacing="0"><tspan x="114" dy="0">DESIGN EVIDENCE</tspan></text>
+<text x="76" y="525" font-size="15" font-weight="400" fill="#5f5a4e" text-anchor="start" letter-spacing="0"><tspan x="76" dy="0">Architecture</tspan><tspan x="76" dy="20">and boundaries</tspan></text>
+<line x1="240" y1="525" x2="285" y2="525" stroke="#ad0034" stroke-width="3" marker-end="url(#arrow-red)"/>
+<rect x="285" y="470" width="180" height="110" rx="0" fill="#fffdf5" stroke="#ad0034" stroke-width="3"/>
+<rect x="285" y="470" width="42" height="35" rx="0" fill="#ad0034" stroke="#ad0034" stroke-width="2"/>
+<text x="306" y="494" font-size="16" font-weight="800" fill="#fffdf5" text-anchor="middle" letter-spacing="0"><tspan x="306" dy="0">2</tspan></text>
+<text x="339" y="498" font-size="16" font-weight="800" fill="#111111" text-anchor="start" letter-spacing="0"><tspan x="339" dy="0">GOVERNED REVIEW</tspan></text>
+<text x="301" y="525" font-size="15" font-weight="400" fill="#5f5a4e" text-anchor="start" letter-spacing="0"><tspan x="301" dy="0">Risk, money,</tspan><tspan x="301" dy="20">ownership</tspan></text>
+<line x1="465" y1="525" x2="510" y2="525" stroke="#ad0034" stroke-width="3" marker-end="url(#arrow-red)"/>
+<rect x="510" y="470" width="180" height="110" rx="0" fill="#fffdf5" stroke="#ad0034" stroke-width="3"/>
+<rect x="510" y="470" width="42" height="35" rx="0" fill="#ad0034" stroke="#ad0034" stroke-width="2"/>
+<text x="531" y="494" font-size="16" font-weight="800" fill="#fffdf5" text-anchor="middle" letter-spacing="0"><tspan x="531" dy="0">3</tspan></text>
+<text x="564" y="498" font-size="16" font-weight="800" fill="#111111" text-anchor="start" letter-spacing="0"><tspan x="564" dy="0">CAPACITY</tspan></text>
+<text x="526" y="525" font-size="15" font-weight="400" fill="#5f5a4e" text-anchor="start" letter-spacing="0"><tspan x="526" dy="0">Teams accept</tspan><tspan x="526" dy="20">named work</tspan></text>
+<line x1="690" y1="525" x2="735" y2="525" stroke="#ad0034" stroke-width="3" marker-end="url(#arrow-red)"/>
+<rect x="735" y="470" width="180" height="110" rx="0" fill="#fffdf5" stroke="#ad0034" stroke-width="3"/>
+<rect x="735" y="470" width="42" height="35" rx="0" fill="#ad0034" stroke="#ad0034" stroke-width="2"/>
+<text x="756" y="494" font-size="16" font-weight="800" fill="#fffdf5" text-anchor="middle" letter-spacing="0"><tspan x="756" dy="0">4</tspan></text>
+<text x="789" y="498" font-size="16" font-weight="800" fill="#111111" text-anchor="start" letter-spacing="0"><tspan x="789" dy="0">DELIVERY</tspan></text>
+<text x="751" y="525" font-size="15" font-weight="400" fill="#5f5a4e" text-anchor="start" letter-spacing="0"><tspan x="751" dy="0">Build inside</tspan><tspan x="751" dy="20">approved scope</tspan></text>
+<line x1="915" y1="525" x2="960" y2="525" stroke="#ad0034" stroke-width="3" marker-end="url(#arrow-red)"/>
+<rect x="960" y="470" width="180" height="110" rx="0" fill="#fffdf5" stroke="#ad0034" stroke-width="3"/>
+<rect x="960" y="470" width="42" height="35" rx="0" fill="#ad0034" stroke="#ad0034" stroke-width="2"/>
+<text x="981" y="494" font-size="16" font-weight="800" fill="#fffdf5" text-anchor="middle" letter-spacing="0"><tspan x="981" dy="0">5</tspan></text>
+<text x="1014" y="498" font-size="16" font-weight="800" fill="#111111" text-anchor="start" letter-spacing="0"><tspan x="1014" dy="0">ACCEPTANCE</tspan></text>
+<text x="976" y="525" font-size="15" font-weight="400" fill="#5f5a4e" text-anchor="start" letter-spacing="0"><tspan x="976" dy="0">Test the</tspan><tspan x="976" dy="20">prediction</tspan></text>
+<line x1="58" y1="694" x2="1142" y2="694" stroke="#ddd5bf" stroke-width="2"/>
+<text x="58" y="722" font-size="14" font-weight="600" fill="#5f5a4e" text-anchor="start" letter-spacing="0"><tspan x="58" dy="0">A research label does not make production access, sensitive data, or material spending risk-free.</tspan></text>
+</svg>

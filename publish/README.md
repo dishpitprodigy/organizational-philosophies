@@ -16,6 +16,8 @@ any of this.
   `fc-list | grep -i "tex gyre"` comes back empty, install
   `texlive-tex-gyre`. EPUB output doesn't need this system-wide — the same
   fonts are embedded from `publish/fonts/`.
+- `rsvg-convert` for SVG figures in PDF output. On Fedora, install
+  `librsvg2-tools`.
 
 ## Typography
 
@@ -84,6 +86,20 @@ path at build time.
 Both scripts `cd` to the repo root themselves, so run them from anywhere.
 `publish/output/` is gitignored; outputs are build artifacts, not checked
 in. Re-run the scripts any time the source Markdown changes.
+
+## Work Intake HTML and figures
+
+The Work Intake page is rebuilt from its Markdown source so its tabbed
+HTML does not drift away from the chapter:
+
+```
+python3 publish/figures/build_work_intake_figures.py
+python3 publish/bin/build-work-intake-html.py
+```
+
+The figure build writes editable SVG masters to
+`docs/assets/images/work-intake/`. The same SVGs are used by the HTML,
+PDF, and EPUB builds.
 
 ## Known limitation
 

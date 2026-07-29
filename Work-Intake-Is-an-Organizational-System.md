@@ -82,6 +82,8 @@ The requester seeks to evaluate or deliver a change that cannot be fulfilled thr
 
 These paths should remain separate because they preserve different facts. Converting an inquiry into a proposal or asking a receiving team to submit on a customer's behalf may feel efficient, but it destroys the cleanest evidence of who knowingly asked the organization to act.
 
+![The front door routes authenticated demand according to the kind of commitment it requires.](docs/assets/images/work-intake/front-door-routing.svg){#fig-front-door-routing}
+
 ---
 
 ## Provenance Before Convenience
@@ -114,6 +116,8 @@ At minimum, it must establish:
 - **Operational Ownership:** who will operate, support, and maintain the result; and
 - **Sponsorship:** who accepts the proposal's priority claim and organizational tradeoffs.
 
+![The proposal's central argument connects the current state to a desired outcome through a required difference, while boundaries, proof, feasibility, and stewardship make that argument governable.](docs/assets/images/work-intake/work-proposal-evidence.svg){#fig-work-proposal-evidence}
+
 The proposal must govern exactly one top-level outcome. That outcome may require one Epic or an Initiative containing several independently valuable Epics. The hierarchy follows the completion condition, not the amount of effort: an Initiative is complete when its organizational outcome becomes true, not merely when every child ticket closes.
 
 ### Sponsorship Is an Act
@@ -140,6 +144,8 @@ This produces two distinct readiness states:
 
 - **Proposal Readiness:** enough is known to justify evaluation or bounded discovery. Material unknowns may remain, but they are visible.
 - **Delivery Readiness:** dependencies, ownership, design, risk, capacity, and acceptance responsibilities are confirmed well enough to authorize implementation.
+
+![Bounded discovery produces evidence and a decision; implementation requires a new authorization that commits risk, money, ownership, and capacity.](docs/assets/images/work-intake/discovery-vs-implementation.svg){#fig-discovery-vs-implementation}
 
 Sponsorship does not create Delivery Readiness. Architecture does not create budget. Approval does not commit another team's capacity. Each decision has its own owner because each decision spends or risks something different.
 
@@ -192,6 +198,8 @@ Every participating function should know which decision it owns, what evidence i
 2. the Security Review Board evaluates cross-cutting organizational risk;
 3. financial and technical functions review the proposal after the earlier gates clear; and
 4. accepted review records assemble into the authoritative proposal artifact.
+
+![Review proceeds in dependency order so an earlier mandatory rejection stops downstream reviews and delivery decisions that depend on it.](docs/assets/images/work-intake/ordered-review.svg){#fig-ordered-review}
 
 Not every review can or should run in parallel. Finance should not spend time constructing a budget for work that Security will reject the next day. Systems Engineering and Network Engineering should not design delivery around a proposal that lacks organizational authority. A rejection at an earlier gate prevents dependent review from beginning.
 
@@ -254,6 +262,8 @@ The condition must state:
 
 Conditional Approval is not approval with cleanup attached. The review remains unresolved, and general implementation remains unauthorized. After the test, the original reviewing authority approves, rejects, or authorizes another bounded test with a new question, expected result, owner, and timebox.
 
+![Conditional Approval permits only the minimum proof needed to resolve a testable unknown; the result returns to the reviewing authority for another decision.](docs/assets/images/work-intake/conditional-approval.svg){#fig-conditional-approval}
+
 ### Review Rejection
 
 The current proposal revision fails a governing standard, risk decision, requirement, or other mandatory condition. Reviews and delivery decisions that depend on the rejected result stop. Other approvals cannot offset it.
@@ -284,9 +294,11 @@ This does not repeal Murphy's Law. Estimates will change, dependencies will fail
 
 A security-tool replacement, for example, can complete its technical migration and still fail its users because a dashboard from the old system was never captured as a requirement. "No one thought to ask the question" is not merely an implementation problem when the missing question changes whether the replacement satisfies the original need. It is evidence that discovery and review did not follow the consequence tree far enough before the organization committed to an answer.
 
-Golf makes the same point with less paperwork. A tiny change in the clubface angle at contact can separate a shot down the fairway from one deep in the woods. The visible failure happens far from the original deviation, but that does not mean the deviation was unimportant. Early questions work the same way: a small correction before commitment can change the entire downstream tree.
+Golf makes the same point with less paperwork: a tiny change in the clubface angle at contact can separate a shot down the fairway from one deep in the woods. The visible failure happens far from the original deviation, but that does not mean the deviation was unimportant. Early questions work the same way: a small correction before commitment can change the entire downstream tree.
 
-Developing a process that consistently produces authorized, implementation-ready work takes effort. Enforcing it takes more. Developing a swing that consistently finds the fairway also takes effort. The organization has to decide what game it is playing. Are we playing for beers, or are we playing for Majors? It cannot prepare for the former and demand the results of the latter.
+![A small difference in clubface angle creates a widening difference between the intended path and the eventual result.](docs/assets/images/work-intake/clubface-consequence.svg){#fig-clubface-consequence}
+
+Developing a process that consistently produces authorized, implementation-ready work takes effort. Enforcing it takes more. Developing a swing that consistently finds the fairway also takes effort. The organization has to decide what game it is playing: **are we playing for beers, or are we playing for Majors?**
 
 ---
 
@@ -296,15 +308,42 @@ Human review should produce durable records, not a trail of comments that somebo
 
 An accepted review record enters the final Work Proposal only after the system verifies that it belongs to the correct proposal revision, carries an approved decision, and has not been altered or duplicated. Assembly preserves the specialist conclusion as written. It does not replace disagreements with an AI-generated consensus that no reviewer approved.
 
-Once every required review has cleared, the proposal becomes an **Authorized Work Proposal**. That revision does not change. It governs one top-level outcome and records the scope, constraints, acceptance authority, review decisions, and organizational commitments that permit delivery to begin.
+Once every required review has cleared, the proposal becomes an **Authorized Work Proposal**. That revision does not change. It governs one top-level outcome and records the scope, constraints, acceptance authority, review decisions, and organizational commitments that govern delivery. When the top-level outcome is one Epic and every Delivery Readiness condition has already been satisfied, implementation may begin. When the top-level outcome requires an Initiative, authorization permits its child delivery records to be developed within the approved boundaries; it does not make every child ready.
+
+![The Authorized Work Proposal connects intact specialist review records through a common, versioned contract without replacing their specialized evidence.](docs/assets/images/work-intake/authorized-work-assembly.svg){#fig-authorized-work-assembly}
 
 Delivery records refine execution. They do not rewrite authority.
 
 An Epic, story, work package, task, sprint backlog, or implementation plan may change the sequence, approach, estimate, or local decomposition as evidence improves. None may silently change the approved outcome, boundary, constraint, or acceptance condition. Those changes require an approved superseding proposal revision.
 
-Initiative approval is not blanket implementation permission for every child Epic. Each child begins only when it reaches Delivery Readiness and receives the capacity and specialized approvals its work requires. This permits adaptive delivery without converting "Agile" into an exemption from planning or authority.
+Initiative approval is not blanket implementation permission for every child Epic. Each child reaches Delivery Readiness only when its design, dependencies, operational ownership, acceptance responsibility, specialized approvals, and named capacity within a Planning Interval are confirmed. Only then may implementation begin. This permits adaptive delivery without converting "Agile" into an exemption from planning or authority.
 
-Authorization also needs a sponsor. If the sponsor leaves or withdraws, discretionary work does not continue forever through momentum. The existing rules determine whether a replacement sponsor accepts the work, the work pauses, or delivery ends. Anything left running must have an owner and an exit plan under [Managed Runoff](./Managed-Runoff-for-Deprecated-Services.md).
+### From an Authorized Initiative to a Delivery-Ready Epic
+
+Initiative authorization settles the organizational outcome and the boundaries within which delivery planning may proceed. It may also preserve forecasts, sequence assumptions, dependency reservations, and an overall capacity strategy. Those records make later delivery possible, but they do not commit a receiving team to implement a child Epic that has not yet been defined and accepted.
+
+Every candidate Epic identifies the exact Authorized Work Proposal revision from which it derives. The Epic states the independently valuable result it will produce, the approved requirements and acceptance conditions it advances, and the boundaries it must not cross. Work Intake then derives which earlier decisions still apply and which decisions the child must obtain for itself. A cross-cutting review may remain valid when the Epic stays inside the facts and boundaries that review examined; a new data flow, vendor, operating model, risk, or other material difference returns to the authority that owns the affected decision.
+
+Delivery Readiness is assembled from those decisions; it is not granted by a generic readiness approver. For each child Epic, the authoritative record must establish:
+
+- traceability to the governing Initiative revision;
+- child scope and acceptance evidence that remain inside the approved outcome;
+- architecture and design evidence sufficient for implementation;
+- dependencies with named owners and actual commitments or valid reservations;
+- every specialized approval triggered by the child's facts;
+- the expertise, staffing, operational ownership, and support model the work requires;
+- acceptance by the receiving team's capacity owner of the named work within a Planning Interval; and
+- the person authorized to accept the delivered result.
+
+The system marks the Epic Delivery Ready only after each required decision owner has supplied an accepted record. The Review Facilitator may coordinate the evidence and unresolved questions, but facilitation does not allow one person or committee to substitute a broad approval for the decisions of Security, Finance, Architecture, delivery teams, or another responsible function. A missing condition returns to its owner; a testable unknown may receive Conditional Approval for bounded discovery; silence does not move the Epic forward.
+
+Initiative-level capacity records must describe what they actually represent. A forecast estimates likely demand. A Conditional Dependency Reservation preserves one possible slot. A staffing strategy identifies how the organization expects to source expertise. None commits a delivery team to a child Epic. The capacity condition becomes true only when the receiving team accepts the named Epic and its required ownership within a Planning Interval. At that point, the organization records the Approved Delivery Baseline and implementation may begin.
+
+### Authorization Must Remain Active
+
+An approval does not keep work alive by itself. The sponsor and the authoritative record must remain identifiable throughout delivery.
+
+If the sponsor leaves or withdraws, discretionary work does not continue forever through momentum. The existing rules determine whether a replacement sponsor accepts the work, the work pauses, or delivery ends. Anything left running must have an owner and an exit plan under [Managed Runoff](./Managed-Runoff-for-Deprecated-Services.md).
 
 The authoritative source belongs in a central, version-controlled repository. Ticket attachments, rendered pages, dashboards, and published copies link back to it. Accepted artifacts should be readable across the organization by default. Restricted work must identify why access is limited, who owns the restriction, when it will be reviewed, and what coordination information can be published safely.
 
@@ -316,9 +355,13 @@ Routing work to a team does not commit that team's capacity.
 
 A dependency may be known without being planned. Discovery may require a team to provide access or expertise without committing it to later implementation. Delivery begins only when the receiving team accepts named work, ownership, and capacity within a Planning Interval.
 
-Where an approved Initiative cannot provide an exact handoff date, a dependency team may hold a Conditional Dependency Reservation for a defined interval and cutoff. If upstream work fails to activate or renew the reservation, the team releases the capacity. A late arrival does not automatically jump the queue.
+Where an approved Initiative cannot provide an exact handoff date, a dependency team may place a Conditional Dependency Reservation on one work slot for a defined Planning Interval. The team plans around leaving that slot open. If the reserved work becomes ready during the interval and has higher priority than the team's other queued work, it enters the workstream immediately instead of waiting for the next planning cycle. If upstream work does not activate or renew the reservation by its cutoff, the team releases the slot.
 
-If leadership directs a team to drop committed work for something new, that choice must be visible. The record identifies who made it, what got displaced, why the normal queue was bypassed, and which delay or consequence they accepted. This is an **Accountable Priority Override**.
+An operating-system migration makes the purpose concrete: if a million-dollar contract for the old operating system is about to renew, Systems Engineering must deliver the replacement image before downstream teams can migrate. Those teams may not know exactly when the image will be ready, but a reservation allows the first downstream work to begin as soon as it arrives. The reservation does not decide priority; it gives a dependency team a way to honor a priority the organization has already established.
+
+![A Conditional Dependency Reservation holds one slot open so previously prioritized dependency work can enter the workstream when it becomes ready.](docs/assets/images/work-intake/conditional-dependency-reservation.svg){#fig-conditional-dependency-reservation}
+
+If leadership instead directs a team to drop committed work for something new, that choice must be visible. The record identifies who made it, what got displaced, why the normal queue was bypassed, and which delay or consequence they accepted. This is an **Accountable Priority Override**.
 
 Routing work to a team does not mean that any available engineer can do it. The team's technical reviewer decides what expertise, ownership, and support the work requires; the capacity owner decides whether the team can provide them.
 
@@ -334,6 +377,8 @@ When implementation is approved, the organization records the estimate it used t
 
 As the team learns more, it updates the **Delivery Forecast**. The baseline records what the organization thought then; the forecast records what it thinks now. Keeping both allows the organization to plan honestly without erasing whether its original assumptions were any good.
 
+![The Approved Delivery Baseline remains fixed while successive Delivery Forecasts incorporate new evidence.](docs/assets/images/work-intake/baseline-and-forecast.svg){#fig-baseline-and-forecast}
+
 If the new forecast requires substantially more capacity, someone with authority over the affected priorities must accept the larger commitment. If the desired outcome, scope, requirement, boundary, or acceptance condition changes, the proposal must change.
 
 The delivery team may change how it builds the approved thing. It may not quietly decide to build a different thing.
@@ -345,6 +390,8 @@ The delivery team may change how it builds the approved thing. It may not quietl
 Authorization is a prediction. The organization is saying that the proposed change is worth making, the design can work, the risks are acceptable, the required capacity is available, and everyone will be able to recognize success when they see it.
 
 Completion should test those predictions.
+
+![Completion closes the ordinary delivery loop: measure the outcome and the intake history, compare both with expectations, and carry the findings into the next authorization.](docs/assets/images/work-intake/close-the-loop.svg){#fig-close-the-loop}
 
 ### Did the Work Do What We Approved?
 
@@ -378,9 +425,7 @@ Work Intake sits at the intersection of several established bodies of practice:
 
 Each discipline addresses part of the problem. This model connects them around the Work Proposal so that authorization, architecture, risk, funding, capacity, delivery, and acceptance do not become separate conversations whose conclusions disappear before the next team begins its work.
 
-I have reviewed proposed work, evaluated security-related concerns, challenged whether solutions were viable and appropriate, and decided whether work was ready to continue within my authority. That is the class of work this document describes. Performing it does not require one person to know every question that Security, Finance, Procurement, Privacy, Legal, Architecture, and each delivery function must ask.
-
-The document therefore stops at the shared structure of review: which function must decide, when it must decide, what evidence it receives, what its decision authorizes, and how that decision reaches the teams that depend on it. Specialist teams should define their own questions, standards, and evidence in companion guides. Work Intake makes those reviews part of one traceable decision process without pretending their expertise is interchangeable.
+This document defines the shared structure of review: which function must decide, when it must decide, what evidence it receives, what its decision authorizes, and how that decision reaches the teams that depend on it. Each specialist function owns its questions, standards, and evidence. Work Intake connects those reviews through one traceable decision process; it does not make their expertise interchangeable.
 
 ---
 

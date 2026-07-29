@@ -1,0 +1,98 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 820" role="img" aria-labelledby="title desc">
+<title id="title">Route demand before a team accepts it</title>
+<desc id="desc">The front door preserves different kinds of requests instead of forcing everything through project intake.</desc>
+
+<defs>
+  <marker id="arrow-ink" markerWidth="10" markerHeight="10" refX="8" refY="3"
+          orient="auto" markerUnits="strokeWidth">
+    <path d="M0,0 L0,6 L9,3 z" fill="#111111"/>
+  </marker>
+  <marker id="arrow-red" markerWidth="10" markerHeight="10" refX="8" refY="3"
+          orient="auto" markerUnits="strokeWidth">
+    <path d="M0,0 L0,6 L9,3 z" fill="#ad0034"/>
+  </marker>
+  <marker id="arrow-cyan" markerWidth="10" markerHeight="10" refX="8" refY="3"
+          orient="auto" markerUnits="strokeWidth">
+    <path d="M0,0 L0,6 L9,3 z" fill="#007f7b"/>
+  </marker>
+  <marker id="arrow-green" markerWidth="10" markerHeight="10" refX="8" refY="3"
+          orient="auto" markerUnits="strokeWidth">
+    <path d="M0,0 L0,6 L9,3 z" fill="#2f7d32"/>
+  </marker>
+  <pattern id="hatch" width="10" height="10" patternUnits="userSpaceOnUse"
+           patternTransform="rotate(45)">
+    <rect width="10" height="10" fill="#fffdf5"/>
+    <line x1="0" y1="0" x2="0" y2="10" stroke="#111111" stroke-width="2" opacity=".22"/>
+  </pattern>
+  <pattern id="grid" width="24" height="24" patternUnits="userSpaceOnUse">
+    <rect width="24" height="24" fill="#f5efdc"/>
+    <path d="M24 0H0V24" fill="none" stroke="#111111" stroke-width="1" opacity=".08"/>
+  </pattern>
+  <style>
+    text { font-family: "Helvetica Neue", Arial, sans-serif; }
+    .label { font-size: 15px; font-weight: 800; letter-spacing: 1.8px; }
+    .title { font-size: 34px; font-weight: 800; }
+    .subtitle { font-size: 17px; fill: #5f5a4e; }
+    .box-title { font-size: 20px; font-weight: 800; }
+    .box-copy { font-size: 16px; fill: #3f3b34; }
+    .small { font-size: 14px; fill: #5f5a4e; }
+    .tiny { font-size: 12px; fill: #5f5a4e; letter-spacing: .5px; }
+  </style>
+</defs>
+
+<rect width="1200" height="820" fill="#f5efdc"/>
+<rect x="18" y="18" width="1164" height="784" fill="none" stroke="#111111" stroke-width="2"/>
+<rect x="30" y="30" width="1140" height="760" fill="none" stroke="none"/>
+<text x="58" y="60" font-size="15" font-weight="800" fill="#ad0034" text-anchor="start" letter-spacing="1.8"><tspan x="58" dy="0">WORK INTAKE / SYSTEM FIGURE</tspan></text>
+<text x="58" y="102" font-size="34" font-weight="800" fill="#111111" text-anchor="start" letter-spacing="0"><tspan x="58" dy="0">Route demand before a team accepts it</tspan></text>
+<text x="58" y="132" font-size="17" font-weight="400" fill="#5f5a4e" text-anchor="start" letter-spacing="0"><tspan x="58" dy="0">The front door preserves different kinds of requests instead of forcing everything through project intake.</tspan></text>
+<line x1="58" y1="151" x2="1142" y2="151" stroke="#111111" stroke-width="2"/>
+<rect x="60" y="330" width="190" height="110" rx="0" fill="#fff8e0" stroke="#ad0034" stroke-width="3"/>
+<text x="76" y="358" font-size="19" font-weight="800" fill="#111111" text-anchor="start" letter-spacing="0"><tspan x="76" dy="0">Authenticated</tspan></text>
+<text x="76" y="385" font-size="15" font-weight="400" fill="#5f5a4e" text-anchor="start" letter-spacing="0"><tspan x="76" dy="0">demand</tspan></text>
+<line x1="250" y1="385" x2="335" y2="385" stroke="#111111" stroke-width="3" marker-end="url(#arrow-ink)"/>
+<polygon points="405,315.0 475.0,385 405,455.0 335.0,385" fill="#fff8e0" stroke="#ad0034" stroke-width="3"/>
+<text x="405" y="378" font-size="17" font-weight="800" fill="#111111" text-anchor="middle" letter-spacing="0"><tspan x="405" dy="0">What kind</tspan><tspan x="405" dy="22">of request?</tspan></text>
+<path d="M475,385 L520,385 L520,215 L565,215" fill="none" stroke="#ad0034" stroke-width="3" marker-end="url(#arrow-ink)"/>
+<rect x="565" y="175" width="255" height="80" rx="0" fill="#fffdf5" stroke="#ad0034" stroke-width="3"/>
+<text x="581" y="203" font-size="19" font-weight="800" fill="#111111" text-anchor="start" letter-spacing="0"><tspan x="581" dy="0">INCIDENT</tspan></text>
+<text x="581" y="230" font-size="15" font-weight="400" fill="#5f5a4e" text-anchor="start" letter-spacing="0"><tspan x="581" dy="0">Stabilize harm</tspan><tspan x="581" dy="20">Record follows</tspan></text>
+<path d="M475,385 L520,385 L520,325 L565,325" fill="none" stroke="#007f7b" stroke-width="3" marker-end="url(#arrow-ink)"/>
+<rect x="565" y="285" width="255" height="80" rx="0" fill="#fffdf5" stroke="#007f7b" stroke-width="3"/>
+<text x="581" y="313" font-size="19" font-weight="800" fill="#111111" text-anchor="start" letter-spacing="0"><tspan x="581" dy="0">STANDARD SERVICE</tspan></text>
+<text x="581" y="340" font-size="15" font-weight="400" fill="#5f5a4e" text-anchor="start" letter-spacing="0"><tspan x="581" dy="0">Use known path</tspan><tspan x="581" dy="20">Known outcome</tspan></text>
+<path d="M475,385 L520,385 L520,435 L565,435" fill="none" stroke="#111111" stroke-width="3" marker-end="url(#arrow-ink)"/>
+<rect x="565" y="395" width="255" height="80" rx="0" fill="#fffdf5" stroke="#111111" stroke-width="3"/>
+<text x="581" y="423" font-size="19" font-weight="800" fill="#111111" text-anchor="start" letter-spacing="0"><tspan x="581" dy="0">GENERAL INQUIRY</tspan></text>
+<text x="581" y="450" font-size="15" font-weight="400" fill="#5f5a4e" text-anchor="start" letter-spacing="0"><tspan x="581" dy="0">Bounded answer</tspan><tspan x="581" dy="20">No proposal</tspan></text>
+<path d="M475,385 L520,385 L520,545 L565,545" fill="none" stroke="#dcc61e" stroke-width="3" marker-end="url(#arrow-ink)"/>
+<rect x="565" y="505" width="255" height="80" rx="0" fill="#fffdf5" stroke="#dcc61e" stroke-width="3"/>
+<text x="581" y="533" font-size="19" font-weight="800" fill="#111111" text-anchor="start" letter-spacing="0"><tspan x="581" dy="0">ASSISTED INTAKE</tspan></text>
+<text x="581" y="560" font-size="15" font-weight="400" fill="#5f5a4e" text-anchor="start" letter-spacing="0"><tspan x="581" dy="0">Navigate process</tspan><tspan x="581" dy="20">Do not do discovery</tspan></text>
+<path d="M475,385 L520,385 L520,655 L565,655" fill="none" stroke="#ad0034" stroke-width="3" marker-end="url(#arrow-ink)"/>
+<rect x="565" y="615" width="255" height="80" rx="0" fill="#fffdf5" stroke="#ad0034" stroke-width="3"/>
+<text x="581" y="643" font-size="19" font-weight="800" fill="#111111" text-anchor="start" letter-spacing="0"><tspan x="581" dy="0">WORK PROPOSAL</tspan></text>
+<text x="581" y="670" font-size="15" font-weight="400" fill="#5f5a4e" text-anchor="start" letter-spacing="0"><tspan x="581" dy="0">Evidence + sponsor</tspan><tspan x="581" dy="20">Review before delivery</tspan></text>
+<rect x="885" y="175" width="250" height="80" rx="0" fill="#fff8e0" stroke="#ad0034" stroke-width="3"/>
+<text x="901" y="203" font-size="19" font-weight="800" fill="#111111" text-anchor="start" letter-spacing="0"><tspan x="901" dy="0">OPERATIONAL PATH</tspan></text>
+<text x="901" y="230" font-size="15" font-weight="400" fill="#5f5a4e" text-anchor="start" letter-spacing="0"><tspan x="901" dy="0">Immediate response</tspan></text>
+<rect x="885" y="285" width="250" height="80" rx="0" fill="#fffdf5" stroke="#007f7b" stroke-width="3"/>
+<text x="901" y="313" font-size="19" font-weight="800" fill="#111111" text-anchor="start" letter-spacing="0"><tspan x="901" dy="0">SERVICE CATALOG</tspan></text>
+<text x="901" y="340" font-size="15" font-weight="400" fill="#5f5a4e" text-anchor="start" letter-spacing="0"><tspan x="901" dy="0">Repeatable fulfillment</tspan></text>
+<rect x="885" y="395" width="250" height="80" rx="0" fill="#fffdf5" stroke="#111111" stroke-width="3"/>
+<text x="901" y="423" font-size="19" font-weight="800" fill="#111111" text-anchor="start" letter-spacing="0"><tspan x="901" dy="0">ANSWER OR REDIRECT</tspan></text>
+<text x="901" y="450" font-size="15" font-weight="400" fill="#5f5a4e" text-anchor="start" letter-spacing="0"><tspan x="901" dy="0">The requester chooses next</tspan></text>
+<rect x="885" y="505" width="250" height="80" rx="0" fill="#fffdf5" stroke="#dcc61e" stroke-width="3"/>
+<text x="901" y="533" font-size="19" font-weight="800" fill="#111111" text-anchor="start" letter-spacing="0"><tspan x="901" dy="0">PROCESS ROUTE</tspan></text>
+<text x="901" y="560" font-size="15" font-weight="400" fill="#5f5a4e" text-anchor="start" letter-spacing="0"><tspan x="901" dy="0">Missing owner or prerequisite</tspan></text>
+<rect x="885" y="615" width="250" height="80" rx="0" fill="#fffdf5" stroke="#ad0034" stroke-width="3"/>
+<text x="901" y="643" font-size="19" font-weight="800" fill="#111111" text-anchor="start" letter-spacing="0"><tspan x="901" dy="0">GOVERNED REVIEW</tspan></text>
+<text x="901" y="670" font-size="15" font-weight="400" fill="#5f5a4e" text-anchor="start" letter-spacing="0"><tspan x="901" dy="0">Authority before capacity</tspan></text>
+<line x1="820" y1="215" x2="885" y2="215" stroke="#ad0034" stroke-width="3" marker-end="url(#arrow-ink)"/>
+<line x1="820" y1="325" x2="885" y2="325" stroke="#007f7b" stroke-width="3" marker-end="url(#arrow-ink)"/>
+<line x1="820" y1="435" x2="885" y2="435" stroke="#111111" stroke-width="3" marker-end="url(#arrow-ink)"/>
+<line x1="820" y1="545" x2="885" y2="545" stroke="#dcc61e" stroke-width="3" marker-end="url(#arrow-ink)"/>
+<line x1="820" y1="655" x2="885" y2="655" stroke="#ad0034" stroke-width="3" marker-end="url(#arrow-ink)"/>
+<line x1="58" y1="754" x2="1142" y2="754" stroke="#ddd5bf" stroke-width="2"/>
+<text x="58" y="782" font-size="14" font-weight="600" fill="#5f5a4e" text-anchor="start" letter-spacing="0"><tspan x="58" dy="0">Assistance may identify discovery work; it may not hide discovery inside an intake ticket.</tspan></text>
+</svg>
