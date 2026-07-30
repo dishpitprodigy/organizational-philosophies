@@ -74,16 +74,17 @@ ITIL, ISO 20000, and CMMI are bodies of knowledge that *inform* this approach �
 
 ## Work Taxonomy
 
-### Delivery Work vs Improvement Work
+### Delivery, Corrective Engineering, and Improvement Work
 
-Same people, different hats. The split is not about headcount; it is about capacity allocation.
+The same people may perform all three, but the investment classes answer different questions:
 
-- **Delivery work**: keeping the service, workflow, or operation running. This may include incident response, order fulfillment, exception handling, customer response, or daily execution.
-- **Improvement work**: automation, tooling, standardization, process redesign, training, and systemic fixes that make delivery work more repeatable and scalable.
+- **Delivery work** operates a conforming service or fulfills legitimate demand. Incident response may contain harm and restore service, but restoration alone does not remove the underlying defect.
+- **Corrective engineering** removes a defect or its cause so the system returns to required behavior. It is part of producing and maintaining an acceptable system, not an optional improvement.
+- **Improvement work** raises capability, quality, efficiency, or consistency after the system already meets its accepted requirements and tolerances.
 
-In infrastructure teams this often maps cleanly to **operations vs engineering**. In other environments it may map to **daily execution vs process improvement**, **production vs continuous improvement**, or **service delivery vs enablement**.
+Standardization and automation are mechanisms, not classifications. Automating a workaround around a defect may institutionalize bad behavior. Automating legitimate repeatable demand may be a useful improvement. The organization must first decide whether the observed work is conformance, correction, or advancement.
 
-"This week, 60% of our capacity went to delivery work and 40% to improvement work" is a sentence leadership can understand and act on.
+"This week, 60% of capacity operated the service, 25% corrected defects, and 15% improved a conforming system" is a sentence leadership can understand and act on.
 
 ### Work Types
 
@@ -185,16 +186,17 @@ One person per rotation (day or week, depending on volume) is the designated int
 
 If an interrupt takes less than 30 minutes, the shield handles it. If it takes more, it becomes a tracked work item. But **this only works with a feedback loop on the backlog**:
 
-- **Recurring interrupt = improvement project, not backlog clutter.** If the same type of interrupt shows up 3 times in a month, it graduates from "observed work item" to "prioritized improvement work."
-- The backlog isn't where interrupts go to live — it's where they go to be *observed*. The observation period is short (one month), and the exit condition is clear: automate it, or explicitly decide it's rare enough to keep manual.
-- Anything that sits in the backlog for 60 days without action gets reviewed — either it matters enough to schedule, or it doesn't matter and you close it. No 10,000-item graveyard.
+- **A defect routes to corrective engineering.** The first occurrence may justify immediate action when consequence, exposure, detectability, or containment makes the risk unacceptable. Recurrence strengthens the evidence; it does not create the obligation.
+- **Legitimate repeatable demand routes to standard work.** Frequency and cumulative effort may then justify documentation, standardization, or automation.
+- **A recurrence threshold is an alerting rule, not a quality standard.** A rule such as three similar records in a month can force review of low-severity patterns. The review still has to classify the cause and decide whether to correct, standardize, improve, accept within a narrow tolerance, or reject as unsupported.
+- Anything that remains unresolved for 60 days returns to an accountable decision owner. Backlog age cannot silently turn a known defect into an accepted limitation.
 
-> **Implementation note:** The "recurring interrupt → improvement project" concept needs a concrete implementation in the team's work-management tool — automation rules, dashboards, or saved filters to surface recurring patterns. To be designed separately.
+> **Implementation note:** The work-management system should aggregate demand by cause and surface patterns for classification. The resulting route—corrective engineering, standardization, improvement, accepted limitation, or no action—must be recorded rather than inferred from a threshold.
 
 ### Standard-Work-First Response
 
-When the shield handles an interrupt, step one is checking whether documented standard work exists. If yes, follow it. If no, handle it manually *and create the documentation as part of the resolution*. Every interrupt is a standardization opportunity, and many become automation opportunities later.
+When the shield handles an interrupt, step one is checking whether documented standard work exists. If yes, follow it. If no, handle it manually *and create the documentation as part of the resolution*. A legitimate repeated procedure is a standardization opportunity. When the interrupt exposes a defect, the procedure is containment; documenting or automating the workaround does not close the corrective obligation.
 
-Visibility exposes recurrence. The organization can now decide whether repeated manual work should remain delivery, become standard work, or justify changing the system that keeps producing it.
+Visibility exposes recurrence. The organization can now distinguish legitimate repeatable demand from a defect, route required correction without waiting for a frequency threshold, and reserve improvement language for raising a system that already conforms.
 
 <!-- Preview assembly source: Process-Improvement-Framework.md: sections 1–5 -->

@@ -28,6 +28,7 @@ class BookItem:
 
 
 ITEMS: list[BookItem] = [
+    BookItem("frontmatter/about-the-author.md", "About the Author — Future Edition", "Front matter", "Author-source review and interview", "Unnumbered editorial placeholder"),
     BookItem("frontmatter/working-glossary.md", "Working Glossary", "Front matter", "Book assembly synthesis", "Reader aid"),
     BookItem("parts/part-1.md", "Part I: Learning to See the Loop", "I", "Assembly structure", "Part divider"),
     BookItem("chapters/01-open-loop-enterprise.md", "The Open-Loop Enterprise", "I — Learning to See the Loop", "The-Open-Loop-Enterprise.md", "Chapter anchor"),
@@ -40,7 +41,7 @@ ITEMS: list[BookItem] = [
     BookItem("chapters/06-executable-work.md", "Turn Decisions Into Executable Work", "III — Framing and Authorizing Work", "Writing Work Items - Epics, Stories, and Tasks.md", "Assembled source cut"),
     BookItem("parts/part-4.md", "Part IV: Operating, Improving, and Retiring the System", "IV", "Assembly structure", "Part divider"),
     BookItem("chapters/07-visible-operating-system.md", "Make the Operating System Visible", "IV — Operating, Improving, and Retiring the System", "Process-Improvement-Framework.md", "Assembled source cut"),
-    BookItem("chapters/08-convert-recurrence.md", "Convert Recurrence Into Improvement", "IV — Operating, Improving, and Retiring the System", "Process-Improvement-Framework.md", "Assembled source cut"),
+    BookItem("chapters/08-convert-recurrence.md", "Turn Recurrence Into Engineering Work", "IV — Operating, Improving, and Retiring the System", "Process-Improvement-Framework.md plus book-level quality distinction", "Assembled source cut"),
     BookItem("chapters/09-operating-cadence.md", "Future Edition: Operating Cadence", "IV — Operating, Improving, and Retiring the System", "Gap-map synthesis plus distributed operating practices", "Unnumbered editorial placeholder"),
     BookItem("chapters/10-managed-runoff.md", "Managed Runoff", "IV — Operating, Improving, and Retiring the System", "Managed-Runoff-for-Deprecated-Services.md", "Chapter anchor"),
     BookItem("parts/part-5.md", "Part V: Developing and Acquiring Capability", "V", "Assembly structure", "Part divider"),
@@ -208,6 +209,18 @@ def chapter_contents() -> dict[str, str]:
     rfp = "RFPs-and-Vendor-Selection-as-Evidence-Systems.md"
 
     chapters: dict[str, str] = {}
+    chapters["frontmatter/about-the-author.md"] = compose(
+        "About the Author — Future Edition",
+        "",
+        """This section will be written from two kinds of evidence: the author's CVs and cover letters, which preserve the professional record, and a focused interview, which will establish why that record produced this book.
+
+The finished version should not read like a résumé converted into paragraphs. It should explain the relevant lineage: early practical exposure to Lean thinking; applying flow, motion, and waste concepts to information systems; formal work with Six Sigma, ITIL, and Agile; participation in service-management, reporting, ticketing, call-flow, infrastructure, and organizational-change work; and the repeated observation that sound methods fail when the surrounding organization does not preserve evidence or return results to decisions.
+
+The interview will also separate documented facts from retrospective interpretation. Dates, roles, certifications, employers, and project claims will come from the record. The author will supply the connecting argument: what he learned, what he rejected, how the methods relate, and which failures made this book necessary.""",
+        future="The author-source review and interview have not yet been completed. The editorial interview brief lives beside this preview so the biography and preface can be developed without inventing a polished origin story from scattered manuscript remarks.",
+        provenance="Planned synthesis from author CVs, cover letters, and a recorded editorial interview",
+        unnumbered=True,
+    )
     chapters["frontmatter/working-glossary.md"] = compose(
         "Working Glossary",
         "",
@@ -254,11 +267,16 @@ The definitions are specific to this book. They are not claims that every cited 
 | **Discovery** | Bounded work whose outcome is decision-ready knowledge. Discovery is legitimate company work even when the responsible result is not to implement. |
 | **Implementation** | Work authorized to make a selected change real. It commits capacity, risk, ownership, and later acceptance obligations that discovery may not. |
 | **Output** | An activity performed or artifact produced. Output is not proof that the intended change occurred. |
+| **Incident** | An observed interruption or degradation that requires containment or service restoration. The incident is the manifestation; it is not necessarily the underlying defect. |
+| **Defect** | A condition that causes a product, service, process, or control to violate an applicable requirement or accepted tolerance. A defect exists on the first occurrence; recurrence changes the evidence about exposure, not the classification. |
+| **Corrective engineering** | Work that removes a defect or its cause so required behavior is restored and recurrence is prevented. This is quality work, not an optional improvement to a conforming system. |
+| **Improvement** | Work that raises the target, capability, efficiency, or quality of a system already operating within its accepted requirements and tolerances. |
+| **Accepted limitation / tolerance** | A bounded, owned decision not to correct a known condition because its consequence, exposure, support boundary, or correction cost does not justify action. Silence and backlog age do not create acceptance. |
 | **Outcome / exit condition** | The observable change that justifies the work and determines whether the governing Epic or initiative can close. |
 | **Acceptance criteria** | The item-specific conditions that prove a story, work package, requirement, or delivered capability did what it promised. |
 | **Definition of Done** | A standing workmanship bar applied to every item of a given kind. It is not the item-specific acceptance criterion or the governing outcome. |
 | **Work type** | A stable classification of the work's operating shape, such as incident, standard request, or proposed change. |
-| **Investment class** | The rule governing what kind of capacity the work may receive: ordinary delivery, improvement, discovery, managed runoff, or another explicitly defined class. |
+| **Investment class** | The rule governing what kind of capacity the work may receive: ordinary delivery, corrective engineering, improvement, discovery, managed runoff, or another explicitly defined class. |
 
 ## Actors and boundaries
 
@@ -449,6 +467,21 @@ These obligations are enough to expose a fake prioritization system. They are no
                 " (Section 4)": "",
                 " (Section 5)": "",
                 " (Section 7)": "",
+                "| **Recurring toil** | The same manual fix/request, again and again | **Not a work type you create** - a **derived signal** from aggregating the above **by cause** | **Yes - when a *cause category* crosses a threshold** (see below) |": "| **Recurring demand signal** | Repeated incidents, manual fixes, or requests sharing a cause | **Not a work type you create** - a **derived signal** from aggregating demand **by cause** | It may create corrective, standardization, automation, or improvement work after classification. A severe defect may require action on its first occurrence. |",
+                "| **Roadmap project work** | Deliberate improvement we chose to do |": "| **Roadmap project work** | Deliberate corrective, improvement, or capability work we chose to do |",
+                "**Surface toil by work *type*, not by *tag*": "**Surface recurring demand by work *type*, not by *tag*",
+                '**"recurring toil" stops being a type you file and becomes a number you compute**': '**"recurring demand" stops being a type you file and becomes a pattern you compute**',
+                "### The toil-to-epic rule (this is the feedback loop)": "### The demand-to-engineering rule (this is the feedback loop)",
+                """> **When a cause category crosses a threshold - e.g. *N occurrences* or *X hours* in a rolling window - it spawns a roadmap epic whose outcome is "retire this demand source," measured back against the demand data.**""": """> **Demand evidence routes a cause into planned engineering; it does not decide what kind of engineering the cause requires.**
+
+A defect is a defect on the first observed failure. Its priority depends on consequence, exposure, detectability, containment, support boundary, and accepted tolerance—not on waiting for an arbitrary recurrence count. A frequency or effort threshold can surface a low-severity pattern for review, but it cannot convert required correction into optional improvement.
+
+Legitimate repeatable demand is different. If the system is behaving as intended but the work remains manual, volume and cumulative effort can justify standardization or automation. If the system already conforms and the organization wants a higher target, that is improvement.""",
+                "This is the mechanism that turns reactive pain into planned improvement": "This is the mechanism that turns observed demand into planned engineering",
+                "spawn roadmap epic to retire the driver": "spawn corrective or improvement epic",
+                "causes that cross a threshold spawn roadmap epics": "causes requiring action create roadmap engineering work",
+                "That crosses the threshold, so it spawns a roadmap epic - *not* another demand incident:": "The repeated evidence quantifies exposure and cost, while the failed automatic registration identifies a defect. It spawns a corrective Epic—not another demand incident:",
+                "2. **A prioritization signal for the roadmap.** Demand data is how teams *rank* bugs and improvements honestly: \"this bug caused **17 incidents in the last 30 days**\" or \"this feature reclaims **~`t` hours/month**.\" Severity comes from incident count; value comes from reclaimed effort. Without this, prioritization is opinion.": "2. **A prioritization signal for the roadmap.** Demand data helps teams rank corrective and improvement work honestly: \"this defect caused **17 incidents in the last 30 days**\" or \"this change reclaims **~`t` hours/month**.\" Consequence, exposure, detectability, containment, and accepted tolerance establish defect risk. Recurrence count and recorded effort quantify frequency and cost. Without both, prioritization is opinion.",
             },
         ),
         closing="Once work is executable, the organization needs an operating system that can see it, control how much is active, distinguish planned work from interruption, and turn repeated demand into evidence that the system itself should change.",
@@ -472,18 +505,59 @@ These obligations are enough to expose a fake prioritization system. They are no
             ),
             {
                 "The examples in this document": "The examples here",
+                """### Delivery Work vs Improvement Work
+
+Same people, different hats. The split is not about headcount; it is about capacity allocation.
+
+- **Delivery work**: keeping the service, workflow, or operation running. This may include incident response, order fulfillment, exception handling, customer response, or daily execution.
+- **Improvement work**: automation, tooling, standardization, process redesign, training, and systemic fixes that make delivery work more repeatable and scalable.
+
+In infrastructure teams this often maps cleanly to **operations vs engineering**. In other environments it may map to **daily execution vs process improvement**, **production vs continuous improvement**, or **service delivery vs enablement**.
+
+"This week, 60% of our capacity went to delivery work and 40% to improvement work" is a sentence leadership can understand and act on.""": """### Delivery, Corrective Engineering, and Improvement Work
+
+The same people may perform all three, but the investment classes answer different questions:
+
+- **Delivery work** operates a conforming service or fulfills legitimate demand. Incident response may contain harm and restore service, but restoration alone does not remove the underlying defect.
+- **Corrective engineering** removes a defect or its cause so the system returns to required behavior. It is part of producing and maintaining an acceptable system, not an optional improvement.
+- **Improvement work** raises capability, quality, efficiency, or consistency after the system already meets its accepted requirements and tolerances.
+
+Standardization and automation are mechanisms, not classifications. Automating a workaround around a defect may institutionalize bad behavior. Automating legitimate repeatable demand may be a useful improvement. The organization must first decide whether the observed work is conformance, correction, or advancement.
+
+"This week, 60% of capacity operated the service, 25% corrected defects, and 15% improved a conforming system" is a sentence leadership can understand and act on.""",
+                """- **Recurring interrupt = improvement project, not backlog clutter.** If the same type of interrupt shows up 3 times in a month, it graduates from "observed work item" to "prioritized improvement work."
+- The backlog isn't where interrupts go to live — it's where they go to be *observed*. The observation period is short (one month), and the exit condition is clear: automate it, or explicitly decide it's rare enough to keep manual.
+- Anything that sits in the backlog for 60 days without action gets reviewed — either it matters enough to schedule, or it doesn't matter and you close it. No 10,000-item graveyard.""": """- **A defect routes to corrective engineering.** The first occurrence may justify immediate action when consequence, exposure, detectability, or containment makes the risk unacceptable. Recurrence strengthens the evidence; it does not create the obligation.
+- **Legitimate repeatable demand routes to standard work.** Frequency and cumulative effort may then justify documentation, standardization, or automation.
+- **A recurrence threshold is an alerting rule, not a quality standard.** A rule such as three similar records in a month can force review of low-severity patterns. The review still has to classify the cause and decide whether to correct, standardize, improve, accept within a narrow tolerance, or reject as unsupported.
+- Anything that remains unresolved for 60 days returns to an accountable decision owner. Backlog age cannot silently turn a known defect into an accepted limitation.""",
+                '> **Implementation note:** The "recurring interrupt → improvement project" concept needs a concrete implementation in the team\'s work-management tool — automation rules, dashboards, or saved filters to surface recurring patterns. To be designed separately.': '> **Implementation note:** The work-management system should aggregate demand by cause and surface patterns for classification. The resulting route—corrective engineering, standardization, improvement, accepted limitation, or no action—must be recorded rather than inferred from a threshold.',
+                "Every interrupt is a standardization opportunity, and many become automation opportunities later.": "A legitimate repeated procedure is a standardization opportunity. When the interrupt exposes a defect, the procedure is containment; documenting or automating the workaround does not close the corrective obligation.",
             },
         ),
         future="A future version will add the Eight Wastes of Engineering before the improvement method. The gate will ask whether work should exist before helping a team execute it more efficiently, while preserving the distinction between genuine waste and necessary discovery, resilience, recovery, security, compliance, or documentation.",
-        closing="Visibility exposes recurrence. The organization can now decide whether repeated manual work should remain delivery, become standard work, or justify changing the system that keeps producing it.",
+        closing="Visibility exposes recurrence. The organization can now distinguish legitimate repeatable demand from a defect, route required correction without waiting for a frequency threshold, and reserve improvement language for raising a system that already conforms.",
         provenance=f"{process}: sections 1–5",
     )
 
     chapters["chapters/08-convert-recurrence.md"] = compose(
-        "Convert Recurrence Into Improvement",
+        "Turn Recurrence Into Engineering Work",
         "IV — Operating, Improving, and Retiring the System",
-        "Recurring work is not merely a queue-management problem. It is evidence about the operating model. The improvement loop begins when the organization stops treating each repeated request as an isolated success and asks whether the pattern should be documented, standardized, automated, prevented, or consciously retained.",
-        replace_many(
+        "Recurring work is not merely a queue-management problem. It is evidence about the operating model. Recurrence strengthens the evidence about exposure, cause, and economic cost; it does not determine what kind of work the response is. A defect routes to corrective engineering even when the first occurrence is the only occurrence. Legitimate repeatable demand may route to standard work or automation. Improvement raises a system that already conforms. A narrow accepted limitation requires an explicit, owned tolerance decision.",
+        """## Classify the recurrence before acting
+
+The first question is not whether the pattern has crossed an arbitrary threshold. It is what the pattern represents:
+
+| Observed condition | Required route |
+|---|---|
+| Required behavior failed or an accepted tolerance was violated | Contain the consequence, then correct the defect or its cause |
+| Legitimate demand is being fulfilled through a repeatable manual procedure | Define standard work, then evaluate automation using frequency, cost, risk, and expected return |
+| The system conforms, but a higher capability, quality, or efficiency target is worthwhile | Improvement |
+| The condition is real but support, consequence, exposure, or correction cost does not justify action | Record a bounded, owned accepted limitation or tolerance |
+
+A recurrence threshold can force a review before low-severity demand disappears into the queue. It cannot turn a defect into a defect, convert correction into optional improvement, or create acceptance through neglect.
+
+""" + replace_many(
             sections(
                 process,
                 [
@@ -495,9 +569,13 @@ These obligations are enough to expose a fake prioritization system. They are no
             ),
             {
                 "For more information: [Scrum.org — What is a Sprint Review]": "The distinction between a retrospective and a Sprint Review is documented by [Scrum.org — What is a Sprint Review]",
+                "Establish at least one metric *before* starting, so we can tell whether the process improvement is actually improving anything.": "Establish at least one metric *before* starting, so the organization can tell whether the intervention changed the condition it was authorized to change.",
+                "If this is not declining, the process improvement is not working.": "If this is not declining, the intervention is not reducing unplanned demand; revisit the classification, cause, or chosen mechanism.",
+                "If automation is working, this trends toward zero.": "If the corrective mechanism is working, this trends toward zero.",
+                "Review the Delivery vs Improvement capacity split": "Review the Delivery, Corrective Engineering, and Improvement capacity split",
             },
         ),
-        closing="Retrospectives, metrics, and recurring-demand evidence create several review loops. Without a defined cadence and decision boundary, those loops tend to collapse into status meetings or operate as unrelated ceremonies.",
+        closing="Classification determines the obligation; recurrence helps quantify its exposure and cost. Retrospectives, metrics, and recurring-demand evidence then create several review loops. Without a defined cadence and decision boundary, those loops tend to collapse into status meetings or operate as unrelated ceremonies.",
         provenance=f"{process}: sections 6–9",
     )
 
@@ -823,7 +901,7 @@ The pilot is not funded merely because the table exists. Leadership must also sa
 
 Return to the registration example from the work-item chapter. Over a rolling ninety days, the demand queue shows twenty-three incidents caused by manual registration re-runs after endpoint certificate rotation. The incidents consumed approximately thirty-one staff-hours.
 
-That evidence is enough to justify attention. It is not enough to justify a favorite solution. The implementation proceeds through the same loop the book has applied everywhere else.
+The registration failure is a defect because required automatic behavior failed. The first occurrence created the corrective obligation; the twenty-three incidents and thirty-one hours quantify exposure and cost. A single occurrence with sufficiently severe consequences could have required immediate correction. This evidence is enough to justify attention. It is not enough to justify a favorite solution. The implementation proceeds through the same loop the book has applied everywhere else.
 
 ### 1. Make the demand observable
 
@@ -845,11 +923,11 @@ This is not measurement theater. Each field answers a later decision. Incident c
 
 The discovery package asks why certificate rotation requires manual registration, which systems own certificate issuance and registration, whether the behavior differs by region, what failure and recovery paths exist, and which constraints a safe change must preserve.
 
-Its completion condition is a decision-ready artifact: the observed failure mechanism, viable options, non-goals, affected owners, proof conditions, and a recommendation. A responsible result may be that the apparent pattern combines several causes and should not become one automation project. That is useful company work. Discovery prevented the organization from automating a false category.
+Its completion condition is a decision-ready artifact: the observed failure mechanism, viable options, non-goals, affected owners, proof conditions, and a recommendation. A responsible result may be that the apparent pattern combines several causes and should not become one corrective work item. That is useful company work. Discovery prevented the organization from automating a false category.
 
 ### 3. Define the outcome before choosing the metric
 
-Assume discovery confirms one repairable cause. The governing Epic receives this outcome:
+Assume discovery confirms one correctable defect. The governing Epic receives this outcome:
 
 > No host requires a manual registration re-run after certificate rotation, verified by zero demand incidents with this cause for ninety consecutive days after rollout and successful automated re-registration observed across at least two regional endpoints.
 
@@ -1021,7 +1099,8 @@ def source_map_text() -> str:
             "",
             "## Assembly decisions demonstrated in this preview",
             "",
-            "- A front-matter glossary fixes the book's current vocabulary for decision states, evidence records, completion, and trust boundaries.",
+            "- A visible About the Author placeholder prevents a résumé-shaped biography or invented origin story from entering the preview before the CV, cover-letter, and interview evidence has been reconciled.",
+            "- A front-matter glossary fixes the book's current vocabulary for decision states, evidence records, completion, quality, and trust boundaries.",
             "- Work Intake is split across the front door, legitimate authorization, and later enterprise-reconciliation synthesis.",
             "- Process Improvement is split across visibility and recurrence; the implementation chapter now synthesizes those mechanisms through one end-to-end tracer bullet instead of replaying the source article's adoption section.",
             "- Framing keeps its main argument while the discovery template and DNS example move to Appendix A.",
@@ -1044,8 +1123,8 @@ def source_map_text() -> str:
             "| 4. Frame the Work Before Designing It | Is the selected problem ready for design or execution? | Problem frame versus premature solution | Intent classification, five-box frame, design gates, pre-mortem | Discovery preserves judgment before decomposition | Who may legitimately authorize the resulting commitment? |",
             "| 5. Make the Commitment Legitimate | When is framed work authorized to consume delivery capacity? | Review, approval, and acceptance as different decisions | Ordered reviews, conditional approval, dependency reservation, baseline | Authority and delivery risk remain visible | How does the authorized outcome become executable work? |",
             "| 6. Turn Decisions Into Executable Work | How can decomposition preserve the governing decision? | Work hierarchy versus one generic ticket shape | Epics, packages, stories, tasks, completion conditions, readiness | Backlog work remains attached to outcome and proof | How is the resulting operating system made visible? |",
-            "| 7. Make the Operating System Visible | What work exists and how is it moving? | Delivery visibility versus improvement | Work taxonomy, pull, WIP limits, interrupt budget, aging and blockage | Queue pressure and hidden demand become inspectable | What should recurring demand teach the system? |",
-            "| 8. Convert Recurrence Into Improvement | When should repeated work change the system that produces it? | Repeated delivery versus system improvement | Standardization and automation ladder, metrics, retrospectives | Recurrence becomes evidence for redesign | Which review rhythms connect the separate loops? |",
+            "| 7. Make the Operating System Visible | What work exists and how is it moving? | Delivery, corrective engineering, and improvement as separate investment classes | Work taxonomy, pull, WIP limits, interrupt budget, aging and blockage | Queue pressure and hidden demand become inspectable without making correction optional | What should recurring demand teach the system? |",
+            "| 8. Turn Recurrence Into Engineering Work | What does a repeated condition obligate the organization to do? | Defect correction, legitimate repeatable demand, improvement, and accepted limitation | Cause classification, standardization and automation ladder, metrics, retrospectives | Recurrence quantifies exposure and cost while the condition determines the route | Which review rhythms connect the separate loops? |",
             "| Future Edition: Operating Cadence | When and where must evidence return to judgment? | Decision loop versus status meeting | Named decision rights, inputs, outputs, timing, exception paths | Reviews can coexist without becoming ceremony | How does cadence change for an asset meant to disappear? |",
             "| 10. Managed Runoff | How should the organization govern an asset with no strategic future? | Keep operational versus keep investing | Lifecycle state, allowed work, exception expiry, dependency inventory, checkpoints | Retirement becomes managed exposure rather than neglect | How are capabilities created and placed? |",
             "| 11. Development Is an Organizational Architecture | How does aspiration become usable organizational capability? | Development activity versus development architecture | Capability target, calibration, real work, evidence, reconciliation, placement | Development connects to work and decisions | What recurring management practice preserves the evidence? |",

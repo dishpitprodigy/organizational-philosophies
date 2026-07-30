@@ -254,18 +254,22 @@ Think of a ticketing boundary the way you'd think of a service boundary: separat
 |---|---|---|---|
 | **Incident / break-fix** | Reactive response to something broken now | A distinct **work type** set at creation; cause from a **required, resolve-gated field**; time from the **worklog**. **Not** an epic. | No - a single incident *feeds* the data below |
 | **Request** | A standard, repeatable ask with a known procedure (e.g. server build, package signing) | Its own **work type(s)**; governed by **acceptance criteria frozen into the type** (see [below](#repeatable-requests-the-machinery-frozen-into-a-form)) | No - it's steady-state demand, not improvement |
-| **Recurring toil** | The same manual fix/request, again and again | **Not a work type you create** - a **derived signal** from aggregating the above **by cause** | **Yes - when a *cause category* crosses a threshold** (see below) |
-| **Roadmap project work** | Deliberate improvement we chose to do | Epics with outcomes and item-level proof | It already is one |
+| **Recurring demand signal** | Repeated incidents, manual fixes, or requests sharing a cause | **Not a work type you create** - a **derived signal** from aggregating demand **by cause** | It may create corrective, standardization, automation, or improvement work after classification. A severe defect may require action on its first occurrence. |
+| **Roadmap project work** | Deliberate corrective, improvement, or capability work we chose to do | Epics with outcomes and item-level proof | It already is one |
 
-> **Surface toil by work *type*, not by *tag* - and let that get harder, not easier, as you mature.** Two rungs:
+> **Surface recurring demand by work *type*, not by *tag* - and let that get harder, not easier, as you mature.** Two rungs:
 > - **Rudimentary (one project):** make "incident," "request," etc. **distinct work types chosen at creation**, and have humans **reclassify** the occasional mistake. Do **not** use a removable *tag* or *label* for this. Reclassifying a work type and toggling a tag are nearly identical effort - but a tag is a manual setting that's trivially and *accidentally* removed (a config change living outside version control), whereas a work type is closer to an immutable choice: changing it is deliberate. That friction is a **feature** - it resists silent reclassification, and a misclassification you *have* to consciously fix is itself a **signal that intake (or the system being managed) needs attention**. Use the tool's real capabilities; technology won't fix a behavioral failing, but a proper work type buys you organization, audit trail, and clean aggregation that a tag never will.
-> - **Advanced (separate boundary):** once demand-driven work has its own queue, **"recurring toil" stops being a type you file and becomes a number you compute** - aggregate demand items by their resolve-gated **cause** and rank by count and reclaimed hours. This is the [Automation Ladder](#the-ops-outcome-catalog) pointed at the planning process itself.
+> - **Advanced (separate boundary):** once demand-driven work has its own queue, **"recurring demand" stops being a type you file and becomes a pattern you compute** - aggregate demand items by their resolve-gated **cause** and rank by count and reclaimed hours. This is the [Automation Ladder](#the-ops-outcome-catalog) pointed at the planning process itself.
 
-### The toil-to-epic rule (this is the feedback loop)
+### The demand-to-engineering rule (this is the feedback loop)
 
-> **When a cause category crosses a threshold - e.g. *N occurrences* or *X hours* in a rolling window - it spawns a roadmap epic whose outcome is "retire this demand source," measured back against the demand data.**
+> **Demand evidence routes a cause into planned engineering; it does not decide what kind of engineering the cause requires.**
 
-This is the mechanism that turns reactive pain into planned improvement, and it's exactly the narrative leadership wants to see - note that it **crosses the boundary** (demand data in -> roadmap epic out -> outcome verified against the same demand data):
+A defect is a defect on the first observed failure. Its priority depends on consequence, exposure, detectability, containment, support boundary, and accepted tolerance—not on waiting for an arbitrary recurrence count. A frequency or effort threshold can surface a low-severity pattern for review, but it cannot convert required correction into optional improvement.
+
+Legitimate repeatable demand is different. If the system is behaving as intended but the work remains manual, volume and cumulative effort can justify standardization or automation. If the system already conforms and the organization wants a higher target, that is improvement.
+
+This is the mechanism that turns observed demand into planned engineering, and it's exactly the narrative leadership wants to see - note that it **crosses the boundary** (demand data in -> roadmap epic out -> outcome verified against the same demand data):
 
 ```
 demand queue: incidents + requests
@@ -274,7 +278,7 @@ demand queue: incidents + requests
 top demand drivers, ranked by count × hours
         │
         ▼
-   spawn roadmap epic to retire the driver
+   spawn corrective or improvement epic
         │                                   │
         ▼                                   ▼
    reported as %                  outcome measured in demand data
@@ -283,9 +287,9 @@ top demand drivers, ranked by count × hours
 
 So the reporting story to leadership becomes digestible and honest: *here's our roadmap-vs-demand ratio -> here are the top drivers of the demand half -> here are the epics retiring those drivers -> here's the outcome each one moved, read straight from the demand data.* That loop only works if (a) cause and time are captured **structurally**, and (b) the epics we spawn from it have **real outcomes** - which is the governing point of this chapter.
 
-![Demand items supply structured cause-and-time evidence; causes that cross a threshold spawn roadmap epics, whose outcomes are measured back against the same demand data.](../assets/images/writing-work-items/demand-to-roadmap-loop.svg){#fig-demand-to-roadmap-loop}
+![Demand items supply structured cause-and-time evidence; causes requiring action create roadmap engineering work, whose outcomes are measured back against the same demand data.](../assets/images/writing-work-items/demand-to-roadmap-loop.svg){#fig-demand-to-roadmap-loop}
 
-> **Worked example - the loop crossing the boundary.** Over a rolling 90 days, the demand queue shows **23 registration incidents** sharing the resolve-gated cause *"manual registration re-run after endpoint certificate rotation,"* totaling ~31 hours. That crosses the threshold, so it spawns a roadmap epic - *not* another demand incident:
+> **Worked example - the loop crossing the boundary.** Over a rolling 90 days, the demand queue shows **23 registration incidents** sharing the resolve-gated cause *"manual registration re-run after endpoint certificate rotation,"* totaling ~31 hours. The repeated evidence quantifies exposure and cost, while the failed automatic registration identifies a defect. It spawns a corrective Epic—not another demand incident:
 > - **Roadmap epic outcome:** *"No host requires manual registration re-run after a certificate rotation; verified by zero demand incidents with this cause for 90 consecutive days post-rollout, and a successful automated re-registration observed across >=2 regional endpoints."*
 > - The **baseline (23/quarter, ~31 hrs)** comes straight from demand data; the **outcome is measured back in the demand queue** (does the cause category go to zero?). The incident tickets themselves stay in demand as reactive work - they were never going to "become" the epic; they are the *evidence* that justified opening it.
 
@@ -294,7 +298,7 @@ So the reporting story to leadership becomes digestible and honest: *here's our 
 The point of capturing demand-driven work this carefully is two specific payoffs:
 
 1. **A leading indicator.** Aggregated incidents should surface a systemic problem **before our customers feel it**. (We hold a deliberate, *non-zero* tolerance for customers noticing first today - but that tolerance is a stated baseline we intend to drive down, not an accepted permanent state.)
-2. **A prioritization signal for the roadmap.** Demand data is how teams *rank* bugs and improvements honestly: "this bug caused **17 incidents in the last 30 days**" or "this feature reclaims **~`t` hours/month**." Severity comes from incident count; value comes from reclaimed effort. Without this, prioritization is opinion.
+2. **A prioritization signal for the roadmap.** Demand data helps teams rank corrective and improvement work honestly: "this defect caused **17 incidents in the last 30 days**" or "this change reclaims **~`t` hours/month**." Consequence, exposure, detectability, containment, and accepted tolerance establish defect risk. Recurrence count and recorded effort quantify frequency and cost. Without both, prioritization is opinion.
 
 > **The data is only as good as its weakest manual input.** This loop drives leadership reporting and epic prioritization, so it cannot rest on anyone *remembering* to classify a ticket - voluntary tagging fails often enough to make the totals untrustworthy, and unreliable data here is worse than none because it gets acted on. Push the capture into the structure: **work type** chosen at creation, a **cause** field made **required to resolve** (the same resolve-gate mechanism as the standing gates in [the distinction among DoD, acceptance, and outcome](#three-things-people-confuse-dod-vs-acceptance-vs-outcome)) and presented as a **closed dropdown** (not free text) so categories aggregate cleanly, and **time from the worklog** rather than a hand-typed estimate. Keep the human surface as small as possible, and treat any number that depends on optional input as an estimate, not a fact.
 

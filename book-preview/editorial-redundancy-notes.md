@@ -9,7 +9,7 @@ Yes, there is a real book here. No, the page count does not represent that many 
 The preview currently contains approximately:
 
 - **44,000 words of narrative**
-- **1,000 words of front-matter glossary**
+- **1,200 words of front matter**, including the working glossary and the visible author placeholder
 - **13,800 words of appendices**
 - **2,350 narrative words in five future-edition interludes**
 - **176 words in six Part dividers**
@@ -34,20 +34,20 @@ This is the cleanest accidental redundancy because it was created by assembly.
 
 **Judgment:** usually not useful repetition. The book needs the transition or the article opening, not both. Preserve whichever sentence best carries the previous chapter into the new one, then let the chapter begin.
 
-### 2. The work taxonomy is explained three times and is not yet one taxonomy
+### 2. The work taxonomy was explained three times and encoded a bad quality model
 
-[Chapter 6](chapters/06-executable-work.md) distinguishes roadmap-driven work, incidents, standard requests, and recurring toil. [Chapter 7](chapters/07-visible-operating-system.md) distinguishes delivery from improvement, then gives incident/request/change categories. [Chapter 8](chapters/08-convert-recurrence.md) again explains how recurring delivery becomes improvement work.
+[Chapter 6](chapters/06-executable-work.md) distinguished roadmap-driven work, incidents, standard requests, and recurring toil. [Chapter 7](chapters/07-visible-operating-system.md) distinguished delivery from improvement, then gave incident/request/change categories. [Chapter 8](chapters/08-convert-recurrence.md) again explained how recurring delivery becomes improvement work.
 
-This is not only repetition. The models answer different questions:
+This was not only repetition. The models answered different questions:
 
 - origin of demand;
 - operational work type;
 - investment class; and
-- whether recurrence has crossed a threshold into improvement.
+- the engineering obligation created by the observed condition.
 
-Because the current text does not explicitly say that these are separate axes, they can read like competing lists of the same thing. Chapter 6 says recurring toil is a derived signal rather than a filed type; Chapter 7 says a recurring interrupt becomes an improvement project after three occurrences in a month. Both can be true, but the manuscript should establish one canonical classification model and show how the other views project onto it.
+The threshold rule was wrong, not merely another projection of the taxonomy. Required behavior that violates an applicable requirement or accepted tolerance is a defect on the first occurrence. Removing its cause is corrective engineering and part of producing or maintaining an acceptable system. Recurrence may strengthen causal evidence and quantify exposure or cost; it does not graduate a defect into optional improvement. Improvement raises a conforming system. Legitimate repeatable demand may warrant standardization or automation. A decision not to correct a known condition must be a narrow, explicit, owned limitation or tolerance rather than the passive result of backlog age.
 
-**Judgment:** important material, but currently overlapping and mildly contradictory. This is a synthesis problem, not a prose-cutting problem.
+**Action taken:** Chapters 6–8 and the glossary now use that distinction. The old three-occurrences-in-a-month rule is retained only as the kind of alert that can force classification review; it is no longer a quality threshold. The chapter title changed from **Convert Recurrence Into Improvement** to **Turn Recurrence Into Engineering Work**.
 
 ### 3. The process-improvement adoption case is replayed in the conclusion
 
@@ -110,7 +110,7 @@ The material is strong, concrete, and unusually complete. That completeness is e
 
 ### 7. The work-item chapter is also functioning as a field guide
 
-[Chapter 6](chapters/06-executable-work.md) is the longest narrative chapter at roughly **6,100 words**. Its governing distinction is excellent: output, acceptance, workmanship, and outcome close different claims at different levels. The chapter also retains extensive worked-example repair, ticket-writing instruction, standing gates, reporting-boundary design, work taxonomy, a toil-to-Epic mechanism, request-type design, splitting rules, sizing guidance, and readiness.
+[Chapter 6](chapters/06-executable-work.md) is the longest narrative chapter at roughly **6,100 words**. Its governing distinction is excellent: output, acceptance, workmanship, and outcome close different claims at different levels. The chapter also retains extensive worked-example repair, ticket-writing instruction, standing gates, reporting-boundary design, work taxonomy, a demand-to-engineering mechanism, request-type design, splitting rules, sizing guidance, and readiness.
 
 That density explains the length better than redundancy does. It is doing the work of a chapter and a practical manual simultaneously.
 

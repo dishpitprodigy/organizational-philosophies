@@ -5,7 +5,9 @@ This directory contains a book-specific assembly of the organizational-philosoph
 Start here:
 
 - [manuscript.md](manuscript.md) is the complete Markdown preview.
+- [frontmatter/about-the-author.md](frontmatter/about-the-author.md) is a visible future-edition placeholder for a biography grounded in the author's professional record and interview.
 - [frontmatter/working-glossary.md](frontmatter/working-glossary.md) fixes the current distinctions among decision states, evidence records, completion terms, and trust boundaries.
+- [author-interview-brief.md](author-interview-brief.md) is the editorial source-gathering plan for the About the Author and a first-person preface.
 - [source-map.md](source-map.md) records where each chapter came from and which chapters are provisional.
 - [editorial-redundancy-notes.md](editorial-redundancy-notes.md) distinguishes useful recurrence from article-style restatement, overlapping mechanisms, and reference material that inflates the physical book.
 - `parts/` contains the reader-journey dividers that organize the source cuts into a book rather than a flat article collection.

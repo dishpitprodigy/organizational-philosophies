@@ -1,8 +1,21 @@
-# Convert Recurrence Into Improvement
+# Turn Recurrence Into Engineering Work
 
 *Part IV — Operating, Improving, and Retiring the System*
 
-Recurring work is not merely a queue-management problem. It is evidence about the operating model. The improvement loop begins when the organization stops treating each repeated request as an isolated success and asks whether the pattern should be documented, standardized, automated, prevented, or consciously retained.
+Recurring work is not merely a queue-management problem. It is evidence about the operating model. Recurrence strengthens the evidence about exposure, cause, and economic cost; it does not determine what kind of work the response is. A defect routes to corrective engineering even when the first occurrence is the only occurrence. Legitimate repeatable demand may route to standard work or automation. Improvement raises a system that already conforms. A narrow accepted limitation requires an explicit, owned tolerance decision.
+
+## Classify the recurrence before acting
+
+The first question is not whether the pattern has crossed an arbitrary threshold. It is what the pattern represents:
+
+| Observed condition | Required route |
+|---|---|
+| Required behavior failed or an accepted tolerance was violated | Contain the consequence, then correct the defect or its cause |
+| Legitimate demand is being fulfilled through a repeatable manual procedure | Define standard work, then evaluate automation using frequency, cost, risk, and expected return |
+| The system conforms, but a higher capability, quality, or efficiency target is worthwhile | Improvement |
+| The condition is real but support, consequence, exposure, or correction cost does not justify action | Record a bounded, owned accepted limitation or tolerance |
+
+A recurrence threshold can force a review before low-severity demand disappears into the queue. It cannot turn a defect into a defect, convert correction into optional improvement, or create acceptance through neglect.
 
 ## The Standardization and Automation Ladder
 
@@ -79,18 +92,18 @@ This is the hardest part. Everything before it is planning; everything after it 
 
 ## Measuring Success
 
-Establish at least one metric *before* starting, so we can tell whether the process improvement is actually improving anything.
+Establish at least one metric *before* starting, so the organization can tell whether the intervention changed the condition it was authorized to change.
 
 ### Leading Indicators (measure effort)
 
 - **Automation coverage** — percentage of recurring tasks at each level of the automation ladder. Track monthly. Target: 0% at Level 0 within 6 months.
-- **Unplanned work ratio** — unplanned work items / total work items per week. Track weekly. If this is not declining, the process improvement is not working.
+- **Unplanned work ratio** — unplanned work items / total work items per week. Track weekly. If this is not declining, the intervention is not reducing unplanned demand; revisit the classification, cause, or chosen mechanism.
 - **Mean time to standard work** — when a new recurring task is identified, how long until a documented procedure exists? Target: by the end of the week it is first performed.
 
 ### Lagging Indicators (measure outcomes)
 
 - **Cycle time** — median time from ticket creation to resolution. Segment by type (incident vs request vs project).
-- **Repeat incident rate** — how often do we get paged for the same thing twice? If automation is working, this trends toward zero.
+- **Repeat incident rate** — how often do we get paged for the same thing twice? If the corrective mechanism is working, this trends toward zero.
 - **Time to production** — how long from "we decided to do this" to "it's in production." Captures the full cost of process overhead, approvals, and queuing.
 
 ### The Executive Number
@@ -119,11 +132,11 @@ The goal is not to optimize for velocity theater. The goal is to create forecast
    - Even better if...
 3. Include domain-relevant operational metrics reports
    - High unplanned work utilization helps us understand shortcomings in planned work
-   - Review the Delivery vs Improvement capacity split — are we spending our time the way we intended?
+   - Review the Delivery, Corrective Engineering, and Improvement capacity split — are we spending our time the way we intended?
 4. Present the results of our work to key stakeholders
 
 The distinction between a retrospective and a Sprint Review is documented by [Scrum.org — What is a Sprint Review](https://www.scrum.org/resources/what-is-a-sprint-review)
 
-Retrospectives, metrics, and recurring-demand evidence create several review loops. Without a defined cadence and decision boundary, those loops tend to collapse into status meetings or operate as unrelated ceremonies.
+Classification determines the obligation; recurrence helps quantify its exposure and cost. Retrospectives, metrics, and recurring-demand evidence then create several review loops. Without a defined cadence and decision boundary, those loops tend to collapse into status meetings or operate as unrelated ceremonies.
 
 <!-- Preview assembly source: Process-Improvement-Framework.md: sections 6–9 -->

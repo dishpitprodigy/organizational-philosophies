@@ -4,6 +4,7 @@ This map records editorial treatment, not merely file provenance. “Provisional
 
 | Preview item | Part | Source material | Status |
 |---|---|---|---|
+| [About the Author — Future Edition](frontmatter/about-the-author.md) | Front matter | Author-source review and interview | Unnumbered editorial placeholder |
 | [Working Glossary](frontmatter/working-glossary.md) | Front matter | Book assembly synthesis | Reader aid |
 | [Part I: Learning to See the Loop](parts/part-1.md) | I | Assembly structure | Part divider |
 | [The Open-Loop Enterprise](chapters/01-open-loop-enterprise.md) | I — Learning to See the Loop | The-Open-Loop-Enterprise.md | Chapter anchor |
@@ -16,7 +17,7 @@ This map records editorial treatment, not merely file provenance. “Provisional
 | [Turn Decisions Into Executable Work](chapters/06-executable-work.md) | III — Framing and Authorizing Work | Writing Work Items - Epics, Stories, and Tasks.md | Assembled source cut |
 | [Part IV: Operating, Improving, and Retiring the System](parts/part-4.md) | IV | Assembly structure | Part divider |
 | [Make the Operating System Visible](chapters/07-visible-operating-system.md) | IV — Operating, Improving, and Retiring the System | Process-Improvement-Framework.md | Assembled source cut |
-| [Convert Recurrence Into Improvement](chapters/08-convert-recurrence.md) | IV — Operating, Improving, and Retiring the System | Process-Improvement-Framework.md | Assembled source cut |
+| [Turn Recurrence Into Engineering Work](chapters/08-convert-recurrence.md) | IV — Operating, Improving, and Retiring the System | Process-Improvement-Framework.md plus book-level quality distinction | Assembled source cut |
 | [Future Edition: Operating Cadence](chapters/09-operating-cadence.md) | IV — Operating, Improving, and Retiring the System | Gap-map synthesis plus distributed operating practices | Unnumbered editorial placeholder |
 | [Managed Runoff](chapters/10-managed-runoff.md) | IV — Operating, Improving, and Retiring the System | Managed-Runoff-for-Deprecated-Services.md | Chapter anchor |
 | [Part V: Developing and Acquiring Capability](parts/part-5.md) | V | Assembly structure | Part divider |
@@ -40,7 +41,8 @@ This map records editorial treatment, not merely file provenance. “Provisional
 
 ## Assembly decisions demonstrated in this preview
 
-- A front-matter glossary fixes the book's current vocabulary for decision states, evidence records, completion, and trust boundaries.
+- A visible About the Author placeholder prevents a résumé-shaped biography or invented origin story from entering the preview before the CV, cover-letter, and interview evidence has been reconciled.
+- A front-matter glossary fixes the book's current vocabulary for decision states, evidence records, completion, quality, and trust boundaries.
 - Work Intake is split across the front door, legitimate authorization, and later enterprise-reconciliation synthesis.
 - Process Improvement is split across visibility and recurrence; the implementation chapter now synthesizes those mechanisms through one end-to-end tracer bullet instead of replaying the source article's adoption section.
 - Framing keeps its main argument while the discovery template and DNS example move to Appendix A.
@@ -63,8 +65,8 @@ These contracts describe the movement each narrative chapter is responsible for.
 | 4. Frame the Work Before Designing It | Is the selected problem ready for design or execution? | Problem frame versus premature solution | Intent classification, five-box frame, design gates, pre-mortem | Discovery preserves judgment before decomposition | Who may legitimately authorize the resulting commitment? |
 | 5. Make the Commitment Legitimate | When is framed work authorized to consume delivery capacity? | Review, approval, and acceptance as different decisions | Ordered reviews, conditional approval, dependency reservation, baseline | Authority and delivery risk remain visible | How does the authorized outcome become executable work? |
 | 6. Turn Decisions Into Executable Work | How can decomposition preserve the governing decision? | Work hierarchy versus one generic ticket shape | Epics, packages, stories, tasks, completion conditions, readiness | Backlog work remains attached to outcome and proof | How is the resulting operating system made visible? |
-| 7. Make the Operating System Visible | What work exists and how is it moving? | Delivery visibility versus improvement | Work taxonomy, pull, WIP limits, interrupt budget, aging and blockage | Queue pressure and hidden demand become inspectable | What should recurring demand teach the system? |
-| 8. Convert Recurrence Into Improvement | When should repeated work change the system that produces it? | Repeated delivery versus system improvement | Standardization and automation ladder, metrics, retrospectives | Recurrence becomes evidence for redesign | Which review rhythms connect the separate loops? |
+| 7. Make the Operating System Visible | What work exists and how is it moving? | Delivery, corrective engineering, and improvement as separate investment classes | Work taxonomy, pull, WIP limits, interrupt budget, aging and blockage | Queue pressure and hidden demand become inspectable without making correction optional | What should recurring demand teach the system? |
+| 8. Turn Recurrence Into Engineering Work | What does a repeated condition obligate the organization to do? | Defect correction, legitimate repeatable demand, improvement, and accepted limitation | Cause classification, standardization and automation ladder, metrics, retrospectives | Recurrence quantifies exposure and cost while the condition determines the route | Which review rhythms connect the separate loops? |
 | Future Edition: Operating Cadence | When and where must evidence return to judgment? | Decision loop versus status meeting | Named decision rights, inputs, outputs, timing, exception paths | Reviews can coexist without becoming ceremony | How does cadence change for an asset meant to disappear? |
 | 10. Managed Runoff | How should the organization govern an asset with no strategic future? | Keep operational versus keep investing | Lifecycle state, allowed work, exception expiry, dependency inventory, checkpoints | Retirement becomes managed exposure rather than neglect | How are capabilities created and placed? |
 | 11. Development Is an Organizational Architecture | How does aspiration become usable organizational capability? | Development activity versus development architecture | Capability target, calibration, real work, evidence, reconciliation, placement | Development connects to work and decisions | What recurring management practice preserves the evidence? |

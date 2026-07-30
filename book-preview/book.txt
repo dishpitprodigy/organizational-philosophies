@@ -3,6 +3,7 @@ subtitle: A Guide to Organizational Excellence — Preview Manuscript
 author: Jon Wroblewski
 slug: closing-the-loop-preview
 chapters:
+book-preview/frontmatter/about-the-author.md
 book-preview/frontmatter/working-glossary.md
 book-preview/parts/part-1.md
 book-preview/chapters/01-open-loop-enterprise.md

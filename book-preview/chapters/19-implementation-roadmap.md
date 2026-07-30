@@ -44,7 +44,7 @@ The pilot is not funded merely because the table exists. Leadership must also sa
 
 Return to the registration example from the work-item chapter. Over a rolling ninety days, the demand queue shows twenty-three incidents caused by manual registration re-runs after endpoint certificate rotation. The incidents consumed approximately thirty-one staff-hours.
 
-That evidence is enough to justify attention. It is not enough to justify a favorite solution. The implementation proceeds through the same loop the book has applied everywhere else.
+The registration failure is a defect because required automatic behavior failed. The first occurrence created the corrective obligation; the twenty-three incidents and thirty-one hours quantify exposure and cost. A single occurrence with sufficiently severe consequences could have required immediate correction. This evidence is enough to justify attention. It is not enough to justify a favorite solution. The implementation proceeds through the same loop the book has applied everywhere else.
 
 ### Make the demand observable
 
@@ -66,11 +66,11 @@ This is not measurement theater. Each field answers a later decision. Incident c
 
 The discovery package asks why certificate rotation requires manual registration, which systems own certificate issuance and registration, whether the behavior differs by region, what failure and recovery paths exist, and which constraints a safe change must preserve.
 
-Its completion condition is a decision-ready artifact: the observed failure mechanism, viable options, non-goals, affected owners, proof conditions, and a recommendation. A responsible result may be that the apparent pattern combines several causes and should not become one automation project. That is useful company work. Discovery prevented the organization from automating a false category.
+Its completion condition is a decision-ready artifact: the observed failure mechanism, viable options, non-goals, affected owners, proof conditions, and a recommendation. A responsible result may be that the apparent pattern combines several causes and should not become one corrective work item. That is useful company work. Discovery prevented the organization from automating a false category.
 
 ### Define the outcome before choosing the metric
 
-Assume discovery confirms one repairable cause. The governing Epic receives this outcome:
+Assume discovery confirms one correctable defect. The governing Epic receives this outcome:
 
 > No host requires a manual registration re-run after certificate rotation, verified by zero demand incidents with this cause for ninety consecutive days after rollout and successful automated re-registration observed across at least two regional endpoints.
 

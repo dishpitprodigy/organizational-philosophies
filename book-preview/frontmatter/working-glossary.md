@@ -44,11 +44,16 @@ The definitions are specific to this book. They are not claims that every cited 
 | **Discovery** | Bounded work whose outcome is decision-ready knowledge. Discovery is legitimate company work even when the responsible result is not to implement. |
 | **Implementation** | Work authorized to make a selected change real. It commits capacity, risk, ownership, and later acceptance obligations that discovery may not. |
 | **Output** | An activity performed or artifact produced. Output is not proof that the intended change occurred. |
+| **Incident** | An observed interruption or degradation that requires containment or service restoration. The incident is the manifestation; it is not necessarily the underlying defect. |
+| **Defect** | A condition that causes a product, service, process, or control to violate an applicable requirement or accepted tolerance. A defect exists on the first occurrence; recurrence changes the evidence about exposure, not the classification. |
+| **Corrective engineering** | Work that removes a defect or its cause so required behavior is restored and recurrence is prevented. This is quality work, not an optional improvement to a conforming system. |
+| **Improvement** | Work that raises the target, capability, efficiency, or quality of a system already operating within its accepted requirements and tolerances. |
+| **Accepted limitation / tolerance** | A bounded, owned decision not to correct a known condition because its consequence, exposure, support boundary, or correction cost does not justify action. Silence and backlog age do not create acceptance. |
 | **Outcome / exit condition** | The observable change that justifies the work and determines whether the governing Epic or initiative can close. |
 | **Acceptance criteria** | The item-specific conditions that prove a story, work package, requirement, or delivered capability did what it promised. |
 | **Definition of Done** | A standing workmanship bar applied to every item of a given kind. It is not the item-specific acceptance criterion or the governing outcome. |
 | **Work type** | A stable classification of the work's operating shape, such as incident, standard request, or proposed change. |
-| **Investment class** | The rule governing what kind of capacity the work may receive: ordinary delivery, improvement, discovery, managed runoff, or another explicitly defined class. |
+| **Investment class** | The rule governing what kind of capacity the work may receive: ordinary delivery, corrective engineering, improvement, discovery, managed runoff, or another explicitly defined class. |
 
 ## Actors and boundaries {.unnumbered .unlisted}
 
