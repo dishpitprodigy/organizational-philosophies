@@ -1,0 +1,61 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 870" role="img" aria-labelledby="title desc">
+<title id="title">Diagnose the gap before assigning the rating</title>
+<desc id="desc">Capability and opportunity require different evidence, owners, and corrective actions.</desc>
+
+<defs>
+  <marker id="arrow-ink" markerWidth="10" markerHeight="10" refX="8.85" refY="3"
+          orient="auto" markerUnits="strokeWidth">
+    <path d="M0,0 L0,6 L9,3 z" fill="#111111"/>
+  </marker>
+  <marker id="arrow-red" markerWidth="10" markerHeight="10" refX="8.85" refY="3"
+          orient="auto" markerUnits="strokeWidth">
+    <path d="M0,0 L0,6 L9,3 z" fill="#ad0034"/>
+  </marker>
+  <style>
+    text { font-family: "Helvetica Neue", Arial, sans-serif; }
+  </style>
+</defs>
+
+<rect width="1200" height="870" fill="#f5efdc"/>
+<rect x="18" y="18" width="1164" height="834" fill="none" stroke="#111111" stroke-width="2"/>
+<text x="58" y="62" font-size="15" font-weight="800" fill="#ad0034" text-anchor="start" letter-spacing="1.8"><tspan x="58" dy="0">CAREER PROGRESSION</tspan></text>
+<text x="58" y="104" font-size="34" font-weight="800" fill="#111111" text-anchor="start" letter-spacing="0"><tspan x="58" dy="0">Diagnose the gap before assigning the rating</tspan></text>
+<text x="58" y="134" font-size="17" font-weight="400" fill="#5f5a4e" text-anchor="start" letter-spacing="0"><tspan x="58" dy="0">Capability and opportunity require different evidence, owners, and corrective actions.</tspan></text>
+<line x1="58" y1="154" x2="1142" y2="154" stroke="#111111" stroke-width="2"/>
+<text x="700" y="188" font-size="12" font-weight="800" fill="#ad0034" text-anchor="start" letter-spacing="1.1"><tspan x="700" dy="0">WAS TARGET-LEVEL SCOPE AVAILABLE AND AUTHORIZED?</tspan></text>
+<rect x="290" y="204" width="410" height="64" fill="#007f7b" stroke="#007f7b" stroke-width="2"/>
+<rect x="700" y="204" width="410" height="64" fill="#ad0034" stroke="#ad0034" stroke-width="2"/>
+<text x="495" y="244" font-size="16" font-weight="800" fill="#fffdf5" text-anchor="middle" letter-spacing="1.2"><tspan x="495" dy="0">YES</tspan></text>
+<text x="905" y="244" font-size="16" font-weight="800" fill="#fffdf5" text-anchor="middle" letter-spacing="1.2"><tspan x="905" dy="0">NO</tspan></text>
+<rect x="58" y="288" width="232" height="214" fill="#111111" stroke="#111111" stroke-width="2"/>
+<text x="174" y="377" font-size="12" font-weight="800" fill="#fffdf5" text-anchor="middle" letter-spacing="0.8"><tspan x="174" dy="0">TARGET-LEVEL OPERATION</tspan></text>
+<text x="174" y="404" font-size="12" font-weight="800" fill="#fffdf5" text-anchor="middle" letter-spacing="0.8"><tspan x="174" dy="0">DEMONSTRATED</tspan></text>
+<rect x="58" y="502" width="232" height="214" fill="#111111" stroke="#111111" stroke-width="2"/>
+<text x="174" y="591" font-size="12" font-weight="800" fill="#fffdf5" text-anchor="middle" letter-spacing="0.8"><tspan x="174" dy="0">NOT YET DEMONSTRATED</tspan></text>
+<text x="174" y="618" font-size="12" font-weight="800" fill="#fffdf5" text-anchor="middle" letter-spacing="0.8"><tspan x="174" dy="0">OR NOT EVIDENCED</tspan></text>
+<rect x="290" y="288" width="410" height="214" fill="#fffdf5" stroke="#2f7d32" stroke-width="3"/>
+<rect x="290" y="288" width="12" height="214" fill="#2f7d32" stroke="#2f7d32" stroke-width="0"/>
+<text x="322" y="336" font-size="21" font-weight="800" fill="#111111" text-anchor="start" letter-spacing="0"><tspan x="322" dy="0">Promotion assessment</tspan></text>
+<line x1="322" y1="355" x2="668" y2="355" stroke="#ddd5bf" stroke-width="2"/>
+<text x="322" y="389" font-size="16" font-weight="500" fill="#5f5a4e" text-anchor="start" letter-spacing="0"><tspan x="322" dy="0">Compare sustained evidence</tspan><tspan x="322" dy="23">to the target level; confirm</tspan><tspan x="322" dy="23">organizational need.</tspan></text>
+<rect x="700" y="288" width="410" height="214" fill="#fffdf5" stroke="#ad0034" stroke-width="3"/>
+<rect x="700" y="288" width="12" height="214" fill="#ad0034" stroke="#ad0034" stroke-width="0"/>
+<text x="732" y="336" font-size="21" font-weight="800" fill="#111111" text-anchor="start" letter-spacing="0"><tspan x="732" dy="0">Scope-starvation risk</tspan></text>
+<line x1="732" y1="355" x2="1078" y2="355" stroke="#ddd5bf" stroke-width="2"/>
+<text x="732" y="389" font-size="16" font-weight="500" fill="#5f5a4e" text-anchor="start" letter-spacing="0"><tspan x="732" dy="0">Recognize evidence already</tspan><tspan x="732" dy="23">shown; fix the role, placement,</tspan><tspan x="732" dy="23">or withheld authority.</tspan></text>
+<rect x="290" y="502" width="410" height="214" fill="#fffdf5" stroke="#dcc61e" stroke-width="3"/>
+<rect x="290" y="502" width="12" height="214" fill="#dcc61e" stroke="#dcc61e" stroke-width="0"/>
+<text x="322" y="550" font-size="21" font-weight="800" fill="#111111" text-anchor="start" letter-spacing="0"><tspan x="322" dy="0">Capability gap</tspan></text>
+<line x1="322" y1="569" x2="668" y2="569" stroke="#ddd5bf" stroke-width="2"/>
+<text x="322" y="603" font-size="16" font-weight="500" fill="#5f5a4e" text-anchor="start" letter-spacing="0"><tspan x="322" dy="0">Name the missing dimension;</tspan><tspan x="322" dy="23">coach against observable</tspan><tspan x="322" dy="23">evidence and expectations.</tspan></text>
+<rect x="700" y="502" width="410" height="214" fill="#fffdf5" stroke="#007f7b" stroke-width="3"/>
+<rect x="700" y="502" width="12" height="214" fill="#007f7b" stroke="#007f7b" stroke-width="0"/>
+<text x="732" y="550" font-size="21" font-weight="800" fill="#111111" text-anchor="start" letter-spacing="0"><tspan x="732" dy="0">Opportunity gap</tspan></text>
+<line x1="732" y1="569" x2="1078" y2="569" stroke="#ddd5bf" stroke-width="2"/>
+<text x="732" y="603" font-size="16" font-weight="500" fill="#5f5a4e" text-anchor="start" letter-spacing="0"><tspan x="732" dy="0">Capability cannot be inferred;</tspan><tspan x="732" dy="23">create scope or state the</tspan><tspan x="732" dy="23">role ceiling explicitly.</tspan></text>
+<rect x="206" y="748" width="936" height="52" fill="#fffdf5" stroke="#111111" stroke-width="2" stroke-dasharray="8 6"/>
+<text x="230" y="769" font-size="12" font-weight="800" fill="#ad0034" text-anchor="start" letter-spacing="1.1"><tspan x="230" dy="0">IF THE EVIDENCE IS UNCLEAR</tspan></text>
+<text x="1120" y="782" font-size="15" font-weight="700" fill="#111111" text-anchor="end" letter-spacing="0"><tspan x="1120" dy="0">Collect it; do not default to a lower level.</tspan></text>
+<line x1="58" y1="806" x2="1142" y2="806" stroke="#ddd5bf" stroke-width="2"/>
+<text x="58" y="833" font-size="14" font-weight="600" fill="#5f5a4e" text-anchor="start" letter-spacing="0"><tspan x="58" dy="0">The person who controls access to scope must not score its absence as a capability deficiency.</tspan></text>
+</svg>

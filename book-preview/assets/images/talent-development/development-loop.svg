@@ -1,0 +1,80 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800" role="img" aria-labelledby="title desc">
+<title id="title">Development is a closed evidence loop</title>
+<desc id="desc">Seven connected stages move from aspiration through capability, real work, coaching, evidence, reconciliation, and a next decision that begins another development cycle.</desc>
+<defs>
+  <marker id="arrow-ink" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth">
+    <path d="M0,0 L0,6 L9,3 z" fill="#111111"/>
+  </marker>
+  <marker id="arrow-teal" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth">
+    <path d="M0,0 L0,6 L9,3 z" fill="#007f7b"/>
+  </marker>
+  <style>
+    text { font-family: "Helvetica Neue", Arial, sans-serif; }
+    .card-title { font-size: 17px; font-weight: 800; fill: #111111; }
+    .card-copy { font-size: 14px; fill: #5f5a4e; }
+    .num { font-size: 15px; font-weight: 800; fill: #fffdf5; }
+  </style>
+</defs>
+<rect width="1200" height="800" fill="#f5efdc"/>
+<rect x="18" y="18" width="1164" height="764" fill="none" stroke="#111111" stroke-width="2"/>
+<rect x="30" y="30" width="1140" height="740" fill="none" stroke="#111111" stroke-width="1"/>
+<text x="58" y="60" font-size="15" font-weight="800" fill="#ad0034" letter-spacing="1.8">TALENT DEVELOPMENT / SYSTEM FIGURE</text>
+<text x="58" y="102" font-size="34" font-weight="800" fill="#111111">Development is a closed evidence loop</text>
+<text x="58" y="132" font-size="17" fill="#5f5a4e">Intent becomes capability only when real work produces evidence and that evidence changes the next decision.</text>
+<line x1="58" y1="151" x2="1142" y2="151" stroke="#111111" stroke-width="2"/>
+
+<rect x="65" y="215" width="230" height="120" fill="#fffdf5" stroke="#ad0034" stroke-width="3"/>
+<rect x="65" y="215" width="42" height="35" fill="#ad0034"/>
+<text x="86" y="239" text-anchor="middle" class="num">1</text>
+<text x="120" y="243" class="card-title">ASPIRATION</text>
+<text x="81" y="278" class="card-copy"><tspan x="81">Direction, preference,</tspan><tspan x="81" dy="20">role context</tspan></text>
+
+<line x1="295" y1="275" x2="330" y2="275" stroke="#111111" stroke-width="3" marker-end="url(#arrow-ink)"/>
+<rect x="330" y="215" width="230" height="120" fill="#fffdf5" stroke="#ad0034" stroke-width="3"/>
+<rect x="330" y="215" width="42" height="35" fill="#ad0034"/>
+<text x="351" y="239" text-anchor="middle" class="num">2</text>
+<text x="385" y="243" class="card-title">TARGET CAPABILITY</text>
+<text x="346" y="278" class="card-copy"><tspan x="346">Observable next</tspan><tspan x="346" dy="20">operating mode</tspan></text>
+
+<line x1="560" y1="275" x2="595" y2="275" stroke="#111111" stroke-width="3" marker-end="url(#arrow-ink)"/>
+<rect x="595" y="215" width="230" height="120" fill="#fffdf5" stroke="#dcc61e" stroke-width="3"/>
+<rect x="595" y="215" width="42" height="35" fill="#dcc61e"/>
+<text x="616" y="239" text-anchor="middle" class="num" fill="#111111">3</text>
+<text x="650" y="243" class="card-title">REAL WORK</text>
+<text x="611" y="278" class="card-copy"><tspan x="611">Bounded assignment</tspan><tspan x="611" dy="20">with legitimate stakes</tspan></text>
+
+<line x1="825" y1="275" x2="860" y2="275" stroke="#111111" stroke-width="3" marker-end="url(#arrow-ink)"/>
+<rect x="860" y="215" width="275" height="120" fill="#fffdf5" stroke="#007f7b" stroke-width="3"/>
+<rect x="860" y="215" width="42" height="35" fill="#007f7b"/>
+<text x="881" y="239" text-anchor="middle" class="num">4</text>
+<text x="915" y="243" class="card-title">COACHING + FEEDBACK</text>
+<text x="876" y="278" class="card-copy"><tspan x="876">Read the system;</tspan><tspan x="876" dy="20">update the mental model</tspan></text>
+
+<path d="M997,335 L997,405" fill="none" stroke="#007f7b" stroke-width="3" marker-end="url(#arrow-teal)"/>
+<rect x="860" y="405" width="275" height="120" fill="#fffdf5" stroke="#007f7b" stroke-width="3"/>
+<rect x="860" y="405" width="42" height="35" fill="#007f7b"/>
+<text x="881" y="429" text-anchor="middle" class="num">5</text>
+<text x="915" y="433" class="card-title">EVIDENCE</text>
+<text x="876" y="468" class="card-copy"><tspan x="876">Observed behavior,</tspan><tspan x="876" dy="20">outcome, artifact, context</tspan></text>
+
+<line x1="860" y1="465" x2="825" y2="465" stroke="#111111" stroke-width="3" marker-end="url(#arrow-ink)"/>
+<rect x="595" y="405" width="230" height="120" fill="#fffdf5" stroke="#2f7d32" stroke-width="3"/>
+<rect x="595" y="405" width="42" height="35" fill="#2f7d32"/>
+<text x="616" y="429" text-anchor="middle" class="num">6</text>
+<text x="650" y="433" class="card-title">RECONCILIATION</text>
+<text x="611" y="468" class="card-copy"><tspan x="611">What changed?</tspan><tspan x="611" dy="20">Was the target right?</tspan></text>
+
+<line x1="595" y1="465" x2="560" y2="465" stroke="#111111" stroke-width="3" marker-end="url(#arrow-ink)"/>
+<rect x="330" y="405" width="230" height="120" fill="#fffdf5" stroke="#2f7d32" stroke-width="3"/>
+<rect x="330" y="405" width="42" height="35" fill="#2f7d32"/>
+<text x="351" y="429" text-anchor="middle" class="num">7</text>
+<text x="385" y="433" class="card-title">NEXT DECISION</text>
+<text x="346" y="468" class="card-copy"><tspan x="346">Continue, adjust, expand,</tspan><tspan x="346" dy="20">move, promote, or redesign</tspan></text>
+
+<path d="M330,465 L180,465 L180,365 L180,335" fill="none" stroke="#111111" stroke-width="3" marker-end="url(#arrow-ink)"/>
+<rect x="300" y="585" width="600" height="56" fill="#fff8e0" stroke="#111111" stroke-width="2"/>
+<text x="600" y="608" font-size="14" font-weight="800" fill="#ad0034" text-anchor="middle" letter-spacing="1">ONE CYCLE SHOULD CHANGE THE NEXT ONE</text>
+<text x="600" y="630" font-size="14" fill="#5f5a4e" text-anchor="middle">The plan is unfinished until the evidence changes a talent or system decision.</text>
+<line x1="58" y1="714" x2="1142" y2="714" stroke="#ddd5bf" stroke-width="2"/>
+<text x="58" y="742" font-size="14" font-weight="600" fill="#5f5a4e">A career map without assignments and a review without preserved context are artifacts, not architecture.</text>
+</svg>

@@ -1,0 +1,121 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 820" role="img" aria-labelledby="title desc">
+<title id="title">Open loops spend decisions; closed loops compound them</title>
+<desc id="desc">An open-loop organization records a result but loses the original judgment and context, so the next decision begins from memory. A closed-loop organization preserves the claim, observes the outcome, reconciles the two, and feeds the learning into the next decision.</desc>
+
+<defs>
+  <marker id="arrow-ink" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth">
+    <path d="M0,0 L0,6 L9,3 z" fill="#111111"/>
+  </marker>
+  <marker id="arrow-red" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth">
+    <path d="M0,0 L0,6 L9,3 z" fill="#ad0034"/>
+  </marker>
+  <marker id="arrow-green" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth">
+    <path d="M0,0 L0,6 L9,3 z" fill="#2f7d32"/>
+  </marker>
+  <pattern id="hatch" width="10" height="10" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+    <rect width="10" height="10" fill="#fffdf5"/>
+    <line x1="0" y1="0" x2="0" y2="10" stroke="#ad0034" stroke-width="2" opacity=".2"/>
+  </pattern>
+  <style>
+    text { font-family: "Helvetica Neue", Arial, sans-serif; }
+    .eyebrow { font-size: 15px; font-weight: 800; letter-spacing: 1.8px; }
+    .title { font-size: 34px; font-weight: 800; }
+    .subtitle { font-size: 17px; fill: #5f5a4e; }
+    .panel-title { font-size: 21px; font-weight: 800; letter-spacing: .8px; }
+    .box-title { font-size: 17px; font-weight: 800; }
+    .copy { font-size: 14px; fill: #5f5a4e; }
+    .small { font-size: 12px; font-weight: 800; letter-spacing: .7px; }
+  </style>
+</defs>
+
+<rect width="1200" height="820" fill="#f5efdc"/>
+<rect x="18" y="18" width="1164" height="784" fill="none" stroke="#111111" stroke-width="2"/>
+<rect x="30" y="30" width="1140" height="760" fill="none" stroke="#111111" stroke-width="1"/>
+
+<text x="58" y="60" class="eyebrow" fill="#ad0034">OPEN-LOOP ENTERPRISE / SYSTEM FIGURE</text>
+<text x="58" y="102" class="title" fill="#111111">Open loops spend decisions; closed loops compound them</text>
+<text x="58" y="132" class="subtitle">The difference is whether evidence returns to change the next judgment.</text>
+<line x1="58" y1="151" x2="1142" y2="151" stroke="#111111" stroke-width="2"/>
+
+<rect x="50" y="185" width="515" height="535" fill="#fffdf5" stroke="#ad0034" stroke-width="3"/>
+<rect x="50" y="185" width="515" height="52" fill="#ad0034"/>
+<text x="75" y="219" class="panel-title" fill="#fffdf5">OPEN LOOP</text>
+<text x="535" y="217" class="small" fill="#fffdf5" text-anchor="end">RESULT WITHOUT RETURN</text>
+
+<rect x="88" y="270" width="390" height="70" fill="#fffdf5" stroke="#111111" stroke-width="2"/>
+<rect x="88" y="270" width="42" height="70" fill="#111111"/>
+<text x="109" y="311" font-size="16" font-weight="800" fill="#fffdf5" text-anchor="middle">1</text>
+<text x="150" y="298" class="box-title" fill="#111111">JUDGMENT IS MADE</text>
+<text x="150" y="321" class="copy">Reasoning remains in the room</text>
+
+<line x1="283" y1="340" x2="283" y2="375" stroke="#111111" stroke-width="3" marker-end="url(#arrow-ink)"/>
+
+<rect x="88" y="375" width="390" height="70" fill="#fffdf5" stroke="#111111" stroke-width="2"/>
+<rect x="88" y="375" width="42" height="70" fill="#007f7b"/>
+<text x="109" y="416" font-size="16" font-weight="800" fill="#fffdf5" text-anchor="middle">2</text>
+<text x="150" y="403" class="box-title" fill="#111111">ACTION HAPPENS</text>
+<text x="150" y="426" class="copy">Work consumes money, time, and trust</text>
+
+<line x1="283" y1="445" x2="283" y2="480" stroke="#111111" stroke-width="3" marker-end="url(#arrow-ink)"/>
+
+<rect x="88" y="480" width="390" height="70" fill="#fffdf5" stroke="#dcc61e" stroke-width="3"/>
+<rect x="88" y="480" width="42" height="70" fill="#dcc61e"/>
+<text x="109" y="521" font-size="16" font-weight="800" fill="#111111" text-anchor="middle">3</text>
+<text x="150" y="508" class="box-title" fill="#111111">A RESULT IS RECORDED</text>
+<text x="150" y="531" class="copy">Date, rating, price, status, incident count</text>
+
+<path d="M283,550 L283,590" fill="none" stroke="#ad0034" stroke-width="3" stroke-dasharray="8 7" marker-end="url(#arrow-red)"/>
+
+<rect x="88" y="590" width="390" height="92" fill="url(#hatch)" stroke="#ad0034" stroke-width="2"/>
+<text x="283" y="621" class="small" fill="#ad0034" text-anchor="middle">THE RETURN PATH IS MISSING</text>
+<text x="283" y="647" class="box-title" fill="#111111" text-anchor="middle">The next decision starts from memory,</text>
+<text x="283" y="669" class="copy" text-anchor="middle">hindsight, politics, or whatever survived.</text>
+
+<rect x="635" y="185" width="515" height="535" fill="#fffdf5" stroke="#2f7d32" stroke-width="3"/>
+<rect x="635" y="185" width="515" height="52" fill="#2f7d32"/>
+<text x="660" y="219" class="panel-title" fill="#fffdf5">CLOSED LOOP</text>
+<text x="1120" y="217" class="small" fill="#fffdf5" text-anchor="end">EVIDENCE RETURNS</text>
+
+<rect x="690" y="260" width="390" height="62" fill="#fffdf5" stroke="#ad0034" stroke-width="2"/>
+<rect x="690" y="260" width="42" height="62" fill="#ad0034"/>
+<text x="711" y="297" font-size="16" font-weight="800" fill="#fffdf5" text-anchor="middle">1</text>
+<text x="752" y="286" class="box-title" fill="#111111">PRESERVE THE CLAIM</text>
+<text x="752" y="308" class="copy">Context, assumptions, owner, expected outcome</text>
+
+<line x1="885" y1="322" x2="885" y2="350" stroke="#111111" stroke-width="3" marker-end="url(#arrow-ink)"/>
+
+<rect x="690" y="350" width="390" height="62" fill="#fffdf5" stroke="#007f7b" stroke-width="2"/>
+<rect x="690" y="350" width="42" height="62" fill="#007f7b"/>
+<text x="711" y="387" font-size="16" font-weight="800" fill="#fffdf5" text-anchor="middle">2</text>
+<text x="752" y="376" class="box-title" fill="#111111">ACT UNDER REAL CONDITIONS</text>
+<text x="752" y="398" class="copy">Spend capacity; preserve changes and constraints</text>
+
+<line x1="885" y1="412" x2="885" y2="440" stroke="#111111" stroke-width="3" marker-end="url(#arrow-ink)"/>
+
+<rect x="690" y="440" width="390" height="62" fill="#fffdf5" stroke="#dcc61e" stroke-width="2"/>
+<rect x="690" y="440" width="42" height="62" fill="#dcc61e"/>
+<text x="711" y="477" font-size="16" font-weight="800" fill="#111111" text-anchor="middle">3</text>
+<text x="752" y="466" class="box-title" fill="#111111">OBSERVE THE OUTCOME</text>
+<text x="752" y="488" class="copy">Result plus evidence about how it happened</text>
+
+<line x1="885" y1="502" x2="885" y2="530" stroke="#111111" stroke-width="3" marker-end="url(#arrow-ink)"/>
+
+<rect x="690" y="530" width="390" height="62" fill="#fffdf5" stroke="#111111" stroke-width="2"/>
+<rect x="690" y="530" width="42" height="62" fill="#111111"/>
+<text x="711" y="567" font-size="16" font-weight="800" fill="#fffdf5" text-anchor="middle">4</text>
+<text x="752" y="556" class="box-title" fill="#111111">RECONCILE CLAIM WITH REALITY</text>
+<text x="752" y="578" class="copy">What held, changed, failed, or remained unknown?</text>
+
+<line x1="885" y1="592" x2="885" y2="620" stroke="#2f7d32" stroke-width="3" marker-end="url(#arrow-green)"/>
+
+<rect x="690" y="620" width="390" height="62" fill="#fffdf5" stroke="#2f7d32" stroke-width="3"/>
+<rect x="690" y="620" width="42" height="62" fill="#2f7d32"/>
+<text x="711" y="657" font-size="16" font-weight="800" fill="#fffdf5" text-anchor="middle">5</text>
+<text x="752" y="646" class="box-title" fill="#111111">CHANGE THE NEXT DECISION</text>
+<text x="752" y="668" class="copy">Carry the learning forward as new context</text>
+
+<path d="M1080,651 L1110,651 L1110,291 L1080,291" fill="none" stroke="#2f7d32" stroke-width="3" marker-end="url(#arrow-green)"/>
+
+<line x1="58" y1="750" x2="1142" y2="750" stroke="#ddd5bf" stroke-width="2"/>
+<text x="58" y="778" font-size="14" font-weight="600" fill="#5f5a4e">Both organizations act and measure. Only one makes the next judgment with more evidence than the last.</text>
+</svg>

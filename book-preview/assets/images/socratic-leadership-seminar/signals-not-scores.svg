@@ -1,0 +1,100 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800" role="img" aria-labelledby="title desc">
+<title id="title">Watch downstream signals without claiming causation</title>
+<desc id="desc">The seminar may influence mental models that leaders carry into real work, where downstream behavior can be observed. Attendance and worksheets prove only presence or completion, and downstream improvement cannot be attributed directly to the seminar.</desc>
+
+<defs>
+  <marker id="arrow-ink" markerWidth="10" markerHeight="10" refX="8" refY="3"
+          orient="auto" markerUnits="strokeWidth">
+    <path d="M0,0 L0,6 L9,3 z" fill="#111111"/>
+  </marker>
+  <marker id="arrow-cyan" markerWidth="10" markerHeight="10" refX="8" refY="3"
+          orient="auto" markerUnits="strokeWidth">
+    <path d="M0,0 L0,6 L9,3 z" fill="#007f7b"/>
+  </marker>
+  <marker id="arrow-green" markerWidth="10" markerHeight="10" refX="8" refY="3"
+          orient="auto" markerUnits="strokeWidth">
+    <path d="M0,0 L0,6 L9,3 z" fill="#2f7d32"/>
+  </marker>
+  <pattern id="hatch" width="10" height="10" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+    <rect width="10" height="10" fill="#fffdf5"/>
+    <line x1="0" y1="0" x2="0" y2="10" stroke="#ad0034" stroke-width="2" opacity=".18"/>
+  </pattern>
+  <style>
+    text { font-family: "Helvetica Neue", Arial, sans-serif; }
+    .box-title { font-size: 18px; font-weight: 800; }
+    .box-copy { font-size: 15px; fill: #3f3b34; }
+    .small { font-size: 14px; fill: #5f5a4e; }
+  </style>
+</defs>
+
+<rect width="1200" height="800" fill="#f5efdc"/>
+<rect x="18" y="18" width="1164" height="764" fill="none" stroke="#111111" stroke-width="2"/>
+<rect x="30" y="30" width="1140" height="740" fill="none" stroke="#111111" stroke-width="1"/>
+
+<text x="58" y="60" font-size="15" font-weight="800" fill="#ad0034" letter-spacing="1.8">SOCRATIC LEADERSHIP / SEMINAR FIGURE</text>
+<text x="58" y="102" font-size="34" font-weight="800" fill="#111111">Watch downstream signals without claiming causation</text>
+<text x="58" y="132" font-size="17" fill="#5f5a4e">The seminar is an input whose possible effects emerge later, among many other influences.</text>
+<line x1="58" y1="151" x2="1142" y2="151" stroke="#111111" stroke-width="2"/>
+
+<rect x="55" y="230" width="220" height="140" fill="#fffdf5" stroke="#ad0034" stroke-width="3"/>
+<text x="72" y="264" class="box-title" fill="#111111">SEMINAR</text>
+<text x="72" y="296" class="box-copy">
+  <tspan x="72" dy="0">Reading + inquiry</tspan>
+  <tspan x="72" dy="23">Repeated over time</tspan>
+</text>
+<rect x="72" y="334" width="140" height="24" fill="#fff8e0" stroke="#ad0034" stroke-width="1"/>
+<text x="142" y="351" font-size="12" font-weight="800" fill="#ad0034" text-anchor="middle">UNMEASURED INPUT</text>
+
+<line x1="275" y1="300" x2="325" y2="300" stroke="#ad0034" stroke-width="3" stroke-dasharray="8 7" marker-end="url(#arrow-ink)"/>
+<text x="300" y="284" font-size="12" font-weight="800" fill="#5f5a4e" text-anchor="middle">MAY</text>
+
+<rect x="330" y="230" width="220" height="140" fill="#fffdf5" stroke="#111111" stroke-width="3" stroke-dasharray="9 7"/>
+<text x="347" y="264" class="box-title" fill="#111111">MENTAL MODELS</text>
+<text x="347" y="296" class="box-copy">
+  <tspan x="347" dy="0">Ideas reconsidered</tspan>
+  <tspan x="347" dy="23">Assumptions unsettled</tspan>
+</text>
+<text x="347" y="350" font-size="12" font-weight="800" fill="#5f5a4e">NOT DIRECTLY OBSERVABLE</text>
+
+<line x1="550" y1="300" x2="600" y2="300" stroke="#111111" stroke-width="3" stroke-dasharray="8 7" marker-end="url(#arrow-ink)"/>
+<text x="575" y="284" font-size="12" font-weight="800" fill="#5f5a4e" text-anchor="middle">MAY</text>
+
+<rect x="605" y="230" width="220" height="140" fill="#fffdf5" stroke="#007f7b" stroke-width="3"/>
+<text x="622" y="264" class="box-title" fill="#111111">REAL WORK</text>
+<text x="622" y="296" class="box-copy">
+  <tspan x="622" dy="0">Coaching people</tspan>
+  <tspan x="622" dy="23">Facilitating rooms</tspan>
+  <tspan x="622" dy="23">Allocating development</tspan>
+</text>
+
+<line x1="825" y1="300" x2="875" y2="300" stroke="#007f7b" stroke-width="4" marker-end="url(#arrow-green)"/>
+
+<rect x="880" y="215" width="265" height="170" fill="#fff8e0" stroke="#2f7d32" stroke-width="3"/>
+<text x="897" y="249" class="box-title" fill="#111111">DOWNSTREAM SIGNALS</text>
+<text x="897" y="281" class="box-copy">
+  <tspan x="897" dy="0">Better coaching behavior</tspan>
+  <tspan x="897" dy="23">Thoughtful developmental reps</tspan>
+  <tspan x="897" dy="23">Ideas referenced voluntarily</tspan>
+  <tspan x="897" dy="23">The next reading requested</tspan>
+</text>
+
+<rect x="55" y="455" width="450" height="170" fill="url(#hatch)" stroke="#ad0034" stroke-width="3"/>
+<text x="73" y="490" font-size="15" font-weight="800" fill="#ad0034" letter-spacing="1.4">MEASUREMENT SHORTCUTS</text>
+<text x="73" y="527" class="box-copy">
+  <tspan x="73" dy="0">Attendance  →  proves presence</tspan>
+  <tspan x="73" dy="28">Worksheet   →  proves completion</tspan>
+</text>
+<line x1="73" y1="585" x2="470" y2="585" stroke="#ad0034" stroke-width="2"/>
+<text x="73" y="610" font-size="13" font-weight="800" fill="#ad0034">NEITHER PROVES A MENTAL MODEL CHANGED</text>
+
+<rect x="550" y="455" width="595" height="170" fill="#fffdf5" stroke="#007f7b" stroke-width="3"/>
+<text x="568" y="490" font-size="15" font-weight="800" fill="#007f7b" letter-spacing="1.4">EVIDENCE DISCIPLINE</text>
+<text x="568" y="527" class="box-copy">
+  <tspan x="568" dy="0">Observe whether ideas return without being forced.</tspan>
+  <tspan x="568" dy="28">Look for patterns in behavior across real work and time.</tspan>
+  <tspan x="568" dy="28">Treat contribution as plausible; do not claim direct attribution.</tspan>
+</text>
+
+<line x1="58" y1="734" x2="1142" y2="734" stroke="#ddd5bf" stroke-width="2"/>
+<text x="58" y="762" font-size="14" font-weight="600" fill="#5f5a4e">The honest signal is recurrence: an idea becomes useful enough to reappear without a score compelling it.</text>
+</svg>

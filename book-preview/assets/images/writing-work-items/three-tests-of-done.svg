@@ -1,0 +1,80 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800" role="img" aria-labelledby="title desc">
+<title id="title">Three tests close three different claims</title>
+<desc id="desc">An epic is closed by its outcome, a story is accepted through unique acceptance criteria, and delivery items meet one team-wide Definition of Done. Closing child tickets does not itself prove the epic outcome.</desc>
+
+<defs>
+  <marker id="arrow-ink" markerWidth="10" markerHeight="10" refX="8" refY="3"
+          orient="auto" markerUnits="strokeWidth">
+    <path d="M0,0 L0,6 L9,3 z" fill="#111111"/>
+  </marker>
+  <style>
+    text { font-family: "Helvetica Neue", Arial, sans-serif; }
+    .eyebrow { font-size: 15px; font-weight: 800; letter-spacing: 1.8px; }
+    .title { font-size: 34px; font-weight: 800; }
+    .subtitle { font-size: 17px; fill: #5f5a4e; }
+    .box-title { font-size: 19px; font-weight: 800; }
+    .copy { font-size: 15px; fill: #5f5a4e; }
+    .small { font-size: 13px; font-weight: 800; letter-spacing: .8px; }
+  </style>
+</defs>
+
+<rect width="1200" height="800" fill="#f5efdc"/>
+<rect x="18" y="18" width="1164" height="764" fill="none" stroke="#111111" stroke-width="2"/>
+<rect x="30" y="30" width="1140" height="740" fill="none" stroke="#111111" stroke-width="1"/>
+
+<text x="58" y="60" class="eyebrow" fill="#ad0034">WRITING WORK ITEMS / SYSTEM FIGURE</text>
+<text x="58" y="102" class="title" fill="#111111">Three tests close three different claims</text>
+<text x="58" y="132" class="subtitle">Outcome, acceptance, and workmanship stay distinct even when the tickets are nested.</text>
+<line x1="58" y1="151" x2="1142" y2="151" stroke="#111111" stroke-width="2"/>
+
+<text x="60" y="190" class="small" fill="#5f5a4e">WORK HIERARCHY</text>
+<rect x="60" y="210" width="265" height="112" fill="#fffdf5" stroke="#ad0034" stroke-width="3"/>
+<text x="80" y="244" class="box-title" fill="#111111">EPIC</text>
+<text x="80" y="274" class="copy">A promised change in</text>
+<text x="80" y="295" class="copy">capability, reliability, risk, or cost</text>
+
+<line x1="192" y1="322" x2="192" y2="358" stroke="#111111" stroke-width="3" marker-end="url(#arrow-ink)"/>
+
+<rect x="60" y="370" width="265" height="112" fill="#fffdf5" stroke="#007f7b" stroke-width="3"/>
+<text x="80" y="404" class="box-title" fill="#111111">STORY / WP</text>
+<text x="80" y="434" class="copy">One observable behavior slice</text>
+<text x="80" y="455" class="copy">inside the epic</text>
+
+<line x1="192" y1="482" x2="192" y2="518" stroke="#111111" stroke-width="3" marker-end="url(#arrow-ink)"/>
+
+<rect x="60" y="530" width="265" height="112" fill="#fffdf5" stroke="#111111" stroke-width="3"/>
+<text x="80" y="564" class="box-title" fill="#111111">TASK / SUB-TASK</text>
+<text x="80" y="594" class="copy">A concrete deliverable</text>
+<text x="80" y="615" class="copy">or checklist step</text>
+
+<line x1="325" y1="266" x2="390" y2="266" stroke="#ad0034" stroke-width="3" marker-end="url(#arrow-ink)"/>
+<rect x="400" y="205" width="740" height="122" fill="#fffdf5" stroke="#ad0034" stroke-width="3"/>
+<rect x="400" y="205" width="52" height="38" fill="#ad0034"/>
+<text x="426" y="231" font-size="16" font-weight="800" fill="#fffdf5" text-anchor="middle">1</text>
+<text x="468" y="234" class="small" fill="#ad0034">OUTCOME / EXIT CONDITION · UNIQUE TO THE EPIC</text>
+<text x="424" y="273" class="box-title" fill="#111111">Did the promised change become true?</text>
+<text x="424" y="302" class="copy">Measured change in the world — independent of whether the guessed work list is exhausted.</text>
+
+<line x1="325" y1="426" x2="390" y2="426" stroke="#007f7b" stroke-width="3" marker-end="url(#arrow-ink)"/>
+<rect x="400" y="365" width="740" height="122" fill="#fffdf5" stroke="#007f7b" stroke-width="3"/>
+<rect x="400" y="365" width="52" height="38" fill="#007f7b"/>
+<text x="426" y="391" font-size="16" font-weight="800" fill="#fffdf5" text-anchor="middle">2</text>
+<text x="468" y="394" class="small" fill="#007f7b">ACCEPTANCE CRITERIA · UNIQUE TO THE STORY</text>
+<text x="424" y="433" class="box-title" fill="#111111">Does this specific behavior work as promised?</text>
+<text x="424" y="462" class="copy">Observable pass/fail evidence — not “PR submitted” or another artifact-exists claim.</text>
+
+<path d="M325,426 L360,426 L360,586 L390,586" fill="none" stroke="#111111" stroke-width="3"/>
+<line x1="325" y1="586" x2="390" y2="586" stroke="#111111" stroke-width="3" marker-end="url(#arrow-ink)"/>
+<rect x="400" y="525" width="740" height="122" fill="#fffdf5" stroke="#dcc61e" stroke-width="3"/>
+<rect x="400" y="525" width="52" height="38" fill="#dcc61e"/>
+<text x="426" y="551" font-size="16" font-weight="800" fill="#111111" text-anchor="middle">3</text>
+<text x="468" y="554" class="small" fill="#111111">TEAM DEFINITION OF DONE · SAME BAR ACROSS DELIVERY ITEMS</text>
+<text x="424" y="593" class="box-title" fill="#111111">Is the workmanship up to the standing standard?</text>
+<text x="424" y="622" class="copy">Tests, security, observability, documentation — inherited once, not reinvented per epic.</text>
+
+<rect x="400" y="675" width="740" height="42" fill="#fff8e0" stroke="#ad0034" stroke-width="2"/>
+<text x="770" y="702" font-size="15" font-weight="800" fill="#ad0034" text-anchor="middle">ALL CHILD TICKETS CLOSED  ≠  EPIC OUTCOME TRUE</text>
+
+<line x1="58" y1="730" x2="1142" y2="730" stroke="#ddd5bf" stroke-width="2"/>
+<text x="58" y="758" font-size="14" font-weight="600" fill="#5f5a4e">The work list is a bet; the outcome is the independent test of whether the bet worked.</text>
+</svg>

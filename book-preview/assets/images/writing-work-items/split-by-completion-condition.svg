@@ -1,0 +1,95 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 850" role="img" aria-labelledby="title desc">
+<title id="title">Split bundled work by its completion conditions</title>
+<desc id="desc">A problem task containing a decision, an implementation, and infrastructure changes is separated into a discovery work package, a behavior-focused story, and two concrete child tasks.</desc>
+
+<defs>
+  <marker id="arrow-ink" markerWidth="10" markerHeight="10" refX="8" refY="3"
+          orient="auto" markerUnits="strokeWidth">
+    <path d="M0,0 L0,6 L9,3 z" fill="#111111"/>
+  </marker>
+  <marker id="arrow-teal" markerWidth="10" markerHeight="10" refX="8" refY="3"
+          orient="auto" markerUnits="strokeWidth">
+    <path d="M0,0 L0,6 L9,3 z" fill="#007f7b"/>
+  </marker>
+  <style>
+    text { font-family: "Helvetica Neue", Arial, sans-serif; }
+    .eyebrow { font-size: 15px; font-weight: 800; letter-spacing: 1.8px; }
+    .title { font-size: 34px; font-weight: 800; }
+    .subtitle { font-size: 17px; fill: #5f5a4e; }
+    .box-title { font-size: 19px; font-weight: 800; }
+    .copy { font-size: 15px; fill: #5f5a4e; }
+    .small { font-size: 13px; font-weight: 800; letter-spacing: .8px; }
+  </style>
+</defs>
+
+<rect width="1200" height="850" fill="#f5efdc"/>
+<rect x="18" y="18" width="1164" height="814" fill="none" stroke="#111111" stroke-width="2"/>
+<rect x="30" y="30" width="1140" height="790" fill="none" stroke="#111111" stroke-width="1"/>
+
+<text x="58" y="60" class="eyebrow" fill="#ad0034">WRITING WORK ITEMS / SYSTEM FIGURE</text>
+<text x="58" y="102" class="title" fill="#111111">Split bundled work by its completion conditions</text>
+<text x="58" y="132" class="subtitle">A decision, a behavior, and a deliverable do not become one item merely because they serve the same goal.</text>
+<line x1="58" y1="151" x2="1142" y2="151" stroke="#111111" stroke-width="2"/>
+
+<rect x="60" y="205" width="330" height="530" fill="#fff8e0" stroke="#ad0034" stroke-width="3"/>
+<rect x="60" y="205" width="330" height="48" fill="#ad0034"/>
+<text x="80" y="236" class="box-title" fill="#fffdf5">PROBLEM: ONE “TASK”</text>
+<text x="82" y="283" class="copy">Three claims hide inside one ticket:</text>
+
+<rect x="82" y="310" width="286" height="102" fill="#fffdf5" stroke="#111111" stroke-width="2"/>
+<text x="98" y="340" class="small" fill="#ad0034">DECIDE</text>
+<text x="98" y="368" class="box-title" fill="#111111">Identify the method</text>
+<text x="98" y="394" class="copy">Closes when a decision is recorded.</text>
+
+<rect x="82" y="430" width="286" height="102" fill="#fffdf5" stroke="#111111" stroke-width="2"/>
+<text x="98" y="460" class="small" fill="#007f7b">BUILD BEHAVIOR</text>
+<text x="98" y="488" class="box-title" fill="#111111">Register on first boot</text>
+<text x="98" y="514" class="copy">Closes when observable behavior passes.</text>
+
+<rect x="82" y="550" width="286" height="132" fill="#fffdf5" stroke="#111111" stroke-width="2"/>
+<text x="98" y="580" class="small" fill="#dcc61e">CHANGE INFRASTRUCTURE</text>
+<text x="98" y="608" class="box-title" fill="#111111">Create secret + grant access</text>
+<text x="98" y="634" class="copy">Each closes when a concrete</text>
+<text x="98" y="655" class="copy">resource or configuration exists.</text>
+
+<line x1="390" y1="470" x2="448" y2="470" stroke="#111111" stroke-width="4" marker-end="url(#arrow-ink)"/>
+<text x="419" y="444" class="small" fill="#5f5a4e" text-anchor="middle">SPLIT</text>
+
+<rect x="470" y="205" width="670" height="126" fill="#fffdf5" stroke="#dcc61e" stroke-width="3"/>
+<rect x="470" y="205" width="50" height="38" fill="#dcc61e"/>
+<text x="495" y="231" font-size="16" font-weight="800" fill="#111111" text-anchor="middle">1</text>
+<text x="536" y="234" class="small" fill="#111111">DISCOVERY WORK PACKAGE</text>
+<text x="490" y="272" class="box-title" fill="#111111">Decide how an instance finds its region and endpoint</text>
+<text x="490" y="303" class="copy">Done when: a reusable decision is recorded — not when code merges.</text>
+
+<line x1="805" y1="331" x2="805" y2="380" stroke="#007f7b" stroke-width="4" marker-end="url(#arrow-teal)"/>
+<text x="822" y="360" class="small" fill="#007f7b">DECISION FEEDS DELIVERY</text>
+
+<rect x="470" y="390" width="670" height="136" fill="#fffdf5" stroke="#007f7b" stroke-width="3"/>
+<rect x="470" y="390" width="50" height="38" fill="#007f7b"/>
+<text x="495" y="416" font-size="16" font-weight="800" fill="#fffdf5" text-anchor="middle">2</text>
+<text x="536" y="419" class="small" fill="#111111">STORY / WORK PACKAGE</text>
+<text x="490" y="457" class="box-title" fill="#111111">Instance registers to the correct endpoint on first boot</text>
+<text x="490" y="488" class="copy">Done when: acceptance criteria prove the behavior end to end.</text>
+<text x="490" y="509" class="copy">The story owns the observable result; its child tasks contribute artifacts.</text>
+
+<path d="M805,526 L805,566 L630,566 L630,600" fill="none" stroke="#111111" stroke-width="3" marker-end="url(#arrow-ink)"/>
+<path d="M805,566 L980,566 L980,600" fill="none" stroke="#111111" stroke-width="3" marker-end="url(#arrow-ink)"/>
+
+<rect x="470" y="610" width="320" height="125" fill="#fffdf5" stroke="#111111" stroke-width="3"/>
+<rect x="470" y="610" width="50" height="38" fill="#111111"/>
+<text x="495" y="636" font-size="16" font-weight="800" fill="#fffdf5" text-anchor="middle">3A</text>
+<text x="536" y="639" class="small" fill="#111111">TASK</text>
+<text x="490" y="678" class="box-title" fill="#111111">Create regional secret</text>
+<text x="490" y="708" class="copy">Done when: the resource exists.</text>
+
+<rect x="820" y="610" width="320" height="125" fill="#fffdf5" stroke="#111111" stroke-width="3"/>
+<rect x="820" y="610" width="50" height="38" fill="#111111"/>
+<text x="845" y="636" font-size="16" font-weight="800" fill="#fffdf5" text-anchor="middle">3B</text>
+<text x="886" y="639" class="small" fill="#111111">TASK</text>
+<text x="840" y="678" class="box-title" fill="#111111">Grant role read access</text>
+<text x="840" y="708" class="copy">Done when: the policy is applied.</text>
+
+<line x1="58" y1="782" x2="1142" y2="782" stroke="#ddd5bf" stroke-width="2"/>
+<text x="58" y="811" font-size="14" font-weight="600" fill="#5f5a4e">Different intents and different closing tests belong in different work items.</text>
+</svg>

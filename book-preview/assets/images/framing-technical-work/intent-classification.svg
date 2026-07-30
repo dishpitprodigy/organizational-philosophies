@@ -1,0 +1,68 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 790" role="img" aria-labelledby="title desc">
+<title id="title">Classify the result before prescribing the work</title>
+<desc id="desc">The primary value of the work determines its intent; unresolved completion conditions remain Discovery.</desc>
+
+<defs>
+  <marker id="arrow-ink" markerWidth="10" markerHeight="10" refX="8.95" refY="3"
+          orient="auto" markerUnits="strokeWidth">
+    <path d="M0,0 L0,6 L9,3 z" fill="#111111"/>
+  </marker>
+  <marker id="arrow-red" markerWidth="10" markerHeight="10" refX="8.95" refY="3"
+          orient="auto" markerUnits="strokeWidth">
+    <path d="M0,0 L0,6 L9,3 z" fill="#ad0034"/>
+  </marker>
+  <marker id="arrow-cyan" markerWidth="10" markerHeight="10" refX="8.95" refY="3"
+          orient="auto" markerUnits="strokeWidth">
+    <path d="M0,0 L0,6 L9,3 z" fill="#007f7b"/>
+  </marker>
+  <marker id="arrow-green" markerWidth="10" markerHeight="10" refX="8.95" refY="3"
+          orient="auto" markerUnits="strokeWidth">
+    <path d="M0,0 L0,6 L9,3 z" fill="#2f7d32"/>
+  </marker>
+  <style>
+    text { font-family: "Helvetica Neue", Arial, sans-serif; }
+  </style>
+</defs>
+
+<rect width="1200" height="790" fill="#f5efdc"/>
+<rect x="18" y="18" width="1164" height="754" fill="none" stroke="#111111" stroke-width="2"/>
+<text x="58" y="62" font-size="15" font-weight="800" fill="#ad0034" text-anchor="start" letter-spacing="1.8"><tspan x="58" dy="0">FRAMING TECHNICAL WORK</tspan></text>
+<text x="58" y="104" font-size="34" font-weight="800" fill="#111111" text-anchor="start" letter-spacing="0"><tspan x="58" dy="0">Classify the result before prescribing the work</tspan></text>
+<text x="58" y="134" font-size="17" font-weight="400" fill="#5f5a4e" text-anchor="start" letter-spacing="0"><tspan x="58" dy="0">The primary value of the work determines its intent; unresolved completion conditions remain Discovery.</tspan></text>
+<line x1="58" y1="154" x2="1142" y2="154" stroke="#111111" stroke-width="2"/>
+<polygon points="600,181.0 750.0,240 600,299.0 450.0,240" fill="#fffdf5" stroke="#007f7b" stroke-width="3"/>
+<text x="600" y="230" font-size="16" font-weight="800" fill="#111111" text-anchor="middle" letter-spacing="0"><tspan x="600" dy="0">Do we know what</tspan><tspan x="600" dy="21">done looks like?</tspan></text>
+<path d="M450,240 L228,240 L228,354" fill="none" stroke="#ad0034" stroke-width="3" marker-end="url(#arrow-red)"/>
+<text x="325" y="223" font-size="13" font-weight="800" fill="#ad0034" text-anchor="start" letter-spacing="0"><tspan x="325" dy="0">NO</tspan></text>
+<rect x="78" y="354" width="300" height="112" fill="#fffdf5" stroke="#ad0034" stroke-width="3"/>
+<text x="96" y="382" font-size="19" font-weight="800" fill="#111111" text-anchor="start" letter-spacing="0"><tspan x="96" dy="0">Discovery</tspan></text>
+<text x="96" y="410" font-size="14" font-weight="400" fill="#5f5a4e" text-anchor="start" letter-spacing="0"><tspan x="96" dy="0">Reduce uncertainty; produce</tspan><tspan x="96" dy="19">a reusable decision artifact</tspan></text>
+<path d="M750,240 L800,240 L800,339" fill="none" stroke="#2f7d32" stroke-width="3" marker-end="url(#arrow-green)"/>
+<text x="858" y="223" font-size="13" font-weight="800" fill="#2f7d32" text-anchor="start" letter-spacing="0"><tspan x="858" dy="0">YES</tspan></text>
+<polygon points="800,339.0 940.0,398 800,457.0 660.0,398" fill="#fffdf5" stroke="#2f7d32" stroke-width="3"/>
+<text x="800" y="388" font-size="16" font-weight="800" fill="#111111" text-anchor="middle" letter-spacing="0"><tspan x="800" dy="0">What primary result</tspan><tspan x="800" dy="21">creates value?</tspan></text>
+<rect x="58" y="578" width="194" height="104" fill="#fffdf5" stroke="#007f7b" stroke-width="3"/>
+<text x="76" y="606" font-size="19" font-weight="800" fill="#111111" text-anchor="start" letter-spacing="0"><tspan x="76" dy="0">Migration</tspan></text>
+<text x="76" y="634" font-size="14" font-weight="400" fill="#5f5a4e" text-anchor="start" letter-spacing="0"><tspan x="76" dy="0">Move state A</tspan><tspan x="76" dy="19">to state B</tspan></text>
+<path d="M800,457 L800,528 L155,528 L155,578" fill="none" stroke="#007f7b" stroke-width="3" marker-end="url(#arrow-ink)"/>
+<rect x="288" y="578" width="194" height="104" fill="#fffdf5" stroke="#ad0034" stroke-width="3"/>
+<text x="306" y="606" font-size="19" font-weight="800" fill="#111111" text-anchor="start" letter-spacing="0"><tspan x="306" dy="0">Redesign</tspan></text>
+<text x="306" y="634" font-size="14" font-weight="400" fill="#5f5a4e" text-anchor="start" letter-spacing="0"><tspan x="306" dy="0">Change the</tspan><tspan x="306" dy="19">structure</tspan></text>
+<path d="M800,457 L800,528 L385,528 L385,578" fill="none" stroke="#ad0034" stroke-width="3" marker-end="url(#arrow-ink)"/>
+<rect x="518" y="578" width="194" height="104" fill="#fffdf5" stroke="#dcc61e" stroke-width="3"/>
+<text x="536" y="606" font-size="19" font-weight="800" fill="#111111" text-anchor="start" letter-spacing="0"><tspan x="536" dy="0">Enablement</tspan></text>
+<text x="536" y="634" font-size="14" font-weight="400" fill="#5f5a4e" text-anchor="start" letter-spacing="0"><tspan x="536" dy="0">Remove blockers</tspan><tspan x="536" dy="19">for others</tspan></text>
+<path d="M800,457 L800,528 L615,528 L615,578" fill="none" stroke="#dcc61e" stroke-width="3" marker-end="url(#arrow-ink)"/>
+<rect x="748" y="578" width="194" height="104" fill="#fffdf5" stroke="#2f7d32" stroke-width="3"/>
+<text x="766" y="606" font-size="19" font-weight="800" fill="#111111" text-anchor="start" letter-spacing="0"><tspan x="766" dy="0">Optimization</tspan></text>
+<text x="766" y="634" font-size="14" font-weight="400" fill="#5f5a4e" text-anchor="start" letter-spacing="0"><tspan x="766" dy="0">Improve efficiency</tspan><tspan x="766" dy="19">or flow</tspan></text>
+<path d="M800,457 L800,528 L845,528 L845,578" fill="none" stroke="#2f7d32" stroke-width="3" marker-end="url(#arrow-ink)"/>
+<rect x="970" y="346" width="172" height="104" fill="#fffdf5" stroke="#111111" stroke-width="3"/>
+<text x="988" y="374" font-size="19" font-weight="800" fill="#111111" text-anchor="start" letter-spacing="0"><tspan x="988" dy="0">Split it</tspan></text>
+<text x="988" y="402" font-size="14" font-weight="400" fill="#5f5a4e" text-anchor="start" letter-spacing="0"><tspan x="988" dy="0">Two primary results</tspan><tspan x="988" dy="19">mean two packages</tspan></text>
+<line x1="940" y1="398" x2="970" y2="398" stroke="#111111" stroke-width="3" stroke-dasharray="8 6" marker-end="url(#arrow-ink)"/>
+<text x="955" y="382" font-size="13" font-weight="800" fill="#111111" text-anchor="middle" letter-spacing="0"><tspan x="955" dy="0">&gt;1</tspan></text>
+<text x="818" y="492" font-size="13" font-weight="800" fill="#2f7d32" text-anchor="start" letter-spacing="0"><tspan x="818" dy="0">1</tspan></text>
+<line x1="58" y1="726" x2="1142" y2="726" stroke="#ddd5bf" stroke-width="2"/>
+<text x="58" y="753" font-size="14" font-weight="600" fill="#5f5a4e" text-anchor="start" letter-spacing="0"><tspan x="58" dy="0">When two intents remain, splitting the work preserves separate completion conditions.</tspan></text>
+</svg>

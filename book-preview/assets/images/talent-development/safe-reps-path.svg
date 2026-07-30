@@ -1,0 +1,72 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800" role="img" aria-labelledby="title desc">
+<title id="title">Responsibility expands as evidence accumulates</title>
+<desc id="desc">A safe-reps path progresses from observation through read-only work, reversible supervised action, bounded independent ownership, and broader ownership. Evidence at each level justifies the next increase in responsibility.</desc>
+<defs>
+  <marker id="arrow-ink" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth">
+    <path d="M0,0 L0,6 L9,3 z" fill="#111111"/>
+  </marker>
+  <style>
+    text { font-family: "Helvetica Neue", Arial, sans-serif; }
+    .head { font-size: 17px; font-weight: 800; fill: #111111; }
+    .copy { font-size: 14px; fill: #5f5a4e; }
+    .level { font-size: 13px; font-weight: 800; fill: #fffdf5; }
+  </style>
+</defs>
+<rect width="1200" height="800" fill="#f5efdc"/>
+<rect x="18" y="18" width="1164" height="764" fill="none" stroke="#111111" stroke-width="2"/>
+<rect x="30" y="30" width="1140" height="740" fill="none" stroke="#111111" stroke-width="1"/>
+<text x="58" y="60" font-size="15" font-weight="800" fill="#ad0034" letter-spacing="1.8">TALENT DEVELOPMENT / SAFE-REPS FIGURE</text>
+<text x="58" y="102" font-size="34" font-weight="800" fill="#111111">Responsibility expands as evidence accumulates</text>
+<text x="58" y="132" font-size="17" fill="#5f5a4e">The organization does not wait for experience to appear; it creates bounded ways to earn the next level of trust.</text>
+<line x1="58" y1="151" x2="1142" y2="151" stroke="#111111" stroke-width="2"/>
+
+<path d="M90,590 L1115,590" stroke="#111111" stroke-width="3" marker-end="url(#arrow-ink)"/>
+<text x="90" y="621" font-size="13" font-weight="800" fill="#5f5a4e" letter-spacing="1.1">MORE RESPONSIBILITY • MORE REALISTIC CONDITIONS • MORE DECISION RIGHTS</text>
+
+<rect x="70" y="430" width="190" height="130" fill="#fffdf5" stroke="#ad0034" stroke-width="3"/>
+<rect x="70" y="430" width="190" height="30" fill="#ad0034"/>
+<text x="165" y="450" class="level" text-anchor="middle">LEVEL 1</text>
+<text x="86" y="490" class="head">OBSERVE + LEARN</text>
+<text x="86" y="519" class="copy"><tspan x="86">Shadow the work;</tspan><tspan x="86" dy="20">name signals and risks</tspan></text>
+
+<path d="M260,495 L285,495 L285,425 L310,425" fill="none" stroke="#111111" stroke-width="3" marker-end="url(#arrow-ink)"/>
+<rect x="310" y="360" width="190" height="200" fill="#fffdf5" stroke="#ad0034" stroke-width="3"/>
+<rect x="310" y="360" width="190" height="30" fill="#ad0034"/>
+<text x="405" y="380" class="level" text-anchor="middle">LEVEL 2</text>
+<text x="326" y="420" class="head">READ-ONLY REP</text>
+<text x="326" y="449" class="copy"><tspan x="326">Diagnose or prepare;</tspan><tspan x="326" dy="20">no production change</tspan></text>
+<line x1="326" y1="510" x2="484" y2="510" stroke="#dcc61e" stroke-width="5"/>
+<text x="326" y="536" font-size="12" font-weight="800" fill="#5f5a4e">EVIDENCE CHECKPOINT</text>
+
+<path d="M500,425 L525,425 L525,355 L550,355" fill="none" stroke="#111111" stroke-width="3" marker-end="url(#arrow-ink)"/>
+<rect x="550" y="290" width="200" height="270" fill="#fffdf5" stroke="#dcc61e" stroke-width="3"/>
+<rect x="550" y="290" width="200" height="30" fill="#dcc61e"/>
+<text x="650" y="310" class="level" text-anchor="middle" fill="#111111">LEVEL 3</text>
+<text x="566" y="350" class="head">REVERSIBLE ACTION</text>
+<text x="566" y="379" class="copy"><tspan x="566">Execute a safe change</tspan><tspan x="566" dy="20">under supervision</tspan></text>
+<text x="566" y="448" class="copy"><tspan x="566">Approval boundary</tspan><tspan x="566" dy="20">Rollback path</tspan><tspan x="566" dy="20">Named work owner</tspan></text>
+<line x1="566" y1="510" x2="734" y2="510" stroke="#dcc61e" stroke-width="5"/>
+<text x="566" y="536" font-size="12" font-weight="800" fill="#5f5a4e">EVIDENCE CHECKPOINT</text>
+
+<path d="M750,355 L775,355 L775,285 L800,285" fill="none" stroke="#111111" stroke-width="3" marker-end="url(#arrow-ink)"/>
+<rect x="800" y="220" width="200" height="340" fill="#fffdf5" stroke="#007f7b" stroke-width="3"/>
+<rect x="800" y="220" width="200" height="30" fill="#007f7b"/>
+<text x="900" y="240" class="level" text-anchor="middle">LEVEL 4</text>
+<text x="816" y="280" class="head">BOUNDED OWNER</text>
+<text x="816" y="309" class="copy"><tspan x="816">Own the outcome inside</tspan><tspan x="816" dy="20">explicit limits</tspan></text>
+<text x="816" y="378" class="copy"><tspan x="816">Independent execution</tspan><tspan x="816" dy="20">Escalation triggers</tspan><tspan x="816" dy="20">Feedback after the rep</tspan></text>
+<line x1="816" y1="510" x2="984" y2="510" stroke="#dcc61e" stroke-width="5"/>
+<text x="816" y="536" font-size="12" font-weight="800" fill="#5f5a4e">EVIDENCE CHECKPOINT</text>
+
+<path d="M1000,285 L1025,285 L1025,215 L1050,215" fill="none" stroke="#111111" stroke-width="3" marker-end="url(#arrow-ink)"/>
+<rect x="1050" y="165" width="105" height="395" fill="#fffdf5" stroke="#2f7d32" stroke-width="3"/>
+<rect x="1050" y="165" width="105" height="30" fill="#2f7d32"/>
+<text x="1102" y="185" class="level" text-anchor="middle">LEVEL 5</text>
+<text x="1102" y="225" class="head" text-anchor="middle"><tspan x="1102">BROADER</tspan><tspan x="1102" dy="21">SCOPE</tspan></text>
+<text x="1102" y="292" class="copy" text-anchor="middle"><tspan x="1102">Coordinate</tspan><tspan x="1102" dy="20">others and</tspan><tspan x="1102" dy="20">shape the</tspan><tspan x="1102" dy="20">system</tspan></text>
+
+<rect x="165" y="655" width="870" height="46" fill="#fff8e0" stroke="#ad0034" stroke-width="2"/>
+<text x="600" y="684" font-size="13" font-weight="800" fill="#ad0034" text-anchor="middle" letter-spacing=".6">IF THE NEXT REP IS NOT LEGITIMATELY AVAILABLE, THE CAREER GATE IS NOT LEGITIMATELY OPEN.</text>
+<line x1="58" y1="728" x2="1142" y2="728" stroke="#ddd5bf" stroke-width="2"/>
+<text x="58" y="756" font-size="14" font-weight="600" fill="#5f5a4e">Training supports the rep; observed behavior under realistic conditions is what justifies more scope.</text>
+</svg>

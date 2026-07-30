@@ -1,0 +1,93 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800" role="img" aria-labelledby="title desc">
+<title id="title">One proposal, intact specialist records</title>
+<desc id="desc">Assembly validates the shared contract and provenance without flattening each function&#x27;s evidence into one universal schema.</desc>
+
+<defs>
+  <marker id="arrow-ink" markerWidth="10" markerHeight="10" refX="8" refY="3"
+          orient="auto" markerUnits="strokeWidth">
+    <path d="M0,0 L0,6 L9,3 z" fill="#111111"/>
+  </marker>
+  <marker id="arrow-red" markerWidth="10" markerHeight="10" refX="8" refY="3"
+          orient="auto" markerUnits="strokeWidth">
+    <path d="M0,0 L0,6 L9,3 z" fill="#ad0034"/>
+  </marker>
+  <marker id="arrow-cyan" markerWidth="10" markerHeight="10" refX="8" refY="3"
+          orient="auto" markerUnits="strokeWidth">
+    <path d="M0,0 L0,6 L9,3 z" fill="#007f7b"/>
+  </marker>
+  <marker id="arrow-green" markerWidth="10" markerHeight="10" refX="8" refY="3"
+          orient="auto" markerUnits="strokeWidth">
+    <path d="M0,0 L0,6 L9,3 z" fill="#2f7d32"/>
+  </marker>
+  <pattern id="hatch" width="10" height="10" patternUnits="userSpaceOnUse"
+           patternTransform="rotate(45)">
+    <rect width="10" height="10" fill="#fffdf5"/>
+    <line x1="0" y1="0" x2="0" y2="10" stroke="#111111" stroke-width="2" opacity=".22"/>
+  </pattern>
+  <pattern id="grid" width="24" height="24" patternUnits="userSpaceOnUse">
+    <rect width="24" height="24" fill="#f5efdc"/>
+    <path d="M24 0H0V24" fill="none" stroke="#111111" stroke-width="1" opacity=".08"/>
+  </pattern>
+  <style>
+    text { font-family: "Helvetica Neue", Arial, sans-serif; }
+    .label { font-size: 15px; font-weight: 800; letter-spacing: 1.8px; }
+    .title { font-size: 34px; font-weight: 800; }
+    .subtitle { font-size: 17px; fill: #5f5a4e; }
+    .box-title { font-size: 20px; font-weight: 800; }
+    .box-copy { font-size: 16px; fill: #3f3b34; }
+    .small { font-size: 14px; fill: #5f5a4e; }
+    .tiny { font-size: 12px; fill: #5f5a4e; letter-spacing: .5px; }
+  </style>
+</defs>
+
+<rect width="1200" height="800" fill="#f5efdc"/>
+<rect x="18" y="18" width="1164" height="764" fill="none" stroke="#111111" stroke-width="2"/>
+<rect x="30" y="30" width="1140" height="740" fill="none" stroke="none"/>
+<text x="58" y="60" font-size="15" font-weight="800" fill="#ad0034" text-anchor="start" letter-spacing="1.8"><tspan x="58" dy="0">WORK INTAKE / SYSTEM FIGURE</tspan></text>
+<text x="58" y="102" font-size="34" font-weight="800" fill="#111111" text-anchor="start" letter-spacing="0"><tspan x="58" dy="0">One proposal, intact specialist records</tspan></text>
+<text x="58" y="132" font-size="17" font-weight="400" fill="#5f5a4e" text-anchor="start" letter-spacing="0"><tspan x="58" dy="0">Assembly validates the shared contract and provenance without flattening each function&#x27;s evidence into one universal schema.</tspan></text>
+<line x1="58" y1="151" x2="1142" y2="151" stroke="#111111" stroke-width="2"/>
+<rect x="60" y="205" width="210" height="105" rx="0" fill="#fffdf5" stroke="#ad0034" stroke-width="3"/>
+<text x="76" y="233" font-size="19" font-weight="800" fill="#111111" text-anchor="start" letter-spacing="0"><tspan x="76" dy="0">SECURITY</tspan></text>
+<text x="76" y="260" font-size="15" font-weight="400" fill="#5f5a4e" text-anchor="start" letter-spacing="0"><tspan x="76" dy="0">Threat model</tspan><tspan x="76" dy="20">Control evidence</tspan></text>
+<rect x="60" y="350" width="210" height="105" rx="0" fill="#fffdf5" stroke="#dcc61e" stroke-width="3"/>
+<text x="76" y="378" font-size="19" font-weight="800" fill="#111111" text-anchor="start" letter-spacing="0"><tspan x="76" dy="0">FINANCE</tspan></text>
+<text x="76" y="405" font-size="15" font-weight="400" fill="#5f5a4e" text-anchor="start" letter-spacing="0"><tspan x="76" dy="0">Cost model</tspan><tspan x="76" dy="20">Funding condition</tspan></text>
+<rect x="60" y="495" width="210" height="105" rx="0" fill="#fffdf5" stroke="#007f7b" stroke-width="3"/>
+<text x="76" y="523" font-size="19" font-weight="800" fill="#111111" text-anchor="start" letter-spacing="0"><tspan x="76" dy="0">TECHNICAL</tspan></text>
+<text x="76" y="550" font-size="15" font-weight="400" fill="#5f5a4e" text-anchor="start" letter-spacing="0"><tspan x="76" dy="0">Feasibility</tspan><tspan x="76" dy="20">Operating burden</tspan></text>
+<rect x="930" y="205" width="210" height="105" rx="0" fill="#fffdf5" stroke="#111111" stroke-width="3"/>
+<text x="946" y="233" font-size="19" font-weight="800" fill="#111111" text-anchor="start" letter-spacing="0"><tspan x="946" dy="0">PRIVACY / LEGAL</tspan></text>
+<text x="946" y="260" font-size="15" font-weight="400" fill="#5f5a4e" text-anchor="start" letter-spacing="0"><tspan x="946" dy="0">Applicable duties</tspan><tspan x="946" dy="20">Required conditions</tspan></text>
+<rect x="930" y="350" width="210" height="105" rx="0" fill="#fffdf5" stroke="#ad0034" stroke-width="3"/>
+<text x="946" y="378" font-size="19" font-weight="800" fill="#111111" text-anchor="start" letter-spacing="0"><tspan x="946" dy="0">PROCUREMENT</tspan></text>
+<text x="946" y="405" font-size="15" font-weight="400" fill="#5f5a4e" text-anchor="start" letter-spacing="0"><tspan x="946" dy="0">Vendor evidence</tspan><tspan x="946" dy="20">Contract terms</tspan></text>
+<rect x="930" y="495" width="210" height="105" rx="0" fill="#fffdf5" stroke="#007f7b" stroke-width="3"/>
+<text x="946" y="523" font-size="19" font-weight="800" fill="#111111" text-anchor="start" letter-spacing="0"><tspan x="946" dy="0">DELIVERY TEAMS</tspan></text>
+<text x="946" y="550" font-size="15" font-weight="400" fill="#5f5a4e" text-anchor="start" letter-spacing="0"><tspan x="946" dy="0">Capacity decision</tspan><tspan x="946" dy="20">Ownership</tspan></text>
+<rect x="365" y="220" width="470" height="375" rx="0" fill="#fff8e0" stroke="#111111" stroke-width="4"/>
+<rect x="395" y="250" width="410" height="315" rx="0" fill="#fffdf5" stroke="#ad0034" stroke-width="3"/>
+<text x="600" y="290" font-size="23" font-weight="800" fill="#111111" text-anchor="middle" letter-spacing="0"><tspan x="600" dy="0">AUTHORIZED WORK PROPOSAL</tspan></text>
+<rect x="510" y="310" width="180" height="34" rx="17" fill="#dcc61e" stroke="#111111" stroke-width="2"/>
+<text x="600.0" y="333" font-size="13" font-weight="800" fill="#111111" text-anchor="middle" letter-spacing="0.4"><tspan x="600.0" dy="0">REVISION 3 / FIXED</tspan></text>
+<line x1="435" y1="370" x2="455" y2="370" stroke="#007f7b" stroke-width="5"/>
+<text x="470" y="376" font-size="16" font-weight="600" fill="#111111" text-anchor="start" letter-spacing="0"><tspan x="470" dy="0">Authenticated demand + sponsor</tspan></text>
+<line x1="435" y1="408" x2="455" y2="408" stroke="#007f7b" stroke-width="5"/>
+<text x="470" y="414" font-size="16" font-weight="600" fill="#111111" text-anchor="start" letter-spacing="0"><tspan x="470" dy="0">Outcome, scope, and acceptance</tspan></text>
+<line x1="435" y1="446" x2="455" y2="446" stroke="#007f7b" stroke-width="5"/>
+<text x="470" y="452" font-size="16" font-weight="600" fill="#111111" text-anchor="start" letter-spacing="0"><tspan x="470" dy="0">Review decisions + provenance</tspan></text>
+<line x1="435" y1="484" x2="455" y2="484" stroke="#007f7b" stroke-width="5"/>
+<text x="470" y="490" font-size="16" font-weight="600" fill="#111111" text-anchor="start" letter-spacing="0"><tspan x="470" dy="0">Dependencies + capacity evidence</tspan></text>
+<line x1="435" y1="522" x2="455" y2="522" stroke="#007f7b" stroke-width="5"/>
+<text x="470" y="528" font-size="16" font-weight="600" fill="#111111" text-anchor="start" letter-spacing="0"><tspan x="470" dy="0">Owners + dates + version history</tspan></text>
+<path d="M270,257 L365,257" fill="none" stroke="#ad0034" stroke-width="3" marker-end="url(#arrow-ink)"/>
+<path d="M270,402 L365,402" fill="none" stroke="#dcc61e" stroke-width="3" marker-end="url(#arrow-ink)"/>
+<path d="M270,547 L365,547" fill="none" stroke="#007f7b" stroke-width="3" marker-end="url(#arrow-ink)"/>
+<path d="M930,257 L835,257" fill="none" stroke="#111111" stroke-width="3" marker-end="url(#arrow-ink)"/>
+<path d="M930,402 L835,402" fill="none" stroke="#ad0034" stroke-width="3" marker-end="url(#arrow-ink)"/>
+<path d="M930,547 L835,547" fill="none" stroke="#007f7b" stroke-width="3" marker-end="url(#arrow-ink)"/>
+<text x="600" y="645" font-size="16" font-weight="800" fill="#ad0034" text-anchor="middle" letter-spacing="1.2"><tspan x="600" dy="0">SPECIALIST RECORDS REMAIN INTACT</tspan></text>
+<text x="600" y="674" font-size="15" font-weight="500" fill="#5f5a4e" text-anchor="middle" letter-spacing="0"><tspan x="600" dy="0">The common envelope proves whose decision applies to which proposal revision.</tspan></text>
+<line x1="58" y1="734" x2="1142" y2="734" stroke="#ddd5bf" stroke-width="2"/>
+<text x="58" y="762" font-size="14" font-weight="600" fill="#5f5a4e" text-anchor="start" letter-spacing="0"><tspan x="58" dy="0">Delivery records may refine execution; changing authority requires a superseding proposal revision.</tspan></text>
+</svg>

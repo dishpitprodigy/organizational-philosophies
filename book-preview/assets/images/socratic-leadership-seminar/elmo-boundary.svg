@@ -1,0 +1,97 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 780" role="img" aria-labelledby="title desc">
+<title id="title">ELMO keeps implementation work outside the seminar</title>
+<desc id="desc">Discussion stays in the seminar while participants examine research, interpretations, experience, and disagreement. When the group begins designing a solution, any participant may call ELMO and route implementation work elsewhere.</desc>
+
+<defs>
+  <marker id="arrow-ink" markerWidth="10" markerHeight="10" refX="8" refY="3"
+          orient="auto" markerUnits="strokeWidth">
+    <path d="M0,0 L0,6 L9,3 z" fill="#111111"/>
+  </marker>
+  <marker id="arrow-red" markerWidth="10" markerHeight="10" refX="8" refY="3"
+          orient="auto" markerUnits="strokeWidth">
+    <path d="M0,0 L0,6 L9,3 z" fill="#ad0034"/>
+  </marker>
+  <marker id="arrow-cyan" markerWidth="10" markerHeight="10" refX="8" refY="3"
+          orient="auto" markerUnits="strokeWidth">
+    <path d="M0,0 L0,6 L9,3 z" fill="#007f7b"/>
+  </marker>
+  <style>
+    text { font-family: "Helvetica Neue", Arial, sans-serif; }
+    .box-title { font-size: 19px; font-weight: 800; }
+    .box-copy { font-size: 15px; fill: #3f3b34; }
+    .small { font-size: 14px; fill: #5f5a4e; }
+  </style>
+</defs>
+
+<rect width="1200" height="780" fill="#f5efdc"/>
+<rect x="18" y="18" width="1164" height="744" fill="none" stroke="#111111" stroke-width="2"/>
+<rect x="30" y="30" width="1140" height="720" fill="none" stroke="#111111" stroke-width="1"/>
+
+<text x="58" y="60" font-size="15" font-weight="800" fill="#ad0034" letter-spacing="1.8">SOCRATIC LEADERSHIP / SEMINAR FIGURE</text>
+<text x="58" y="102" font-size="34" font-weight="800" fill="#111111">ELMO keeps implementation work outside the seminar</text>
+<text x="58" y="132" font-size="17" fill="#5f5a4e">Protect exploration when practical energy starts pulling the room toward solution design.</text>
+<line x1="58" y1="151" x2="1142" y2="151" stroke="#111111" stroke-width="2"/>
+
+<rect x="55" y="195" width="790" height="440" fill="#fffdf5" stroke="#007f7b" stroke-width="2" stroke-dasharray="10 7"/>
+<text x="75" y="225" font-size="15" font-weight="800" fill="#007f7b" letter-spacing="1.4">INSIDE THE SEMINAR</text>
+
+<rect x="80" y="285" width="190" height="115" fill="#fffdf5" stroke="#111111" stroke-width="3"/>
+<text x="96" y="317" class="box-title" fill="#111111">MATERIAL</text>
+<text x="96" y="348" class="box-copy">
+  <tspan x="96" dy="0">Claims + evidence</tspan>
+  <tspan x="96" dy="22">worth examining</tspan>
+</text>
+
+<line x1="270" y1="342" x2="315" y2="342" stroke="#111111" stroke-width="4" marker-end="url(#arrow-ink)"/>
+
+<rect x="320" y="285" width="210" height="115" fill="#fffdf5" stroke="#007f7b" stroke-width="3"/>
+<text x="336" y="317" class="box-title" fill="#111111">DISCUSSION</text>
+<text x="336" y="348" class="box-copy">
+  <tspan x="336" dy="0">Interpretations</tspan>
+  <tspan x="336" dy="22">Experience + dissent</tspan>
+</text>
+
+<line x1="530" y1="342" x2="558" y2="342" stroke="#007f7b" stroke-width="4" marker-end="url(#arrow-cyan)"/>
+
+<polygon points="650,265 742,342 650,419 558,342" fill="#fff8e0" stroke="#ad0034" stroke-width="3"/>
+<text x="650" y="330" font-size="17" font-weight="800" fill="#111111" text-anchor="middle">
+  <tspan x="650" dy="0">Are we designing</tspan>
+  <tspan x="650" dy="22">a solution?</tspan>
+</text>
+
+<path d="M650,419 L650,478 L425,478 L425,400" fill="none" stroke="#007f7b" stroke-width="3" marker-end="url(#arrow-cyan)"/>
+<text x="615" y="462" font-size="13" font-weight="800" fill="#007f7b">NO — KEEP EXPLORING</text>
+
+<line x1="742" y1="342" x2="765" y2="342" stroke="#ad0034" stroke-width="4" marker-end="url(#arrow-red)"/>
+<text x="750" y="326" font-size="13" font-weight="800" fill="#ad0034">YES</text>
+
+<rect x="770" y="287" width="55" height="110" fill="#ad0034" stroke="#ad0034" stroke-width="3"/>
+<text x="798" y="329" font-size="18" font-weight="800" fill="#fffdf5" text-anchor="middle">
+  <tspan x="798" dy="0">E</tspan>
+  <tspan x="798" dy="21">L</tspan>
+  <tspan x="798" dy="21">M</tspan>
+  <tspan x="798" dy="21">O</tspan>
+</text>
+
+<rect x="80" y="520" width="720" height="85" fill="#fff8e0" stroke="#007f7b" stroke-width="2"/>
+<text x="98" y="550" font-size="15" font-weight="800" fill="#007f7b" letter-spacing="1.2">ELMO DOES NOT REMOVE</text>
+<text x="98" y="580" class="box-copy">disagreement  •  critique  •  real examples  •  uncomfortable questions</text>
+
+<line x1="865" y1="195" x2="865" y2="635" stroke="#ad0034" stroke-width="3" stroke-dasharray="9 7"/>
+<text x="883" y="225" font-size="15" font-weight="800" fill="#ad0034" letter-spacing="1.4">OTHER WORKFLOW</text>
+
+<line x1="825" y1="342" x2="905" y2="342" stroke="#ad0034" stroke-width="4" marker-end="url(#arrow-red)"/>
+<rect x="910" y="270" width="230" height="205" fill="#fff8e0" stroke="#ad0034" stroke-width="3"/>
+<text x="928" y="304" class="box-title" fill="#111111">IMPLEMENTATION</text>
+<text x="928" y="336" class="box-copy">
+  <tspan x="928" dy="0">Name what someone</tspan>
+  <tspan x="928" dy="22">imagines trying</tspan>
+  <tspan x="928" dy="30">Route planning, owners,</tspan>
+  <tspan x="928" dy="22">and design elsewhere</tspan>
+</text>
+<rect x="940" y="505" width="170" height="38" fill="#fffdf5" stroke="#111111" stroke-width="2"/>
+<text x="1025" y="530" font-size="13" font-weight="800" fill="#111111" text-anchor="middle">NO ACTION PLAN HERE</text>
+
+<line x1="58" y1="714" x2="1142" y2="714" stroke="#ddd5bf" stroke-width="2"/>
+<text x="58" y="742" font-size="14" font-weight="600" fill="#5f5a4e">ELMO protects the seminar’s purpose, not anyone’s comfort: disagreement stays; implementation leaves.</text>
+</svg>

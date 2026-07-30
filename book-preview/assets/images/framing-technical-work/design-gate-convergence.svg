@@ -1,0 +1,65 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 820" role="img" aria-labelledby="title desc">
+<title id="title">A design commitment depends on several different proofs</title>
+<desc id="desc">One strong answer cannot compensate for a missing requirement, operating owner, or failure boundary.</desc>
+
+<defs>
+  <marker id="arrow-ink" markerWidth="10" markerHeight="10" refX="8.95" refY="3"
+          orient="auto" markerUnits="strokeWidth">
+    <path d="M0,0 L0,6 L9,3 z" fill="#111111"/>
+  </marker>
+  <marker id="arrow-red" markerWidth="10" markerHeight="10" refX="8.95" refY="3"
+          orient="auto" markerUnits="strokeWidth">
+    <path d="M0,0 L0,6 L9,3 z" fill="#ad0034"/>
+  </marker>
+  <marker id="arrow-cyan" markerWidth="10" markerHeight="10" refX="8.95" refY="3"
+          orient="auto" markerUnits="strokeWidth">
+    <path d="M0,0 L0,6 L9,3 z" fill="#007f7b"/>
+  </marker>
+  <marker id="arrow-green" markerWidth="10" markerHeight="10" refX="8.95" refY="3"
+          orient="auto" markerUnits="strokeWidth">
+    <path d="M0,0 L0,6 L9,3 z" fill="#2f7d32"/>
+  </marker>
+  <style>
+    text { font-family: "Helvetica Neue", Arial, sans-serif; }
+  </style>
+</defs>
+
+<rect width="1200" height="820" fill="#f5efdc"/>
+<rect x="18" y="18" width="1164" height="784" fill="none" stroke="#111111" stroke-width="2"/>
+<text x="58" y="62" font-size="15" font-weight="800" fill="#ad0034" text-anchor="start" letter-spacing="1.8"><tspan x="58" dy="0">FRAMING TECHNICAL WORK</tspan></text>
+<text x="58" y="104" font-size="34" font-weight="800" fill="#111111" text-anchor="start" letter-spacing="0"><tspan x="58" dy="0">A design commitment depends on several different proofs</tspan></text>
+<text x="58" y="134" font-size="17" font-weight="400" fill="#5f5a4e" text-anchor="start" letter-spacing="0"><tspan x="58" dy="0">One strong answer cannot compensate for a missing requirement, operating owner, or failure boundary.</tspan></text>
+<line x1="58" y1="154" x2="1142" y2="154" stroke="#111111" stroke-width="2"/>
+<rect x="58" y="210" width="320" height="116" fill="#fffdf5" stroke="#007f7b" stroke-width="3"/>
+<text x="76" y="238" font-size="19" font-weight="800" fill="#111111" text-anchor="start" letter-spacing="0"><tspan x="76" dy="0">Requirements</tspan></text>
+<text x="76" y="266" font-size="14" font-weight="400" fill="#5f5a4e" text-anchor="start" letter-spacing="0"><tspan x="76" dy="0">Problem, users, scale,</tspan><tspan x="76" dy="19">success conditions</tspan></text>
+<rect x="58" y="390" width="320" height="116" fill="#fffdf5" stroke="#ad0034" stroke-width="3"/>
+<text x="76" y="418" font-size="19" font-weight="800" fill="#111111" text-anchor="start" letter-spacing="0"><tspan x="76" dy="0">Performance &amp; failure</tspan></text>
+<text x="76" y="446" font-size="14" font-weight="400" fill="#5f5a4e" text-anchor="start" letter-spacing="0"><tspan x="76" dy="0">Load, latency, degradation,</tspan><tspan x="76" dy="19">recovery, RTO/RPO</tspan></text>
+<rect x="58" y="570" width="320" height="116" fill="#fffdf5" stroke="#dcc61e" stroke-width="3"/>
+<text x="76" y="598" font-size="19" font-weight="800" fill="#111111" text-anchor="start" letter-spacing="0"><tspan x="76" dy="0">Operational impact</tspan></text>
+<text x="76" y="626" font-size="14" font-weight="400" fill="#5f5a4e" text-anchor="start" letter-spacing="0"><tspan x="76" dy="0">Intervention, cognitive load,</tspan><tspan x="76" dy="19">transition, maintenance</tspan></text>
+<rect x="822" y="210" width="320" height="116" fill="#fffdf5" stroke="#2f7d32" stroke-width="3"/>
+<text x="840" y="238" font-size="19" font-weight="800" fill="#111111" text-anchor="start" letter-spacing="0"><tspan x="840" dy="0">Accountability</tspan></text>
+<text x="840" y="266" font-size="14" font-weight="400" fill="#5f5a4e" text-anchor="start" letter-spacing="0"><tspan x="840" dy="0">Operation, incidents, uptime,</tspan><tspan x="840" dy="19">automation, risk acceptance</tspan></text>
+<rect x="822" y="390" width="320" height="116" fill="#fffdf5" stroke="#007f7b" stroke-width="3"/>
+<text x="840" y="418" font-size="19" font-weight="800" fill="#111111" text-anchor="start" letter-spacing="0"><tspan x="840" dy="0">Complexity &amp; tooling</tspan></text>
+<text x="840" y="446" font-size="14" font-weight="400" fill="#5f5a4e" text-anchor="start" letter-spacing="0"><tspan x="840" dy="0">Where complexity lives;</tspan><tspan x="840" dy="19">who pays support cost</tspan></text>
+<rect x="822" y="570" width="320" height="116" fill="#fffdf5" stroke="#ad0034" stroke-width="3"/>
+<text x="840" y="598" font-size="19" font-weight="800" fill="#111111" text-anchor="start" letter-spacing="0"><tspan x="840" dy="0">Pre-mortem</tspan></text>
+<text x="840" y="626" font-size="14" font-weight="400" fill="#5f5a4e" text-anchor="start" letter-spacing="0"><tspan x="840" dy="0">Hidden assumptions, stress,</tspan><tspan x="840" dy="19">likely incident paths</tspan></text>
+<rect x="435" y="358" width="330" height="160" fill="#fffdf5" stroke="#111111" stroke-width="3"/>
+<text x="453" y="386" font-size="19" font-weight="800" fill="#111111" text-anchor="start" letter-spacing="0"><tspan x="453" dy="0">Responsible design commitment</tspan></text>
+<text x="453" y="414" font-size="14" font-weight="400" fill="#5f5a4e" text-anchor="start" letter-spacing="0"><tspan x="453" dy="0">Fitness, authority, and operating</tspan><tspan x="453" dy="19">boundaries are explicit</tspan></text>
+<path d="M378,268 L410,268 L410,390 L435,390" fill="none" stroke="#007f7b" stroke-width="3" marker-end="url(#arrow-ink)"/>
+<path d="M378,448 L410,448 L410,438 L435,438" fill="none" stroke="#ad0034" stroke-width="3" marker-end="url(#arrow-ink)"/>
+<path d="M378,628 L410,628 L410,486 L435,486" fill="none" stroke="#dcc61e" stroke-width="3" marker-end="url(#arrow-ink)"/>
+<path d="M822,268 L790,268 L790,390 L765,390" fill="none" stroke="#2f7d32" stroke-width="3" marker-end="url(#arrow-ink)"/>
+<path d="M822,448 L790,448 L790,438 L765,438" fill="none" stroke="#007f7b" stroke-width="3" marker-end="url(#arrow-ink)"/>
+<path d="M822,628 L790,628 L790,486 L765,486" fill="none" stroke="#ad0034" stroke-width="3" marker-end="url(#arrow-ink)"/>
+<text x="600" y="690" font-size="14" font-weight="800" fill="#5f5a4e" text-anchor="middle" letter-spacing="1.2"><tspan x="600" dy="0">DESIGN-INFORMING QUESTIONS</tspan></text>
+<rect x="300" y="710" width="600" height="54" fill="#fffdf5" stroke="#ddd5bf" stroke-width="2" stroke-dasharray="7 6"/>
+<text x="600" y="742" font-size="15" font-weight="600" fill="#5f5a4e" text-anchor="middle" letter-spacing="0"><tspan x="600" dy="0">Consumption model • delegation • record ownership • implementation options</tspan></text>
+<line x1="58" y1="756" x2="1142" y2="756" stroke="#ddd5bf" stroke-width="2"/>
+<text x="58" y="783" font-size="14" font-weight="600" fill="#5f5a4e" text-anchor="start" letter-spacing="0"><tspan x="58" dy="0">Design gates establish fitness and authority; design-informing questions shape the chosen implementation.</tspan></text>
+</svg>

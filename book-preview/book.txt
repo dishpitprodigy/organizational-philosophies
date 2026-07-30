@@ -1,0 +1,38 @@
+title: Closing the Loop
+subtitle: A Guide to Organizational Excellence — Preview Manuscript
+author: Jon Wroblewski
+slug: closing-the-loop-preview
+chapters:
+book-preview/frontmatter/working-glossary.md
+book-preview/parts/part-1.md
+book-preview/chapters/01-open-loop-enterprise.md
+book-preview/parts/part-2.md
+book-preview/chapters/02-front-door.md
+book-preview/chapters/03-portfolio-judgment.md
+book-preview/parts/part-3.md
+book-preview/chapters/04-frame-before-design.md
+book-preview/chapters/05-legitimate-commitment.md
+book-preview/chapters/06-executable-work.md
+book-preview/parts/part-4.md
+book-preview/chapters/07-visible-operating-system.md
+book-preview/chapters/08-convert-recurrence.md
+book-preview/chapters/09-operating-cadence.md
+book-preview/chapters/10-managed-runoff.md
+book-preview/parts/part-5.md
+book-preview/chapters/11-development-architecture.md
+book-preview/chapters/12-management-evidence.md
+book-preview/chapters/13-safe-reps-and-opportunity.md
+book-preview/chapters/14-hiring-capability.md
+book-preview/chapters/15-selecting-external-capability.md
+book-preview/chapters/16-proving-external-capability.md
+book-preview/parts/part-6.md
+book-preview/chapters/17-reconciling-enterprise.md
+book-preview/chapters/18-ai-context-leverage.md
+book-preview/chapters/19-implementation-roadmap.md
+book-preview/appendices/00-appendices.md
+book-preview/appendices/a-framing-and-work-item-tools.md
+book-preview/appendices/b-conversation-planner.md
+book-preview/appendices/c-tda-workbook.md
+book-preview/appendices/d-career-reference.md
+book-preview/appendices/e-rfp-tools.md
+book-preview/appendices/f-socratic-seminar.md

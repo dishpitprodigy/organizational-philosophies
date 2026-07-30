@@ -1,0 +1,94 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800" role="img" aria-labelledby="title desc">
+<title id="title">Evidence strengthens as contact with reality increases</title>
+<desc id="desc">The sequence moves from an RFI discovery demo, to an RFP demo against stated requirements, to a proof of concept with buyer workloads and operators, and finally to acceptance and burn-in under production conditions. Decision consequence rises with evidentiary strength.</desc>
+
+<defs>
+  <marker id="arrow-ink" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth">
+    <path d="M0,0 L0,6 L9,3 z" fill="#111111"/>
+  </marker>
+  <marker id="arrow-teal" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth">
+    <path d="M0,0 L0,6 L9,3 z" fill="#007f7b"/>
+  </marker>
+  <style>
+    text { font-family: "Helvetica Neue", Arial, sans-serif; }
+    .eyebrow { font-size: 15px; font-weight: 800; letter-spacing: 1.8px; }
+    .title { font-size: 34px; font-weight: 800; }
+    .subtitle { font-size: 17px; fill: #5f5a4e; }
+    .box-title { font-size: 18px; font-weight: 800; }
+    .copy { font-size: 15px; fill: #5f5a4e; }
+    .small { font-size: 14px; font-weight: 600; fill: #5f5a4e; }
+  </style>
+</defs>
+
+<rect width="1200" height="800" fill="#f5efdc"/>
+<rect x="18" y="18" width="1164" height="764" fill="none" stroke="#111111" stroke-width="2"/>
+<rect x="30" y="30" width="1140" height="740" fill="none" stroke="#111111" stroke-width="1"/>
+
+<text x="58" y="60" class="eyebrow" fill="#ad0034">RFP / EVIDENCE SYSTEM</text>
+<text x="58" y="102" class="title" fill="#111111">Evidence strengthens as contact with reality increases</text>
+<text x="58" y="132" class="subtitle">Discovery explains the promise; production proof earns trust and contractual consequence.</text>
+<line x1="58" y1="151" x2="1142" y2="151" stroke="#111111" stroke-width="2"/>
+
+<path d="M95,575 L1105,575" fill="none" stroke="#111111" stroke-width="4" marker-end="url(#arrow-ink)"/>
+<text x="95" y="608" font-size="13" font-weight="800" fill="#5f5a4e" letter-spacing="1">LOWER CONTACT</text>
+<text x="1105" y="608" font-size="13" font-weight="800" fill="#007f7b" text-anchor="end" letter-spacing="1">PRODUCTION CONTACT</text>
+
+<rect x="60" y="350" width="245" height="180" fill="#fffdf5" stroke="#111111" stroke-width="3"/>
+<rect x="60" y="350" width="44" height="37" fill="#111111"/>
+<text x="82" y="376" font-size="16" font-weight="800" fill="#fffdf5" text-anchor="middle">1</text>
+<text x="116" y="378" font-size="16" font-weight="800" fill="#111111">RFI DISCOVERY DEMO</text>
+<text x="78" y="416" class="copy">Vendor environment</text>
+<text x="78" y="440" class="copy">Broad happy path</text>
+<text x="78" y="464" class="copy">Learns market language</text>
+<rect x="78" y="486" width="164" height="28" fill="#f5efdc" stroke="#111111" stroke-width="1"/>
+<text x="160" y="505" font-size="12" font-weight="800" fill="#111111" text-anchor="middle">INFORMS REQUIREMENTS</text>
+
+<line x1="305" y1="440" x2="335" y2="440" stroke="#111111" stroke-width="3" marker-end="url(#arrow-ink)"/>
+
+<rect x="335" y="310" width="245" height="220" fill="#fffdf5" stroke="#dcc61e" stroke-width="3"/>
+<rect x="335" y="310" width="44" height="37" fill="#dcc61e"/>
+<text x="357" y="336" font-size="16" font-weight="800" fill="#111111" text-anchor="middle">2</text>
+<text x="391" y="338" class="box-title" fill="#111111">RFP DEMO</text>
+<text x="353" y="378" class="copy">Named requirements</text>
+<text x="353" y="402" class="copy">Recorded assumptions</text>
+<text x="353" y="426" class="copy">Known environment + scale</text>
+<text x="353" y="450" class="copy">Evidence supplied afterward</text>
+<rect x="353" y="476" width="184" height="28" fill="#fff8e0" stroke="#dcc61e" stroke-width="1"/>
+<text x="445" y="495" font-size="12" font-weight="800" fill="#111111" text-anchor="middle">SUPPORTS COMPARISON</text>
+
+<line x1="580" y1="420" x2="610" y2="420" stroke="#dcc61e" stroke-width="3" marker-end="url(#arrow-ink)"/>
+
+<rect x="610" y="260" width="245" height="270" fill="#fffdf5" stroke="#ad0034" stroke-width="3"/>
+<rect x="610" y="260" width="44" height="37" fill="#ad0034"/>
+<text x="632" y="286" font-size="16" font-weight="800" fill="#fffdf5" text-anchor="middle">3</text>
+<text x="666" y="288" class="box-title" fill="#111111">LIVE POC</text>
+<text x="628" y="328" class="copy">Buyer workload + data</text>
+<text x="628" y="352" class="copy">Buyer systems + operators</text>
+<text x="628" y="376" class="copy">Representative scale</text>
+<text x="628" y="400" class="copy">Support + failure modes</text>
+<text x="628" y="424" class="copy">Tuning and gaps preserved</text>
+<rect x="628" y="468" width="184" height="36" fill="#fff8e0" stroke="#ad0034" stroke-width="2"/>
+<text x="720" y="491" font-size="12" font-weight="800" fill="#ad0034" text-anchor="middle">REDUCES SELECTION RISK</text>
+
+<line x1="855" y1="395" x2="885" y2="395" stroke="#ad0034" stroke-width="3" marker-end="url(#arrow-ink)"/>
+
+<rect x="885" y="205" width="255" height="325" fill="#fffdf5" stroke="#007f7b" stroke-width="4"/>
+<rect x="885" y="205" width="44" height="37" fill="#007f7b"/>
+<text x="907" y="231" font-size="16" font-weight="800" fill="#fffdf5" text-anchor="middle">4</text>
+<text x="941" y="233" font-size="16" font-weight="800" fill="#111111">ACCEPTANCE + BURN-IN</text>
+<text x="903" y="273" class="copy">Contracted configuration</text>
+<text x="903" y="297" class="copy">Agreed test conditions</text>
+<text x="903" y="321" class="copy">Integration + performance</text>
+<text x="903" y="345" class="copy">Failure behavior + support</text>
+<text x="903" y="369" class="copy">Sustained representative load</text>
+<text x="903" y="393" class="copy">Captured pass/fail evidence</text>
+<rect x="903" y="448" width="206" height="56" fill="#eaf4e6" stroke="#2f7d32" stroke-width="3"/>
+<text x="1006" y="471" font-size="12" font-weight="800" fill="#2f7d32" text-anchor="middle">EARNS FINAL ACCEPTANCE</text>
+<text x="1006" y="490" font-size="12" font-weight="800" fill="#2f7d32" text-anchor="middle">AND PAYMENT</text>
+
+<rect x="300" y="644" width="600" height="45" fill="#fff8e0" stroke="#ad0034" stroke-width="2"/>
+<text x="600" y="672" font-size="15" font-weight="800" fill="#ad0034" text-anchor="middle">A CONTROLLED DEMO IS USEFUL — BUT IT IS NOT PRODUCTION PROOF</text>
+
+<line x1="58" y1="724" x2="1142" y2="724" stroke="#ddd5bf" stroke-width="2"/>
+<text x="58" y="752" class="small">Each stage answers a different question; evidence should not silently inherit more authority than the test earned.</text>
+</svg>

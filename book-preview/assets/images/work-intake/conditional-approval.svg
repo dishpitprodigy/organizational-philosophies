@@ -1,0 +1,91 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800" role="img" aria-labelledby="title desc">
+<title id="title">Conditional Approval authorizes proof, not implementation</title>
+<desc id="desc">A testable unknown may justify the minimum work needed to resolve it; the reviewing authority still decides what follows.</desc>
+
+<defs>
+  <marker id="arrow-ink" markerWidth="10" markerHeight="10" refX="8" refY="3"
+          orient="auto" markerUnits="strokeWidth">
+    <path d="M0,0 L0,6 L9,3 z" fill="#111111"/>
+  </marker>
+  <marker id="arrow-red" markerWidth="10" markerHeight="10" refX="8" refY="3"
+          orient="auto" markerUnits="strokeWidth">
+    <path d="M0,0 L0,6 L9,3 z" fill="#ad0034"/>
+  </marker>
+  <marker id="arrow-cyan" markerWidth="10" markerHeight="10" refX="8" refY="3"
+          orient="auto" markerUnits="strokeWidth">
+    <path d="M0,0 L0,6 L9,3 z" fill="#007f7b"/>
+  </marker>
+  <marker id="arrow-green" markerWidth="10" markerHeight="10" refX="8" refY="3"
+          orient="auto" markerUnits="strokeWidth">
+    <path d="M0,0 L0,6 L9,3 z" fill="#2f7d32"/>
+  </marker>
+  <pattern id="hatch" width="10" height="10" patternUnits="userSpaceOnUse"
+           patternTransform="rotate(45)">
+    <rect width="10" height="10" fill="#fffdf5"/>
+    <line x1="0" y1="0" x2="0" y2="10" stroke="#111111" stroke-width="2" opacity=".22"/>
+  </pattern>
+  <pattern id="grid" width="24" height="24" patternUnits="userSpaceOnUse">
+    <rect width="24" height="24" fill="#f5efdc"/>
+    <path d="M24 0H0V24" fill="none" stroke="#111111" stroke-width="1" opacity=".08"/>
+  </pattern>
+  <style>
+    text { font-family: "Helvetica Neue", Arial, sans-serif; }
+    .label { font-size: 15px; font-weight: 800; letter-spacing: 1.8px; }
+    .title { font-size: 34px; font-weight: 800; }
+    .subtitle { font-size: 17px; fill: #5f5a4e; }
+    .box-title { font-size: 20px; font-weight: 800; }
+    .box-copy { font-size: 16px; fill: #3f3b34; }
+    .small { font-size: 14px; fill: #5f5a4e; }
+    .tiny { font-size: 12px; fill: #5f5a4e; letter-spacing: .5px; }
+  </style>
+</defs>
+
+<rect width="1200" height="800" fill="#f5efdc"/>
+<rect x="18" y="18" width="1164" height="764" fill="none" stroke="#111111" stroke-width="2"/>
+<rect x="30" y="30" width="1140" height="740" fill="none" stroke="none"/>
+<text x="58" y="60" font-size="15" font-weight="800" fill="#ad0034" text-anchor="start" letter-spacing="1.8"><tspan x="58" dy="0">WORK INTAKE / SYSTEM FIGURE</tspan></text>
+<text x="58" y="102" font-size="34" font-weight="800" fill="#111111" text-anchor="start" letter-spacing="0"><tspan x="58" dy="0">Conditional Approval authorizes proof, not implementation</tspan></text>
+<text x="58" y="132" font-size="17" font-weight="400" fill="#5f5a4e" text-anchor="start" letter-spacing="0"><tspan x="58" dy="0">A testable unknown may justify the minimum work needed to resolve it; the reviewing authority still decides what follows.</tspan></text>
+<line x1="58" y1="151" x2="1142" y2="151" stroke="#111111" stroke-width="2"/>
+<rect x="60" y="295" width="210" height="110" rx="0" fill="#fffdf5" stroke="#111111" stroke-width="3"/>
+<text x="76" y="323" font-size="19" font-weight="800" fill="#111111" text-anchor="start" letter-spacing="0"><tspan x="76" dy="0">REVIEW QUESTION</tspan></text>
+<text x="76" y="350" font-size="15" font-weight="400" fill="#5f5a4e" text-anchor="start" letter-spacing="0"><tspan x="76" dy="0">A critical variable</tspan><tspan x="76" dy="20">is still unknown</tspan></text>
+<line x1="270" y1="350" x2="345" y2="350" stroke="#111111" stroke-width="3" marker-end="url(#arrow-ink)"/>
+<polygon points="430,275.0 515.0,350 430,425.0 345.0,350" fill="#fff8e0" stroke="#ad0034" stroke-width="3"/>
+<text x="430" y="338" font-size="17" font-weight="800" fill="#111111" text-anchor="middle" letter-spacing="0"><tspan x="430" dy="0">Can a bounded</tspan><tspan x="430" dy="22">test resolve it?</tspan></text>
+<path d="M515,350 L585,350" fill="none" stroke="#007f7b" stroke-width="3" marker-end="url(#arrow-cyan)"/>
+<text x="550" y="334" font-size="13" font-weight="800" fill="#007f7b" text-anchor="middle" letter-spacing="0"><tspan x="550" dy="0">YES</tspan></text>
+<rect x="585" y="285" width="235" height="130" rx="0" fill="#fffdf5" stroke="#007f7b" stroke-width="3"/>
+<text x="601" y="313" font-size="19" font-weight="800" fill="#111111" text-anchor="start" letter-spacing="0"><tspan x="601" dy="0">CONDITIONAL APPROVAL</tspan></text>
+<text x="601" y="340" font-size="15" font-weight="400" fill="#5f5a4e" text-anchor="start" letter-spacing="0"><tspan x="601" dy="0">Named variable</tspan><tspan x="601" dy="20">Pass/fail evidence</tspan><tspan x="601" dy="20">Owner + timebox</tspan></text>
+<line x1="820" y1="350" x2="875" y2="350" stroke="#007f7b" stroke-width="3" marker-end="url(#arrow-cyan)"/>
+<rect x="875" y="285" width="260" height="130" rx="0" fill="#fffdf5" stroke="#007f7b" stroke-width="3" stroke-dasharray="9 7"/>
+<text x="891" y="313" font-size="19" font-weight="800" fill="#111111" text-anchor="start" letter-spacing="0"><tspan x="891" dy="0">MINIMUM PROOF ONLY</tspan></text>
+<text x="891" y="340" font-size="15" font-weight="400" fill="#5f5a4e" text-anchor="start" letter-spacing="0"><tspan x="891" dy="0">No general implementation</tspan><tspan x="891" dy="20">No vague cleanup list</tspan></text>
+<path d="M1005,415 L1005,500 L600,500" fill="none" stroke="#111111" stroke-width="3" marker-end="url(#arrow-ink)"/>
+<polygon points="515,430.0 600.0,500 515,570.0 430.0,500" fill="#fffdf5" stroke="#111111" stroke-width="3"/>
+<text x="515" y="491" font-size="17" font-weight="800" fill="#111111" text-anchor="middle" letter-spacing="0"><tspan x="515" dy="0">What did</tspan><tspan x="515" dy="22">the test show?</tspan></text>
+<path d="M430,425 L430,610 L245,610" fill="none" stroke="#ad0034" stroke-width="3" marker-end="url(#arrow-red)"/>
+<text x="400" y="450" font-size="13" font-weight="800" fill="#ad0034" text-anchor="end" letter-spacing="0"><tspan x="400" dy="0">NO</tspan></text>
+<rect x="60" y="560" width="185" height="100" rx="0" fill="#fff8e0" stroke="#ad0034" stroke-width="3"/>
+<text x="76" y="588" font-size="19" font-weight="800" fill="#111111" text-anchor="start" letter-spacing="0"><tspan x="76" dy="0">REJECTED</tspan></text>
+<text x="76" y="615" font-size="15" font-weight="400" fill="#5f5a4e" text-anchor="start" letter-spacing="0"><tspan x="76" dy="0">No responsible</tspan><tspan x="76" dy="20">proof path</tspan></text>
+<path d="M430,500 L325,500 L325,610 L245,610" fill="none" stroke="#ad0034" stroke-width="3" marker-end="url(#arrow-red)"/>
+<text x="335" y="486" font-size="13" font-weight="800" fill="#ad0034" text-anchor="middle" letter-spacing="0"><tspan x="335" dy="0">FAIL</tspan></text>
+<path d="M515,570 L515,630 L600,630" fill="none" stroke="#007f7b" stroke-width="3" marker-end="url(#arrow-cyan)"/>
+<rect x="600" y="580" width="215" height="100" rx="0" fill="#fffdf5" stroke="#007f7b" stroke-width="3" stroke-dasharray="9 7"/>
+<text x="616" y="608" font-size="19" font-weight="800" fill="#111111" text-anchor="start" letter-spacing="0"><tspan x="616" dy="0">ANOTHER TEST</tspan></text>
+<text x="616" y="635" font-size="15" font-weight="400" fill="#5f5a4e" text-anchor="start" letter-spacing="0"><tspan x="616" dy="0">New question,</tspan><tspan x="616" dy="20">owner, and timebox</tspan></text>
+<text x="558" y="615" font-size="13" font-weight="800" fill="#007f7b" text-anchor="middle" letter-spacing="0"><tspan x="558" dy="0">UNKNOWN</tspan></text>
+<path d="M600,500 L1000,500 L1000,580" fill="none" stroke="#2f7d32" stroke-width="3" marker-end="url(#arrow-green)"/>
+<rect x="900" y="580" width="200" height="100" rx="0" fill="#fffdf5" stroke="#2f7d32" stroke-width="3"/>
+<text x="916" y="608" font-size="19" font-weight="800" fill="#111111" text-anchor="start" letter-spacing="0"><tspan x="916" dy="0">APPROVED</tspan></text>
+<text x="916" y="635" font-size="15" font-weight="400" fill="#5f5a4e" text-anchor="start" letter-spacing="0"><tspan x="916" dy="0">Recorded scope</tspan><tspan x="916" dy="20">may proceed</tspan></text>
+<text x="755" y="486" font-size="13" font-weight="800" fill="#007f7b" text-anchor="middle" letter-spacing="0"><tspan x="755" dy="0">PASS</tspan></text>
+<line x1="815" y1="630" x2="900" y2="630" stroke="#2f7d32" stroke-width="3" stroke-dasharray="8 7" marker-end="url(#arrow-green)"/>
+<text x="858" y="615" font-size="12" font-weight="800" fill="#2f7d32" text-anchor="middle" letter-spacing="0"><tspan x="858" dy="0">PASS</tspan></text>
+<path d="M707,680 L707,710 L152,710 L152,660" fill="none" stroke="#ad0034" stroke-width="3" stroke-dasharray="8 7" marker-end="url(#arrow-red)"/>
+<text x="430" y="700" font-size="12" font-weight="800" fill="#ad0034" text-anchor="middle" letter-spacing="0"><tspan x="430" dy="0">FAIL</tspan></text>
+<line x1="58" y1="734" x2="1142" y2="734" stroke="#ddd5bf" stroke-width="2"/>
+<text x="58" y="762" font-size="14" font-weight="600" fill="#5f5a4e" text-anchor="start" letter-spacing="0"><tspan x="58" dy="0">If bounded proof could responsibly answer the question, asking for that proof is not Review Rejection.</tspan></text>
+</svg>

@@ -1,0 +1,91 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 780" role="img" aria-labelledby="title desc">
+<title id="title">Review order follows decision dependencies</title>
+<desc id="desc">An earlier gate must clear before functions that depend on its decision spend time or commit resources.</desc>
+
+<defs>
+  <marker id="arrow-ink" markerWidth="10" markerHeight="10" refX="8" refY="3"
+          orient="auto" markerUnits="strokeWidth">
+    <path d="M0,0 L0,6 L9,3 z" fill="#111111"/>
+  </marker>
+  <marker id="arrow-red" markerWidth="10" markerHeight="10" refX="8" refY="3"
+          orient="auto" markerUnits="strokeWidth">
+    <path d="M0,0 L0,6 L9,3 z" fill="#ad0034"/>
+  </marker>
+  <marker id="arrow-cyan" markerWidth="10" markerHeight="10" refX="8" refY="3"
+          orient="auto" markerUnits="strokeWidth">
+    <path d="M0,0 L0,6 L9,3 z" fill="#007f7b"/>
+  </marker>
+  <marker id="arrow-green" markerWidth="10" markerHeight="10" refX="8" refY="3"
+          orient="auto" markerUnits="strokeWidth">
+    <path d="M0,0 L0,6 L9,3 z" fill="#2f7d32"/>
+  </marker>
+  <pattern id="hatch" width="10" height="10" patternUnits="userSpaceOnUse"
+           patternTransform="rotate(45)">
+    <rect width="10" height="10" fill="#fffdf5"/>
+    <line x1="0" y1="0" x2="0" y2="10" stroke="#111111" stroke-width="2" opacity=".22"/>
+  </pattern>
+  <pattern id="grid" width="24" height="24" patternUnits="userSpaceOnUse">
+    <rect width="24" height="24" fill="#f5efdc"/>
+    <path d="M24 0H0V24" fill="none" stroke="#111111" stroke-width="1" opacity=".08"/>
+  </pattern>
+  <style>
+    text { font-family: "Helvetica Neue", Arial, sans-serif; }
+    .label { font-size: 15px; font-weight: 800; letter-spacing: 1.8px; }
+    .title { font-size: 34px; font-weight: 800; }
+    .subtitle { font-size: 17px; fill: #5f5a4e; }
+    .box-title { font-size: 20px; font-weight: 800; }
+    .box-copy { font-size: 16px; fill: #3f3b34; }
+    .small { font-size: 14px; fill: #5f5a4e; }
+    .tiny { font-size: 12px; fill: #5f5a4e; letter-spacing: .5px; }
+  </style>
+</defs>
+
+<rect width="1200" height="780" fill="#f5efdc"/>
+<rect x="18" y="18" width="1164" height="744" fill="none" stroke="#111111" stroke-width="2"/>
+<rect x="30" y="30" width="1140" height="720" fill="none" stroke="none"/>
+<text x="58" y="60" font-size="15" font-weight="800" fill="#ad0034" text-anchor="start" letter-spacing="1.8"><tspan x="58" dy="0">WORK INTAKE / SYSTEM FIGURE</tspan></text>
+<text x="58" y="102" font-size="34" font-weight="800" fill="#111111" text-anchor="start" letter-spacing="0"><tspan x="58" dy="0">Review order follows decision dependencies</tspan></text>
+<text x="58" y="132" font-size="17" font-weight="400" fill="#5f5a4e" text-anchor="start" letter-spacing="0"><tspan x="58" dy="0">An earlier gate must clear before functions that depend on its decision spend time or commit resources.</tspan></text>
+<line x1="58" y1="151" x2="1142" y2="151" stroke="#111111" stroke-width="2"/>
+<rect x="65" y="205" width="190" height="118" rx="0" fill="#fffdf5" stroke="#ad0034" stroke-width="3"/>
+<rect x="65" y="205" width="42" height="35" rx="0" fill="#ad0034" stroke="#ad0034" stroke-width="2"/>
+<text x="86" y="229" font-size="16" font-weight="800" fill="#fffdf5" text-anchor="middle" letter-spacing="0"><tspan x="86" dy="0">1</tspan></text>
+<text x="119" y="233" font-size="16" font-weight="800" fill="#111111" text-anchor="start" letter-spacing="0"><tspan x="119" dy="0">ADMIN AUTHORITY</tspan></text>
+<text x="81" y="260" font-size="15" font-weight="400" fill="#5f5a4e" text-anchor="start" letter-spacing="0"><tspan x="81" dy="0">May this proposal</tspan><tspan x="81" dy="20">consume evaluation</tspan><tspan x="81" dy="20">capacity?</tspan></text>
+<path d="M255,264 L267,264 L267,329 L285,329" fill="none" stroke="#111111" stroke-width="3" marker-end="url(#arrow-ink)"/>
+<rect x="285" y="270" width="190" height="118" rx="0" fill="#fffdf5" stroke="#ad0034" stroke-width="3"/>
+<rect x="285" y="270" width="42" height="35" rx="0" fill="#ad0034" stroke="#ad0034" stroke-width="2"/>
+<text x="306" y="294" font-size="16" font-weight="800" fill="#fffdf5" text-anchor="middle" letter-spacing="0"><tspan x="306" dy="0">2</tspan></text>
+<text x="339" y="298" font-size="16" font-weight="800" fill="#111111" text-anchor="start" letter-spacing="0"><tspan x="339" dy="0">SECURITY</tspan></text>
+<text x="301" y="325" font-size="15" font-weight="400" fill="#5f5a4e" text-anchor="start" letter-spacing="0"><tspan x="301" dy="0">Is cross-cutting risk</tspan><tspan x="301" dy="20">inside tolerance?</tspan></text>
+<path d="M475,329 L487,329 L487,394 L505,394" fill="none" stroke="#111111" stroke-width="3" marker-end="url(#arrow-ink)"/>
+<rect x="505" y="335" width="190" height="118" rx="0" fill="#fffdf5" stroke="#007f7b" stroke-width="3"/>
+<rect x="505" y="335" width="42" height="35" rx="0" fill="#007f7b" stroke="#007f7b" stroke-width="2"/>
+<text x="526" y="359" font-size="16" font-weight="800" fill="#fffdf5" text-anchor="middle" letter-spacing="0"><tspan x="526" dy="0">3</tspan></text>
+<text x="559" y="363" font-size="16" font-weight="800" fill="#111111" text-anchor="start" letter-spacing="0"><tspan x="559" dy="0">SPECIALIST REVIEWS</tspan></text>
+<text x="521" y="390" font-size="15" font-weight="400" fill="#5f5a4e" text-anchor="start" letter-spacing="0"><tspan x="521" dy="0">Finance, Procurement,</tspan><tspan x="521" dy="20">Privacy, technical teams</tspan></text>
+<path d="M695,394 L707,394 L707,459 L725,459" fill="none" stroke="#111111" stroke-width="3" marker-end="url(#arrow-ink)"/>
+<rect x="725" y="400" width="190" height="118" rx="0" fill="#fffdf5" stroke="#111111" stroke-width="3"/>
+<rect x="725" y="400" width="42" height="35" rx="0" fill="#111111" stroke="#111111" stroke-width="2"/>
+<text x="746" y="424" font-size="16" font-weight="800" fill="#fffdf5" text-anchor="middle" letter-spacing="0"><tspan x="746" dy="0">4</tspan></text>
+<text x="779" y="428" font-size="16" font-weight="800" fill="#111111" text-anchor="start" letter-spacing="0"><tspan x="779" dy="0">ASSEMBLY</tspan></text>
+<text x="741" y="455" font-size="15" font-weight="400" fill="#5f5a4e" text-anchor="start" letter-spacing="0"><tspan x="741" dy="0">Are accepted records</tspan><tspan x="741" dy="20">current and complete?</tspan></text>
+<path d="M915,459 L927,459 L927,524 L945,524" fill="none" stroke="#111111" stroke-width="3" marker-end="url(#arrow-ink)"/>
+<rect x="945" y="465" width="190" height="118" rx="0" fill="#fffdf5" stroke="#dcc61e" stroke-width="3"/>
+<rect x="945" y="465" width="42" height="35" rx="0" fill="#dcc61e" stroke="#dcc61e" stroke-width="2"/>
+<text x="966" y="489" font-size="16" font-weight="800" fill="#fffdf5" text-anchor="middle" letter-spacing="0"><tspan x="966" dy="0">5</tspan></text>
+<text x="999" y="493" font-size="16" font-weight="800" fill="#111111" text-anchor="start" letter-spacing="0"><tspan x="999" dy="0">DELIVERY READINESS</tspan></text>
+<text x="961" y="520" font-size="15" font-weight="400" fill="#5f5a4e" text-anchor="start" letter-spacing="0"><tspan x="961" dy="0">Have teams accepted</tspan><tspan x="961" dy="20">capacity and ownership?</tspan></text>
+<path d="M160,323 L160,640" fill="none" stroke="#ad0034" stroke-width="3" stroke-dasharray="8 7" marker-end="url(#arrow-red)"/>
+<rect x="99" y="630" width="122" height="34" rx="17" fill="#fff8e0" stroke="#ad0034" stroke-width="2"/>
+<text x="160.0" y="653" font-size="13" font-weight="800" fill="#ad0034" text-anchor="middle" letter-spacing="0.4"><tspan x="160.0" dy="0">STOP</tspan></text>
+<path d="M380,388 L380,640" fill="none" stroke="#ad0034" stroke-width="3" stroke-dasharray="8 7" marker-end="url(#arrow-red)"/>
+<rect x="319" y="630" width="122" height="34" rx="17" fill="#fff8e0" stroke="#ad0034" stroke-width="2"/>
+<text x="380.0" y="653" font-size="13" font-weight="800" fill="#ad0034" text-anchor="middle" letter-spacing="0.4"><tspan x="380.0" dy="0">STOP</tspan></text>
+<path d="M600,453 L600,640" fill="none" stroke="#ad0034" stroke-width="3" stroke-dasharray="8 7" marker-end="url(#arrow-red)"/>
+<rect x="539" y="630" width="122" height="34" rx="17" fill="#fff8e0" stroke="#ad0034" stroke-width="2"/>
+<text x="600.0" y="653" font-size="13" font-weight="800" fill="#ad0034" text-anchor="middle" letter-spacing="0.4"><tspan x="600.0" dy="0">STOP</tspan></text>
+<text x="597" y="610" font-size="16" font-weight="700" fill="#111111" text-anchor="middle" letter-spacing="0"><tspan x="597" dy="0">A mandatory no stops every review and delivery decision that depends on it.</tspan></text>
+<line x1="58" y1="714" x2="1142" y2="714" stroke="#ddd5bf" stroke-width="2"/>
+<text x="58" y="742" font-size="14" font-weight="600" fill="#5f5a4e" text-anchor="start" letter-spacing="0"><tspan x="58" dy="0">Organizations may use different stages; the sequence still follows the dependencies among decisions.</tspan></text>
+</svg>
