@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>DevOps & Site Reliability Engineering Career Progression Guide</title>
+<title>Career Progression Guide</title>
 <style>
 :root{
   --nav:300px;
@@ -205,6 +205,19 @@ th:last-child,td:last-child{border-right:0}
 tbody tr:last-child td{border-bottom:0}
 tbody tr:nth-child(even){background:rgba(197,0,60,.11)}
 tbody tr:hover{background:rgba(252,238,84,.07)}
+figure{
+  width:min(100%, 1080px); margin:1.6rem auto 2rem;
+  border:1px solid rgba(243,230,0,.38); background:#f5efdc;
+  box-shadow:0 16px 40px rgba(0,0,0,.42);
+}
+figure img{display:block; width:100%; height:auto}
+figcaption{
+  padding:.7rem .9rem .8rem; border-top:1px solid #b9af94;
+  background:#f5efdc; color:#29271f; font-size:.88rem; line-height:1.45;
+}
+.figure-number{
+  color:#8b002b; font-weight:900; letter-spacing:.035em; text-transform:uppercase;
+}
 /* Work-item expand boxes */
 .expand{margin:1em 0; overflow:hidden}
 .expand[open]{background:rgba(20,16,20,.92)}
@@ -239,12 +252,13 @@ footer{margin-top:60px; padding-top:22px; border-top:1px solid var(--line); colo
 .totop{position:fixed; right:1.5rem; bottom:1.5rem; z-index:30; width:44px; height:44px; border-radius:50%; cursor:pointer; border:1px solid rgba(85,234,212,.6); background:#0d1020; color:var(--cyan); font-size:1.2rem; line-height:1; display:flex; align-items:center; justify-content:center; box-shadow:0 0 24px rgba(85,234,212,.24); opacity:0; visibility:hidden; transition:opacity .2s ease, visibility .2s ease, transform .2s ease}.totop.show{opacity:1; visibility:visible}.totop:hover{transform:translateY(-2px); color:var(--yellow); border-color:var(--yellow)}
 @media(max-width:920px){body{background-size:34px 34px,34px 34px,auto,auto,auto}.toc{position:static; width:auto; height:auto; overflow:visible; border-right:0; border-bottom:1px solid var(--line)}.toc-list{columns:1}.content{margin-left:0; margin-right:0; padding:1.15rem 1rem 4rem}.doc-header{padding:1rem}table{display:block; overflow-x:auto}.cards{grid-template-columns:1fr}.pcard .psub,.pcard .lines{margin-left:0}}
 @media print{body{background:#fff; color:#111}body::before,.toc,.tabbar,.totop,.modal-overlay{display:none!important}.content{margin:0; padding:0}.panel{display:block!important}.doc-header,.principle,.block,.callout,blockquote,.card,.pcard,.expand{box-shadow:none; background:#fff; color:#111; border-color:#ccc}h1,h2,h3,h4,p,li,td,th,strong,em,.attr-val{color:#111}h1{text-shadow:none}h2::before{content:""}a{color:#0645ad}pre{background:#f4f6f8; color:#111; border:1px solid #ccc}table,.card{break-inside:avoid}#details{display:block; margin-top:30px}#details .detail{break-inside:avoid; border:1px solid #ccc; border-radius:0; margin:14px 0; padding:4px 16px 12px}#details .modal-head{display:flex; gap:12px; align-items:center; padding:10px 0}.more,.modal-close{display:none!important}.badge{color:#0b0f14!important; -webkit-print-color-adjust:exact; print-color-adjust:exact}}
+@media print{figure{break-inside:avoid; box-shadow:none; border:1px solid #777; background:#fff}figure img,figcaption{background:#fff}}
 </style>
 </head>
 <body>
 <div class="wrap">
 <nav class="toc" aria-label="Contents">
-<div class="toc-title"><span class="toc-kicker">Career</span>DevOps/SRE Progression Guide</div>
+<div class="toc-title"><span class="toc-kicker">Career</span>Progression Guide</div>
 <div class="toc-group active" data-tab="overview">
 <button class="toc-tab" data-tab="overview">Overview<span class="toc-sub">Purpose, summary, ladder use</span></button>
 <ul class="toc-list">
@@ -296,16 +310,16 @@ footer{margin-top:60px; padding-top:22px; border-top:1px solid var(--line); colo
 <main class="content">
 <header class="doc-header">
   <a class="home-link" href="index.html">Return to home</a>
-  <p class="eyebrow">Engineering &middot; Specialization Career Framework</p>
-  <h1>DevOps & Site Reliability Engineering Career Progression Guide</h1>
-  <p class="sub">A shared scope-and-impact ladder for DevOps, Site Reliability, Platform, Cloud, Infrastructure, and Security Engineering &mdash; built to help managers and calibration groups apply the grade scale consistently.</p>
+  <p class="eyebrow">Career Development &middot; Progression Framework</p>
+  <h1>Career Progression Guide</h1>
+  <p class="sub">A shared scope-and-impact ladder across roles, illustrated through systems-engineering titles and situations.</p>
 </header>
 <div class="tabbar"><button class="tabbtn active" data-tab="overview">Overview</button><button class="tabbtn" data-tab="ladder">IC Ladder</button><button class="tabbtn" data-tab="leadership">Leadership</button><button class="tabbtn" data-tab="calibration">Calibration</button></div>
 <div class="panels">
 <section class="panel active" id="tab-overview" data-tab="overview">
-<p><em>“DevOps &amp; SRE” in the title is shorthand; the ladder applies equally to Platform, Cloud, Infrastructure, and Security Engineering.</em></p>
+<p><em>The grade boundaries apply across roles; the titles and situations in the ladder are systems-engineering examples.</em></p>
 <h2 id="purpose">Purpose</h2>
-<p>This guide translates an IC1–IC9, MGR4–MGR8, and EX9–EX11 grade scale into observable expectations for DevOps, Site Reliability, Platform, Cloud, Infrastructure, and Security Engineering roles.</p>
+<p>This guide translates an IC1–IC9, MGR4–MGR8, and EX9–EX11 grade scale into observable expectations that can be applied across roles.</p>
 <p>The grade reflects the <strong>scope, ambiguity, autonomy, influence, and durable impact</strong> of the work a person consistently performs. It is not determined by tenure, ticket volume, technical trivia, or title.</p>
 <p>Higher levels are not simply “more difficult engineering.” Progression increasingly means:</p>
 <ul>
@@ -315,18 +329,24 @@ footer{margin-top:60px; padding-top:22px; border-top:1px solid var(--line); colo
 <li>moving from personal execution to standards, systems, and decisions that multiply the work of others;</li>
 <li>moving from technical correctness to business-relevant technical judgment.</li>
 </ul>
-<p>Example titles may be adapted by specialization—such as SRE, Platform Engineer, Cloud Engineer, Infrastructure Engineer, or Security Engineer—without changing the grade expectations.</p>
-<p>This document is a <strong>shared scope-and-impact ladder</strong>, not a universal technical-skills checklist. Each specialization should maintain a concise competency appendix for its own tools, practices, and domain knowledge while preserving the common grade boundaries. A Cloud Engineer and an SRE at the same grade may demonstrate different technical depth, but they should operate at comparable scope, autonomy, influence, and impact.</p>
+<p>The example titles and technical situations are deliberately systems-engineering focused. Other specializations may adapt them without changing the grade expectations.</p>
+<p>This document is a <strong>shared scope-and-impact ladder across roles</strong>, not a universal technical-skills checklist. Each specialization should maintain a concise competency appendix for its own tools, practices, and domain knowledge while preserving the common grade boundaries. People at the same grade may demonstrate different technical or functional depth, but they should operate at comparable scope, autonomy, influence, and impact.</p>
 <hr>
 <h2 id="executive-summary">Executive Summary</h2>
 <p>The full guide is reference material. The points below are the operating system. A reader who absorbs only this section should still calibrate consistently with the rest of the document.</p>
 <p><strong>Four separate judgments, never one label.</strong> Career level (the scope and operating model expected of the role), period performance (how effectively the person met current-level expectations), growth trajectory (direction and pace of development), and opportunity (whether the role provides scope at the target level). Collapsing these into a single rating produces the most common calibration failures.</p>
+<figure id="fig-four-separate-judgments">
+<img
+src="assets/images/career-progression/four-separate-judgments.svg" width="1200" height="790"
+alt="Career level, period performance, growth trajectory, and opportunity are separate judgments drawn from the same review evidence and leading to different decisions; they must not be averaged into one label." />
+<figcaption aria-hidden="true"><span class="figure-number">Figure 1.</span> Career level, period performance, growth trajectory, and opportunity are separate judgments drawn from the same review evidence and leading to different decisions; they must not be averaged into one label.</figcaption>
+</figure>
 <p><strong>Seven dimensions of level.</strong> Every calibration question, every promotion packet, and every escalation reduces to: scope, complexity, autonomy, impact, influence, leverage, durability. The progression model, scope horizons, and evaluation rubrics elsewhere in this guide are views of these same seven dimensions applied to different questions.</p>
 <p><strong>IC5 is a complete career level.</strong> Progression beyond IC5 is optional and reflects an organizational need for cross-team technical leadership, scope creation, and leverage through other engineers. It is not the default reward for sustained excellence at IC5.</p>
 <p><strong>Promotion is lagging recognition.</strong> The next level should already describe how the person normally operates. Promotion does not authorize attempting next-level work; demonstration precedes recognition. Scope must be agreed in advance and evidence must be sustained.</p>
 <p><strong>Calibrate against the ladder, not against people.</strong> Read the written case before discussion. Compare evidence to documented expectations. Record which expectations were demonstrated, which were not, and whether the remaining gap is capability, opportunity, or organizational need.</p>
 <p><strong>Common failure modes.</strong> Tenure inflation, execution substitution, scope-by-headcount, manager-advocacy bias, invisible-work erasure, network-blindness, scope starvation, level-performance conflation, and curve enforcement. The full list with definitions is in <em>Common Miscalibrations</em>.</p>
-<p><strong>The promotion packet must show causation.</strong> <em>Problem → ownership → decisions → adoption → durable outcome.</em> Activity, attendance, relationships, and effort are not impact. The packet must make the causal narrative legible to a calibration group that has never observed the candidate's daily work.</p>
+<p><strong>The promotion packet must show causation.</strong> Activity, attendance, relationships, and effort are not impact. The packet must make the causal narrative legible to a calibration group that has never observed the candidate's daily work.</p>
 <hr>
 <h2 id="how-to-use-the-ladder">How to Use the Ladder</h2>
 <p>A person should be calibrated at the level where the expectations below describe their <strong>normal, sustained contribution</strong>, not their best isolated project.</p>
@@ -396,6 +416,12 @@ footer{margin-top:60px; padding-top:22px; border-top:1px solid var(--line); colo
 <p>A manager and employee should align on the intended scope and expected evidence <strong>before</strong> the work begins. Perfect execution of current-level assignments does not become next-level performance merely through volume or effort.</p>
 <h3 id="the-progression-model">The progression model</h3>
 <p>The clearest distinction between levels is the unit of ownership and how the engineer creates results. This table is the canonical dimensions read across tiers—each row maps to one of the seven (shown in parentheses):</p>
+<figure id="fig-operating-model-progression">
+<img
+src="assets/images/career-progression/operating-model-progression.svg" width="1200" height="850"
+alt="Career progression changes the operating model from assigned tasks and direct execution through owned outcomes to organizational scope created through influence, standards, delegation, and other leaders." />
+<figcaption aria-hidden="true"><span class="figure-number">Figure 2.</span> Career progression changes the operating model from assigned tasks and direct execution through owned outcomes to organizational scope created through influence, standards, delegation, and other leaders.</figcaption>
+</figure>
 <table>
 <thead>
 <tr>
@@ -672,6 +698,12 @@ footer{margin-top:60px; padding-top:22px; border-top:1px solid var(--line); colo
 <li>a <strong>capability gap</strong>, where the person has access to appropriate work but has not yet demonstrated the required operating model; and</li>
 <li>an <strong>opportunity gap</strong>, where the organization has not provided or permitted work at the required scope.</li>
 </ul>
+<figure id="fig-scope-gap-diagnostic">
+<img
+src="assets/images/career-progression/scope-gap-diagnostic.svg" width="1200" height="870"
+alt="A two-by-two diagnostic separates promotion assessment, scope-starvation risk, capability gaps, and opportunity gaps according to whether target-level scope was available and whether the target-level operating model was demonstrated." />
+<figcaption aria-hidden="true"><span class="figure-number">Figure 3.</span> A two-by-two diagnostic separates promotion assessment, scope-starvation risk, capability gaps, and opportunity gaps according to whether target-level scope was available and whether the target-level operating model was demonstrated.</figcaption>
+</figure>
 <p>An opportunity gap should lead to a concrete scope plan, role redesign, transfer, or an explicit acknowledgment that the current position cannot support further progression. It should not be disguised as an indefinite performance deficiency.</p>
 <hr>
 </section>
@@ -886,7 +918,13 @@ footer{margin-top:60px; padding-top:22px; border-top:1px solid var(--line); colo
 <li><strong>Level comparison</strong> — why the evidence exceeds the current level and matches the proposed level’s operating model</li>
 <li><strong>Remaining gaps</strong> — expectations not yet demonstrated and whether they reflect capability, opportunity, or organizational need</li>
 </ol>
-<p>The packet should make the causal narrative obvious: <strong>problem → ownership → decisions → adoption → durable outcome</strong>. A calibration group unfamiliar with the candidate’s daily work should be able to understand the scale and consequence of the contribution without relying on reputation, advocacy, or raw activity counts.</p>
+<figure id="fig-promotion-evidence-chain">
+<img
+src="assets/images/career-progression/promotion-evidence-chain.svg" width="1200" height="790"
+alt="A promotion case establishes causation by connecting the original problem to the candidate's ownership, decisions, adoption by others, and a durable outcome, supported by artifacts, measures, and attributable evidence." />
+<figcaption aria-hidden="true"><span class="figure-number">Figure 4.</span> A promotion case establishes causation by connecting the original problem to the candidate's ownership, decisions, adoption by others, and a durable outcome, supported by artifacts, measures, and attributable evidence.</figcaption>
+</figure>
+<p>The packet should make this causal narrative legible. A calibration group unfamiliar with the candidate’s daily work should be able to understand the scale and consequence of the contribution without relying on reputation, advocacy, or raw activity counts.</p>
 <h3 id="what-stakeholder-and-influence-evidence-looks-like">What stakeholder and influence evidence looks like</h3>
 <p>Influence and network creation are among the most frequently misunderstood expectations in this ladder. Calibrating managers commonly say they are "not sure if the person creates networks" or "cannot tell whether senior leaders relied on the engineer's judgment." That uncertainty almost always reflects a gap in the evidence collected, not a gap in the engineer's actual contribution.</p>
 <p>Strong influence and network evidence is <strong>specific, attributable, and causal</strong>. It identifies who the stakeholder was, what decision or outcome was at stake, what the engineer contributed, and what changed as a result. Examples of evidence that meet this bar:</p>
@@ -908,7 +946,7 @@ footer{margin-top:60px; padding-top:22px; border-top:1px solid var(--line); colo
 </ul>
 <p>Calibration groups and managers should request the specific, attributable form when they are uncertain. The absence of stakeholder evidence in a packet is more often a failure of evidence collection than a failure of the engineer; the correct response is to gather it, not to default to a lower level.</p>
 <footer>
-  <span>DevOps & Site Reliability Engineering Career Progression Guide</span>
+  <span>Career Progression Guide</span>
   <span>Internal calibration reference</span>
 </footer>
 </section>

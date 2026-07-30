@@ -1,0 +1,76 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 760" role="img" aria-labelledby="title desc">
+<title id="title">Framing produces the evidence design still lacks</title>
+<desc id="desc">Unanswered design-gate questions return to bounded discovery; implementation begins only after commitment.</desc>
+
+<defs>
+  <marker id="arrow-ink" markerWidth="10" markerHeight="10" refX="8.95" refY="3"
+          orient="auto" markerUnits="strokeWidth">
+    <path d="M0,0 L0,6 L9,3 z" fill="#111111"/>
+  </marker>
+  <marker id="arrow-red" markerWidth="10" markerHeight="10" refX="8.95" refY="3"
+          orient="auto" markerUnits="strokeWidth">
+    <path d="M0,0 L0,6 L9,3 z" fill="#ad0034"/>
+  </marker>
+  <marker id="arrow-cyan" markerWidth="10" markerHeight="10" refX="8.95" refY="3"
+          orient="auto" markerUnits="strokeWidth">
+    <path d="M0,0 L0,6 L9,3 z" fill="#007f7b"/>
+  </marker>
+  <marker id="arrow-green" markerWidth="10" markerHeight="10" refX="8.95" refY="3"
+          orient="auto" markerUnits="strokeWidth">
+    <path d="M0,0 L0,6 L9,3 z" fill="#2f7d32"/>
+  </marker>
+  <style>
+    text { font-family: "Helvetica Neue", Arial, sans-serif; }
+  </style>
+</defs>
+
+<rect width="1200" height="760" fill="#f5efdc"/>
+<rect x="18" y="18" width="1164" height="724" fill="none" stroke="#111111" stroke-width="2"/>
+<text x="58" y="62" font-size="15" font-weight="800" fill="#ad0034" text-anchor="start" letter-spacing="1.8"><tspan x="58" dy="0">FRAMING TECHNICAL WORK</tspan></text>
+<text x="58" y="104" font-size="34" font-weight="800" fill="#111111" text-anchor="start" letter-spacing="0"><tspan x="58" dy="0">Framing produces the evidence design still lacks</tspan></text>
+<text x="58" y="134" font-size="17" font-weight="400" fill="#5f5a4e" text-anchor="start" letter-spacing="0"><tspan x="58" dy="0">Unanswered design-gate questions return to bounded discovery; implementation begins only after commitment.</tspan></text>
+<line x1="58" y1="154" x2="1142" y2="154" stroke="#111111" stroke-width="2"/>
+<rect x="58" y="232" width="180" height="118" fill="#fffdf5" stroke="#111111" stroke-width="3"/>
+<rect x="58" y="232" width="42" height="34" fill="#111111" stroke="#111111" stroke-width="2"/>
+<text x="79" y="255" font-size="15" font-weight="800" fill="#fffdf5" text-anchor="middle" letter-spacing="0"><tspan x="79" dy="0">1</tspan></text>
+<text x="113" y="260" font-size="19" font-weight="800" fill="#111111" text-anchor="start" letter-spacing="0"><tspan x="113" dy="0">Request</tspan></text>
+<text x="76" y="288" font-size="14" font-weight="400" fill="#5f5a4e" text-anchor="start" letter-spacing="0"><tspan x="76" dy="0">Problem, users,</tspan><tspan x="76" dy="19">desired outcome</tspan></text>
+<rect x="272" y="232" width="180" height="118" fill="#fffdf5" stroke="#007f7b" stroke-width="3"/>
+<rect x="272" y="232" width="42" height="34" fill="#007f7b" stroke="#007f7b" stroke-width="2"/>
+<text x="293" y="255" font-size="15" font-weight="800" fill="#fffdf5" text-anchor="middle" letter-spacing="0"><tspan x="293" dy="0">2</tspan></text>
+<text x="327" y="260" font-size="19" font-weight="800" fill="#111111" text-anchor="start" letter-spacing="0"><tspan x="327" dy="0">Five-Box</tspan></text>
+<text x="290" y="288" font-size="14" font-weight="400" fill="#5f5a4e" text-anchor="start" letter-spacing="0"><tspan x="290" dy="0">Intent, constraints,</tspan><tspan x="290" dy="19">non-goals, artifact</tspan></text>
+<rect x="486" y="232" width="180" height="118" fill="#fffdf5" stroke="#dcc61e" stroke-width="3"/>
+<rect x="486" y="232" width="42" height="34" fill="#dcc61e" stroke="#dcc61e" stroke-width="2"/>
+<text x="507" y="255" font-size="15" font-weight="800" fill="#fffdf5" text-anchor="middle" letter-spacing="0"><tspan x="507" dy="0">3</tspan></text>
+<text x="541" y="260" font-size="19" font-weight="800" fill="#111111" text-anchor="start" letter-spacing="0"><tspan x="541" dy="0">Discovery</tspan></text>
+<text x="504" y="288" font-size="14" font-weight="400" fill="#5f5a4e" text-anchor="start" letter-spacing="0"><tspan x="504" dy="0">Answer the question;</tspan><tspan x="504" dy="19">preserve evidence</tspan></text>
+<rect x="700" y="232" width="180" height="118" fill="#fffdf5" stroke="#ad0034" stroke-width="3"/>
+<rect x="700" y="232" width="42" height="34" fill="#ad0034" stroke="#ad0034" stroke-width="2"/>
+<text x="721" y="255" font-size="15" font-weight="800" fill="#fffdf5" text-anchor="middle" letter-spacing="0"><tspan x="721" dy="0">4</tspan></text>
+<text x="755" y="260" font-size="19" font-weight="800" fill="#111111" text-anchor="start" letter-spacing="0"><tspan x="755" dy="0">Design gates</tspan></text>
+<text x="718" y="288" font-size="14" font-weight="400" fill="#5f5a4e" text-anchor="start" letter-spacing="0"><tspan x="718" dy="0">Requirements, failure,</tspan><tspan x="718" dy="19">operations, ownership</tspan></text>
+<rect x="914" y="232" width="180" height="118" fill="#fffdf5" stroke="#2f7d32" stroke-width="3"/>
+<rect x="914" y="232" width="42" height="34" fill="#2f7d32" stroke="#2f7d32" stroke-width="2"/>
+<text x="935" y="255" font-size="15" font-weight="800" fill="#fffdf5" text-anchor="middle" letter-spacing="0"><tspan x="935" dy="0">5</tspan></text>
+<text x="969" y="260" font-size="19" font-weight="800" fill="#111111" text-anchor="start" letter-spacing="0"><tspan x="969" dy="0">Commitment</tspan></text>
+<text x="932" y="288" font-size="14" font-weight="400" fill="#5f5a4e" text-anchor="start" letter-spacing="0"><tspan x="932" dy="0">Architecture, risk,</tspan><tspan x="932" dy="19">delivery boundary</tspan></text>
+<line x1="238" y1="291" x2="272" y2="291" stroke="#111111" stroke-width="3" marker-end="url(#arrow-ink)"/>
+<line x1="452" y1="291" x2="486" y2="291" stroke="#111111" stroke-width="3" marker-end="url(#arrow-ink)"/>
+<line x1="666" y1="291" x2="700" y2="291" stroke="#111111" stroke-width="3" marker-end="url(#arrow-ink)"/>
+<line x1="880" y1="291" x2="914" y2="291" stroke="#111111" stroke-width="3" marker-end="url(#arrow-ink)"/>
+<polygon points="690,418.0 805.0,474 690,530.0 575.0,474" fill="#fffdf5" stroke="#ad0034" stroke-width="3"/>
+<text x="690" y="464" font-size="16" font-weight="800" fill="#111111" text-anchor="middle" letter-spacing="0"><tspan x="690" dy="0">Gate questions</tspan><tspan x="690" dy="21">answered?</tspan></text>
+<line x1="790" y1="350" x2="690" y2="418" stroke="#ad0034" stroke-width="3" marker-end="url(#arrow-red)"/>
+<line x1="575" y1="474" x2="576" y2="350" stroke="#ad0034" stroke-width="3" marker-end="url(#arrow-red)"/>
+<text x="555" y="455" font-size="13" font-weight="800" fill="#ad0034" text-anchor="end" letter-spacing="0"><tspan x="555" dy="0">NO</tspan></text>
+<text x="555" y="477" font-size="12" font-weight="800" fill="#ad0034" text-anchor="end" letter-spacing="0"><tspan x="555" dy="0">BOUNDED DISCOVERY</tspan></text>
+<path d="M805,474 L960,474 L960,350" fill="none" stroke="#2f7d32" stroke-width="3" marker-end="url(#arrow-green)"/>
+<text x="835" y="459" font-size="13" font-weight="800" fill="#2f7d32" text-anchor="start" letter-spacing="0"><tspan x="835" dy="0">YES</tspan></text>
+<rect x="850" y="552" width="290" height="92" fill="#fffdf5" stroke="#2f7d32" stroke-width="3"/>
+<text x="868" y="580" font-size="19" font-weight="800" fill="#111111" text-anchor="start" letter-spacing="0"><tspan x="868" dy="0">Execution planning</tspan></text>
+<text x="868" y="608" font-size="14" font-weight="400" fill="#5f5a4e" text-anchor="start" letter-spacing="0"><tspan x="868" dy="0">Epics, stories, work packages, tasks</tspan></text>
+<path d="M1048,350 L1048,520 L995,520 L995,552" fill="none" stroke="#2f7d32" stroke-width="3" marker-end="url(#arrow-green)"/>
+<line x1="58" y1="696" x2="1142" y2="696" stroke="#ddd5bf" stroke-width="2"/>
+<text x="58" y="723" font-size="14" font-weight="600" fill="#5f5a4e" text-anchor="start" letter-spacing="0"><tspan x="58" dy="0">Discovery is complete when its question is answered, not when implementation quietly begins.</tspan></text>
+</svg>

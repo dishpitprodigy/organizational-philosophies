@@ -1,0 +1,72 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 790" role="img" aria-labelledby="title desc">
+<title id="title">One review, four separate judgments</title>
+<desc id="desc">Each question uses different evidence and produces a different decision.</desc>
+
+<defs>
+  <marker id="arrow-ink" markerWidth="10" markerHeight="10" refX="8.85" refY="3"
+          orient="auto" markerUnits="strokeWidth">
+    <path d="M0,0 L0,6 L9,3 z" fill="#111111"/>
+  </marker>
+  <marker id="arrow-red" markerWidth="10" markerHeight="10" refX="8.85" refY="3"
+          orient="auto" markerUnits="strokeWidth">
+    <path d="M0,0 L0,6 L9,3 z" fill="#ad0034"/>
+  </marker>
+  <style>
+    text { font-family: "Helvetica Neue", Arial, sans-serif; }
+  </style>
+</defs>
+
+<rect width="1200" height="790" fill="#f5efdc"/>
+<rect x="18" y="18" width="1164" height="754" fill="none" stroke="#111111" stroke-width="2"/>
+<text x="58" y="62" font-size="15" font-weight="800" fill="#ad0034" text-anchor="start" letter-spacing="1.8"><tspan x="58" dy="0">CAREER PROGRESSION</tspan></text>
+<text x="58" y="104" font-size="34" font-weight="800" fill="#111111" text-anchor="start" letter-spacing="0"><tspan x="58" dy="0">One review, four separate judgments</tspan></text>
+<text x="58" y="134" font-size="17" font-weight="400" fill="#5f5a4e" text-anchor="start" letter-spacing="0"><tspan x="58" dy="0">Each question uses different evidence and produces a different decision.</tspan></text>
+<line x1="58" y1="154" x2="1142" y2="154" stroke="#111111" stroke-width="2"/>
+<rect x="58" y="184" width="1084" height="52" fill="#fffdf5" stroke="#111111" stroke-width="2"/>
+<text x="600" y="205" font-size="12" font-weight="800" fill="#ad0034" text-anchor="start" letter-spacing="1.1"><tspan x="600" dy="0">SHARED BODY OF REVIEW EVIDENCE</tspan></text>
+<text x="600" y="225" font-size="14" font-weight="600" fill="#5f5a4e" text-anchor="middle" letter-spacing="0"><tspan x="600" dy="0">Written outcomes • observed behavior • role context • agreed expectations</tspan></text>
+<line x1="176" y1="236" x2="176" y2="272" stroke="#007f7b" stroke-width="3"/>
+<rect x="58" y="272" width="236" height="352" fill="#fffdf5" stroke="#007f7b" stroke-width="3"/>
+<rect x="58" y="272" width="48" height="40" fill="#007f7b" stroke="#007f7b" stroke-width="2"/>
+<text x="82" y="298" font-size="15" font-weight="800" fill="#fffdf5" text-anchor="middle" letter-spacing="0"><tspan x="82" dy="0">01</tspan></text>
+<text x="76" y="350" font-size="18" font-weight="800" fill="#111111" text-anchor="start" letter-spacing="0"><tspan x="76" dy="0">Career level</tspan></text>
+<line x1="76" y1="366" x2="276" y2="366" stroke="#ddd5bf" stroke-width="2"/>
+<text x="76" y="398" font-size="12" font-weight="800" fill="#5f5a4e" text-anchor="start" letter-spacing="1.1"><tspan x="76" dy="0">QUESTION</tspan></text>
+<text x="76" y="429" font-size="15" font-weight="500" fill="#5f5a4e" text-anchor="start" letter-spacing="0"><tspan x="76" dy="0">What scope and</tspan><tspan x="76" dy="22">operating model describe</tspan><tspan x="76" dy="22">the sustained work?</tspan></text>
+<rect x="76" y="548" width="200" height="52" fill="#007f7b" stroke="#007f7b" stroke-width="2"/>
+<text x="176" y="580" font-size="12" font-weight="800" fill="#fffdf5" text-anchor="middle" letter-spacing="0.8"><tspan x="176" dy="0">LEVEL</tspan></text>
+<line x1="448" y1="236" x2="448" y2="272" stroke="#ad0034" stroke-width="3"/>
+<rect x="330" y="272" width="236" height="352" fill="#fffdf5" stroke="#ad0034" stroke-width="3"/>
+<rect x="330" y="272" width="48" height="40" fill="#ad0034" stroke="#ad0034" stroke-width="2"/>
+<text x="354" y="298" font-size="15" font-weight="800" fill="#fffdf5" text-anchor="middle" letter-spacing="0"><tspan x="354" dy="0">02</tspan></text>
+<text x="348" y="350" font-size="18" font-weight="800" fill="#111111" text-anchor="start" letter-spacing="0"><tspan x="348" dy="0">Period performance</tspan></text>
+<line x1="348" y1="366" x2="548" y2="366" stroke="#ddd5bf" stroke-width="2"/>
+<text x="348" y="398" font-size="12" font-weight="800" fill="#5f5a4e" text-anchor="start" letter-spacing="1.1"><tspan x="348" dy="0">QUESTION</tspan></text>
+<text x="348" y="429" font-size="15" font-weight="500" fill="#5f5a4e" text-anchor="start" letter-spacing="0"><tspan x="348" dy="0">How effectively were</tspan><tspan x="348" dy="22">current-level expectations</tspan><tspan x="348" dy="22">met this period?</tspan></text>
+<rect x="348" y="548" width="200" height="52" fill="#ad0034" stroke="#ad0034" stroke-width="2"/>
+<text x="448" y="580" font-size="12" font-weight="800" fill="#fffdf5" text-anchor="middle" letter-spacing="0.8"><tspan x="448" dy="0">PERFORMANCE RATING</tspan></text>
+<line x1="720" y1="236" x2="720" y2="272" stroke="#dcc61e" stroke-width="3"/>
+<rect x="602" y="272" width="236" height="352" fill="#fffdf5" stroke="#dcc61e" stroke-width="3"/>
+<rect x="602" y="272" width="48" height="40" fill="#dcc61e" stroke="#dcc61e" stroke-width="2"/>
+<text x="626" y="298" font-size="15" font-weight="800" fill="#fffdf5" text-anchor="middle" letter-spacing="0"><tspan x="626" dy="0">03</tspan></text>
+<text x="620" y="350" font-size="18" font-weight="800" fill="#111111" text-anchor="start" letter-spacing="0"><tspan x="620" dy="0">Growth trajectory</tspan></text>
+<line x1="620" y1="366" x2="820" y2="366" stroke="#ddd5bf" stroke-width="2"/>
+<text x="620" y="398" font-size="12" font-weight="800" fill="#5f5a4e" text-anchor="start" letter-spacing="1.1"><tspan x="620" dy="0">QUESTION</tspan></text>
+<text x="620" y="429" font-size="15" font-weight="500" fill="#5f5a4e" text-anchor="start" letter-spacing="0"><tspan x="620" dy="0">What is changing, and</tspan><tspan x="620" dy="22">what development should</tspan><tspan x="620" dy="22">come next?</tspan></text>
+<rect x="620" y="548" width="200" height="52" fill="#dcc61e" stroke="#dcc61e" stroke-width="2"/>
+<text x="720" y="580" font-size="12" font-weight="800" fill="#111111" text-anchor="middle" letter-spacing="0.8"><tspan x="720" dy="0">DEVELOPMENT PLAN</tspan></text>
+<line x1="992" y1="236" x2="992" y2="272" stroke="#2f7d32" stroke-width="3"/>
+<rect x="874" y="272" width="236" height="352" fill="#fffdf5" stroke="#2f7d32" stroke-width="3"/>
+<rect x="874" y="272" width="48" height="40" fill="#2f7d32" stroke="#2f7d32" stroke-width="2"/>
+<text x="898" y="298" font-size="15" font-weight="800" fill="#fffdf5" text-anchor="middle" letter-spacing="0"><tspan x="898" dy="0">04</tspan></text>
+<text x="892" y="350" font-size="18" font-weight="800" fill="#111111" text-anchor="start" letter-spacing="0"><tspan x="892" dy="0">Opportunity</tspan></text>
+<line x1="892" y1="366" x2="1092" y2="366" stroke="#ddd5bf" stroke-width="2"/>
+<text x="892" y="398" font-size="12" font-weight="800" fill="#5f5a4e" text-anchor="start" letter-spacing="1.1"><tspan x="892" dy="0">QUESTION</tspan></text>
+<text x="892" y="429" font-size="15" font-weight="500" fill="#5f5a4e" text-anchor="start" letter-spacing="0"><tspan x="892" dy="0">Did the role provide</tspan><tspan x="892" dy="22">scope at the target</tspan><tspan x="892" dy="22">level?</tspan></text>
+<rect x="892" y="548" width="200" height="52" fill="#2f7d32" stroke="#2f7d32" stroke-width="2"/>
+<text x="992" y="580" font-size="12" font-weight="800" fill="#fffdf5" text-anchor="middle" letter-spacing="0.8"><tspan x="992" dy="0">SCOPE ACTION</tspan></text>
+<rect x="264" y="652" width="672" height="50" fill="#fffdf5" stroke="#ad0034" stroke-width="3"/>
+<text x="600" y="683" font-size="15" font-weight="800" fill="#ad0034" text-anchor="middle" letter-spacing="1.1"><tspan x="600" dy="0">DO NOT AVERAGE THESE INTO ONE LABEL</tspan></text>
+<line x1="58" y1="726" x2="1142" y2="726" stroke="#ddd5bf" stroke-width="2"/>
+<text x="58" y="753" font-size="14" font-weight="600" fill="#5f5a4e" text-anchor="start" letter-spacing="0"><tspan x="58" dy="0">A promotion decision can be incomplete without making current-level performance deficient.</tspan></text>
+</svg>

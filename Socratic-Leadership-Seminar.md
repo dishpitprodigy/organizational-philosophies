@@ -105,6 +105,8 @@ Ask instead:
 
 The seminar succeeds when participants leave with a better question, a productive disagreement, or an idea that returns to them later.
 
+![A three-stage seminar session moves from credible material through collective inquiry to an open question, while the facilitator protects curiosity rather than forcing agreement or action.](docs/assets/images/socratic-leadership-seminar/session-shape.svg){#fig-socratic-session-shape}
+
 ## ELMO: Enough, Let's Move On
 
 It is a sign of success when participants begin imagining practical applications. It is also the point where the seminar can accidentally become a planning meeting.
@@ -112,6 +114,8 @@ It is a sign of success when participants begin imagining practical applications
 Any participant may say **ELMO: Enough, Let's Move On** when the discussion has moved from exploring the material into designing a solution. ELMO is not used to suppress disagreement or prevent real examples. It protects the seminar from being consumed by implementation work that belongs somewhere else.
 
 If someone wants to try an idea, the facilitator can ask what they imagine trying. The group does not have to design the experiment during the seminar.
+
+![ELMO keeps disagreement and real examples inside the seminar while routing solution design and implementation work elsewhere.](docs/assets/images/socratic-leadership-seminar/elmo-boundary.svg){#fig-socratic-elmo-boundary}
 
 ## The Whiteboard
 
@@ -151,6 +155,8 @@ That does not make the seminar unfalsifiable. Its effects, if any, should eventu
 Do not attribute those outcomes directly to the seminar. The causal claim would be stronger than the evidence. The honest signal is that ideas return without being forced.
 
 The failure mode is not that the seminar lacks a score. The failure mode is measuring everything so aggressively that the organization stops investing in forms of learning that do not measure cleanly.
+
+![The seminar may influence mental models that leaders carry into real work, where downstream behavior can be observed without claiming that the seminar directly caused it.](docs/assets/images/socratic-leadership-seminar/signals-not-scores.svg){#fig-socratic-signals-not-scores}
 
 ## The Long Game
 

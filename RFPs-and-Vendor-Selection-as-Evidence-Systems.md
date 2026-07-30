@@ -127,6 +127,8 @@ That is operational risk transfer:
 
 This is not anti-vendor. Good vendors benefit from clear requirements, explicit assumptions, known acceptance criteria, and realistic buyer obligations. Ambiguity helps weak sales motions more than strong delivery teams.
 
+![The buyer retains responsibility for defining organizational need and operating conditions; the RFP converts those facts into testable obligations that the vendor can own.](docs/assets/images/rfp-vendor-selection/risk-allocation-boundary.svg){#fig-rfp-risk-allocation-boundary}
+
 ---
 
 ## Before the RFP
@@ -464,6 +466,8 @@ If the organization is replacing an internal system, the POC should test the can
 
 The demonstration should never become the whole evaluation. It is one evidence source.
 
+![Evidence becomes stronger as evaluation moves from vendor-controlled discovery to buyer workloads, production conditions, and contractual consequences.](docs/assets/images/rfp-vendor-selection/evidence-escalation.svg){#fig-rfp-evidence-escalation}
+
 ### Benchmark and Workload Selection
 
 Benchmarks are useful only when they match the decision being made. A benchmark that proves one kind of capability can be noise, or even misdirection, for another.
@@ -611,6 +615,8 @@ Milestones may include:
 The contract should also define remedies when the vendor fails to deliver the promised thing. Possible remedies include a cure period, escalation path, withheld payment, service credits, vendor-funded remediation, replacement obligations, extended warranty or support, delayed final acceptance, right to reject, right to terminate, refund terms, and post-acceptance defect obligations.
 
 The exact remedy language belongs with procurement and legal counsel. The operating principle belongs in the RFP: the organization should know what happens if the promised capability does not arrive.
+
+![Delivery begins a gated acceptance path; failed gates return to remediation, while final payment waits for proven operational capability.](docs/assets/images/rfp-vendor-selection/acceptance-payment-gates.svg){#fig-rfp-acceptance-payment-gates}
 
 ---
 
@@ -1079,14 +1085,3 @@ For many purchases:
 - executive sponsors own priority, risk acceptance, funding escalation, and organizational commitment
 
 The RFP does not have to teach each function its profession. It has to make sure the purchase cannot silently pass through gaps between them.
-
----
-
-## Open Questions and TODOs
-
-- Define the minimum artifact set for each risk tier. The current model names the stages, but it does not yet specify which artifacts are mandatory, optional, or merged at each tier.
-- Create sample acceptance plans for storage, HPC/GPU compute, latency-sensitive infrastructure, and cloud-vendor comparisons.
-- Define when an RFI is enough, when an RFP is necessary, and when a simpler quote comparison is appropriate.
-- Decide how this framework should connect to architecture decision records and post-implementation reviews in the broader closed-loop enterprise model.
-- Add examples of good and bad requirements for storage, HPC, identity, backup, networking, and SaaS platforms.
-- Clarify how renewal, expansion, and vendor replacement decisions should reuse the same evidence system.

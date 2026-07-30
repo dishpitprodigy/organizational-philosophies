@@ -177,6 +177,8 @@ The Example Task is typed as a **Task**, but it bundles three different kinds of
 
 Three completion conditions = at least three items, and by **Test B** it fails immediately: it carries multiple intents - a *Discovery* ("identify the methodology") fused to a *Redesign/Enablement* build. This isn't one task; it's a **Discovery work package** (decide the approach) followed by a **Story/WP** to implement it, with child tasks for the secret and the access-policy change. It is not one task.
 
+![The problem-version task separates into a Discovery work package whose decision feeds a behavior-focused Story, with concrete infrastructure changes as child Tasks.](docs/assets/images/writing-work-items/split-by-completion-condition.svg){#fig-split-by-completion-condition}
+
 ---
 
 ## 3. Writing outcomes (for epics)
@@ -273,6 +275,8 @@ This is the single biggest source of our "is it done?" confusion. These are **th
 
 Two different fields. We were writing one, calling it the other, and smuggling two non-bars into the mix.
 
+![Outcome, acceptance criteria, and the team Definition of Done close different claims at different levels; finishing child work does not itself prove the epic outcome.](docs/assets/images/writing-work-items/three-tests-of-done.svg){#fig-three-tests-of-done}
+
 ### Standing gates (the anti-weasel rule)
 
 There's a failure mode the DoD exists to kill: someone ships something insecure (or undocumented, or untested) and defends it with *"it wasn't in the acceptance criteria."* That's a lame defense - but if our standard relies on each author *remembering* to write a security criterion every time, it will eventually win, because people forget and reviewers are busy.
@@ -354,6 +358,8 @@ top demand drivers, ranked by count × hours
 ```
 
 So the reporting story to leadership becomes digestible and honest: *here's our roadmap-vs-demand ratio -> here are the top drivers of the demand half -> here are the epics retiring those drivers -> here's the outcome each one moved, read straight from the demand data.* That loop only works if (a) cause and time are captured **structurally**, and (b) the epics we spawn from it have **real outcomes** - which is the whole point of this document.
+
+![Demand items supply structured cause-and-time evidence; causes that cross a threshold spawn roadmap epics, whose outcomes are measured back against the same demand data.](docs/assets/images/writing-work-items/demand-to-roadmap-loop.svg){#fig-demand-to-roadmap-loop}
 
 > **Worked example - the loop crossing the boundary.** Over a rolling 90 days, the demand queue shows **23 registration incidents** sharing the resolve-gated cause *"manual registration re-run after endpoint certificate rotation,"* totaling ~31 hours. That crosses the threshold, so it spawns a roadmap epic - *not* another demand incident:
 > - **Roadmap epic outcome:** *"No host requires manual registration re-run after a certificate rotation; verified by zero demand incidents with this cause for 90 consecutive days post-rollout, and a successful automated re-registration observed across >=2 regional endpoints."*

@@ -16,13 +16,15 @@ Closing the loop means five things, done as a matter of course rather than as a 
 
 None of these steps is exotic. Most organizations already do some version of each one, just badly: informally, inconsistently, or only after something goes wrong enough to force a postmortem. The rest of this book is an argument that the same five-step loop belongs in how work gets written, how architecture gets decided, how people get coached and promoted, how vendors get selected, and how services get retired, and that an organization unwilling to close the loop in small things will not manage it when the stakes are high.
 
+![An open-loop organization records a result but loses the original judgment and context; a closed-loop organization returns evidence through reconciliation so the next decision begins with preserved learning.](docs/assets/images/open-loop-enterprise/open-vs-closed-loop.svg){#fig-open-vs-closed-loop}
+
 ---
 
 ## Why This Book Makes Use of Sports Metaphors
 
 A correct explanation that puts the reader to sleep before the causal structure becomes visible has not done its job. Systems theory, feedback loops, and evidentiary reasoning are simple ideas once you see them, but "once you see them" is exactly the problem: a reader has to get past the vocabulary first.
 
-Sports solve that problem because they make systems concrete before they make them technical. The goal is visible. The constraints can be explained in a sentence. Preparation and execution are different activities performed by different people. Roles carry real decision rights, not just titles. Feedback is immediate. Failure has consequences a reader has felt, at least at a smaller scale, in their own body. Nobody needs a graduate seminar to understand what it means to call a play, get the play wrong, and watch someone else adjust it in real time.
+Sports solve that problem because they make systems concrete before they make them technical. The goal is visible. The constraints can be explained in a a sentences. Preparation and execution are different activities performed by different people. Roles carry real decision rights, not just titles. Feedback is immediate. Failure has consequences a reader has felt, at least at a smaller scale, in their own body. Nobody needs a graduate seminar to understand at a visceral level the disappointment a baseball pitcher probably feels after throwing a pitch that resulted in a walk-off grand slam to end game 7 of the World Series. All you need to know is that it's the pitcher's job to prevent the other team from getting points, a grand-slam is 4 points, and the World Series is what crowns that year's champion for the MLB (the highest level at which one can play baseball competitively). We can all empathize with seeing the most well-intended plans go terribly wrong, even if we never experience a moment quite that dramatic.
 
 That is the job sports analogies aim to do in this book: make the organizational pattern easier to see. It is not used to prove anything. A reader who has never watched a football game and does not care to should still be able to follow every argument in this book using ordinary business language alone: the analogy is a way in, not a load-bearing wall.
 
@@ -34,7 +36,7 @@ Three sports do most of the work here, each for a different reason:
 
 Other sports, and other domains entirely, earn a place in this book only when they make a point clearer than these three already do. The rule is the same every time: use the analogy when it makes a reusable organizational pattern legible, and drop it the moment it would require the reader to already know something about the sport to follow the argument. A metaphor that needs a glossary has stopped paying its way.
 
-It is also fine if a sports analogy does not land for a particular reader. The goal underneath all of this is cross-domain pattern recognition, not sports appreciation. If someone reads a football comparison and thinks "this is really about theater production" or "this maps better to a video game raid" or simply "this metaphor is wrong, but I see the structure it's pointing at," the analogy has done its job. The point was never the game: the point was getting the reader to notice the same shape showing up in an unfamiliar place.
+It is also fine if a sports analogy does not land for a particular reader. The goal underneath all of this is cross-domain pattern recognition, not sports appreciation. If someone reads a football comparison and thinks "this is really about theater production" or "this maps better to a video game raid" or simply "this metaphor is wrong, but I see the structure it's pointing at," the analogy has done its job. The point was never the game: the point was getting the reader to notice the same shape, or pattern, showing up in an unfamiliar place.
 
 ---
 
@@ -58,7 +60,7 @@ If there is one habit that best explains what closing the loop actually looks li
 
 The point is not that every loss hides a clever tactical lesson waiting to be discovered. Sometimes a team gets dismantled because it had a bad day, and the film shows exactly that and nothing more elegant. The review still happens, because the team is not made only of tactics. Memory, confidence, preparation, and the felt experience of losing control all affect the next performance, and none of that is directly visible in the final score.
 
-The box score says what happened. The film shows how it happened: which read was missed, where the structure broke down, when execution stopped matching intent, what changed on the field, and how it felt to lose control of a game the team thought it had. A team that only ever looks at the box score is optimizing for a number it does not understand.
+The box score says what happened, and the film shows how it happened: which read was missed, where the structure broke down, when execution stopped matching intent, what changed on the field, and how it felt to lose control of a game the team thought it had. A team that only ever looks at the box score is optimizing for a number it does not understand.
 
 The organizational equivalent of film review is reconciliation after a decision or an outcome. A budget variance, a project status, a performance rating, an uptime number, a vendor score: every one of these is a box score. Each can be perfectly accurate and still be radically incomplete, because the score preserves the result and discards the causal story: the original claims, the assumptions that seemed reasonable at the time, the constraints nobody chose, the decisions that were actually available, and the evidence the organization had and ignored.
 
@@ -67,6 +69,8 @@ This is the failure mode worth naming precisely, because it gets mistaken for it
 > The bean-counter failure is not the use of numbers. It is confusing the box score with the game.
 
 Nobody who reviews film is anti-statistics. A completion percentage, a yards-per-carry average, and a turnover margin are all useful. What film review refuses to accept is the idea that the number is the whole story. Imagine a football quarterback throwing a ball that hits his receivers hands uncontested, but the receiver does not catch the ball, instead, he tips it into the air and a defender catches it: the stat sheet says the quaterback threw an interception, the film tells a very different story. An organization that tracks cost, schedule, and rating with genuine rigor, but never returns to the decisions and conditions that produced those numbers, has kept the score and thrown away the film.
+
+![A box score accurately compresses the result, while film review reconnects that result to the original claim, operating context, available choices, and execution before the learning enters the next decision.](docs/assets/images/open-loop-enterprise/box-score-and-film.svg){#fig-box-score-and-film}
 
 ---
 
@@ -88,6 +92,20 @@ Take the people row on its own for a moment, because it is the one most likely t
 Or take projects. "Canceled" reads as a failure in the box score and often is treated as one in the room where headcount gets discussed. But a canceled project can still leave behind reusable automation, a clearer picture of a real constraint, a relationship worth having, or a sharper understanding of a failure mode the organization would otherwise have discovered in production. The box score has no column for that. Only a review that goes back to the original forecast and asks what actually changed can tell the difference between waste and a drive that failed to score but improved field position anyway.
 
 The pattern repeats down every row in the table. The box score is not wrong. It is just not enough, and an organization that treats it as enough has quietly decided that the causal story behind its own decisions is not worth keeping.
+
+---
+
+## A Framework, Not an Answer Key
+
+Everything that follows is an opinion about how to apply this loop. It is a well-considered opinion: the product of sixteen years and seven months of work, along with formal study of the methodologies referenced throughout this book. That experience earns the argument a hearing. It does not turn the argument into a universal implementation specification.
+
+The ambition is universal applicability at the level of mechanism, not identical execution. Anyone who has ordered a "one-size-fits-all" item and received what is clearly the children's version already understands the problem with the label. Organizations differ in size, authority, regulation, risk, capability, and tolerance for ceremony. The form, review body, cadence, or metric that closes a loop in one environment may create waste or false confidence in another. What should survive the translation is the causal obligation: preserve the claim, identify the owner, define the evidence path, and return to the decision when reality has had a chance to answer it.
+
+When a reader finds a gap, an oversight, or a difficult local case, the tempting questions are: "What specific thing should I do here, Mr. Dishpit?" or "Which KPIs will make my organization successful if I track them?" Those questions ask an external answer to replace the local judgment the organization is responsible for recording. A metric imported without the decision it is supposed to inform becomes another box score. A prescribed step copied without knowing which risk or assumption it controls can open a new loop while making the organization feel governed.
+
+Ask instead: Does this create a new loop? What would close that loop before the project goes live? Who owns the claim, what evidence would change the decision, and when must somebody look at it? The book can supply patterns, examples, and warnings. It cannot absolve the reader's organization of translating them into its own operating conditions.
+
+That is not permission to improvise without discipline. Adaptation should leave behind its own reasoning: why the local implementation differs, which consequence it controls, what proof will count, and when the choice will be reviewed. The standard is not whether an organization copied the example. The standard is whether it can later reconcile the decision it actually made.
 
 ---
 

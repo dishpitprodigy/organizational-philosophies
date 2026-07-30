@@ -223,6 +223,23 @@ tbody tr:hover{background:rgba(252,238,84,.07)}
   h1,h2,h3,p,li,td,th{color:#111}
   a{color:#0645ad}
 }
+figure{
+  width:min(100%, 1080px); margin:1.6rem auto 2rem;
+  border:1px solid rgba(243,230,0,.38); background:#f5efdc;
+  box-shadow:0 16px 40px rgba(0,0,0,.42);
+}
+figure img{display:block; width:100%; height:auto}
+figcaption{
+  padding:.7rem .9rem .8rem; border-top:1px solid #b9af94;
+  background:#f5efdc; color:#29271f; font-size:.88rem; line-height:1.45;
+}
+.figure-number{
+  color:#8b002b; font-weight:900; letter-spacing:.035em; text-transform:uppercase;
+}
+@media print{
+  figure{break-inside:avoid; box-shadow:none; border:1px solid #777; background:#fff}
+  figure img,figcaption{background:#fff}
+}
 </style>
 </head>
 <body>
@@ -428,6 +445,11 @@ tbody tr:hover{background:rgba(252,238,84,.07)}
 <div class="callout hot">
 <p>The scoreboard is not a fifth employee-facing form, and it should not reduce individual development to a composite score. <strong>The ledger preserves the case. The scoreboard reveals the pattern.</strong> Accountable leaders still have to interpret the pattern and decide what to do.</p>
 </div>
+<figure id="fig-tda-evidence-levels">
+<img src="assets/images/talent-development/evidence-levels.svg" width="1200" height="780"
+alt="Individual evidence ledgers preserve case context; a deliberately limited scoreboard reveals recurring patterns to accountable leaders without making the decision for them." />
+<figcaption aria-hidden="true"><span class="figure-number">Figure 1.</span> Individual evidence ledgers preserve case context; a deliberately limited scoreboard reveals recurring patterns to accountable leaders without making the decision for them.</figcaption>
+</figure>
 </section>
 
 <section class="block" id="implementation-packet">
@@ -508,6 +530,11 @@ tbody tr:hover{background:rgba(252,238,84,.07)}
 <div class="callout warn">
 <p><strong>This is the precise implementation pattern:</strong> aspiration becomes role context, role context becomes competency target, competency target becomes safe-reps plan, safe reps produce evidence, and evidence feeds the next decision.</p>
 </div>
+<figure id="fig-tda-development-loop">
+<img src="assets/images/talent-development/development-loop.svg" width="1200" height="800"
+alt="Development forms a closed loop in which aspiration becomes a target capability, real work, coaching, evidence, reconciliation, and a next decision that begins another cycle." />
+<figcaption aria-hidden="true"><span class="figure-number">Figure 2.</span> Development forms a closed loop in which aspiration becomes a target capability, real work, coaching, evidence, reconciliation, and a next decision that begins another cycle.</figcaption>
+</figure>
 </section>
 </div>
 <div class="panel" id="tab-principles" data-tab="principles">
@@ -659,6 +686,11 @@ tbody tr:hover{background:rgba(252,238,84,.07)}
 <tr><td>What the person is trying to build</td><td>The bounded assignment where the skill will be practiced</td><td>Manager, mentor, peer, work owner, or community</td><td>Course, reading, lab, certification, or reference material</td><td>What will show that the person has actually improved</td></tr>
 </tbody>
 </table>
+<figure id="fig-tda-safe-reps-path">
+<img src="assets/images/talent-development/safe-reps-path.svg" width="1200" height="800"
+alt="A safe-reps path expands responsibility from observation through read-only work, reversible supervised action, bounded ownership, and broader scope as evidence accumulates." />
+<figcaption aria-hidden="true"><span class="figure-number">Figure 3.</span> A safe-reps path expands responsibility from observation through read-only work, reversible supervised action, bounded ownership, and broader scope as evidence accumulates.</figcaption>
+</figure>
 </section>
 </div>
 <div class="panel" id="tab-system" data-tab="system">

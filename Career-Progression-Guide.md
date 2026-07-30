@@ -1,10 +1,10 @@
 # Career Progression Guide
 
-*The ladder applies equally to DevOps, Site Reliability, Platform, Cloud, Infrastructure, and Security Engineering roles.*
+*The grade boundaries apply across roles; the titles and situations in the ladder are systems-engineering examples.*
 
 ## Purpose
 
-This guide translates an IC1–IC9, MGR4–MGR8, and EX9–EX11 grade scale into observable expectations for DevOps, Site Reliability, Platform, Cloud, Infrastructure, and Security Engineering roles.
+This guide translates an IC1–IC9, MGR4–MGR8, and EX9–EX11 grade scale into observable expectations that can be applied across roles.
 
 The grade reflects the **scope, ambiguity, autonomy, influence, and durable impact** of the work a person consistently performs. It is not determined by tenure, ticket volume, technical trivia, or title.
 
@@ -16,9 +16,9 @@ Higher levels are not simply “more difficult engineering.” Progression incre
 - moving from personal execution to standards, systems, and decisions that multiply the work of others;
 - moving from technical correctness to business-relevant technical judgment.
 
-Example titles may be adapted by specialization—such as SRE, Platform Engineer, Cloud Engineer, Infrastructure Engineer, or Security Engineer—without changing the grade expectations.
+The example titles and technical situations are deliberately systems-engineering focused. Other specializations may adapt them without changing the grade expectations.
 
-This document is a **shared scope-and-impact ladder**, not a universal technical-skills checklist. Each specialization should maintain a concise competency appendix for its own tools, practices, and domain knowledge while preserving the common grade boundaries. A Cloud Engineer and an SRE at the same grade may demonstrate different technical depth, but they should operate at comparable scope, autonomy, influence, and impact.
+This document is a **shared scope-and-impact ladder across roles**, not a universal technical-skills checklist. Each specialization should maintain a concise competency appendix for its own tools, practices, and domain knowledge while preserving the common grade boundaries. People at the same grade may demonstrate different technical or functional depth, but they should operate at comparable scope, autonomy, influence, and impact.
 
 ---
 
@@ -27,6 +27,8 @@ This document is a **shared scope-and-impact ladder**, not a universal technical
 The full guide is reference material. The points below are the operating system. A reader who absorbs only this section should still calibrate consistently with the rest of the document.
 
 **Four separate judgments, never one label.** Career level (the scope and operating model expected of the role), period performance (how effectively the person met current-level expectations), growth trajectory (direction and pace of development), and opportunity (whether the role provides scope at the target level). Collapsing these into a single rating produces the most common calibration failures.
+
+![Career level, period performance, growth trajectory, and opportunity are separate judgments drawn from the same review evidence and leading to different decisions; they must not be averaged into one label.](docs/assets/images/career-progression/four-separate-judgments.svg){#fig-four-separate-judgments}
 
 **Seven dimensions of level.** Every calibration question, every promotion packet, and every escalation reduces to: scope, complexity, autonomy, impact, influence, leverage, durability. The progression model, scope horizons, and evaluation rubrics elsewhere in this guide are views of these same seven dimensions applied to different questions.
 
@@ -38,7 +40,7 @@ The full guide is reference material. The points below are the operating system.
 
 **Common failure modes.** Tenure inflation, execution substitution, scope-by-headcount, manager-advocacy bias, invisible-work erasure, network-blindness, scope starvation, level-performance conflation, and curve enforcement. The full list with definitions is in *Common Miscalibrations*.
 
-**The promotion packet must show causation.** *Problem → ownership → decisions → adoption → durable outcome.* Activity, attendance, relationships, and effort are not impact. The packet must make the causal narrative legible to a calibration group that has never observed the candidate's daily work.
+**The promotion packet must show causation.** Activity, attendance, relationships, and effort are not impact. The packet must make the causal narrative legible to a calibration group that has never observed the candidate's daily work.
 
 ---
 
@@ -89,6 +91,8 @@ A manager and employee should align on the intended scope and expected evidence 
 ### The progression model
 
 The clearest distinction between levels is the unit of ownership and how the engineer creates results. This table is the canonical dimensions read across tiers—each row maps to one of the seven (shown in parentheses):
+
+![Career progression changes the operating model from assigned tasks and direct execution through owned outcomes to organizational scope created through influence, standards, delegation, and other leaders.](docs/assets/images/career-progression/operating-model-progression.svg){#fig-operating-model-progression}
 
 | Dimension | Earlier levels | Senior levels | Staff+ levels |
 |---|---|---|---|
@@ -544,6 +548,8 @@ A person may be capable of next-level work while their assigned role contains no
 
 - a **capability gap**, where the person has access to appropriate work but has not yet demonstrated the required operating model; and
 - an **opportunity gap**, where the organization has not provided or permitted work at the required scope.
+
+![A two-by-two diagnostic separates promotion assessment, scope-starvation risk, capability gaps, and opportunity gaps according to whether target-level scope was available and whether the target-level operating model was demonstrated.](docs/assets/images/career-progression/scope-gap-diagnostic.svg){#fig-scope-gap-diagnostic}
 
 An opportunity gap should lead to a concrete scope plan, role redesign, transfer, or an explicit acknowledgment that the current position cannot support further progression. It should not be disguised as an indefinite performance deficiency.
 
@@ -1006,7 +1012,9 @@ A promotion case should be concise, causal, and evidence-based. The sections bel
 11. **Level comparison** — why the evidence exceeds the current level and matches the proposed level’s operating model
 12. **Remaining gaps** — expectations not yet demonstrated and whether they reflect capability, opportunity, or organizational need
 
-The packet should make the causal narrative obvious: **problem → ownership → decisions → adoption → durable outcome**. A calibration group unfamiliar with the candidate’s daily work should be able to understand the scale and consequence of the contribution without relying on reputation, advocacy, or raw activity counts.
+![A promotion case establishes causation by connecting the original problem to the candidate's ownership, decisions, adoption by others, and a durable outcome, supported by artifacts, measures, and attributable evidence.](docs/assets/images/career-progression/promotion-evidence-chain.svg){#fig-promotion-evidence-chain}
+
+The packet should make this causal narrative legible. A calibration group unfamiliar with the candidate’s daily work should be able to understand the scale and consequence of the contribution without relying on reputation, advocacy, or raw activity counts.
 
 ### What stakeholder and influence evidence looks like
 

@@ -101,6 +101,49 @@ The figure build writes editable SVG masters to
 `docs/assets/images/work-intake/`. The same SVGs are used by the HTML,
 PDF, and EPUB builds.
 
+## Open-Loop Enterprise HTML
+
+The opening chapter's tabbed HTML page is rebuilt directly from its
+Markdown source:
+
+```
+python3 publish/bin/build-open-loop-enterprise-html.py
+```
+
+The builder fails when a top-level section has not been assigned to a
+navigation tab. Its SVG figures under
+`docs/assets/images/open-loop-enterprise/` are shared by the HTML, PDF,
+and EPUB builds.
+
+## Framing Technical Work HTML and figures
+
+The merged framing guide and its SVG figures are rebuilt from the
+Markdown source with:
+
+```
+python3 publish/figures/build_framing_technical_work_figures.py
+python3 publish/bin/build-framing-technical-work-html.py
+```
+
+The builder fails when a top-level section has not been assigned to a
+navigation tab. The generated SVGs under
+`docs/assets/images/framing-technical-work/` are shared by the HTML,
+PDF, and EPUB builds.
+
+## Career Progression figures
+
+The Career Progression Guide uses editable SVG figures shared by its
+HTML, PDF, and EPUB versions. Rebuild the figure masters with:
+
+```
+python3 publish/figures/build_career_progression_figures.py
+```
+
+The generated SVGs are written to
+`docs/assets/images/career-progression/`. The Career Progression HTML
+page is hand-curated, so changes to figure placement must be made in
+both the Markdown source and `docs/Career-Progression-Guide.html`.
+
 ## Known limitation
 
 `Writing Work Items - Epics, Stories, and Tasks.md` and

@@ -210,6 +210,23 @@ tbody tr:hover{background:rgba(252,238,84,.07)}
   a{color:#0645ad}
 }
 
+figure{
+  width:min(100%, 1080px); margin:1.6rem auto 2rem;
+  border:1px solid rgba(243,230,0,.38); background:#f5efdc;
+  box-shadow:0 16px 40px rgba(0,0,0,.42);
+}
+figure img{display:block; width:100%; height:auto}
+figcaption{
+  padding:.7rem .9rem .8rem; border-top:1px solid #b9af94;
+  background:#f5efdc; color:#29271f; font-size:.88rem; line-height:1.45;
+}
+.figure-number{
+  color:#8b002b; font-weight:900; letter-spacing:.035em; text-transform:uppercase;
+}
+@media print{
+  figure{break-inside:avoid; box-shadow:none; border:1px solid #777; background:#fff}
+  figure img,figcaption{background:#fff}
+}
 </style>
 </head>
 <body>
@@ -255,7 +272,7 @@ tbody tr:hover{background:rgba(252,238,84,.07)}
 </ul>
 </div>
 <div class="toc-group" data-tab="templates">
-<button class="toc-tab" data-tab="templates">Templates<span class="toc-sub">Examples, ownership, open notes</span></button>
+<button class="toc-tab" data-tab="templates">Templates<span class="toc-sub">Examples and ownership</span></button>
 <ul class="toc-list">
 <li><a href="#appendix-lightweight-templates">Lightweight Templates</a></li>
 <li><a href="#sample-vendor-claim-register">Vendor Claim Register</a></li>
@@ -265,7 +282,6 @@ tbody tr:hover{background:rgba(252,238,84,.07)}
 <li><a href="#sample-acceptance-test-structure">Acceptance Test</a></li>
 <li><a href="#sample-company-background-survey">Company Background Survey</a></li>
 <li><a href="#organizational-ownership-boundary">Ownership Boundary</a></li>
-<li><a href="#open-questions-and-todos">Open Questions and TODOs</a></li>
 </ul>
 </div>
 </nav>
@@ -278,7 +294,6 @@ tbody tr:hover{background:rgba(252,238,84,.07)}
 <p class="tagline">Buying operational capability means preserving the claims, tests, tradeoffs, and acceptance evidence before production pressure makes ambiguity expensive.</p>
 <div class="status-row">
 <span class="status-pill">Live draft</span>
-<span class="status-pill">Open questions included</span>
 <span class="status-pill">Rendered from Markdown source</span>
 </div>
 </header>
@@ -452,6 +467,11 @@ embedded to reject.</strong></p>
 requirements, explicit assumptions, known acceptance criteria, and
 realistic buyer obligations. Ambiguity helps weak sales motions more
 than strong delivery teams.</p>
+<figure id="fig-rfp-risk-allocation-boundary">
+<img src="assets/images/rfp-vendor-selection/risk-allocation-boundary.svg" width="1200" height="800"
+alt="The buyer retains responsibility for defining organizational need and operating conditions; the RFP converts those facts into testable obligations that the vendor can own." />
+<figcaption aria-hidden="true"><span class="figure-number">Figure 1.</span> The buyer retains responsibility for defining organizational need and operating conditions; the RFP converts those facts into testable obligations that the vendor can own.</figcaption>
+</figure>
 <hr />
 <h2 id="before-the-rfp">Before the RFP</h2>
 <p>The RFP process starts before the RFP document exists.</p>
@@ -931,6 +951,11 @@ require redesign later; evidence does not eliminate risk. It makes the
 decision educated enough to learn from.</p>
 <p>The demonstration should never become the whole evaluation. It is one
 evidence source.</p>
+<figure id="fig-rfp-evidence-escalation">
+<img src="assets/images/rfp-vendor-selection/evidence-escalation.svg" width="1200" height="800"
+alt="Evidence becomes stronger as evaluation moves from vendor-controlled discovery to buyer workloads, production conditions, and contractual consequences." />
+<figcaption aria-hidden="true"><span class="figure-number">Figure 2.</span> Evidence becomes stronger as evaluation moves from vendor-controlled discovery to buyer workloads, production conditions, and contractual consequences.</figcaption>
+</figure>
 <h3 id="benchmark-and-workload-selection">Benchmark and Workload
 Selection</h3>
 <p>Benchmarks are useful only when they match the decision being made. A
@@ -1162,6 +1187,11 @@ terms, and post-acceptance defect obligations.</p>
 <p>The exact remedy language belongs with procurement and legal counsel.
 The operating principle belongs in the RFP: the organization should know
 what happens if the promised capability does not arrive.</p>
+<figure id="fig-rfp-acceptance-payment-gates">
+<img src="assets/images/rfp-vendor-selection/acceptance-payment-gates.svg" width="1200" height="820"
+alt="Delivery begins a gated acceptance path; failed gates return to remediation, while final payment waits for proven operational capability." />
+<figcaption aria-hidden="true"><span class="figure-number">Figure 3.</span> Delivery begins a gated acceptance path; failed gates return to remediation, while final payment waits for proven operational capability.</figcaption>
+</figure>
 <hr />
 <h2 id="what-to-strip-down-under-lower-risk-conditions">What to Strip
 Down Under Lower-Risk Conditions</h2>
@@ -1368,7 +1398,6 @@ hard to lose.</p>
 </section>
 
 <section class="panel" id="tab-templates" data-tab="templates">
-<div class="callout warn"><p><strong>Live draft note:</strong> this tab intentionally includes the open questions and TODOs from the Markdown source. The document is good enough to publish without pretending the remaining items are complete.</p></div>
 <h2 id="appendix-lightweight-templates">Appendix: Lightweight
 Templates</h2>
 <p>These templates are intentionally plain. Real organizations already
@@ -1973,24 +2002,6 @@ escalation, and organizational commitment</li>
 <p>The RFP does not have to teach each function its profession. It has
 to make sure the purchase cannot silently pass through gaps between
 them.</p>
-<hr />
-<h2 id="open-questions-and-todos">Open Questions and TODOs</h2>
-<ul>
-<li>Define the minimum artifact set for each risk tier. The current
-model names the stages, but it does not yet specify which artifacts are
-mandatory, optional, or merged at each tier.</li>
-<li>Create sample acceptance plans for storage, HPC/GPU compute,
-latency-sensitive infrastructure, and cloud-vendor comparisons.</li>
-<li>Define when an RFI is enough, when an RFP is necessary, and when a
-simpler quote comparison is appropriate.</li>
-<li>Decide how this framework should connect to architecture decision
-records and post-implementation reviews in the broader closed-loop
-enterprise model.</li>
-<li>Add examples of good and bad requirements for storage, HPC,
-identity, backup, networking, and SaaS platforms.</li>
-<li>Clarify how renewal, expansion, and vendor replacement decisions
-should reuse the same evidence system.</li>
-</ul>
 </section>
 </div>
 </main>

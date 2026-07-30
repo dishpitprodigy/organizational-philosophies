@@ -1,0 +1,57 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 780" role="img" aria-labelledby="title desc">
+<title id="title">The ledger preserves the case; the scoreboard reveals the pattern</title>
+<desc id="desc">Individual performance evidence ledgers retain context. A limited behavioral scoreboard aggregates recurring patterns and makes them visible to accountable leaders, who choose an organizational response.</desc>
+<defs>
+  <marker id="arrow-ink" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth">
+    <path d="M0,0 L0,6 L9,3 z" fill="#111111"/>
+  </marker>
+  <style>
+    text { font-family: "Helvetica Neue", Arial, sans-serif; }
+    .head { font-size: 20px; font-weight: 800; fill: #111111; }
+    .copy { font-size: 15px; fill: #5f5a4e; }
+    .small { font-size: 13px; fill: #5f5a4e; }
+  </style>
+</defs>
+<rect width="1200" height="780" fill="#f5efdc"/>
+<rect x="18" y="18" width="1164" height="744" fill="none" stroke="#111111" stroke-width="2"/>
+<rect x="30" y="30" width="1140" height="720" fill="none" stroke="#111111" stroke-width="1"/>
+<text x="58" y="60" font-size="15" font-weight="800" fill="#ad0034" letter-spacing="1.8">TALENT DEVELOPMENT / EVIDENCE FIGURE</text>
+<text x="58" y="102" font-size="34" font-weight="800" fill="#111111">The ledger preserves the case; the scoreboard reveals the pattern</text>
+<text x="58" y="132" font-size="17" fill="#5f5a4e">Aggregation creates organizational visibility without replacing individual context or accountable judgment.</text>
+<line x1="58" y1="151" x2="1142" y2="151" stroke="#111111" stroke-width="2"/>
+
+<text x="175" y="196" font-size="13" font-weight="800" fill="#ad0034" text-anchor="middle" letter-spacing="1.3">INDIVIDUAL CONTEXT</text>
+<rect x="65" y="220" width="250" height="118" fill="#fffdf5" stroke="#ad0034" stroke-width="3"/>
+<text x="81" y="249" class="head">LEDGER / PERSON A</text>
+<text x="81" y="278" class="copy"><tspan x="81">Assignment + conditions</tspan><tspan x="81" dy="21">Observation + outcome</tspan></text>
+<rect x="65" y="360" width="250" height="118" fill="#fffdf5" stroke="#ad0034" stroke-width="3"/>
+<text x="81" y="389" class="head">LEDGER / PERSON B</text>
+<text x="81" y="418" class="copy"><tspan x="81">Support + constraints</tspan><tspan x="81" dy="21">Change + next decision</tspan></text>
+<rect x="65" y="500" width="250" height="118" fill="#fffdf5" stroke="#ad0034" stroke-width="3"/>
+<text x="81" y="529" class="head">LEDGER / PERSON C</text>
+<text x="81" y="558" class="copy"><tspan x="81">Evidence type + source</tspan><tspan x="81" dy="21">Narrative context retained</tspan></text>
+
+<path d="M315,279 L405,279 L405,390 L455,390" fill="none" stroke="#111111" stroke-width="3" marker-end="url(#arrow-ink)"/>
+<path d="M315,419 L455,419" fill="none" stroke="#111111" stroke-width="3" marker-end="url(#arrow-ink)"/>
+<path d="M315,559 L405,559 L405,448 L455,448" fill="none" stroke="#111111" stroke-width="3" marker-end="url(#arrow-ink)"/>
+<text x="385" y="250" font-size="12" font-weight="800" fill="#5f5a4e" text-anchor="middle" letter-spacing=".8">LIMITED</text>
+<text x="385" y="268" font-size="12" font-weight="800" fill="#5f5a4e" text-anchor="middle" letter-spacing=".8">AGGREGATION</text>
+
+<rect x="455" y="270" width="300" height="300" fill="#fff8e0" stroke="#007f7b" stroke-width="4"/>
+<rect x="475" y="290" width="260" height="260" fill="#fffdf5" stroke="#007f7b" stroke-width="2"/>
+<text x="605" y="329" font-size="17" font-weight="800" fill="#111111" text-anchor="middle">BEHAVIORAL SCOREBOARD</text>
+<line x1="510" y1="357" x2="700" y2="357" stroke="#dcc61e" stroke-width="6"/>
+<text x="500" y="393" class="copy"><tspan x="500">• access to stretch reps</tspan><tspan x="500" dy="28">• recurring capability gaps</tspan><tspan x="500" dy="28">• coaching + reconciliation</tspan><tspan x="500" dy="28">• manager development patterns</tspan><tspan x="500" dy="28">• possible system defects</tspan></text>
+<text x="605" y="530" font-size="13" font-weight="800" fill="#007f7b" text-anchor="middle" letter-spacing="1">PATTERNS, NOT A PEOPLE SCORE</text>
+
+<line x1="755" y1="420" x2="830" y2="420" stroke="#111111" stroke-width="3" marker-end="url(#arrow-ink)"/>
+<rect x="830" y="270" width="305" height="300" fill="#fffdf5" stroke="#2f7d32" stroke-width="4"/>
+<text x="982" y="318" class="head" text-anchor="middle">ACCOUNTABLE LEADERS</text>
+<text x="854" y="355" class="copy"><tspan x="854">Interpret the pattern with context.</tspan><tspan x="854" dy="28">Then decide whether to:</tspan></text>
+<text x="854" y="429" class="copy"><tspan x="854">• change assignments or support</tspan><tspan x="854" dy="28">• redesign a role or system</tspan><tspan x="854" dy="28">• develop or hire capability</tspan><tspan x="854" dy="28">• intervene in management</tspan></text>
+
+<rect x="350" y="615" width="780" height="46" fill="#fff8e0" stroke="#ad0034" stroke-width="2"/>
+<text x="740" y="644" font-size="13" font-weight="800" fill="#ad0034" text-anchor="middle" letter-spacing=".6">THE SCOREBOARD MAKES THE PATTERN VISIBLE; IT DOES NOT MAKE THE DECISION.</text>
+<line x1="58" y1="704" x2="1142" y2="704" stroke="#ddd5bf" stroke-width="2"/>
+<text x="58" y="732" font-size="14" font-weight="600" fill="#5f5a4e">The individual record remains available so aggregate signal cannot erase changed conditions, constraints, or evidence provenance.</text>
+</svg>

@@ -1,0 +1,696 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Open-Loop Enterprise</title>
+<style>
+
+:root{
+  --nav:310px;
+  --rgutter:8vw;
+  --bg:#000000;
+  --panel:#09080b;
+  --panel-2:#141014;
+  --ink:#f8f7df;
+  --muted:#b8b493;
+  --line:#3c2730;
+  --red:#c5003c;
+  --red-dark:#880425;
+  --yellow:#f3e600;
+  --cyan:#55ead4;
+  --purple:#6300ff;
+  --magenta:#ff008d;
+  --pink:#d14eea;
+  --coral:#f96363;
+  --green:#3fb950;
+  --code-bg:#171018;
+  --code-ink:#f3e600;
+  --shadow:0 0 0 1px rgba(243,230,0,.18), 0 16px 40px rgba(0,0,0,.48);
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%; scroll-behavior:smooth}
+body{
+  margin:0;
+  background:
+    linear-gradient(rgba(243,230,0,.045) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(197,0,60,.045) 1px, transparent 1px),
+    radial-gradient(circle at 18% -10%, rgba(85,234,212,.12), transparent 26rem),
+    radial-gradient(circle at 100% 5%, rgba(197,0,60,.18), transparent 24rem),
+    var(--bg);
+  background-size:44px 44px,44px 44px,auto,auto,auto;
+  color:var(--ink);
+  font:16px/1.68 Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+}
+body::before{
+  content:"";
+  position:fixed; inset:0; pointer-events:none; z-index:1;
+  background:repeating-linear-gradient(0deg, rgba(255,255,255,.025) 0 1px, transparent 1px 4px);
+  mix-blend-mode:screen;
+  opacity:.28;
+}
+a{color:var(--cyan); text-decoration:none}
+a:hover{text-decoration:underline; text-decoration-color:var(--yellow)}
+.wrap{display:block}
+.toc{
+  position:fixed; top:0; left:0; width:var(--nav); height:100vh; overflow:auto;
+  padding:1.1rem .95rem 2rem; z-index:20;
+  background:rgba(7,8,15,.94);
+  border-right:2px solid var(--red);
+  box-shadow:12px 0 32px rgba(0,0,0,.34);
+  backdrop-filter:blur(10px);
+}
+.toc-title{
+  font-weight:800; line-height:1.18; color:var(--ink);
+  padding:.45rem .45rem .9rem; margin-bottom:.7rem;
+  border-bottom:1px solid var(--line);
+  text-transform:uppercase; letter-spacing:.06em;
+}
+.toc-kicker{display:block; color:var(--yellow); font-size:.72rem; margin-bottom:.25rem}
+.toc-group{margin:.25rem 0 .35rem}
+.toc-tab{
+  display:block; width:100%; text-align:left; cursor:pointer; border:1px solid transparent;
+  border-radius:0; padding:.52rem .55rem; background:transparent;
+  color:var(--ink); font:inherit; font-size:.88rem; font-weight:800; line-height:1.2;
+  text-transform:uppercase; letter-spacing:.04em;
+}
+.toc-tab:hover{background:rgba(243,230,0,.08); border-color:rgba(243,230,0,.26)}
+.toc-group.active>.toc-tab{background:var(--yellow); color:#000; border-color:var(--yellow)}
+.toc-sub{display:block; font-size:.7rem; font-weight:700; color:var(--muted); margin-top:.12rem; text-transform:none; letter-spacing:0}
+.toc-group.active .toc-sub{color:#3a3100}
+.toc-list{list-style:none; margin:.2rem 0 .65rem; padding:0; display:none}
+.toc-group.active .toc-list{display:block}
+.toc-list li{margin:.1rem 0}
+.toc-list a{
+  display:block; border-left:2px solid transparent; border-radius:6px;
+  padding:.34rem .55rem; color:#c7dcf2; font-size:.88rem; line-height:1.25;
+}
+.toc-list a:hover{background:rgba(85,234,212,.08); border-left-color:var(--cyan); text-decoration:none}
+.content{
+  position:relative; z-index:2;
+  margin-left:var(--nav); margin-right:var(--rgutter);
+  min-width:0; padding:2.4rem clamp(1.3rem,4.5vw,4rem) 5rem;
+}
+.doc-header{
+  border:1px solid var(--red);
+  border-radius:0;
+  padding:1.45rem clamp(1rem,2.5vw,2rem);
+  background:linear-gradient(135deg, rgba(20,16,20,.98), rgba(0,0,0,.98));
+  box-shadow:var(--shadow);
+}
+.home-link{
+  display:inline-flex; align-items:center; margin:0 0 .85rem;
+  color:var(--cyan); font-size:.82rem; font-weight:900;
+  letter-spacing:.08em; text-transform:uppercase;
+}
+.home-link::before{content:"<-"; margin-right:.45rem; color:var(--yellow)}
+.home-link:hover{color:var(--yellow); text-decoration:none}
+.eyebrow{
+  margin:0 0 .5rem; color:var(--yellow); font-size:.78rem; font-weight:800;
+  letter-spacing:.14em; text-transform:uppercase;
+}
+h1,h2,h3,h4{line-height:1.22; color:var(--ink); font-weight:800; letter-spacing:0}
+h1{font-size:clamp(2rem,4vw,3.55rem); margin:.05em 0 .2em; text-shadow:3px 0 0 var(--red), -2px 0 0 rgba(85,234,212,.55)}
+h2{
+  font-size:1.55rem; margin:2.25em 0 .72em; padding-bottom:.38em;
+  border-bottom:1px solid var(--line); scroll-margin-top:1rem;
+}
+h2::before{content:"// "; color:var(--red)}
+.panel>h2:first-child{margin-top:.3em}
+h3{font-size:1.17rem; margin:1.65em 0 .5em; color:#d7f8ff; scroll-margin-top:1rem}
+p{margin:.78em 0}
+strong{color:#fff}
+em{color:#d5e2ff}
+hr{border:0; border-top:1px solid var(--line); margin:2.2em 0}
+ul,ol{margin:.65em 0 1em; padding-left:1.45em}
+li{margin:.32em 0}
+li::marker{color:var(--cyan)}
+blockquote{
+  margin:1.05em 0; padding:.8rem 1rem;
+  border-left:5px solid var(--yellow);
+  background:rgba(20,16,20,.86);
+  color:#f8fcff;
+}
+blockquote>:first-child{margin-top:0}
+blockquote>:last-child{margin-bottom:0}
+code{
+  font-family:"SF Mono",SFMono-Regular,ui-monospace,"Cascadia Code",Consolas,"Liberation Mono",Menlo,monospace;
+  font-size:.9em;
+}
+:not(pre)>code{
+  color:var(--code-ink); background:var(--code-bg); border:1px solid #39405f;
+  padding:.12em .42em; border-radius:5px;
+}
+.tabbar{
+  position:sticky; top:0; z-index:15; display:flex; gap:.45rem; flex-wrap:wrap;
+  margin:1.1rem 0 1rem; padding:.65rem 0; background:rgba(0,0,0,.92);
+  border-bottom:1px solid var(--line); backdrop-filter:blur(8px);
+}
+.tabbtn{
+  cursor:pointer; border:1px solid var(--red); background:#080506; color:var(--ink);
+  font:inherit; font-weight:900; padding:.48rem .85rem; border-radius:0;
+  text-transform:uppercase; letter-spacing:.04em;
+}
+.tabbtn:hover{border-color:var(--yellow); color:var(--yellow)}
+.tabbtn.active{background:var(--yellow); color:#000; border-color:var(--yellow); box-shadow:0 0 20px rgba(243,230,0,.2)}
+.panel{display:none}
+.panel.active{display:block; animation:panelIn .16s ease-out}
+@keyframes panelIn{from{opacity:0; transform:translateY(4px)}to{opacity:1; transform:none}}
+.lead{color:#cfe7ff; font-size:1.05rem; max-width:78ch}
+.tagline{
+  font-size:1.18rem; color:#f8fcff; font-weight:700; margin-top:1rem;
+  border-left:4px solid var(--yellow); padding-left:1rem;
+}
+.status-row{display:flex; flex-wrap:wrap; gap:.55rem; margin:1rem 0 0}
+.status-pill{border:1px solid var(--line); background:rgba(20,16,20,.86); color:var(--muted); padding:.26rem .55rem; font-size:.86rem}
+.callout{
+  margin:1.05em 0; padding:.9rem 1rem;
+  border:1px solid var(--line); border-left:5px solid var(--cyan);
+  background:rgba(20,16,20,.86); border-radius:0;
+}
+.callout.warn{border-left-color:var(--yellow)}
+.callout.hot{border-left-color:var(--magenta)}
+.callout.success{border-left-color:var(--green)}
+.callout>:first-child{margin-top:0}
+.callout>:last-child{margin-bottom:0}
+figure{
+  width:min(100%, 1080px); margin:1.6rem auto 2rem;
+  border:1px solid rgba(243,230,0,.38); background:#f5efdc;
+  box-shadow:0 16px 40px rgba(0,0,0,.42);
+}
+figure img{display:block; width:100%; height:auto}
+figcaption{
+  padding:.7rem .9rem .8rem; border-top:1px solid #b9af94;
+  background:#f5efdc; color:#29271f; font-size:.88rem; line-height:1.45;
+}
+.figure-number{
+  color:#8b002b; font-weight:900; letter-spacing:.035em; text-transform:uppercase;
+}
+table{
+  border-collapse:separate; border-spacing:0; width:100%; margin:1.1em 0;
+  font-size:.95rem; border:1px solid var(--line); border-radius:0; overflow:hidden;
+  background:rgba(9,8,11,.9);
+}
+thead th{background:rgba(243,230,0,.14); color:#fff8a6; text-align:left; font-weight:800}
+th,td{padding:.68rem .82rem; vertical-align:top; border-bottom:1px solid var(--line); border-right:1px solid var(--line); text-align:left}
+th:last-child,td:last-child{border-right:0}
+tbody tr:last-child td{border-bottom:0}
+tbody tr:nth-child(even){background:rgba(197,0,60,.11)}
+tbody tr:hover{background:rgba(252,238,84,.07)}
+.totop{
+  position:fixed; right:1.5rem; bottom:1.5rem; z-index:30; width:44px; height:44px;
+  border-radius:50%; cursor:pointer; border:1px solid rgba(85,234,212,.6);
+  background:#0d1020; color:var(--cyan); font-size:1.2rem; line-height:1;
+  display:flex; align-items:center; justify-content:center;
+  box-shadow:0 0 24px rgba(85,234,212,.24);
+  opacity:0; visibility:hidden; transition:opacity .2s ease, visibility .2s ease, transform .2s ease;
+}
+.totop.show{opacity:1; visibility:visible}
+.totop:hover{transform:translateY(-2px); color:var(--yellow); border-color:var(--yellow)}
+@media(max-width:920px){
+  body{background-size:34px 34px,34px 34px,auto,auto,auto}
+  .toc{position:static; width:auto; height:auto; overflow:visible; border-right:0; border-bottom:1px solid var(--line)}
+  .content{margin-left:0; margin-right:0; padding:1.15rem 1rem 4rem}
+  .doc-header{padding:1rem}
+  table{display:block; overflow-x:auto}
+}
+@media print{
+  body{background:#fff; color:#111}
+  body::before,.toc,.totop,.tabbar{display:none}
+  .content{margin:0; padding:0}
+  .panel{display:block !important}
+  .doc-header,.callout,blockquote{box-shadow:none; background:#fff; color:#111}
+  figure{break-inside:avoid; box-shadow:none; border:1px solid #777; background:#fff}
+  figure img,figcaption{background:#fff}
+  h1,h2,h3,p,li,td,th{color:#111}
+  a{color:#0645ad}
+}
+
+
+</style>
+</head>
+<body>
+<div class="wrap">
+<nav class="toc" aria-label="Contents">
+<div class="toc-title"><span class="toc-kicker">Closed-Loop Organization</span>The Open-Loop Enterprise</div>
+<div class="toc-group active" data-tab="foundations">
+<button class="toc-tab" data-tab="foundations">Foundations<span class="toc-sub">Thesis, metaphors, origin</span></button>
+<ul class="toc-list">
+<li><a href="#thesis">Thesis</a></li>
+<li><a href="#why-this-book-makes-use-of-sports-metaphors">Why This Book Makes Use of Sports Metaphors</a></li>
+<li><a href="#where-closed-loop-comes-from">Where “Closed Loop” Comes From</a></li>
+</ul>
+</div>
+<div class="toc-group" data-tab="review">
+<button class="toc-tab" data-tab="review">Review<span class="toc-sub">Film, scores, enterprise</span></button>
+<ul class="toc-list">
+<li><a href="#film-review-the-practice-that-closes-the-loop">Film Review: The Practice That Closes the Loop</a></li>
+<li><a href="#the-box-score-across-the-enterprise">The Box Score Across the Enterprise</a></li>
+</ul>
+</div>
+<div class="toc-group" data-tab="application">
+<button class="toc-tab" data-tab="application">Application<span class="toc-sub">Adaptation and the rule</span></button>
+<ul class="toc-list">
+<li><a href="#a-framework-not-an-answer-key">A Framework, Not an Answer Key</a></li>
+<li><a href="#the-rule">The Rule</a></li>
+</ul>
+</div>
+</nav>
+<main class="content">
+<header class="doc-header">
+<a class="home-link" href="index.html">Library home</a>
+<p class="eyebrow">Closed-Loop Organization / Chapter 1</p>
+<h1>The Open-Loop Enterprise</h1>
+<p class="lead">Why organizations preserve outcomes while losing the claims, context, and evidence needed to learn from them.</p>
+<p class="tagline">Record the claim, observe reality, reconcile the difference, and make the next decision with more evidence than the last.</p>
+<div class="status-row">
+<span class="status-pill">Book opening</span>
+<span class="status-pill">Rendered from Markdown source</span>
+</div>
+</header>
+<div class="tabbar">
+<button class="tabbtn active" data-tab="foundations">Foundations</button>
+<button class="tabbtn" data-tab="review">Review</button>
+<button class="tabbtn" data-tab="application">Application</button>
+</div>
+<div class="panels">
+<section class="panel active" id="tab-foundations" data-tab="foundations">
+<h2 id="thesis">Thesis</h2>
+<p>Most enterprises run open-loop. They make requests, forecasts, hiring
+decisions, architecture calls, vendor selections, and performance
+judgments, and then they let the reasoning behind those calls evaporate.
+The decision is made, the moment passes, and the organization moves on
+carrying only the outcome: a ship date, a rating, a purchase, an
+incident count. It keeps no durable record of what it expected to
+happen, why, or what it would have accepted as proof that it was
+wrong.</p>
+<p>An open loop is not a company that lacks opinions. It is a company
+that cannot tell its own good judgment from its own luck, because it
+never wrote down enough to check.</p>
+<p>Closing the loop means five things, done as a matter of course rather
+than as a special project:</p>
+<ol type="1">
+<li>Record the judgment or prediction when it is made, not after the
+fact.</li>
+<li>Preserve the context, assumptions, constraints, and expected outcome
+that produced it.</li>
+<li>Route the resulting artifact somewhere it must actually be
+read.</li>
+<li>Reconcile the original claim against what actually happened.</li>
+<li>Feed what was learned back into the next decision.</li>
+</ol>
+<p>None of these steps is exotic. Most organizations already do some
+version of each one, just badly: informally, inconsistently, or only
+after something goes wrong enough to force a postmortem. The rest of
+this book is an argument that the same five-step loop belongs in how
+work gets written, how architecture gets decided, how people get coached
+and promoted, how vendors get selected, and how services get retired,
+and that an organization unwilling to close the loop in small things
+will not manage it when the stakes are high.</p>
+<figure id="fig-open-vs-closed-loop">
+<img
+src="assets/images/open-loop-enterprise/open-vs-closed-loop.svg" width="1200" height="820"
+alt="An open-loop organization records a result but loses the original judgment and context; a closed-loop organization returns evidence through reconciliation so the next decision begins with preserved learning." />
+<figcaption aria-hidden="true"><span class="figure-number">Figure 1.</span> An open-loop organization records a
+result but loses the original judgment and context; a closed-loop
+organization returns evidence through reconciliation so the next
+decision begins with preserved learning.</figcaption>
+</figure>
+<hr />
+<h2 id="why-this-book-makes-use-of-sports-metaphors">Why This Book Makes
+Use of Sports Metaphors</h2>
+<p>A correct explanation that puts the reader to sleep before the causal
+structure becomes visible has not done its job. Systems theory, feedback
+loops, and evidentiary reasoning are simple ideas once you see them, but
+“once you see them” is exactly the problem: a reader has to get past the
+vocabulary first.</p>
+<p>Sports solve that problem because they make systems concrete before
+they make them technical. The goal is visible. The constraints can be
+explained in a a sentences. Preparation and execution are different
+activities performed by different people. Roles carry real decision
+rights, not just titles. Feedback is immediate. Failure has consequences
+a reader has felt, at least at a smaller scale, in their own body.
+Nobody needs a graduate seminar to understand at a visceral level the
+disappointment a baseball pitcher probably feels after throwing a pitch
+that resulted in a walk-off grand slam to end game 7 of the World
+Series. All you need to know is that it’s the pitcher’s job to prevent
+the other team from getting points, a grand-slam is 4 points, and the
+World Series is what crowns that year’s champion for the MLB (the
+highest level at which one can play baseball competitively). We can all
+empathize with seeing the most well-intended plans go terribly wrong,
+even if we never experience a moment quite that dramatic.</p>
+<p>That is the job sports analogies aim to do in this book: make the
+organizational pattern easier to see. It is not used to prove anything.
+A reader who has never watched a football game and does not care to
+should still be able to follow every argument in this book using
+ordinary business language alone: the analogy is a way in, not a
+load-bearing wall.</p>
+<p>Three sports do most of the work here, each for a different
+reason:</p>
+<ul>
+<li><strong>Football</strong> makes operating context visible: field
+position, down, distance, clock, score, personnel, risk posture. It
+shows how a plan survives contact with reality only because qualified
+people are trusted to adjust it live.</li>
+<li><strong>Baseball</strong> is the cleanest example of a metrics-heavy
+operating model. Almost every efficiency system dreams for its metrics
+to be as strong and durable as Sabermetrics: effectively, Moneyball is
+the desired end-state of any observability system, which makes it useful
+both as a model for structured development pipelines, and as a warning
+about how attractive clean numbers become when the underlying work is
+actually much messier than a box score.</li>
+<li><strong>Boxing</strong> makes individual preparation under pressure
+visible: the difference between a person who has drilled the mechanics
+and a person who has only been told to be brave.</li>
+</ul>
+<p>Other sports, and other domains entirely, earn a place in this book
+only when they make a point clearer than these three already do. The
+rule is the same every time: use the analogy when it makes a reusable
+organizational pattern legible, and drop it the moment it would require
+the reader to already know something about the sport to follow the
+argument. A metaphor that needs a glossary has stopped paying its
+way.</p>
+<p>It is also fine if a sports analogy does not land for a particular
+reader. The goal underneath all of this is cross-domain pattern
+recognition, not sports appreciation. If someone reads a football
+comparison and thinks “this is really about theater production” or “this
+maps better to a video game raid” or simply “this metaphor is wrong, but
+I see the structure it’s pointing at,” the analogy has done its job. The
+point was never the game: the point was getting the reader to notice the
+same shape, or pattern, showing up in an unfamiliar place.</p>
+<hr />
+<h2 id="where-closed-loop-comes-from">Where “Closed Loop” Comes
+From</h2>
+<p>The closed-loop language in this book did not start in a
+systems-engineering textbook, nor anywhere near technology or
+organizational theory. It started with a discussion of the one system
+with which every reader of this book will undoubtedly be familiar: the
+human body. While giving a trainee a lifting cue, Mike Mentzer described
+the human body as a closed hydraulic system: approximately, the pressure
+created in one part of the body necessarily shows up somewhere else in
+the system. That wording is a remembered paraphrase, not a verified
+quotation: the origin of an idea, not a citation to defend.</p>
+<p>The specific example was a heavy leg press. Gripping the handles as
+hard as possible, clenching muscles that had nothing to do with moving
+the weight, does not add force to the lift. It spends a finite resource
+on the wrong target while advertising the appearance of effort. The
+system does not care how hard the lifter grips the handles; it only
+cares how hard the legs are pressing against the sled.</p>
+<p>Organizations do the equivalent constantly. A manager forced to carry
+a normal individual-contributor workload on top of managing people is
+not “doing more” in any way that helps either job; the effort is being
+spent somewhere other than the target, and something else in the system
+absorbs the pressure: unfunded management, unfunded execution, or a
+person quietly failing at both while getting blamed for prioritization.
+Hidden work, role compression, process added without removing anything,
+and activity performed to look busy rather than to move an outcome are
+all the same failure wearing different clothes: local effort spent on
+something other than the thing that was supposed to move.</p>
+<p>That is the only piece of the idea this book needs up front. It
+recurs everywhere in what follows: the organization is one system, not a
+collection of independent boxes, and pressure applied in one place has
+to come from, or go to, somewhere else.</p>
+<hr />
+</section>
+<section class="panel" id="tab-review" data-tab="review">
+<h2 id="film-review-the-practice-that-closes-the-loop">Film Review: The
+Practice That Closes the Loop</h2>
+<p>If there is one habit that best explains what closing the loop
+actually looks like in practice, it is this one:</p>
+<blockquote>
+<p><strong>Coaches never skip film review.</strong></p>
+</blockquote>
+<p>The point is not that every loss hides a clever tactical lesson
+waiting to be discovered. Sometimes a team gets dismantled because it
+had a bad day, and the film shows exactly that and nothing more elegant.
+The review still happens, because the team is not made only of tactics.
+Memory, confidence, preparation, and the felt experience of losing
+control all affect the next performance, and none of that is directly
+visible in the final score.</p>
+<p>The box score says what happened, and the film shows how it happened:
+which read was missed, where the structure broke down, when execution
+stopped matching intent, what changed on the field, and how it felt to
+lose control of a game the team thought it had. A team that only ever
+looks at the box score is optimizing for a number it does not
+understand.</p>
+<p>The organizational equivalent of film review is reconciliation after
+a decision or an outcome. A budget variance, a project status, a
+performance rating, an uptime number, a vendor score: every one of these
+is a box score. Each can be perfectly accurate and still be radically
+incomplete, because the score preserves the result and discards the
+causal story: the original claims, the assumptions that seemed
+reasonable at the time, the constraints nobody chose, the decisions that
+were actually available, and the evidence the organization had and
+ignored.</p>
+<p>This is the failure mode worth naming precisely, because it gets
+mistaken for its opposite:</p>
+<blockquote>
+<p>The bean-counter failure is not the use of numbers. It is confusing
+the box score with the game.</p>
+</blockquote>
+<p>Nobody who reviews film is anti-statistics. A completion percentage,
+a yards-per-carry average, and a turnover margin are all useful. What
+film review refuses to accept is the idea that the number is the whole
+story. Imagine a football quarterback throwing a ball that hits his
+receivers hands uncontested, but the receiver does not catch the ball,
+instead, he tips it into the air and a defender catches it: the stat
+sheet says the quaterback threw an interception, the film tells a very
+different story. An organization that tracks cost, schedule, and rating
+with genuine rigor, but never returns to the decisions and conditions
+that produced those numbers, has kept the score and thrown away the
+film.</p>
+<figure id="fig-box-score-and-film">
+<img
+src="assets/images/open-loop-enterprise/box-score-and-film.svg" width="1200" height="800"
+alt="A box score accurately compresses the result, while film review reconnects that result to the original claim, operating context, available choices, and execution before the learning enters the next decision." />
+<figcaption aria-hidden="true"><span class="figure-number">Figure 2.</span> A box score accurately compresses the
+result, while film review reconnects that result to the original claim,
+operating context, available choices, and execution before the learning
+enters the next decision.</figcaption>
+</figure>
+<hr />
+<h2 id="the-box-score-across-the-enterprise">The Box Score Across the
+Enterprise</h2>
+<p>The same substitution of score for film happens in every function
+this book touches. Each domain below has an obvious number that gets
+recorded, and a much less convenient record that usually does not
+survive the review, if a review happens at all.</p>
+<table>
+<colgroup>
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+</colgroup>
+<thead>
+<tr>
+<th>Domain</th>
+<th>Box score</th>
+<th>Film the organization usually discards</th>
+<th>Loop-closing review</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>People</td>
+<td>Rating, promotion, resignation, or termination</td>
+<td>Assignments, coaching, constraints, hidden work, and the evidence
+actually available at the time</td>
+<td>Calibration and development reconciliation</td>
+</tr>
+<tr>
+<td>Projects</td>
+<td>On time, late, over budget, or canceled</td>
+<td>Original forecast, assumptions, tradeoffs, changing conditions, and
+any reusable capability the work produced</td>
+<td>Benefits-realization or post-implementation review</td>
+</tr>
+<tr>
+<td>Vendors</td>
+<td>Selected vendor, implementation date, purchase price</td>
+<td>Claims made, alternatives rejected, proof conditions, accepted
+risks, and operational burden</td>
+<td>Claim and acceptance reconciliation</td>
+</tr>
+<tr>
+<td>Architecture</td>
+<td>Shipped design, incident count</td>
+<td>Problem framing, expected axes of change, complexity exported to
+other teams, and decision boundaries</td>
+<td>Architecture decision review against live operation</td>
+</tr>
+<tr>
+<td>Risk</td>
+<td>Incident, avoided loss, or no visible event at all</td>
+<td>Who noticed the risk, what evidence existed, how it was routed, and
+why action was or was not taken</td>
+<td>Significant-risk review</td>
+</tr>
+<tr>
+<td>Hiring</td>
+<td>Hired, rejected, time to fill, later performance</td>
+<td>CV context, interview claims, work-sample evidence, and the
+assumptions made about what the person would need after hire</td>
+<td>Hiring-decision and post-hire reconciliation</td>
+</tr>
+</tbody>
+</table>
+<p>Take the people row on its own for a moment, because it is the one
+most likely to be treated as settled by the number. A rating looks like
+a fact. It is really a compressed opinion about a much longer record:
+what the person was actually assigned, what they were coached on and
+when, what was happening around them that made a stretch assignment
+harder or easier than it looked from outside, and what evidence existed
+that never made it into the file. Two people can receive the same rating
+for entirely different reasons, and an organization that only keeps the
+rating has no way to tell which reason applies to which person the next
+time a promotion, a layoff, or a difficult reassignment is on the
+table.</p>
+<p>Or take projects. “Canceled” reads as a failure in the box score and
+often is treated as one in the room where headcount gets discussed. But
+a canceled project can still leave behind reusable automation, a clearer
+picture of a real constraint, a relationship worth having, or a sharper
+understanding of a failure mode the organization would otherwise have
+discovered in production. The box score has no column for that. Only a
+review that goes back to the original forecast and asks what actually
+changed can tell the difference between waste and a drive that failed to
+score but improved field position anyway.</p>
+<p>The pattern repeats down every row in the table. The box score is not
+wrong. It is just not enough, and an organization that treats it as
+enough has quietly decided that the causal story behind its own
+decisions is not worth keeping.</p>
+<hr />
+</section>
+<section class="panel" id="tab-application" data-tab="application">
+<h2 id="a-framework-not-an-answer-key">A Framework, Not an Answer
+Key</h2>
+<p>Everything that follows is an opinion about how to apply this loop.
+It is a well-considered opinion: the product of sixteen years and seven
+months of work, along with formal study of the methodologies referenced
+throughout this book. That experience earns the argument a hearing. It
+does not turn the argument into a universal implementation
+specification.</p>
+<p>The ambition is universal applicability at the level of mechanism,
+not identical execution. Anyone who has ordered a “one-size-fits-all”
+item and received what is clearly the children’s version already
+understands the problem with the label. Organizations differ in size,
+authority, regulation, risk, capability, and tolerance for ceremony. The
+form, review body, cadence, or metric that closes a loop in one
+environment may create waste or false confidence in another. What should
+survive the translation is the causal obligation: preserve the claim,
+identify the owner, define the evidence path, and return to the decision
+when reality has had a chance to answer it.</p>
+<p>When a reader finds a gap, an oversight, or a difficult local case,
+the tempting questions are: “What specific thing should I do here,
+Mr. Dishpit?” or “Which KPIs will make my organization successful if I
+track them?” Those questions ask an external answer to replace the local
+judgment the organization is responsible for recording. A metric
+imported without the decision it is supposed to inform becomes another
+box score. A prescribed step copied without knowing which risk or
+assumption it controls can open a new loop while making the organization
+feel governed.</p>
+<p>Ask instead: Does this create a new loop? What would close that loop
+before the project goes live? Who owns the claim, what evidence would
+change the decision, and when must somebody look at it? The book can
+supply patterns, examples, and warnings. It cannot absolve the reader’s
+organization of translating them into its own operating conditions.</p>
+<p>That is not permission to improvise without discipline. Adaptation
+should leave behind its own reasoning: why the local implementation
+differs, which consequence it controls, what proof will count, and when
+the choice will be reviewed. The standard is not whether an organization
+copied the example. The standard is whether it can later reconcile the
+decision it actually made.</p>
+<hr />
+<h2 id="the-rule">The Rule</h2>
+<p>Everything in this book applies one rule, stated once here so it need
+not be restated every time it recurs:</p>
+<blockquote>
+<p>Every important decision needs a durable claim, an owner, an expected
+outcome, an evidence path, and a review point.</p>
+</blockquote>
+<p>A written record produced by that rule is not automatically
+bureaucracy. It is the answer key the organization needs when it
+eventually sits down to watch its own film. It will need to, because
+judgment is unavoidable. Every hire, every architecture call, every
+performance rating, every vendor selection is somebody’s judgment call,
+made with incomplete information under real constraints. That is not a
+flaw to be engineered away. The flaw is judgment that goes unrecorded,
+because unrecorded judgment cannot be reconciled against what actually
+happened. It can only be defended, forgotten, or repeated.</p>
+<p>The chapters that follow apply this same rule to a different part of
+the enterprise each time: how work gets written before it gets built,
+how architecture commitments get framed before they get made, how
+process improves without becoming theater, how people get coached and
+developed against evidence instead of impressions, how vendors get
+selected and held to their own claims, and how services get retired
+instead of merely abandoned. The domain changes. The loop does not.</p>
+</section>
+</div>
+</main>
+</div>
+<button class="totop" id="totop" title="Back to top" aria-label="Back to top">↑</button>
+<script>
+
+(function(){
+  function activate(name){
+    document.querySelectorAll('.panel').forEach(function(p){
+      p.classList.toggle('active', p.dataset.tab === name);
+    });
+    document.querySelectorAll('.toc-group').forEach(function(g){
+      g.classList.toggle('active', g.dataset.tab === name);
+    });
+    document.querySelectorAll('.tabbtn').forEach(function(b){
+      b.classList.toggle('active', b.dataset.tab === name);
+    });
+  }
+  function panelTabOf(el){
+    var panel = el.closest('.panel');
+    return panel ? panel.dataset.tab : null;
+  }
+  function go(id, smooth){
+    var el = document.getElementById(id);
+    if(!el) return false;
+    var tab = panelTabOf(el);
+    if(tab) activate(tab);
+    el.scrollIntoView(smooth ? {behavior:'smooth', block:'start'} : {block:'start'});
+    return true;
+  }
+  document.querySelectorAll('.tabbtn, .toc-tab').forEach(function(btn){
+    btn.addEventListener('click', function(e){
+      e.preventDefault();
+      activate(btn.dataset.tab);
+      window.scrollTo({top:0, left:0, behavior:'smooth'});
+      history.replaceState(null, '', location.pathname);
+    });
+  });
+  document.addEventListener('click', function(e){
+    var a=e.target.closest('a[href^="#"]');
+    if(!a) return;
+    var id=decodeURIComponent(a.getAttribute('href').slice(1));
+    if(!id) return;
+    if(go(id, true)){
+      e.preventDefault();
+      history.replaceState(null, '', '#' + id);
+    }
+  });
+  var top=document.getElementById('totop');
+  function onScroll(){ if(top) top.classList.toggle('show', window.scrollY>420); }
+  window.addEventListener('scroll', onScroll, {passive:true});
+  onScroll();
+  if(top){
+    top.addEventListener('click', function(){
+      window.scrollTo({top:0, left:0, behavior:'smooth'});
+    });
+  }
+  if(location.hash){
+    if(!go(decodeURIComponent(location.hash.slice(1)), false)) activate(document.querySelector('.panel.active')?.dataset.tab || document.querySelector('.tabbtn')?.dataset.tab || 'overview');
+  } else {
+    activate(document.querySelector('.panel.active')?.dataset.tab || document.querySelector('.tabbtn')?.dataset.tab || 'overview');
+  }
+  window.__docTabs = {activate: activate, go: go};
+})();
+
+
+</script>
+</body>
+</html>

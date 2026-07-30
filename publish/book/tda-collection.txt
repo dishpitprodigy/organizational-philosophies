@@ -10,5 +10,5 @@ TDA-Competency-Calibration-Template.md
 TDA-70-20-10-Development-Plan-Template.md
 TDA-Performance-Evidence-Ledger-Template.md
 Socratic-Leadership-Seminar.md
-DevOps-SRE-Career-Progression-Guide.md
-DevOps-SRE-Coaching-and-Calibration-Guide.md
+Career-Progression-Guide.md
+Coaching-and-Calibration-Guide.md

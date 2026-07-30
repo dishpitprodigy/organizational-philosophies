@@ -149,7 +149,7 @@ This produces two distinct readiness states:
 
 Sponsorship does not create Delivery Readiness. Architecture does not create budget. Approval does not commit another team's capacity. Each decision has its own owner because each decision spends or risks something different.
 
-The [Personal Decision Framework](./personal-decision-framework.md) supplies the lighter discovery framing. The [platform architecture framing guide](./framing-questions-for-platform-architecture-and-design.md) supplies the architecture and design questions that must be answered before implementation commitments are made. Work intake owns the transition between them; it should not copy either document into a larger form.
+The [Framing Technical Work Before Design](./Framing-Technical-Work-Before-Design.md) guide supplies the early intent categories, discovery-package structure, and architecture and design questions that must be answered before implementation commitments are made. Work intake owns the transition from framed demand to authorized work; it should not copy the framing guide into a larger form.
 
 ---
 
@@ -367,7 +367,7 @@ Routing work to a team does not mean that any available engineer can do it. The 
 
 If the team cannot provide what the work requires, the organization must change the staffing, schedule, scope, or source of expertise. It cannot pretend the work became easier because the right people were unavailable.
 
-The [Career Progression Guide](./DevOps-SRE-Career-Progression-Guide.md) explains how the team makes the staffing decision. The [work-item guide](<./Writing Work Items - Epics, Stories, and Tasks.md>) explains how the approved outcome becomes Epics, stories, work packages, and tasks. Work Intake only needs the answers: has the team accepted the staffing and capacity, and does the delivery work still match what was approved?
+The [Career Progression Guide](./Career-Progression-Guide.md) explains how the team makes the staffing decision. The [work-item guide](<./Writing Work Items - Epics, Stories, and Tasks.md>) explains how the approved outcome becomes Epics, stories, work packages, and tasks. Work Intake only needs the answers: has the team accepted the staffing and capacity, and does the delivery work still match what was approved?
 
 ---
 
@@ -517,10 +517,9 @@ This document defines the architecture of Work Intake:
 
 It does not define every function's internal procedure.
 
-- [Framing Questions for Platform Architecture and Design](./framing-questions-for-platform-architecture-and-design.md) owns architecture and design framing.
+- [Framing Technical Work Before Design](./Framing-Technical-Work-Before-Design.md) owns early intent categories, discovery packages, and architecture and design framing.
 - [RFPs and Vendor Selection as Evidence Systems](./RFPs-and-Vendor-Selection-as-Evidence-Systems.md) owns external capability acquisition, vendor claims, proofs of concept, acceptance, and operational risk transfer.
-- [Personal Decision Framework](./personal-decision-framework.md) owns lightweight discovery framing and early intent categories.
-- [Career Progression Guide](./DevOps-SRE-Career-Progression-Guide.md) owns operating levels, technical-review expectations, and Staff+ responsibilities.
+- [Career Progression Guide](./Career-Progression-Guide.md) owns operating levels, technical-review expectations, and Staff+ responsibilities.
 - [Writing Work Items](<./Writing Work Items - Epics, Stories, and Tasks.md>) owns delivery hierarchy and work-item construction.
 - [Managed Runoff](./Managed-Runoff-for-Deprecated-Services.md) owns deprecated systems and live remnants after discretionary investment ends.
 

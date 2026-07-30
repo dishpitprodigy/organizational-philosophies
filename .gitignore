@@ -3,3 +3,5 @@ context_artifacts/
 0.*
 CONTEXT.md
 .claude/worktrees/
+__pycache__/
+*.py[cod]

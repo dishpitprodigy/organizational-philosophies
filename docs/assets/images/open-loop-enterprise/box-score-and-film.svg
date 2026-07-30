@@ -1,0 +1,119 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800" role="img" aria-labelledby="title desc">
+<title id="title">The score says what happened; review preserves why</title>
+<desc id="desc">A box score compresses an outcome into an accurate but incomplete result. Film review reconnects that result to the original claim, operating conditions, decisions, and execution, then carries the finding into the next decision.</desc>
+
+<defs>
+  <marker id="arrow-ink" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth">
+    <path d="M0,0 L0,6 L9,3 z" fill="#111111"/>
+  </marker>
+  <marker id="arrow-green" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth">
+    <path d="M0,0 L0,6 L9,3 z" fill="#2f7d32"/>
+  </marker>
+  <pattern id="grid" width="24" height="24" patternUnits="userSpaceOnUse">
+    <rect width="24" height="24" fill="#fffdf5"/>
+    <path d="M24 0H0V24" fill="none" stroke="#111111" stroke-width="1" opacity=".07"/>
+  </pattern>
+  <style>
+    text { font-family: "Helvetica Neue", Arial, sans-serif; }
+    .eyebrow { font-size: 15px; font-weight: 800; letter-spacing: 1.8px; }
+    .title { font-size: 34px; font-weight: 800; }
+    .subtitle { font-size: 17px; fill: #5f5a4e; }
+    .panel-title { font-size: 21px; font-weight: 800; letter-spacing: .8px; }
+    .box-title { font-size: 17px; font-weight: 800; }
+    .copy { font-size: 14px; fill: #5f5a4e; }
+    .small { font-size: 12px; font-weight: 800; letter-spacing: .7px; }
+  </style>
+</defs>
+
+<rect width="1200" height="800" fill="#f5efdc"/>
+<rect x="18" y="18" width="1164" height="764" fill="none" stroke="#111111" stroke-width="2"/>
+<rect x="30" y="30" width="1140" height="740" fill="none" stroke="#111111" stroke-width="1"/>
+
+<text x="58" y="60" class="eyebrow" fill="#ad0034">OPEN-LOOP ENTERPRISE / REVIEW FIGURE</text>
+<text x="58" y="102" class="title" fill="#111111">The score says what happened; review preserves why</text>
+<text x="58" y="132" class="subtitle">An accurate result can still discard the causal story the next decision needs.</text>
+<line x1="58" y1="151" x2="1142" y2="151" stroke="#111111" stroke-width="2"/>
+
+<rect x="48" y="190" width="285" height="455" fill="#111111" stroke="#ad0034" stroke-width="3"/>
+<text x="72" y="228" class="panel-title" fill="#fffdf5">BOX SCORE</text>
+<text x="309" y="226" class="small" fill="#dcc61e" text-anchor="end">THE RESULT</text>
+<line x1="72" y1="246" x2="309" y2="246" stroke="#5f5a4e" stroke-width="1"/>
+
+<text x="72" y="286" class="small" fill="#dcc61e">PROJECT</text>
+<text x="72" y="326" font-size="29" font-weight="800" fill="#fffdf5">LATE</text>
+<text x="309" y="326" font-size="29" font-weight="800" fill="#ad0034" text-anchor="end">+18%</text>
+<line x1="72" y1="350" x2="309" y2="350" stroke="#5f5a4e" stroke-width="1"/>
+
+<text x="72" y="386" class="small" fill="#dcc61e">PERSON</text>
+<text x="72" y="426" font-size="29" font-weight="800" fill="#fffdf5">RATING</text>
+<text x="309" y="426" font-size="38" font-weight="800" fill="#007f7b" text-anchor="end">3</text>
+<line x1="72" y1="450" x2="309" y2="450" stroke="#5f5a4e" stroke-width="1"/>
+
+<text x="72" y="486" class="small" fill="#dcc61e">VENDOR</text>
+<text x="72" y="526" font-size="29" font-weight="800" fill="#fffdf5">SELECTED</text>
+<text x="309" y="526" font-size="26" font-weight="800" fill="#2f7d32" text-anchor="end">A</text>
+
+<rect x="70" y="570" width="241" height="48" fill="#fffdf5" stroke="#dcc61e" stroke-width="2"/>
+<text x="190.5" y="590" class="small" fill="#111111" text-anchor="middle">ACCURATE</text>
+<text x="190.5" y="607" class="small" fill="#ad0034" text-anchor="middle">INCOMPLETE</text>
+
+<line x1="333" y1="410" x2="400" y2="410" stroke="#111111" stroke-width="3" marker-end="url(#arrow-ink)"/>
+
+<rect x="400" y="190" width="750" height="455" fill="url(#grid)" stroke="#007f7b" stroke-width="3"/>
+<text x="425" y="228" class="panel-title" fill="#111111">FILM REVIEW</text>
+<text x="1125" y="226" class="small" fill="#007f7b" text-anchor="end">THE CAUSAL RECORD</text>
+<line x1="425" y1="246" x2="1125" y2="246" stroke="#111111" stroke-width="1"/>
+
+<rect x="425" y="280" width="128" height="108" fill="#fffdf5" stroke="#ad0034" stroke-width="2"/>
+<text x="441" y="306" class="small" fill="#ad0034">1 · CLAIM</text>
+<text x="441" y="337" class="box-title" fill="#111111">What did we</text>
+<text x="441" y="358" class="box-title" fill="#111111">expect?</text>
+<text x="441" y="379" class="copy">Why?</text>
+
+<line x1="553" y1="334" x2="580" y2="334" stroke="#111111" stroke-width="3" marker-end="url(#arrow-ink)"/>
+
+<rect x="580" y="280" width="128" height="108" fill="#fffdf5" stroke="#dcc61e" stroke-width="2"/>
+<text x="596" y="306" class="small" fill="#8a7900">2 · CONTEXT</text>
+<text x="596" y="337" class="box-title" fill="#111111">What was</text>
+<text x="596" y="358" class="box-title" fill="#111111">true then?</text>
+<text x="596" y="379" class="copy">What changed?</text>
+
+<line x1="708" y1="334" x2="735" y2="334" stroke="#111111" stroke-width="3" marker-end="url(#arrow-ink)"/>
+
+<rect x="735" y="280" width="128" height="108" fill="#fffdf5" stroke="#111111" stroke-width="2"/>
+<text x="751" y="306" class="small" fill="#111111">3 · CHOICE</text>
+<text x="751" y="337" class="box-title" fill="#111111">Which options</text>
+<text x="751" y="358" class="box-title" fill="#111111">existed?</text>
+<text x="751" y="379" class="copy">Why this one?</text>
+
+<line x1="863" y1="334" x2="890" y2="334" stroke="#111111" stroke-width="3" marker-end="url(#arrow-ink)"/>
+
+<rect x="890" y="280" width="128" height="108" fill="#fffdf5" stroke="#007f7b" stroke-width="2"/>
+<text x="906" y="306" class="small" fill="#007f7b">4 · EXECUTION</text>
+<text x="906" y="337" class="box-title" fill="#111111">What actually</text>
+<text x="906" y="358" class="box-title" fill="#111111">happened?</text>
+<text x="906" y="379" class="copy">Where did it shift?</text>
+
+<line x1="1018" y1="334" x2="1045" y2="334" stroke="#111111" stroke-width="3" marker-end="url(#arrow-ink)"/>
+
+<rect x="1045" y="280" width="80" height="108" fill="#fffdf5" stroke="#2f7d32" stroke-width="3"/>
+<text x="1085" y="306" class="small" fill="#2f7d32" text-anchor="middle">5</text>
+<text x="1085" y="337" class="box-title" fill="#111111" text-anchor="middle">RESULT</text>
+<text x="1085" y="362" class="copy" text-anchor="middle">The score</text>
+
+<path d="M1085,388 L1085,405 L775,405 L775,420" fill="none" stroke="#2f7d32" stroke-width="3" marker-end="url(#arrow-green)"/>
+
+<rect x="500" y="420" width="550" height="92" fill="#fff8e0" stroke="#2f7d32" stroke-width="3"/>
+<text x="775" y="450" class="small" fill="#2f7d32" text-anchor="middle">RECONCILE THE CLAIM WITH THE OUTCOME</text>
+<text x="775" y="478" class="box-title" fill="#111111" text-anchor="middle">What held, what changed, what was missed,</text>
+<text x="775" y="500" class="copy" text-anchor="middle">and what should the organization believe now?</text>
+
+<line x1="775" y1="512" x2="775" y2="550" stroke="#2f7d32" stroke-width="3" marker-end="url(#arrow-green)"/>
+
+<rect x="565" y="550" width="420" height="58" fill="#fffdf5" stroke="#2f7d32" stroke-width="3"/>
+<text x="775" y="574" class="small" fill="#2f7d32" text-anchor="middle">NEXT DECISION</text>
+<text x="775" y="596" class="box-title" fill="#111111" text-anchor="middle">Starts with preserved learning</text>
+
+<line x1="58" y1="730" x2="1142" y2="730" stroke="#ddd5bf" stroke-width="2"/>
+<text x="58" y="758" font-size="14" font-weight="600" fill="#5f5a4e">Numbers are evidence. Review prevents compression from becoming amnesia.</text>
+</svg>

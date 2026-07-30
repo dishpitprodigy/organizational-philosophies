@@ -148,6 +148,8 @@ A **Behavioral Scoreboard** works one level above the ledger. It aggregates a de
 
 The scoreboard is not a fifth employee-facing form, and it should not reduce individual development to a composite score. The ledger preserves the case. The scoreboard reveals the pattern. Accountable leaders still have to interpret the pattern and decide what to do.
 
+![Individual evidence ledgers preserve case context; a deliberately limited scoreboard reveals recurring patterns to accountable leaders without making the decision for them.](docs/assets/images/talent-development/evidence-levels.svg){#fig-tda-evidence-levels}
+
 ---
 
 ## The Implementation Packet
@@ -243,6 +245,8 @@ The artifacts should be used in sequence:
 9. The next decision is made from evidence: continue, adjust, add support, increase scope, change assignment, promote, hire externally, or change the system.
 
 This is the precise implementation pattern: aspiration becomes role context, role context becomes competency target, competency target becomes safe-reps plan, safe reps produce evidence, and evidence feeds the next decision.
+
+![Development forms a closed loop in which aspiration becomes a target capability, real work, coaching, evidence, reconciliation, and a next decision that begins another cycle.](docs/assets/images/talent-development/development-loop.svg){#fig-tda-development-loop}
 
 ---
 
@@ -436,6 +440,8 @@ Development plans should make those reps visible. A useful plan does not treat t
 | Development Need | Real Work Rep | Feedback Source | Formal Support | Evidence |
 |---|---|---|---|---|
 | What the person is trying to build | The bounded assignment where the skill will be practiced | Manager, mentor, peer, work owner, or community | Course, reading, lab, certification, or reference material | What will show that the person has actually improved |
+
+![A safe-reps path expands responsibility from observation through read-only work, reversible supervised action, bounded ownership, and broader scope as evidence accumulates.](docs/assets/images/talent-development/safe-reps-path.svg){#fig-tda-safe-reps-path}
 
 ---
 

@@ -239,6 +239,23 @@ footer{margin-top:60px; padding-top:22px; border-top:1px solid var(--line); colo
 .totop{position:fixed; right:1.5rem; bottom:1.5rem; z-index:30; width:44px; height:44px; border-radius:50%; cursor:pointer; border:1px solid rgba(85,234,212,.6); background:#0d1020; color:var(--cyan); font-size:1.2rem; line-height:1; display:flex; align-items:center; justify-content:center; box-shadow:0 0 24px rgba(85,234,212,.24); opacity:0; visibility:hidden; transition:opacity .2s ease, visibility .2s ease, transform .2s ease}.totop.show{opacity:1; visibility:visible}.totop:hover{transform:translateY(-2px); color:var(--yellow); border-color:var(--yellow)}
 @media(max-width:920px){body{background-size:34px 34px,34px 34px,auto,auto,auto}.toc{position:static; width:auto; height:auto; overflow:visible; border-right:0; border-bottom:1px solid var(--line)}.toc-list{columns:1}.content{margin-left:0; margin-right:0; padding:1.15rem 1rem 4rem}.doc-header{padding:1rem}table{display:block; overflow-x:auto}.cards{grid-template-columns:1fr}.pcard .psub,.pcard .lines{margin-left:0}}
 @media print{body{background:#fff; color:#111}body::before,.toc,.tabbar,.totop,.modal-overlay{display:none!important}.content{margin:0; padding:0}.panel{display:block!important}.doc-header,.principle,.block,.callout,blockquote,.card,.pcard,.expand{box-shadow:none; background:#fff; color:#111; border-color:#ccc}h1,h2,h3,h4,p,li,td,th,strong,em,.attr-val{color:#111}h1{text-shadow:none}h2::before{content:""}a{color:#0645ad}pre{background:#f4f6f8; color:#111; border:1px solid #ccc}table,.card{break-inside:avoid}#details{display:block; margin-top:30px}#details .detail{break-inside:avoid; border:1px solid #ccc; border-radius:0; margin:14px 0; padding:4px 16px 12px}#details .modal-head{display:flex; gap:12px; align-items:center; padding:10px 0}.more,.modal-close{display:none!important}.badge{color:#0b0f14!important; -webkit-print-color-adjust:exact; print-color-adjust:exact}}
+figure{
+  width:min(100%, 1080px); margin:1.6rem auto 2rem;
+  border:1px solid rgba(243,230,0,.38); background:#f5efdc;
+  box-shadow:0 16px 40px rgba(0,0,0,.42);
+}
+figure img{display:block; width:100%; height:auto}
+figcaption{
+  padding:.7rem .9rem .8rem; border-top:1px solid #b9af94;
+  background:#f5efdc; color:#29271f; font-size:.88rem; line-height:1.45;
+}
+.figure-number{
+  color:#8b002b; font-weight:900; letter-spacing:.035em; text-transform:uppercase;
+}
+@media print{
+  figure{break-inside:avoid; box-shadow:none; border:1px solid #777; background:#fff}
+  figure img,figcaption{background:#fff}
+}
 </style>
 </head>
 <body>
@@ -432,6 +449,11 @@ Once you're inside an epic, each "and" becomes a <strong>work package (story)</s
 <li><strong>Infrastructure changes</strong> - <em>"create the secret,"</em> <em>"grant the instance role access to the secret."</em> Done when those resources exist and grant access.</li>
 </ol>
 <p>Three completion conditions = at least three items, and by <strong>Test B</strong> it fails immediately: it carries multiple intents - a <em>Discovery</em> ("identify the methodology") fused to a <em>Redesign/Enablement</em> build. This isn't one task; it's a <strong>Discovery work package</strong> (decide the approach) followed by a <strong>Story/WP</strong> to implement it, with child tasks for the secret and the access-policy change. It is not one task.</p>
+<figure id="fig-split-by-completion-condition">
+<img src="assets/images/writing-work-items/split-by-completion-condition.svg" width="1200" height="850"
+alt="The problem-version task separates into a Discovery work package whose decision feeds a behavior-focused Story, with concrete infrastructure changes as child Tasks." />
+<figcaption aria-hidden="true"><span class="figure-number">Figure 1.</span> The problem-version task separates into a Discovery work package whose decision feeds a behavior-focused Story, with concrete infrastructure changes as child Tasks.</figcaption>
+</figure>
 <hr>
 
 <h2 id="3-writing-outcomes-for-epics">3. Writing outcomes (for epics)</h2>
@@ -574,6 +596,11 @@ e.g. <em>"Move pipeline-X provisioning from L1 (runbook) to L3 (Ansible playbook
 <li><strong>Add</strong> the missing <strong>Outcome statement</strong> from <a href="#3-writing-outcomes-for-epics">Section 3</a>.</li>
 </ul>
 <p>Two different fields. We were writing one, calling it the other, and smuggling two non-bars into the mix.</p>
+<figure id="fig-three-tests-of-done">
+<img src="assets/images/writing-work-items/three-tests-of-done.svg" width="1200" height="800"
+alt="Outcome, acceptance criteria, and the team Definition of Done close different claims at different levels; finishing child work does not itself prove the epic outcome." />
+<figcaption aria-hidden="true"><span class="figure-number">Figure 2.</span> Outcome, acceptance criteria, and the team Definition of Done close different claims at different levels; finishing child work does not itself prove the epic outcome.</figcaption>
+</figure>
 <h3 id="standing-gates-the-anti-weasel-rule">Standing gates (the anti-weasel rule)</h3>
 <p>There's a failure mode the DoD exists to kill: someone ships something insecure (or undocumented, or untested) and defends it with <em>"it wasn't in the acceptance criteria."</em> That's a lame defense - but if our standard relies on each author <em>remembering</em> to write a security criterion every time, it will eventually win, because people forget and reviewers are busy.</p>
 <p>The fix is <strong>standing gates</strong>: a small set of requirements baked into the team DoD that apply to <strong>every</strong> item <strong>by default</strong>, whether or not anyone wrote them on the ticket. The only way past a standing gate is a <strong>documented, approved exception</strong> - not silence.</p>
@@ -676,6 +703,11 @@ top demand drivers, ranked by count × hours
  roadmap vs demand     ◄──────  did the driver's volume actually shrink?
 </code></pre>
 <p>So the reporting story to leadership becomes digestible and honest: <em>here's our roadmap-vs-demand ratio -> here are the top drivers of the demand half -> here are the epics retiring those drivers -> here's the outcome each one moved, read straight from the demand data.</em> That loop only works if (a) cause and time are captured <strong>structurally</strong>, and (b) the epics we spawn from it have <strong>real outcomes</strong> - which is the whole point of this document.</p>
+<figure id="fig-demand-to-roadmap-loop">
+<img src="assets/images/writing-work-items/demand-to-roadmap-loop.svg" width="1200" height="820"
+alt="Demand items supply structured cause-and-time evidence; causes that cross a threshold spawn roadmap epics, whose outcomes are measured back against the same demand data." />
+<figcaption aria-hidden="true"><span class="figure-number">Figure 3.</span> Demand items supply structured cause-and-time evidence; causes that cross a threshold spawn roadmap epics, whose outcomes are measured back against the same demand data.</figcaption>
+</figure>
 <blockquote class="callout example">
 <p><strong>Worked example - the loop crossing the boundary.</strong> Over a rolling 90 days, the demand queue shows <strong>23 registration incidents</strong> sharing the resolve-gated cause <em>"manual registration re-run after endpoint certificate rotation,"</em> totaling ~31 hours. That crosses the threshold, so it spawns a roadmap epic - <em>not</em> another demand incident:</p>
 <ul>

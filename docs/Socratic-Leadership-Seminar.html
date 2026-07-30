@@ -223,6 +223,23 @@ tbody tr:hover{background:rgba(252,238,84,.07)}
   h1,h2,h3,p,li,td,th{color:#111}
   a{color:#0645ad}
 }
+figure{
+  width:min(100%, 1080px); margin:1.6rem auto 2rem;
+  border:1px solid rgba(243,230,0,.38); background:#f5efdc;
+  box-shadow:0 16px 40px rgba(0,0,0,.42);
+}
+figure img{display:block; width:100%; height:auto}
+figcaption{
+  padding:.7rem .9rem .8rem; border-top:1px solid #b9af94;
+  background:#f5efdc; color:#29271f; font-size:.88rem; line-height:1.45;
+}
+.figure-number{
+  color:#8b002b; font-weight:900; letter-spacing:.035em; text-transform:uppercase;
+}
+@media print{
+  figure{break-inside:avoid; box-shadow:none; border:1px solid #777; background:#fff}
+  figure img,figcaption{background:#fff}
+}
 </style>
 </head>
 <body>
@@ -399,6 +416,11 @@ the group into an ad hoc working meeting.</p>
 </ul>
 <p>The seminar succeeds when participants leave with a better question,
 a productive disagreement, or an idea that returns to them later.</p>
+<figure id="fig-socratic-session-shape">
+<img src="assets/images/socratic-leadership-seminar/session-shape.svg" width="1200" height="760"
+alt="A three-stage seminar session moves from credible material through collective inquiry to an open question, while the facilitator protects curiosity rather than forcing agreement or action." />
+<figcaption aria-hidden="true"><span class="figure-number">Figure 1.</span> A three-stage seminar session moves from credible material through collective inquiry to an open question, while the facilitator protects curiosity rather than forcing agreement or action.</figcaption>
+</figure>
 <h2 id="elmo-enough-lets-move-on">ELMO: Enough, Let’s Move On</h2>
 <p>It is a sign of success when participants begin imagining practical
 applications. It is also the point where the seminar can accidentally
@@ -411,6 +433,11 @@ work that belongs somewhere else.</p>
 <p>If someone wants to try an idea, the facilitator can ask what they
 imagine trying. The group does not have to design the experiment during
 the seminar.</p>
+<figure id="fig-socratic-elmo-boundary">
+<img src="assets/images/socratic-leadership-seminar/elmo-boundary.svg" width="1200" height="780"
+alt="ELMO keeps disagreement and real examples inside the seminar while routing solution design and implementation work elsewhere." />
+<figcaption aria-hidden="true"><span class="figure-number">Figure 2.</span> ELMO keeps disagreement and real examples inside the seminar while routing solution design and implementation work elsewhere.</figcaption>
+</figure>
 <h2 id="the-whiteboard">The Whiteboard</h2>
 <p>Use the whiteboard minimally. Its purpose is to hold threads of
 thought while the conversation unfolds.</p>
@@ -458,6 +485,11 @@ ideas return without being forced.</p>
 <p>The failure mode is not that the seminar lacks a score. The failure
 mode is measuring everything so aggressively that the organization stops
 investing in forms of learning that do not measure cleanly.</p>
+<figure id="fig-socratic-signals-not-scores">
+<img src="assets/images/socratic-leadership-seminar/signals-not-scores.svg" width="1200" height="800"
+alt="The seminar may influence mental models that leaders carry into real work, where downstream behavior can be observed without claiming that the seminar directly caused it." />
+<figcaption aria-hidden="true"><span class="figure-number">Figure 3.</span> The seminar may influence mental models that leaders carry into real work, where downstream behavior can be observed without claiming that the seminar directly caused it.</figcaption>
+</figure>
 <h2 id="the-long-game">The Long Game</h2>
 <p>The value compounds across sessions.</p>
 <p>After several meetings, participants may begin connecting new
