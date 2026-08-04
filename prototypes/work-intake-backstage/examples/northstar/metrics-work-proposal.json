@@ -1,0 +1,92 @@
+{
+  "schemaVersion": 1,
+  "proposal": {
+    "id": "WP-2026-0042",
+    "revision": 0,
+    "title": "Select a successor metrics capability",
+    "state": "Ready for Ordered Review",
+    "authority": "May consume ordered review or bounded Discovery capacity; no migration or delivery capacity is authorized",
+    "currentState": "OBS-ARCH-004 rev 7 records a production metrics capability with regional ingestion, query, rule-evaluation, and three retention tiers. The accepted May 1–28 workload export records 1.74 million samples per second, 14.2 million active series, 690,000 hourly series churn, 8,420 alerting rules, the retained query corpus, failure behavior, and 56 person-hours of recurring SRE effort per month.",
+    "desiredOutcome": "Northstar has an accepted Selection Decision Record identifying whether to retain, redesign, adopt, or buy the metrics capability, supported by comparable production-workload, failure, operator-effort, lifecycle-cost, and retention evidence.",
+    "requiredDifference": "The organization must compare every viable option against the same accepted Current-State Baseline and measurement package before it may authorize implementation planning. Selection does not authorize migration.",
+    "requirements": [
+      "Every candidate shall receive the same versioned architecture, workload, query corpus, rule set, failure scripts, and measurement definitions.",
+      "Every mandatory condition shall name its verification method and retain a pass, fail, or explicitly accepted exception.",
+      "The selected option shall account for infrastructure, licensing, support, network transfer, operator labor, upgrade behavior, recovery behavior, and five-year lifecycle cost."
+    ],
+    "acceptanceConditions": [
+      "The Decision Owner records the selected and rejected options, material claims, tradeoffs, residual uncertainty, implementation preconditions, and later implementation tests.",
+      "Independent evaluator scores and the final decision narrative identify the same material tradeoffs.",
+      "Acceptance authorizes implementation planning only; it does not authorize migration, create delivery capacity, or create an ADR."
+    ]
+  },
+  "reviews": [
+    {
+      "stage": 1,
+      "name": "Administrative Authority Review",
+      "decisionOwner": "Technology Portfolio Council",
+      "state": "Ready for review"
+    },
+    {
+      "stage": 2,
+      "name": "Security Review Board",
+      "decisionOwner": "Security Review Board",
+      "state": "Waiting for predecessor"
+    },
+    {
+      "stage": 3,
+      "name": "Finance & Procurement Review",
+      "decisionOwner": "Technology Finance Partner",
+      "state": "Waiting for predecessor"
+    },
+    {
+      "stage": 3,
+      "name": "Architecture Review",
+      "decisionOwner": "Architecture Review Council",
+      "state": "Waiting for predecessor"
+    },
+    {
+      "stage": 3,
+      "name": "Reliability & Operations Review",
+      "decisionOwner": "Principal SRE",
+      "state": "Waiting for predecessor"
+    },
+    {
+      "stage": 3,
+      "name": "Network Engineering Technical Review",
+      "decisionOwner": "Principal Network Engineer",
+      "state": "Waiting for predecessor"
+    },
+    {
+      "stage": 3,
+      "name": "Platform Engineering Technical Review",
+      "decisionOwner": "Principal Platform Engineer",
+      "state": "Waiting for predecessor"
+    },
+    {
+      "stage": 3,
+      "name": "Site Reliability Engineering Technical Review",
+      "decisionOwner": "Principal SRE",
+      "state": "Waiting for predecessor"
+    }
+  ],
+  "candidateDelivery": {
+    "authorized": false,
+    "reason": "The artifact is a Reviewable Work Proposal. Required review decisions, an Authorized Work Proposal, Planning Interval, and Capacity Acceptances do not yet exist.",
+    "records": [
+      {
+        "id": "metrics-selection-discovery",
+        "type": "Discovery Work Package",
+        "ownerEntity": "group:default/sre",
+        "affectedEntities": [
+          "system:default/metrics-alerting-platform",
+          "component:default/metrics-service",
+          "resource:default/metrics-retention-storage"
+        ],
+        "title": "Evaluate candidate metrics capabilities",
+        "outcome": "Produce the accepted Selection Decision Record and the evidence package required to frame a later implementation proposal.",
+        "deliveryDependsOn": []
+      }
+    ]
+  }
+}

@@ -70,3 +70,90 @@ The optional environment file
 `~/.config/work-intake-backstage/environment` can supply integration settings
 without storing secrets in the repository. Use one `NAME=value` assignment per
 line, then restart the service. The file is not required for the local demo.
+
+## Jira prototype
+
+The Jira scripts treat Backstage as the source of organizational structure and
+routing metadata. They authenticate to the local Backstage catalog, read Group
+entities, and derive Jira project keys from
+`northstar.example/jira-project-key`. Nothing needs to be entered in Jira by
+hand.
+
+Credentials live outside the repository in `~/.atlassian.env` by default:
+
+```sh
+ATLASSIAN_URL=https://example.atlassian.net
+ATLASSIAN_EMAIL=account@example.com
+ATLASSIAN_TOKEN=replace-me
+```
+
+The credential file must be readable only by its owner:
+
+```sh
+chmod 600 ~/.atlassian.env
+```
+
+Set `ATLASSIAN_ENV_FILE` to use another location. The scripts resolve this path
+themselves; package commands do not contain a workstation-specific credential
+path.
+
+### Bootstrap projects
+
+The bootstrapper creates one `NWI` intake project and one project for each
+Backstage Group whose `spec.type` is `team`. Governance Groups participate in
+review and authority records within `NWI`; the bootstrapper does not pretend
+that each governance authority needs a delivery queue.
+
+```sh
+# Preview; changes nothing
+./yarn jira:bootstrap
+
+# Create only projects that do not already exist
+./yarn jira:bootstrap --apply
+```
+
+Both commands query the live Backstage catalog and Jira site. Repeated applies
+converge without recreating projects.
+
+### Publish an artifact
+
+`scripts/jira/publish.mjs` consumes a versioned JSON artifact, then resolves its
+owner entities, Jira routes, and affected-entity dependency closure through the
+live Backstage catalog. An artifact cannot supply its own trusted Jira project
+key. It publishes a Work Proposal and its ordered review records to `NWI`.
+Candidate delivery records are created in their owning teams' projects only
+when the artifact contains all of the following:
+
+- an explicit Authorized Work Proposal whose state is `Authorized`;
+- an exact match to the governing proposal id and revision;
+- a Planning Interval;
+- an Acceptance Authority; and
+- an accepted Capacity Acceptance for every implicated delivery project.
+
+That check is deliberate: completing intake or clearing specialist review does
+not commit a delivery team's capacity. Candidate work remains in the artifact
+when those decisions do not exist.
+
+The metrics example is a Reviewable Work Proposal, so its dry run shows nine
+`NWI` projections and no delivery issues:
+
+```sh
+./yarn jira:publish:sample
+./yarn jira:publish:sample --apply
+```
+
+For another artifact:
+
+```sh
+node scripts/jira/publish.mjs path/to/artifact.json
+```
+
+Publication labels are derived from proposal id, revision, and local record id.
+The publisher serializes local publication through an owner-only ledger at
+`~/.local/state/work-intake-backstage/jira-publications.json`. Before a create,
+it records an in-progress reservation; after the Jira response, it records the
+issue key. A retry reconciles an existing Jira label, reuses a recorded key, or
+stops on an indeterminate create instead of risking a duplicate. Set
+`JIRA_PUBLICATION_LEDGER` to move the ledger. Cross-project delivery
+dependencies use Jira issue links; candidate delivery records are related
+to—but are not children of—the intake record.
