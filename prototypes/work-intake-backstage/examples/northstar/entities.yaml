@@ -5,8 +5,6 @@ metadata:
   name: data-center-assets
   title: Data Center Assets
   description: Racks, power, cabling, installed compute hardware, and remote-hands inventory.
-  annotations:
-    northstar.example/jira-project-key: DC
 spec:
   type: physical-infrastructure
   lifecycle: production
@@ -22,8 +20,6 @@ metadata:
   name: network-fabric
   title: Network Fabric
   description: Routed data-center and cloud connectivity used by Northstar production systems.
-  annotations:
-    northstar.example/jira-project-key: NETENG
 spec:
   type: network
   lifecycle: production
@@ -39,9 +35,6 @@ metadata:
   name: identity-directories
   title: Identity Directories
   description: Corporate AD, Research AD, FreeIPA, and cloud-IAM identity stores.
-  annotations:
-    northstar.example/jira-project-key: IDENTITY
-    northstar.example/current-state-ref: ID-ARCH-001-rev-3
 spec:
   type: identity-store
   lifecycle: production
@@ -58,8 +51,6 @@ metadata:
   name: research-data-storage
   title: Research Data Storage
   description: Object, file, and database storage carrying governed research-data retention.
-  annotations:
-    northstar.example/jira-project-key: DATA
 spec:
   type: storage
   lifecycle: production
@@ -77,9 +68,6 @@ metadata:
   name: metrics-retention-storage
   title: Metrics Retention Storage
   description: Storage serving the 31-day, 93-day, and 730-day metrics retention outcomes.
-  annotations:
-    northstar.example/jira-project-key: SRE
-    northstar.example/current-state-ref: OBS-ARCH-004-rev-7
 spec:
   type: time-series-storage
   lifecycle: production
@@ -96,8 +84,6 @@ metadata:
   name: researcher-portal-web
   title: Researcher Portal Web Application
   description: Browser application for projects, datasets, and compute workflows.
-  annotations:
-    northstar.example/jira-project-key: APPS
 spec:
   type: website
   lifecycle: production
@@ -122,8 +108,6 @@ metadata:
   name: compute-scheduler-service
   title: Compute Scheduler Service
   description: Schedules research workloads across data-center and cloud compute pools.
-  annotations:
-    northstar.example/jira-project-key: PLATFORM
 spec:
   type: service
   lifecycle: production
@@ -147,8 +131,6 @@ metadata:
   name: secure-data-transfer-service
   title: Secure Data Transfer Service
   description: Transfers large datasets across institutional trust boundaries.
-  annotations:
-    northstar.example/jira-project-key: DATA
 spec:
   type: service
   lifecycle: production
@@ -171,8 +153,6 @@ metadata:
   name: edge-gateway
   title: Edge Gateway
   description: Implements public DNS, DDoS controls, load balancing, and ingress routing.
-  annotations:
-    northstar.example/jira-project-key: NETENG
 spec:
   type: service
   lifecycle: production
@@ -189,8 +169,6 @@ metadata:
   name: container-runtime
   title: Container Runtime
   description: Shared Kubernetes clusters and application-delivery substrate.
-  annotations:
-    northstar.example/jira-project-key: PLATFORM
 spec:
   type: service
   lifecycle: production
@@ -211,8 +189,6 @@ metadata:
   name: linux-fleet-management
   title: Linux Fleet Management
   description: RHEL images, lifecycle controls, virtualization, bare-metal provisioning, and configuration management.
-  annotations:
-    northstar.example/jira-project-key: SYSENG
 spec:
   type: service
   lifecycle: production
@@ -233,9 +209,6 @@ metadata:
   name: identity-broker
   title: Identity Broker
   description: Provides human, service, and workload authentication and authorization interfaces.
-  annotations:
-    northstar.example/jira-project-key: IDENTITY
-    northstar.example/current-state-ref: ID-ARCH-001-rev-3
 spec:
   type: service
   lifecycle: production
@@ -255,8 +228,6 @@ metadata:
   name: research-data-service
   title: Research Data Service
   description: Presents governed object, file, and database services to research workloads.
-  annotations:
-    northstar.example/jira-project-key: DATA
 spec:
   type: service
   lifecycle: production
@@ -279,9 +250,6 @@ metadata:
   name: metrics-service
   title: Metrics and Alerting Service
   description: Receives Prometheus-format metrics and provides alert evaluation, dashboards, and SLO evidence.
-  annotations:
-    northstar.example/jira-project-key: SRE
-    northstar.example/current-state-ref: OBS-ARCH-004-rev-7
 spec:
   type: service
   lifecycle: production

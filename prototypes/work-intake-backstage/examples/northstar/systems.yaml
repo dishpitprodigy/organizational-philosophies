@@ -35,7 +35,6 @@ metadata:
   tags: [customer-facing, production]
   annotations:
     northstar.example/model-key: researchPortal
-    northstar.example/jira-project-key: APPS
     northstar.example/work-intake-review-profile: production-application
 spec:
   owner: appeng
@@ -50,7 +49,6 @@ metadata:
   tags: [hpc, production]
   annotations:
     northstar.example/model-key: computeScheduler
-    northstar.example/jira-project-key: PLATFORM
     northstar.example/work-intake-review-profile: production-platform
 spec:
   owner: platform
@@ -65,7 +63,6 @@ metadata:
   tags: [data, internet-facing, production]
   annotations:
     northstar.example/model-key: dataTransfer
-    northstar.example/jira-project-key: DATA
     northstar.example/work-intake-review-profile: sensitive-data-service
 spec:
   owner: dataeng
@@ -80,7 +77,6 @@ metadata:
   tags: [internet-facing, network, production]
   annotations:
     northstar.example/model-key: edgeServices
-    northstar.example/jira-project-key: NETENG
     northstar.example/work-intake-review-profile: internet-edge
 spec:
   owner: neteng
@@ -95,7 +91,6 @@ metadata:
   tags: [kubernetes, production]
   annotations:
     northstar.example/model-key: containerPlatform
-    northstar.example/jira-project-key: PLATFORM
     northstar.example/work-intake-review-profile: production-platform
 spec:
   owner: platform
@@ -110,7 +105,6 @@ metadata:
   tags: [linux, production]
   annotations:
     northstar.example/model-key: linuxFleet
-    northstar.example/jira-project-key: SYSENG
     northstar.example/work-intake-review-profile: production-infrastructure
 spec:
   owner: syseng
@@ -125,7 +119,6 @@ metadata:
   tags: [physical-infrastructure, production]
   annotations:
     northstar.example/model-key: dcFoundation
-    northstar.example/jira-project-key: DC
     northstar.example/work-intake-review-profile: data-center-change
 spec:
   owner: dcops
@@ -140,7 +133,6 @@ metadata:
   tags: [network, production]
   annotations:
     northstar.example/model-key: networkFabric
-    northstar.example/jira-project-key: NETENG
     northstar.example/work-intake-review-profile: production-network
 spec:
   owner: neteng
@@ -155,8 +147,8 @@ metadata:
   tags: [identity, security, production]
   annotations:
     northstar.example/model-key: identityPlatform
-    northstar.example/jira-project-key: IDENTITY
     northstar.example/work-intake-review-profile: authentication-path
+    northstar.example/current-state-ref: ID-ARCH-001-rev-3
 spec:
   owner: identity
   domain: shared-platform-services
@@ -170,7 +162,6 @@ metadata:
   tags: [data, retention, production]
   annotations:
     northstar.example/model-key: researchData
-    northstar.example/jira-project-key: DATA
     northstar.example/work-intake-review-profile: sensitive-data-platform
 spec:
   owner: dataeng
@@ -185,7 +176,6 @@ metadata:
   tags: [observability, production]
   annotations:
     northstar.example/model-key: metricsPlatform
-    northstar.example/jira-project-key: SRE
     northstar.example/work-intake-review-profile: production-observability
     northstar.example/current-state-ref: OBS-ARCH-004-rev-7
 spec:

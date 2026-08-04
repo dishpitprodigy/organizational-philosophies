@@ -7,8 +7,9 @@ prototype, and it uses the local development database.
 The catalog includes Northstar's organizational hierarchy, thirteen operating
 and governance teams, three fictional requesters, eleven systems, their primary
 components and resources, seven APIs, cross-system dependencies, and explicit
-Jira-project routing metadata. The source descriptors are under
-`examples/northstar/`.
+Jira-project routing metadata. Jira routing is recorded once on each owning
+Group; consumers derive it by following an entity's `ownedBy` relation. The
+source descriptors are under `examples/northstar/`.
 
 To start the app, run:
 
@@ -34,6 +35,11 @@ systemctl --user link "$PWD/systemd/work-intake-backstage.service"
 systemctl --user daemon-reload
 systemctl --user enable --now work-intake-backstage.service
 ```
+
+The unit intentionally targets this workstation's checkout under
+`%h/Documents/code/dishpitprodigy/organizational-philosophies`. If the checkout
+moves, update its `Documentation`, `WorkingDirectory`, and `ExecStart` paths
+before relinking it.
 
 Backstage is then available at <http://localhost:3000>. Common controls are:
 
