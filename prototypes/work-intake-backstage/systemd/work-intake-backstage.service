@@ -1,0 +1,21 @@
+[Unit]
+Description=Work Intake Backstage prototype
+Documentation=file:%h/Documents/code/dishpitprodigy/organizational-philosophies/prototypes/work-intake-backstage/README.md
+After=network.target
+
+[Service]
+Type=simple
+WorkingDirectory=%h/Documents/code/dishpitprodigy/organizational-philosophies/prototypes/work-intake-backstage
+ExecStart=%h/Documents/code/dishpitprodigy/organizational-philosophies/prototypes/work-intake-backstage/yarn start
+Environment=NODE_ENV=development
+Environment=PATH=/usr/local/bin:/usr/bin:/bin
+EnvironmentFile=-%h/.config/work-intake-backstage/environment
+Restart=on-failure
+RestartSec=3s
+TimeoutStopSec=20s
+KillMode=control-group
+StandardOutput=journal
+StandardError=journal
+
+[Install]
+WantedBy=default.target

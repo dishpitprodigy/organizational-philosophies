@@ -1,0 +1,270 @@
+---
+apiVersion: backstage.io/v1alpha1
+kind: Group
+metadata:
+  name: northstar-research-network
+  title: Northstar Research Network
+  description: Operates shared research-computing and secure data-transfer services for universities and medical-research institutions.
+spec:
+  type: organization
+  profile:
+    displayName: Northstar Research Network
+  children:
+    - infrastructure-reliability
+    - product-data
+    - identity-governance
+---
+apiVersion: backstage.io/v1alpha1
+kind: Group
+metadata:
+  name: infrastructure-reliability
+  title: Infrastructure & Reliability
+  description: Operates the physical, network, systems, platform, and reliability foundations.
+spec:
+  type: department
+  parent: northstar-research-network
+  children: [neteng, syseng, dcops, platform, sre]
+---
+apiVersion: backstage.io/v1alpha1
+kind: Group
+metadata:
+  name: product-data
+  title: Product & Data
+  description: Builds researcher-facing applications and governed research-data services.
+spec:
+  type: department
+  parent: northstar-research-network
+  children: [appeng, dataeng]
+---
+apiVersion: backstage.io/v1alpha1
+kind: Group
+metadata:
+  name: identity-governance
+  title: Identity & Governance
+  description: Owns identity engineering and the organizational decision systems surrounding technology work.
+spec:
+  type: department
+  parent: northstar-research-network
+  children: [identity, security, architecture, portfolio, finance, privacy]
+---
+apiVersion: backstage.io/v1alpha1
+kind: Group
+metadata:
+  name: neteng
+  title: Network Engineering
+  description: Owns the backbone, data-center fabric, DNS, load balancing, and internet edge.
+  annotations:
+    northstar.example/jira-project-key: NETENG
+    northstar.example/capacity-owner-role: Network Engineering Manager
+    northstar.example/technical-reviewer-role: Principal Network Engineer
+spec:
+  type: team
+  parent: infrastructure-reliability
+  children: []
+---
+apiVersion: backstage.io/v1alpha1
+kind: Group
+metadata:
+  name: syseng
+  title: Systems Engineering
+  description: Owns Linux lifecycle, base images, virtualization, bare metal, and configuration management.
+  annotations:
+    northstar.example/jira-project-key: SYSENG
+    northstar.example/capacity-owner-role: Systems Engineering Manager
+    northstar.example/technical-reviewer-role: Principal Systems Engineer
+spec:
+  type: team
+  parent: infrastructure-reliability
+  children: []
+---
+apiVersion: backstage.io/v1alpha1
+kind: Group
+metadata:
+  name: dcops
+  title: Data Center Operations
+  description: Owns racks, power, cabling, hardware installation, and remote hands.
+  annotations:
+    northstar.example/jira-project-key: DC
+    northstar.example/capacity-owner-role: Data Center Operations Manager
+    northstar.example/technical-reviewer-role: Data Center Technical Lead
+spec:
+  type: team
+  parent: infrastructure-reliability
+  children: []
+---
+apiVersion: backstage.io/v1alpha1
+kind: Group
+metadata:
+  name: platform
+  title: Platform Engineering
+  description: Owns Kubernetes, deployment workflows, secrets delivery, and the internal developer platform.
+  annotations:
+    northstar.example/jira-project-key: PLATFORM
+    northstar.example/capacity-owner-role: Platform Engineering Manager
+    northstar.example/technical-reviewer-role: Principal Platform Engineer
+spec:
+  type: team
+  parent: infrastructure-reliability
+  children: []
+---
+apiVersion: backstage.io/v1alpha1
+kind: Group
+metadata:
+  name: sre
+  title: Site Reliability Engineering
+  description: Owns production reliability, observability, SLOs, and incident learning.
+  annotations:
+    northstar.example/jira-project-key: SRE
+    northstar.example/capacity-owner-role: Reliability Engineering Director
+    northstar.example/technical-reviewer-role: Principal SRE
+spec:
+  type: team
+  parent: infrastructure-reliability
+  children: []
+---
+apiVersion: backstage.io/v1alpha1
+kind: Group
+metadata:
+  name: appeng
+  title: Application Engineering
+  description: Owns the Researcher Portal, public APIs, and workflow applications.
+  annotations:
+    northstar.example/jira-project-key: APPS
+    northstar.example/capacity-owner-role: Application Engineering Director
+    northstar.example/technical-reviewer-role: Principal Application Engineer
+spec:
+  type: team
+  parent: product-data
+  children: []
+---
+apiVersion: backstage.io/v1alpha1
+kind: Group
+metadata:
+  name: dataeng
+  title: Data Platform Engineering
+  description: Owns research-data storage, databases, transfer services, and retention controls.
+  annotations:
+    northstar.example/jira-project-key: DATA
+    northstar.example/capacity-owner-role: Data Platform Director
+    northstar.example/technical-reviewer-role: Principal Data Engineer
+spec:
+  type: team
+  parent: product-data
+  children: []
+---
+apiVersion: backstage.io/v1alpha1
+kind: Group
+metadata:
+  name: identity
+  title: Identity Engineering
+  description: Owns workforce identity, workload identity, directories, and federation.
+  annotations:
+    northstar.example/jira-project-key: IDENTITY
+    northstar.example/capacity-owner-role: Identity Engineering Manager
+    northstar.example/technical-reviewer-role: Principal Identity Engineer
+spec:
+  type: team
+  parent: identity-governance
+  children: []
+---
+apiVersion: backstage.io/v1alpha1
+kind: Group
+metadata:
+  name: security
+  title: Information Security
+  description: Owns security risk decisions, control requirements, and exception governance.
+  annotations:
+    northstar.example/jira-project-key: SECURITY
+    northstar.example/capacity-owner-role: Chief Information Security Officer
+    northstar.example/technical-reviewer-role: Security Review Board
+spec:
+  type: governance
+  parent: identity-governance
+  children: []
+---
+apiVersion: backstage.io/v1alpha1
+kind: Group
+metadata:
+  name: architecture
+  title: Enterprise Architecture
+  description: Owns cross-system boundaries, architecture decisions, and technology standards.
+  annotations:
+    northstar.example/jira-project-key: ARCH
+    northstar.example/capacity-owner-role: Chief Architect
+    northstar.example/technical-reviewer-role: Architecture Review Council
+spec:
+  type: governance
+  parent: identity-governance
+  children: []
+---
+apiVersion: backstage.io/v1alpha1
+kind: Group
+metadata:
+  name: portfolio
+  title: Technology Portfolio Office
+  description: Owns administrative authority, proposal sequencing, and portfolio priority.
+  annotations:
+    northstar.example/jira-project-key: PORTFOLIO
+    northstar.example/capacity-owner-role: Chief Technology Officer
+    northstar.example/technical-reviewer-role: Technology Portfolio Council
+spec:
+  type: governance
+  parent: identity-governance
+  children: []
+---
+apiVersion: backstage.io/v1alpha1
+kind: Group
+metadata:
+  name: finance
+  title: Finance & Procurement
+  description: Owns funding decisions, purchasing, contracts, and commercial commitments.
+  annotations:
+    northstar.example/jira-project-key: FINANCE
+    northstar.example/capacity-owner-role: Chief Financial Officer
+    northstar.example/technical-reviewer-role: Technology Finance Partner
+spec:
+  type: governance
+  parent: identity-governance
+  children: []
+---
+apiVersion: backstage.io/v1alpha1
+kind: Group
+metadata:
+  name: privacy
+  title: Privacy & Legal
+  description: Owns data-use boundaries, privacy obligations, and legal review.
+  annotations:
+    northstar.example/jira-project-key: PRIVACY
+    northstar.example/capacity-owner-role: General Counsel
+    northstar.example/technical-reviewer-role: Privacy Counsel
+spec:
+  type: governance
+  parent: identity-governance
+  children: []
+---
+apiVersion: backstage.io/v1alpha1
+kind: User
+metadata:
+  name: avery-shah
+spec:
+  profile:
+    displayName: Avery Shah
+  memberOf: [sre]
+---
+apiVersion: backstage.io/v1alpha1
+kind: User
+metadata:
+  name: morgan-lee
+spec:
+  profile:
+    displayName: Morgan Lee
+  memberOf: [identity]
+---
+apiVersion: backstage.io/v1alpha1
+kind: User
+metadata:
+  name: riley-gomez
+spec:
+  profile:
+    displayName: Riley Gomez
+  memberOf: [architecture]

@@ -1,0 +1,193 @@
+---
+apiVersion: backstage.io/v1alpha1
+kind: Domain
+metadata:
+  name: researcher-services
+  title: Researcher Services
+  description: Customer-facing project, compute-workflow, and secure data-transfer capabilities.
+spec:
+  owner: product-data
+---
+apiVersion: backstage.io/v1alpha1
+kind: Domain
+metadata:
+  name: compute-infrastructure
+  title: Compute Infrastructure
+  description: Physical, network, operating-system, and container foundations for Northstar services.
+spec:
+  owner: infrastructure-reliability
+---
+apiVersion: backstage.io/v1alpha1
+kind: Domain
+metadata:
+  name: shared-platform-services
+  title: Shared Platform Services
+  description: Identity, research-data, and observability capabilities consumed throughout Northstar.
+spec:
+  owner: infrastructure-reliability
+---
+apiVersion: backstage.io/v1alpha1
+kind: System
+metadata:
+  name: researcher-portal
+  title: Researcher Portal
+  description: Customer-facing project, dataset, and compute-workflow interface.
+  tags: [customer-facing, production]
+  annotations:
+    northstar.example/model-key: researchPortal
+    northstar.example/jira-project-key: APPS
+    northstar.example/work-intake-review-profile: production-application
+spec:
+  owner: appeng
+  domain: researcher-services
+---
+apiVersion: backstage.io/v1alpha1
+kind: System
+metadata:
+  name: compute-scheduler
+  title: Compute Scheduler
+  description: Schedules research workloads across data-center and cloud compute pools.
+  tags: [hpc, production]
+  annotations:
+    northstar.example/model-key: computeScheduler
+    northstar.example/jira-project-key: PLATFORM
+    northstar.example/work-intake-review-profile: production-platform
+spec:
+  owner: platform
+  domain: researcher-services
+---
+apiVersion: backstage.io/v1alpha1
+kind: System
+metadata:
+  name: secure-data-transfer
+  title: Secure Data Transfer
+  description: Moves large research datasets across institutional trust boundaries.
+  tags: [data, internet-facing, production]
+  annotations:
+    northstar.example/model-key: dataTransfer
+    northstar.example/jira-project-key: DATA
+    northstar.example/work-intake-review-profile: sensitive-data-service
+spec:
+  owner: dataeng
+  domain: researcher-services
+---
+apiVersion: backstage.io/v1alpha1
+kind: System
+metadata:
+  name: edge-services
+  title: Edge Services
+  description: Public DNS, DDoS controls, load balancing, and ingress routing.
+  tags: [internet-facing, network, production]
+  annotations:
+    northstar.example/model-key: edgeServices
+    northstar.example/jira-project-key: NETENG
+    northstar.example/work-intake-review-profile: internet-edge
+spec:
+  owner: neteng
+  domain: compute-infrastructure
+---
+apiVersion: backstage.io/v1alpha1
+kind: System
+metadata:
+  name: container-platform
+  title: Container Platform
+  description: Shared Kubernetes runtime and application-delivery substrate.
+  tags: [kubernetes, production]
+  annotations:
+    northstar.example/model-key: containerPlatform
+    northstar.example/jira-project-key: PLATFORM
+    northstar.example/work-intake-review-profile: production-platform
+spec:
+  owner: platform
+  domain: compute-infrastructure
+---
+apiVersion: backstage.io/v1alpha1
+kind: System
+metadata:
+  name: linux-fleet
+  title: Linux Fleet
+  description: RHEL images, lifecycle controls, virtualization, and bare-metal compute.
+  tags: [linux, production]
+  annotations:
+    northstar.example/model-key: linuxFleet
+    northstar.example/jira-project-key: SYSENG
+    northstar.example/work-intake-review-profile: production-infrastructure
+spec:
+  owner: syseng
+  domain: compute-infrastructure
+---
+apiVersion: backstage.io/v1alpha1
+kind: System
+metadata:
+  name: data-center-foundation
+  title: Data Center Foundation
+  description: Physical compute, power, cabling, and hardware break/fix.
+  tags: [physical-infrastructure, production]
+  annotations:
+    northstar.example/model-key: dcFoundation
+    northstar.example/jira-project-key: DC
+    northstar.example/work-intake-review-profile: data-center-change
+spec:
+  owner: dcops
+  domain: compute-infrastructure
+---
+apiVersion: backstage.io/v1alpha1
+kind: System
+metadata:
+  name: network-fabric
+  title: Network Fabric
+  description: Data-center and cloud connectivity, routing, and service networks.
+  tags: [network, production]
+  annotations:
+    northstar.example/model-key: networkFabric
+    northstar.example/jira-project-key: NETENG
+    northstar.example/work-intake-review-profile: production-network
+spec:
+  owner: neteng
+  domain: compute-infrastructure
+---
+apiVersion: backstage.io/v1alpha1
+kind: System
+metadata:
+  name: identity-platform
+  title: Identity Platform
+  description: Human, service, and workload authentication and authorization.
+  tags: [identity, security, production]
+  annotations:
+    northstar.example/model-key: identityPlatform
+    northstar.example/jira-project-key: IDENTITY
+    northstar.example/work-intake-review-profile: authentication-path
+spec:
+  owner: identity
+  domain: shared-platform-services
+---
+apiVersion: backstage.io/v1alpha1
+kind: System
+metadata:
+  name: research-data-platform
+  title: Research Data Platform
+  description: Object, file, and database services with governed retention.
+  tags: [data, retention, production]
+  annotations:
+    northstar.example/model-key: researchData
+    northstar.example/jira-project-key: DATA
+    northstar.example/work-intake-review-profile: sensitive-data-platform
+spec:
+  owner: dataeng
+  domain: shared-platform-services
+---
+apiVersion: backstage.io/v1alpha1
+kind: System
+metadata:
+  name: metrics-alerting-platform
+  title: Metrics & Alerting Platform
+  description: Metrics ingestion, alerting, dashboards, and SLO evidence.
+  tags: [observability, production]
+  annotations:
+    northstar.example/model-key: metricsPlatform
+    northstar.example/jira-project-key: SRE
+    northstar.example/work-intake-review-profile: production-observability
+    northstar.example/current-state-ref: OBS-ARCH-004-rev-7
+spec:
+  owner: sre
+  domain: shared-platform-services
