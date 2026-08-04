@@ -7,132 +7,13 @@ const VARIANTS = {
   C: "Routing conversation",
 };
 
-const SIZE_ORDER = ["XS", "S", "M", "L", "XL"];
+const domainModel = window.WorkIntakePrototype;
+const { COMPANY, SCENARIOS, blankState } = domainModel;
 const app = document.querySelector("#app");
-
-const blankState = () => ({
-  scenario: "Blank",
-  catalogPath: "",
-  inquiryHours: 1,
-  requiresChange: false,
-  purchase: false,
-  title: "",
-  outcome: "",
-  currentState: "",
-  difference: "",
-  success: "",
-  sponsor: "",
-  sponsorLevel: "",
-  intent: "",
-  affectedUsers: 0,
-  activeTeams: 0,
-  boundedSupport: true,
-  criticalHandoffs: 0,
-  laborDays: 0,
-  durationWeeks: 0,
-  production: false,
-  customerFacing: false,
-  sensitiveData: false,
-  authenticationPath: false,
-  internetExposed: false,
-  knownUnknowns: false,
-  requiredBy: "",
-  consequence: "",
-  domains: [],
-});
-
-const SCENARIOS = {
-  Blank: blankState(),
-  "Metrics migration": {
-    ...blankState(),
-    scenario: "Metrics migration",
-    catalogPath: "change",
-    title: "Replace the engineering metrics platform",
-    outcome: "Move infrastructure and application metrics to a supported platform without losing alerting coverage or historical query access.",
-    currentState: "Engineering teams publish Prometheus-compatible metrics to an aging, separately operated storage and dashboard stack.",
-    difference: "The replacement must preserve PromQL-compatible workflows, support OpenTelemetry ingestion, and provide a tested migration path for existing alerts and dashboards.",
-    success: "All production metrics and alerts operate on the new platform for 30 days, agreed history remains queryable, and the old storage tier can be retired.",
-    sponsor: "Director, Reliability Engineering",
-    sponsorLevel: "Director",
-    intent: "Migration",
-    affectedUsers: 420,
-    activeTeams: 5,
-    boundedSupport: false,
-    criticalHandoffs: 4,
-    laborDays: 420,
-    durationWeeks: 32,
-    production: true,
-    customerFacing: false,
-    sensitiveData: false,
-    authenticationPath: false,
-    internetExposed: false,
-    knownUnknowns: true,
-    requiredBy: "Before the current platform reaches end of support",
-    consequence: "Unsupported storage and alerting components increase operational and incident risk.",
-    domains: ["Observability", "Platform", "Applications", "Security"],
-  },
-  "SSO migration": {
-    ...blankState(),
-    scenario: "SSO migration",
-    catalogPath: "change",
-    purchase: true,
-    title: "Migrate workforce applications to a new SSO service",
-    outcome: "Move employee-facing applications to a common SSO service while preserving access, conditional-access controls, and auditable deprovisioning.",
-    currentState: "Applications use a mixture of SAML, OIDC, local accounts, and two inherited SSO services.",
-    difference: "The target must support global workforce policies, staged application onboarding, strong authentication, and recovery when the primary service is unavailable.",
-    success: "All in-scope applications authenticate through the new service, access reviews pass, leaver access is removed within policy, and rollback has been exercised.",
-    sponsor: "VP, Corporate Technology",
-    sponsorLevel: "Vice President",
-    intent: "Migration",
-    affectedUsers: 6400,
-    activeTeams: 7,
-    boundedSupport: false,
-    criticalHandoffs: 8,
-    laborDays: 900,
-    durationWeeks: 64,
-    production: true,
-    customerFacing: false,
-    sensitiveData: true,
-    authenticationPath: true,
-    internetExposed: true,
-    knownUnknowns: true,
-    requiredBy: "Before renewal of the inherited SSO contracts",
-    consequence: "Renewal creates another year of duplicate cost and fragmented identity controls.",
-    domains: ["Identity", "Security", "Applications", "Platform", "Finance / Procurement", "Privacy / Legal"],
-  },
-  "Identity provider migration": {
-    ...blankState(),
-    scenario: "Identity provider migration",
-    catalogPath: "change",
-    purchase: true,
-    title: "Establish the next enterprise identity-provider platform",
-    outcome: "Replace the legacy identity-provider estate with a resilient foundation for workforce, application, and administrative identity.",
-    currentState: "Directory, authentication, DNS-integrated identity, certificates, and application trust are distributed across legacy platforms with incomplete ownership records.",
-    difference: "The future platform must support multiple regions, hybrid infrastructure, service identities, delegated administration, recovery testing, and documented trust boundaries.",
-    success: "Critical identity flows meet approved availability and recovery requirements, dependencies have migrated, and the legacy providers can be removed without orphaned identities or trusts.",
-    sponsor: "Chief Technology Officer",
-    sponsorLevel: "Executive",
-    intent: "Redesign",
-    affectedUsers: 12000,
-    activeTeams: 11,
-    boundedSupport: false,
-    criticalHandoffs: 14,
-    laborDays: 1650,
-    durationWeeks: 104,
-    production: true,
-    customerFacing: true,
-    sensitiveData: true,
-    authenticationPath: true,
-    internetExposed: true,
-    knownUnknowns: true,
-    requiredBy: "Before the legacy platform loses vendor support",
-    consequence: "Identity remains a single point of organizational failure, and unsupported components cannot satisfy recovery expectations.",
-    domains: ["Identity", "Security", "Platform", "Network", "Applications", "Finance / Procurement", "Privacy / Legal", "Service Operations"],
-  },
-};
 
 let state = blankState();
 let wizardStep = 0;
+const evaluate = () => domainModel.evaluate(state);
 
 const initialScenario = new URLSearchParams(window.location.search).get("scenario");
 if (initialScenario && SCENARIOS[initialScenario]) state = structuredClone(SCENARIOS[initialScenario]);
@@ -171,178 +52,13 @@ function cycleVariant(direction) {
   setVariant(keys[next]);
 }
 
-function laborBand(days) {
-  if (!days) return "Unknown";
-  if (days <= 10) return "XS";
-  if (days <= 50) return "S";
-  if (days <= 250) return "M";
-  if (days <= 1000) return "L";
-  return "XL";
-}
-
-function durationBand(weeks) {
-  if (!weeks) return "Unknown";
-  if (weeks <= 2) return "XS";
-  if (weeks <= 8) return "S";
-  if (weeks <= 26) return "M";
-  if (weeks <= 78) return "L";
-  return "XL";
-}
-
-function coordinationBand(teams, boundedSupport, handoffs) {
-  if (!teams) return "Unknown";
-  if (teams === 1 && handoffs === 0) return "XS";
-  if (teams === 2 && boundedSupport && handoffs <= 1) return "S";
-  if (teams <= 3 && handoffs <= 2) return "M";
-  if (teams <= 7) return "L";
-  return "XL";
-}
-
-function highestBand(bands) {
-  const known = bands.filter((band) => SIZE_ORDER.includes(band));
-  if (!known.length) return "Unknown";
-  return known.reduce((highest, band) => SIZE_ORDER.indexOf(band) > SIZE_ORDER.indexOf(highest) ? band : highest, "XS");
-}
-
-function isCatalogRoute() {
-  if (state.catalogPath === "incident" || state.catalogPath === "service") return true;
-  return state.catalogPath === "inquiry" && Number(state.inquiryHours) <= 4 && !state.requiresChange && !state.purchase;
-}
-
-function materialChange() {
-  return state.catalogPath === "change" || state.requiresChange || state.purchase || Number(state.inquiryHours) > 4;
-}
-
-function missingCriticalFields() {
-  const missing = [];
-  if (!state.title.trim()) missing.push("short title");
-  if (!state.outcome.trim()) missing.push("desired outcome");
-  if (!state.currentState.trim()) missing.push("current state");
-  if (!state.difference.trim()) missing.push("required difference from the current state");
-  if (!state.success.trim()) missing.push("success measure");
-  if (!state.intent) missing.push("work intent");
-  if (!state.domains.length) missing.push("affected domain");
-  if (!Number(state.activeTeams)) missing.push("active-team estimate");
-  if (!Number(state.laborDays)) missing.push("delivery-labor estimate");
-  if (!Number(state.durationWeeks)) missing.push("elapsed-duration estimate");
-  return missing;
-}
-
-function buildStakeholders() {
-  const map = {
-    Identity: ["Identity Engineering", "Access Governance"],
-    Security: ["Information Security"],
-    Platform: ["Platform Engineering"],
-    Network: ["Network Engineering"],
-    Applications: ["Application Owners"],
-    Observability: ["Reliability / Observability"],
-    "Finance / Procurement": ["Finance", "Procurement"],
-    "Privacy / Legal": ["Privacy / Legal"],
-    "Service Operations": ["Service Operations"],
-  };
-  const people = [state.sponsor || "Sponsor (not yet named)"];
-  state.domains.forEach((domain) => people.push(...(map[domain] || [])));
-  if (state.production) people.push("Production Service Owners");
-  if (state.customerFacing) people.push("Customer Support / Success");
-  return [...new Set(people)];
-}
-
-function buildReviews() {
-  const reviews = [];
-  if (state.production || state.activeTeams > 1 || ["Migration", "Redesign"].includes(state.intent)) reviews.push("Architecture Review");
-  if (state.domains.includes("Identity") || state.domains.includes("Security") || state.authenticationPath || state.internetExposed) reviews.push("Security Review");
-  if (state.production || state.domains.includes("Observability")) reviews.push("Reliability & Operations Review");
-  if (state.sensitiveData || state.domains.includes("Privacy / Legal")) reviews.push("Privacy & Data Review");
-  if (state.purchase || state.domains.includes("Finance / Procurement")) reviews.push("Finance & Procurement Review");
-  if (state.production) reviews.push("Change & Release Review");
-  if (state.activeTeams >= 4) reviews.push("Dependency & Capacity Review");
-  return [...new Set(reviews)];
-}
-
-function buildRisks() {
-  const risks = [];
-  if (state.affectedUsers >= 5000) risks.push("Enterprise-wide blast radius");
-  else if (state.affectedUsers >= 500) risks.push("Multi-department blast radius");
-  else if (state.affectedUsers > 0) risks.push("Bounded user impact");
-  if (state.production) risks.push("Production change");
-  if (state.customerFacing) risks.push("Customer-facing impact");
-  if (state.authenticationPath) risks.push("Authentication critical path");
-  if (state.sensitiveData) risks.push("Sensitive or regulated data");
-  if (state.internetExposed) risks.push("Internet exposure");
-  if (state.purchase) risks.push("Commercial commitment");
-  if (state.knownUnknowns) risks.push("Material uncertainty remains");
-  if (state.criticalHandoffs >= 4) risks.push("Cross-team critical path");
-  return risks.length ? risks : ["No material indicators recorded yet"];
-}
-
-function evaluate() {
-  const bands = {
-    labor: laborBand(Number(state.laborDays)),
-    duration: durationBand(Number(state.durationWeeks)),
-    coordination: coordinationBand(Number(state.activeTeams), state.boundedSupport, Number(state.criticalHandoffs)),
-  };
-  const deliverySize = highestBand(Object.values(bands));
-  const missing = missingCriticalFields();
-  let disposition;
-
-  if (!state.catalogPath) {
-    disposition = {
-      key: "assisted",
-      label: "Assisted Intake",
-      summary: "The service-catalog boundary has not been answered. Intake staff should help determine whether this is service work before proposal review begins.",
-    };
-  } else if (isCatalogRoute()) {
-    const labels = {
-      inquiry: "General Inquiry",
-      incident: "Incident / Break-Fix",
-      service: "Standard Service Request",
-    };
-    disposition = {
-      key: "service",
-      label: labels[state.catalogPath],
-      summary: "This belongs in the existing service catalog, not Work Proposal intake. The form would redirect the requester to the appropriate service queue.",
-    };
-  } else if (materialChange() && !state.sponsor.trim()) {
-    disposition = {
-      key: "blocked",
-      label: "Sponsorship Required",
-      summary: "This is material change, and every Work Proposal requires a named sponsor. The proposal cannot be submitted until someone with appropriate authority accepts sponsorship.",
-    };
-  } else if (missing.length) {
-    disposition = {
-      key: "assisted",
-      label: "Assisted Intake",
-      summary: `A sponsor is present, but decision-critical information is missing: ${missing.join(", ")}. Schedule an intake session before review tickets are assembled.`,
-    };
-  } else {
-    disposition = {
-      key: "proposal",
-      label: "Work Proposal",
-      summary: "The submission contains enough decision-critical information to assemble a draft proposal record and send its review modules to the appropriate teams.",
-    };
-  }
-
-  const stakeholders = buildStakeholders();
-  const reviews = buildReviews();
-  const risks = buildRisks();
-  const routing = [
-    state.catalogPath === "change" ? "Requester selected material change outside the service catalog." : `Catalog answer: ${state.catalogPath || "not answered"}.`,
-  ];
-  if (materialChange()) routing.push(state.sponsor ? `Named sponsor: ${state.sponsor}.` : "Material change has no named sponsor, so submission stops.");
-  if (disposition.key === "proposal") routing.push(`Delivery size is ${deliverySize}, the highest of ${bands.labor} labor, ${bands.duration} duration, and ${bands.coordination} coordination; the values are not averaged.`);
-  if (state.knownUnknowns) routing.push("Recorded ambiguity triggers explicit discovery work; it does not silently inflate the size class.");
-  if (reviews.length) routing.push(`Facts triggered ${reviews.length} independent review module${reviews.length === 1 ? "" : "s"}.`);
-
-  return { disposition, bands, deliverySize, missing, stakeholders, reviews, risks, routing };
-}
-
 function scenarioBar() {
   return `<div class="scenario-bar"><span>Load scenario</span>${Object.keys(SCENARIOS).map((name) => `<button class="scenario-button ${state.scenario === name ? "active" : ""}" type="button" data-scenario="${h(name)}">${h(name)}</button>`).join("")}</div>`;
 }
 
 function topbar(dark = false) {
   return `<header class="topbar ${dark ? "dark" : ""}">
-    <div class="brand"><div class="brand-mark">N</div><div><strong>Northstar Engineering</strong><small>Work intake demonstration</small></div></div>
+    <div class="brand"><div class="brand-mark">N</div><div><strong>${h(COMPANY.name)}</strong><small>Research technology · Work Intake demonstration</small></div></div>
     ${scenarioBar()}
   </header>`;
 }
@@ -351,9 +67,19 @@ function selectField(field, label, options, help = "") {
   return `<label class="field"><span>${label}</span><select data-field="${field}"><option value="">Select one…</option>${options.map((option) => `<option value="${h(option)}" ${state[field] === option ? "selected" : ""}>${h(option)}</option>`).join("")}</select>${help ? `<small>${help}</small>` : ""}</label>`;
 }
 
+function teamSelectField(field, label, help = "") {
+  const options = Object.entries(COMPANY.teams).map(([id, team]) => `<option value="${h(id)}" ${state[field] === id ? "selected" : ""}>${h(team.name)}</option>`).join("");
+  return `<label class="field"><span>${label}</span><select data-field="${field}"><option value="">Select one…</option>${options}</select>${help ? `<small>${help}</small>` : ""}</label>`;
+}
+
+function textareaRows(value) {
+  const wrappedLines = String(value || "").split("\n").reduce((count, line) => count + Math.max(1, Math.ceil(line.length / 92)), 0);
+  return Math.max(4, Math.min(32, wrappedLines + 1));
+}
+
 function textField(field, label, help = "", textarea = false) {
   const control = textarea
-    ? `<textarea data-field="${field}">${h(state[field])}</textarea>`
+    ? `<textarea data-field="${field}" rows="${textareaRows(state[field])}">${h(state[field])}</textarea>`
     : `<input type="text" data-field="${field}" value="${h(state[field])}">`;
   return `<label class="field"><span>${label}</span>${control}${help ? `<small>${help}</small>` : ""}</label>`;
 }
@@ -384,60 +110,175 @@ function boundaryFields() {
 
 function purposeFields() {
   return `<div class="form-grid">
+    ${textField("requester", "Authenticated requester", "The person who knowingly asks the organization to act. A receiving team may not manufacture this demand.")}
+    ${teamSelectField("requestingTeam", "Requesting function")}
     <div class="wide">${textField("title", "Short working title")}</div>
-    <div class="wide">${textField("outcome", "What outcome should exist when the work is done?", "Describe the result, not the product you already prefer.", true)}</div>
-    <div class="wide">${textField("currentState", "What exists today?", "State the current capability and important limitations.", true)}</div>
-    <div class="wide">${textField("difference", "What must be different?", "Compare expected capability with the current state.", true)}</div>
-    <div class="wide">${textField("success", "How will we know it worked?", "Give an observable acceptance condition.", true)}</div>
-    ${selectField("intent", "Preliminary work intent", ["Discovery", "Migration", "Redesign", "Enablement", "Optimization"])}
-    ${textField("sponsor", "Named sponsor", "Every Work Proposal requires one. An unsponsored informational question belongs in General Inquiry.")}
+    <div class="wide">${textField("currentState", "Current State", "What capability, constraint, failure, cost, or operating condition exists now?", true)}</div>
+    <div class="wide">${textField("outcome", "Desired Outcome", "Describe what should become true, not the product you already prefer.", true)}</div>
+    <div class="wide">${textField("difference", "Required Difference", "State the material gap between the Current State and Desired Outcome.", true)}</div>
+    <div class="wide">${textField("requirements", "Requirements", "What must the result do or preserve? Use testable operating conditions where possible.", true)}</div>
+    <div class="wide">${textField("success", "Acceptance Conditions", "What observable evidence will show that the Desired Outcome is real?", true)}</div>
+    <div class="wide">${textField("nonGoals", "Non-Goals", "What does this proposal deliberately not solve?", true)}</div>
+    ${textField("sponsor", "Work Sponsor", "A name alone is not sponsorship; acceptance must be tied to this proposal revision.")}
     ${selectField("sponsorLevel", "Sponsor level", ["Manager", "Director", "Vice President", "Executive"])}
-    ${textField("requiredBy", "Required-by event or date", "A date alone does not establish priority.")}
+    ${booleanChoice("sponsorAccepted", "Has the sponsor accepted this proposal revision?", "Sponsorship accepts the priority claim, evaluation capacity, and organizational tradeoffs.")}
+    ${textField("acceptanceAuthority", "Acceptance Authority", "Who may decide that the delivered result satisfies the agreed proof and operating conditions?")}
+    <div class="wide">${textField("requiredBy", "Required-by event or date", "A date alone does not establish priority.", true)}</div>
     <div class="wide">${textField("consequence", "What happens if that date is missed?", "This is evidence for portfolio prioritization, not a requester-selected urgency label.", true)}</div>
   </div>`;
 }
 
 function scopeFields() {
-  const domains = ["Applications", "Identity", "Security", "Platform", "Network", "Observability", "Finance / Procurement", "Privacy / Legal", "Service Operations"];
   return `<div class="form-grid">
     ${numberField("affectedUsers", "People or customers affected", "Use the best defensible estimate.")}
-    ${numberField("activeTeams", "Teams doing delivery work", "Review-only participation does not count.")}
-    ${numberField("criticalHandoffs", "Cross-team critical handoffs", "Count handoffs that can stop downstream work.")}
-    ${booleanChoice("boundedSupport", "If exactly two teams are involved, is the second contribution small and bounded?")}
+    ${teamSelectField("operationalOwner", "Operational Ownership", "Who will operate, support, maintain, and respond to failure after acceptance?")}
     ${booleanChoice("production", "Will this change production?")}
     ${booleanChoice("customerFacing", "Can customers experience the outcome or a failure?")}
     ${booleanChoice("sensitiveData", "Does it handle sensitive or regulated data?")}
     ${booleanChoice("authenticationPath", "Is it part of authentication or authorization?")}
     ${booleanChoice("internetExposed", "Is any component exposed to the public internet?")}
     ${booleanChoice("purchase", "Could this require a purchase or vendor commitment?")}
-    ${booleanChoice("knownUnknowns", "Are material questions still unanswered?", "This should create discovery work, not hide uncertainty inside an estimate.")}
-    <fieldset class="field wide"><legend>Domains that may own, operate, fund, or depend on the result</legend><div class="choice-grid">${domains.map((domain) => `<label class="choice"><input type="checkbox" data-domain="${h(domain)}" ${state.domains.includes(domain) ? "checked" : ""}>${h(domain)}</label>`).join("")}</div></fieldset>
+    ${numberField("spendUsd", "Potential financial commitment (USD)", "Financial Commitment Class is kept separate from delivery size and risk.")}
+    <fieldset class="field wide"><legend>Affected systems</legend><div class="system-choice-grid">${Object.entries(COMPANY.systems).map(([id, system]) => `<label class="choice system-choice"><input type="checkbox" data-system="${h(id)}" ${state.affectedSystems.includes(id) ? "checked" : ""}><span><strong>${h(system.name)}</strong><small>Owned by ${h(COMPANY.teams[system.owner].name)} · depends on ${h(system.dependsOn.map((dependencyId) => COMPANY.systems[dependencyId].name).join(", "))}</small></span></label>`).join("")}</div><small>The system derives participating functions and dependency handoffs from this service map. Routing does not commit their capacity.</small></fieldset>
+    <div class="wide">${textField("dependencyNotes", "Dependency evidence", "Record commitments, decisions, external events, or hidden contracts that the service map cannot derive.", true)}</div>
+  </div>`;
+}
+
+function framingFields() {
+  return `<div class="form-grid">
+    ${selectField("intent", "Primary intent", ["Discovery", "Migration", "Redesign", "Enablement", "Optimization"], "One intent per Work Package; if two are required, split the work.")}
+    ${selectField("outcomeShape", "Top-level outcome shape", ["single", "multiple"], "One independently valuable result produces an Epic; several produce an Initiative containing Epics.")}
+    <div class="wide">${textField("preconditions", "What must be true before work starts?", "List constraints and prerequisite decisions, not solutions.", true)}</div>
+    <div class="wide">${textField("reusableArtifact", "What reusable artifact must exist at the end?", "For Discovery, this is the proof of completion; it is not running code.", true)}</div>
+    <div class="wide">${textField("downstreamEnabled", "What downstream work should never need to ask why again?", "State what can proceed without reconstructing the reasoning.", true)}</div>
+    ${booleanChoice("knownUnknowns", "Does material Known Uncertainty remain?", "A substantive unknown creates bounded Discovery; Assisted Intake must stop before doing that work.")}
+    <div class="wide">${textField("uncertaintyQuestion", "Decision-critical question", "What question must bounded Discovery answer?", true)}</div>
+    <div class="wide">${textField("discoveryTimebox", "Discovery timebox", "State how the timebox is divided so continuing work cannot hide inside an undifferentiated duration.", true)}</div>
+    <div class="wide">${textField("epicOutcomes", "Candidate independently valuable Epic outcomes", "One outcome per line. These are candidate delivery records, not authorized work.", true)}</div>
   </div>`;
 }
 
 function effortFields() {
   const result = evaluate();
   return `<div class="form-grid">
-    ${numberField("laborDays", "Total delivery labor (person-days)", "Add the effort across all participating teams. Task estimates use person-days.")}
-    ${numberField("durationWeeks", "Elapsed calendar duration (weeks)", "This includes waiting and dependencies; it is not labor.")}
+    ${numberField("laborDays", "Current labor forecast (person-days)", "A delivery estimate supplied or accepted by delivery reviewers; it is not requester-selected size.")}
+    ${numberField("durationWeeks", "Current elapsed-duration forecast (weeks)", "This includes waiting and dependencies; it does not overwrite the Approved Delivery Baseline.")}
   </div>
   <div class="route-preview"><strong>Current size calculation: ${result.deliverySize}</strong><br>
     Labor: ${result.bands.labor} · Duration: ${result.bands.duration} · Coordination: ${result.bands.coordination}<br>
     The highest dimension wins. Four XS dimensions could not cancel one XL dimension.</div>`;
 }
 
-function ticketTree(result) {
+function artifactTree(result) {
   if (result.disposition.key === "service") {
-    return `<div class="ticket-tree"><div class="ticket"><span class="ticket-key">SR-1042</span><span>${h(result.disposition.label)} — routed to Service Operations</span></div></div>`;
+    return `<div class="ticket-tree"><div class="ticket"><span class="ticket-key">DEMAND</span><span>${h(result.disposition.label)} · governed by its operational path and structured capture</span></div></div>`;
   }
   if (result.disposition.key === "blocked") {
-    return `<div class="ticket-tree"><div class="ticket"><span class="ticket-key">DRAFT ONLY</span><span>No ticket created; sponsor confirmation required</span></div></div>`;
+    return `<div class="ticket-tree"><div class="ticket"><span class="ticket-key">DRAFT</span><span>Work Proposal has no authority; sponsorship acceptance is required</span></div></div>`;
   }
   if (result.disposition.key === "assisted") {
-    return `<div class="ticket-tree"><div class="ticket"><span class="ticket-key">INTAKE-88</span><span>Assisted Intake appointment / incomplete draft</span></div></div>`;
+    return `<div class="ticket-tree"><div class="ticket"><span class="ticket-key">ASSIST</span><span>Assisted Intake may explain the route; it may not author a Work Proposal or perform Discovery</span></div></div>`;
   }
-  const subtasks = result.reviews.map((review, index) => `<div class="ticket child"><span class="ticket-key">NSE-${241 + index}</span><span>${h(review)} module</span></div>`).join("");
-  return `<div class="ticket-tree"><div class="ticket"><span class="ticket-key">NSE-240</span><span>${h(state.title || "Draft Work Proposal")}</span></div>${subtasks}<div class="ticket child"><span class="ticket-key">NSE-${241 + result.reviews.length}</span><span>Assemble accepted modules into final review artifact</span></div></div>`;
+  if (result.disposition.key === "draft") {
+    const missing = [...result.proposalMissing, ...result.framingMissing];
+    return `<div class="ticket-tree"><div class="ticket"><span class="ticket-key">DRAFT</span><span>Draft Work Proposal has no authority; missing evidence: ${h(missing.join(", ") || "unspecified")}</span></div></div>`;
+  }
+  const reviewRecords = result.reviews.map((review) => `<div class="ticket child"><span class="ticket-key">STAGE ${review.stage}</span><span>${h(review.name)} record · Decision Owner: ${h(review.decisionOwner)}</span></div>`).join("");
+  return `<div class="ticket-tree">
+    <div class="ticket"><span class="ticket-key">${h(result.proposalRecord.label)}</span><span>${h(result.proposalRecord.type)} · ${h(result.proposalRecord.authority)}</span></div>
+    <div class="ticket child"><span class="ticket-key">FRAME</span><span>${h(state.intent || "Intent missing")} framing record · artifact: ${h(state.reusableArtifact || "missing")}</span></div>
+    ${result.workStructure.discoveryPackage ? `<div class="ticket child"><span class="ticket-key">DISCOVERY</span><span>Bounded Discovery Work Package · ${h(result.workStructure.discoveryPackage.question)}</span></div>` : ""}
+    ${reviewRecords}
+    <div class="ticket child pending"><span class="ticket-key">PENDING</span><span>Authorized Work Proposal · assembled only after every required review record clears</span></div>
+  </div>`;
+}
+
+function systemGraphMarkup(result) {
+  const selected = result.graph.selected.map((id) => `<li><strong>${h(COMPANY.systems[id].name)}</strong> · ${h(COMPANY.teams[COMPANY.systems[id].owner].name)}</li>`).join("");
+  const dependencies = result.graph.dependencies.map((id) => `<li><strong>${h(COMPANY.systems[id].name)}</strong> · derived dependency owned by ${h(COMPANY.teams[COMPANY.systems[id].owner].name)}</li>`).join("");
+  return `<h4>Named affected systems</h4><ul>${selected || "<li>None named</li>"}</ul><h4>Derived dependencies</h4><ul>${dependencies || "<li>None derived</li>"}</ul>`;
+}
+
+function companyStructureMarkup() {
+  return `<p class="muted company-mission">${h(COMPANY.mission)}</p><div class="org-grid">${COMPANY.groups.map((group) => `<section class="org-group"><h4>${h(group.name)}</h4>${group.teams.map((teamId) => { const team = COMPANY.teams[teamId]; return `<div class="org-team"><strong>${h(team.shortName)}</strong><span>${h(team.name)}</span><small>Owns ${h(team.owns)}.</small></div>`; }).join("")}</section>`).join("")}</div>`;
+}
+
+function reviewMarkup(result) {
+  if (!result.reviews.length) return `<p class="muted">No Work Proposal review is active on this front-door path.</p>`;
+  return `<div class="decision-list">${result.reviews.map((review) => `<article class="decision-row"><span class="stage-badge">Stage ${review.stage}</span><div><strong>${h(review.name)}</strong><small>${h(review.state)} · Decision Owner: ${h(review.decisionOwner)}</small><p>${h(review.reason)}</p></div></article>`).join("")}</div>`;
+}
+
+function capacityMarkup(result) {
+  if (!result.capacityDecisions.length) return `<p class="muted">No delivery functions derived yet.</p>`;
+  return `<div class="decision-list">${result.capacityDecisions.map((decision) => `<article class="decision-row"><span class="state-badge">${h(decision.state)}</span><div><strong>${h(decision.team)}</strong><small>Capacity Owner: ${h(decision.decisionOwner)}</small><p>${h(decision.meaning)}</p></div></article>`).join("")}</div>`;
+}
+
+function workStructureMarkup(result) {
+  const structure = result.workStructure;
+  const discovery = structure.discoveryPackage ? `<div class="work-record"><span class="record-type">Discovery Work Package</span><strong>${h(structure.discoveryPackage.question)}</strong><small>Done when: ${h(structure.discoveryPackage.doneWhen)} · Timebox: ${h(structure.discoveryPackage.scope)}</small></div>` : "";
+  if (structure.type === "Undetermined") return `${discovery}<p class="muted">${h(structure.reason)}</p>`;
+  if (structure.type === "Epic candidate") return `${discovery}<div class="work-record"><span class="record-type">Epic candidate</span><strong>${h(structure.outcome)}</strong><small>Outcome / Exit Condition: ${h(structure.exitCondition)}</small></div>`;
+  const epics = structure.epics.map((outcome) => `<div class="work-record child-record"><span class="record-type">Epic candidate</span><strong>${h(outcome)}</strong><small>Requires its own Outcome / Exit Condition and Delivery Readiness decisions.</small></div>`).join("");
+  return `${discovery}<div class="work-record"><span class="record-type">Initiative candidate</span><strong>${h(structure.outcome)}</strong><small>${h(structure.reason)}</small></div>${epics}`;
+}
+
+function evidenceTable(headers, rows) {
+  return `<div class="evidence-table-wrap"><table class="evidence-table"><thead><tr>${headers.map((header) => `<th>${h(header)}</th>`).join("")}</tr></thead><tbody>${rows.map((row) => `<tr>${row.map((cell) => `<td>${h(cell)}</td>`).join("")}</tr>`).join("")}</tbody></table></div>`;
+}
+
+function evidenceList(items) {
+  return `<ul>${items.map((item) => `<li>${h(item)}</li>`).join("")}</ul>`;
+}
+
+function capabilityDecisionMarkup() {
+  const decision = state.capabilityDecision;
+  if (!decision) return "";
+
+  const current = decision.currentState;
+  return `<section class="result-card full capability-package">
+    <p class="eyebrow">Detailed Discovery output</p>
+    <h3>Metrics Capability Decision Package</h3>
+    <p class="package-route"><strong>${h(decision.route)}</strong></p>
+    <div class="loop-strip">${decision.invariant.split(" → ").map((step, index) => `<span><b>${index + 1}</b>${h(step)}</span>`).join("")}</div>
+    <p class="muted">This package selects and proves a target. It does not turn selection into migration authority. Implementation, acceptance, Managed Runoff, and reconciliation remain later governed commitments.</p>
+
+    <details open class="evidence-section"><summary>1 · Current-State Baseline and explicit delta</summary>
+      <div class="evidence-body">
+        <div class="baseline-banner"><strong>${h(current.baseline)}</strong><span>${h(current.resolution)}</span></div>
+        <div class="evidence-columns"><div><h4>Authoritative artifacts</h4>${evidenceList(current.artifacts)}</div><div><h4>Live architecture represented</h4>${evidenceList(current.architecture)}</div></div>
+        <h4>Delta since the accepted revision</h4>${evidenceList(current.delta)}
+        <h4>Record boundaries</h4><p>Historical ADRs remain with the systems they govern. Selection produces a Selection Decision Record, not an ADR. If later design makes an architectural decision, that design records it outside this process.</p>${evidenceTable(["Artifact", "Kind", "Boundary"], decision.recordBoundaries.map((item) => [item.id, item.kind, item.purpose]))}
+      </div>
+    </details>
+
+    <details open class="evidence-section"><summary>2 · Measurement ledger</summary>
+      <div class="evidence-body"><p>The ledger freezes the measured Current State before candidate testing begins. Every acceptance threshold traces to the same retained evidence rather than a vendor estimate or an unexplained round number.</p>
+      ${evidenceTable(["ID", "Measure", "Current evidence", "Required measurement method"], decision.measurements.map((item) => [item.id, item.measure, item.currentEvidence, item.method]))}</div>
+    </details>
+
+    <details open class="evidence-section"><summary>3 · Requirements structure</summary>
+      <div class="evidence-body"><p><strong>will</strong> records a proposal fact or buyer obligation; <strong>shall</strong> is mandatory and pass/fail; <strong>should</strong> is a scored comparative goal.</p>
+      ${evidenceTable(["ID", "Force", "Requirement", "Verification"], decision.requirements.map((item) => [item.id, item.force, item.statement, item.verification]))}</div>
+    </details>
+
+    <details open class="evidence-section"><summary>4 · Options and claims</summary>
+      <div class="evidence-body"><p>The current system is an option, not an invisible default. Open source, internal redesign, managed service, and commercial software enter the same evidence system.</p>
+      ${evidenceTable(["Option", "Category", "Claim", "Proof required"], decision.options.map((item) => [item.option, item.category, item.claim, item.proofNeeded]))}</div>
+    </details>
+
+    <details open class="evidence-section"><summary>5 · POC and decision gates</summary>
+      <div class="evidence-body">${evidenceTable(["Gate", "Exercise", "Pass condition"], decision.proofPlan.map((item) => [item.gate, item.exercise, item.pass]))}</div>
+    </details>
+
+    <details open class="evidence-section"><summary>6 · Evidence-System Tailoring</summary>
+      <div class="evidence-body"><p>The logical process is invariant. These are decisions about ceremony, independent roles, procurement controls, and proof depth.</p>
+      ${evidenceTable(["Control", "Disposition", "Rationale"], decision.tailoring.map((item) => [item.control, item.disposition, item.rationale]))}</div>
+    </details>
+
+    <details open class="evidence-section"><summary>7 · Acceptance and reconciliation contract for later implementation</summary>
+      <div class="evidence-body">${evidenceList(decision.futureAcceptance)}</div>
+    </details>
+  </section>`;
 }
 
 function resultMarkup(compact = false) {
@@ -447,14 +288,20 @@ function resultMarkup(compact = false) {
       <p class="eyebrow">Deterministic disposition</p>
       <div class="route">${h(result.disposition.label)}</div>
       <p>${h(result.disposition.summary)}</p>
-      ${result.disposition.key === "proposal" ? `<div class="pill-row"><span class="pill">${h(state.intent)} intent</span><span class="pill">${result.deliverySize} delivery size</span><span class="pill">${h(state.sponsorLevel || "Sponsor level not set")}</span></div>` : ""}
+      ${!["service", "assisted"].includes(result.disposition.key) ? `<div class="pill-row"><span class="pill">${h(state.intent || "Intent missing")}</span><span class="pill">${result.deliverySize} Delivery Size Class</span><span class="pill">${h(result.financialClass.key)} Financial Commitment Class</span></div>` : ""}
     </section>
     <div class="result-grid">
-      <section class="result-card"><h3>Delivery capacity profile</h3><ul><li>Labor: <strong>${result.bands.labor}</strong> (${Number(state.laborDays) || "?"} person-days)</li><li>Duration: <strong>${result.bands.duration}</strong> (${Number(state.durationWeeks) || "?"} weeks)</li><li>Coordination: <strong>${result.bands.coordination}</strong> (${Number(state.activeTeams) || "?"} active teams)</li><li>Overall: <strong>${result.deliverySize}</strong> — highest dimension</li></ul></section>
-      <section class="result-card"><h3>Risk indicators</h3><div class="pill-row">${result.risks.map((risk) => `<span class="pill risk">${h(risk)}</span>`).join("")}</div></section>
-      <section class="result-card"><h3>Proposed stakeholders</h3><div class="pill-row">${result.stakeholders.map((team) => `<span class="pill team">${h(team)}</span>`).join("")}</div></section>
-      <section class="result-card"><h3>Triggered review modules</h3>${result.reviews.length ? `<div class="pill-row">${result.reviews.map((review) => `<span class="pill review">${h(review)}</span>`).join("")}</div>` : `<p class="muted">No proposal review modules triggered.</p>`}</section>
-      ${compact ? "" : `<section class="result-card full"><h3>Hypothetical ticket structure</h3>${ticketTree(result)}<p class="muted" style="margin: .7rem 0 0; font-size: .75rem;">Demonstration only. No ticket has been created.</p></section>`}
+      <section class="result-card"><h3>Delivery Capacity Profile</h3><ul><li>Labor: <strong>${result.bands.labor}</strong> (${Number(state.laborDays) || "?"} person-days)</li><li>Duration: <strong>${result.bands.duration}</strong> (${Number(state.durationWeeks) || "?"} weeks)</li><li>Coordination: <strong>${result.bands.coordination}</strong> (${result.graph.teamIds.length || "?"} implicated teams; ${result.graph.handoffs} derived handoffs)</li><li>Delivery Size Class: <strong>${result.deliverySize}</strong> — highest dimension</li></ul></section>
+      <section class="result-card"><h3>Financial Commitment Class</h3><p><strong>${h(result.financialClass.key)}</strong> · ${h(result.financialClass.label)}</p><p class="muted">Kept separate from delivery capacity and risk.</p></section>
+      <section class="result-card"><h3>Work Proposal Risk Profile</h3><div class="pill-row">${result.risks.map((risk) => `<span class="pill risk">${h(risk)}</span>`).join("")}</div></section>
+      <section class="result-card"><h3>Proposal and framing gaps</h3><h4>Work Proposal evidence</h4><p>${result.proposalMissing.length ? h(result.proposalMissing.join(" · ")) : "Complete enough for review"}</p><h4>Framing</h4><p>${result.framingMissing.length ? h(result.framingMissing.join(" · ")) : "Five-Box Framing Scaffold represented"}</p></section>
+      ${capabilityDecisionMarkup()}
+      <section class="result-card full"><h3>Fictional company operating model</h3>${companyStructureMarkup()}</section>
+      <section class="result-card full"><h3>Northstar service and dependency map</h3>${systemGraphMarkup(result)}</section>
+      <section class="result-card full"><h3>Provisional ordered review route</h3><p class="muted">This browser preview explains why review may be required. Backstage replaces it with the authoritative catalog dependency closure, owning Groups, and reviewer roles before Jira publication.</p>${reviewMarkup(result)}</section>
+      <section class="result-card full"><h3>Capacity Acceptance</h3>${capacityMarkup(result)}</section>
+      <section class="result-card full"><h3>Candidate delivery hierarchy</h3>${workStructureMarkup(result)}<p class="muted">Stories / Work Packages wait for design evidence and one coherent vertical slice with Acceptance Criteria. Tasks wait until a concrete deliverable is known. Candidate records refine planning; they do not rewrite the approved outcome, boundary, requirement, or Acceptance Conditions.</p></section>
+      ${compact ? "" : `<section class="result-card full"><h3>Artifact and authority chain</h3>${artifactTree(result)}<p class="muted" style="margin: .7rem 0 0; font-size: .75rem;">Demonstration only. No request, review record, or delivery item has been created.</p></section>`}
       <section class="result-card full"><h3>Why it routed this way</h3>${result.routing.map((line) => `<div class="logic-line">${h(line)}</div>`).join("")}</section>
     </div>
   </div>`;
@@ -462,10 +309,11 @@ function resultMarkup(compact = false) {
 
 const WIZARD_STEPS = [
   ["Boundary", "Service request or proposal?", boundaryFields],
-  ["Purpose", "What are you trying to change?", purposeFields],
-  ["Reach", "Who and what could this touch?", scopeFields],
-  ["Capacity", "What will delivery consume?", effortFields],
-  ["Routing", "What would the system create?", () => resultMarkup(false)],
+  ["Proposal", "What organizational change is being proposed?", purposeFields],
+  ["Framing", "What kind of thinking does the work require?", framingFields],
+  ["Reach", "Which systems and operating boundaries could this touch?", scopeFields],
+  ["Capacity", "What does the current delivery forecast say?", effortFields],
+  ["Lifecycle", "What may proceed, and what remains undecided?", () => resultMarkup(false)],
 ];
 
 function renderVariantA() {
@@ -477,7 +325,7 @@ function renderVariantA() {
         <h1>Start with facts. Let the route follow.</h1>
         <p class="lede">Requesters answer one kind of question at a time. The form tests the service boundary before it asks for project detail.</p>
         <div class="wizard-steps">${WIZARD_STEPS.map(([label], index) => `<div class="wizard-step ${index === wizardStep ? "current" : ""} ${index < wizardStep ? "done" : ""}"><b>${index < wizardStep ? "✓" : index + 1}</b><span>${label}</span></div>`).join("")}</div>
-        ${wizardStep < 4 ? `<div class="route-preview"><strong>Live route preview</strong><br>${h(evaluate().disposition.label)}<br><span class="muted">Nothing is submitted while you answer.</span></div>` : ""}
+        ${wizardStep < WIZARD_STEPS.length - 1 ? `<div class="route-preview"><strong>Live route preview</strong><br>${h(evaluate().disposition.label)}<br><span class="muted">Nothing is submitted while you answer.</span></div>` : ""}
       </aside>
       <section class="wizard-card">
         <p class="eyebrow">Step ${wizardStep + 1} of ${WIZARD_STEPS.length}</p>
@@ -502,9 +350,10 @@ function renderVariantB() {
     <div class="worksheet-layout">
       <form class="worksheet" onsubmit="return false">
         <section class="worksheet-section"><div class="section-heading"><h2>1. Service boundary</h2><span>Always first</span></div>${boundaryFields()}</section>
-        <section class="worksheet-section"><div class="section-heading"><h2>2. Purpose and authority</h2><span>Decision-critical</span></div>${purposeFields()}</section>
-        <section class="worksheet-section"><div class="section-heading"><h2>3. Reach and dependencies</h2><span>Fact-derived routing</span></div>${scopeFields()}</section>
-        <section class="worksheet-section"><div class="section-heading"><h2>4. Delivery capacity</h2><span>Highest dimension wins</span></div>${effortFields()}</section>
+        <section class="worksheet-section"><div class="section-heading"><h2>2. Work Proposal evidence</h2><span>Authenticated demand</span></div>${purposeFields()}</section>
+        <section class="worksheet-section"><div class="section-heading"><h2>3. Five-Box Framing Scaffold</h2><span>Before design</span></div>${framingFields()}</section>
+        <section class="worksheet-section"><div class="section-heading"><h2>4. Reach and dependencies</h2><span>Fact-derived routing</span></div>${scopeFields()}</section>
+        <section class="worksheet-section"><div class="section-heading"><h2>5. Delivery Capacity Profile</h2><span>Forecast, not requester size</span></div>${effortFields()}</section>
       </form>
       <aside class="live-result"><p class="eyebrow">Live intake artifact</p>${resultMarkup(false)}</aside>
     </div>
@@ -529,8 +378,9 @@ function routingMap() {
       <div class="map-node ${!service ? "active" : "dim"}"><strong>Material work candidate</strong><small>Continue only when service work is ruled out</small></div>
     </div>
     <div class="map-node ${blocked ? "active" : service ? "dim" : ""}"><strong>2 · Confirm sponsorship</strong><small>${state.sponsor ? h(state.sponsor) : "No sponsor named"}</small></div>
-    <div class="map-node ${assisted ? "active" : service || blocked ? "dim" : ""}"><strong>3 · Check decision-critical information</strong><small>${result.missing.length ? `Missing: ${h(result.missing.join(", "))}` : "Required information is present"}</small></div>
-    <div class="map-node ${proposal ? "active" : "dim"}"><strong>4 · Assemble modular review</strong><small>${result.reviews.length} review modules and ${result.stakeholders.length} proposed stakeholders</small></div>
+    <div class="map-node ${assisted || result.disposition.key === "draft" ? "active" : service || blocked ? "dim" : ""}"><strong>3 · Establish Proposal Readiness</strong><small>${result.proposalMissing.length ? `Missing evidence: ${h(result.proposalMissing.join(", "))}` : "Work Proposal evidence is present"}</small></div>
+    <div class="map-node ${result.framingMissing.length ? "active" : service || blocked ? "dim" : ""}"><strong>4 · Frame before design</strong><small>${result.framingMissing.length ? `Missing: ${h(result.framingMissing.join(", "))}` : `${h(state.intent || "Unknown")} intent; ${result.workStructure.discoveryPackage ? "bounded Discovery required" : "no Discovery package derived"}`}</small></div>
+    <div class="map-node ${proposal ? "active" : "dim"}"><strong>5 · Begin ordered review</strong><small>${result.reviews.length} provisional review records; Backstage re-derives the authoritative route before Jira publication; ${result.capacityDecisions.length} later Capacity Acceptance decisions</small></div>
   </div>`;
 }
 
@@ -550,7 +400,9 @@ function renderVariantC() {
           <div class="chat-question">${boundaryFields()}</div>
           <div class="bubble">Give me the minimum evidence needed to test proposal readiness.</div>
           <div class="chat-question">${purposeFields()}</div>
-          <div class="bubble">Now describe reach, dependencies, and expected delivery capacity.</div>
+          <div class="bubble">Frame the work before anyone converges on design or implementation.</div>
+          <div class="chat-question">${framingFields()}</div>
+          <div class="bubble">Now identify systems and operating boundaries. The organization derives teams and reviews from those facts.</div>
           <div class="chat-question">${scopeFields()}${effortFields()}</div>
         </div>
       </section>
@@ -577,7 +429,7 @@ function bindInteractions() {
       if (control.type === "radio" && ["true", "false"].includes(control.value)) state[field] = control.value === "true";
       else if (control.type === "number") state[field] = Number(control.value);
       else state[field] = control.value;
-      state.scenario = "Custom";
+      markCustom();
       setScenarioInUrl("Custom");
       const variant = currentVariant();
       if ((variant === "B" || variant === "C") && eventName === "change") render();
@@ -591,10 +443,10 @@ function bindInteractions() {
     });
   });
 
-  document.querySelectorAll("[data-domain]").forEach((control) => control.addEventListener("change", () => {
-    const domain = control.dataset.domain;
-    state.domains = control.checked ? [...new Set([...state.domains, domain])] : state.domains.filter((item) => item !== domain);
-    state.scenario = "Custom";
+  document.querySelectorAll("[data-system]").forEach((control) => control.addEventListener("change", () => {
+    const system = control.dataset.system;
+    state.affectedSystems = control.checked ? [...new Set([...state.affectedSystems, system])] : state.affectedSystems.filter((item) => item !== system);
+    markCustom();
     setScenarioInUrl("Custom");
     render();
   }));
@@ -607,12 +459,17 @@ function bindInteractions() {
   }));
 }
 
+function markCustom() {
+  if (state.scenario !== "Custom" && state.proposalId) state.proposalRevision = Number(state.proposalRevision) + 1;
+  state.scenario = "Custom";
+}
+
 function updateLightweightOutputs() {
   // Wizard inputs can update without stealing focus. Full result appears in step five.
   const preview = document.querySelector(".wizard-intro .route-preview");
   if (preview) preview.innerHTML = `<strong>Live route preview</strong><br>${h(evaluate().disposition.label)}<br><span class="muted">Nothing is submitted while you answer.</span>`;
   const capacity = document.querySelector(".wizard-card .route-preview");
-  if (capacity && wizardStep === 3) {
+  if (capacity && wizardStep === 4) {
     const result = evaluate();
     capacity.innerHTML = `<strong>Current size calculation: ${result.deliverySize}</strong><br>Labor: ${result.bands.labor} · Duration: ${result.bands.duration} · Coordination: ${result.bands.coordination}<br>The highest dimension wins. Four XS dimensions could not cancel one XL dimension.`;
   }
@@ -631,6 +488,25 @@ document.addEventListener("keydown", (event) => {
   if (!["ArrowLeft", "ArrowRight"].includes(event.key)) return;
   if (event.target.matches("input, textarea, select, [contenteditable]")) return;
   cycleVariant(event.key === "ArrowLeft" ? -1 : 1);
+});
+
+window.addEventListener("message", (event) => {
+  if (event.source !== window.parent || event.origin !== window.location.origin) return;
+  if (event.data?.type !== "northstar:work-intake:artifact-request") return;
+
+  try {
+    window.parent.postMessage({
+      type: "northstar:work-intake:artifact-response",
+      requestId: event.data.requestId,
+      artifact: domainModel.publicationArtifact(state),
+    }, event.origin);
+  } catch (error) {
+    window.parent.postMessage({
+      type: "northstar:work-intake:artifact-response",
+      requestId: event.data.requestId,
+      error: error instanceof Error ? error.message : String(error),
+    }, event.origin);
+  }
 });
 
 render();

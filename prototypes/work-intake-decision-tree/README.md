@@ -1,6 +1,16 @@
 # Work Intake Decision Tree — Throwaway Prototype
 
-This static prototype demonstrates how a fictional software engineering company might gather factual intake information and translate it into deterministic routing guidance. It does not connect to Jira, ServiceNow, or any other ticketing system, and it does not create tickets.
+This static prototype demonstrates how a fictional research-technology company might turn authenticated demand into a service route, a framed Work Proposal, ordered review records, and candidate delivery records without pretending that routing is authorization or Capacity Acceptance.
+
+Its language and lifecycle come from:
+
+- `Work-Intake-Is-an-Organizational-System.md`;
+- `Framing-Technical-Work-Before-Design.md`; and
+- `Writing Work Items - Epics, Stories, and Tasks.md`;
+- `RFPs-and-Vendor-Selection-as-Evidence-Systems.md`; and
+- `0.rfp-process-notes.md`.
+
+When run by itself, it does not connect to Jira, ServiceNow, or any other ticketing system, and it does not create requests, reviews, approvals, or delivery work. When embedded by the sibling Backstage prototype, it can provide a versioned publication artifact only after an explicit request from its same-origin host. Backstage owns the publication action and the Jira connection.
 
 ## Run it
 
@@ -20,11 +30,29 @@ The three deliberately different layouts share the same questions and routing en
 
 Use the floating arrows or the keyboard's left and right arrow keys to switch variants. The URL remains shareable.
 
-Scenario presets populate fictional examples for a metrics-platform migration, an SSO migration, and an identity-provider migration.
+Scenario presets populate evidence-complete fictional examples for a metrics capability selection, an SSO migration, and identity-platform Discovery. Their counts, component inventories, measurements, costs, dates, requirements, failure conditions, and acceptance thresholds are internally consistent demonstrations, not statements about a real organization.
+
+The metrics scenario is deliberately much deeper than the others. It treats RFP logic as the invariant Capability Decision Loop for internal redesign, open-source adoption, vendor selection, or retaining the current system. Its result includes a referenced Current-State Baseline and explicit delta, explicit record boundaries, a measurement ledger, `will` / `shall` / `should` requirements, option claims, POC gates, Evidence-System Tailoring decisions, and the acceptance contract a later implementation proposal must satisfy. Historical ADRs remain with the systems they govern; selection produces a Selection Decision Record, not an ADR.
+
+## Fictional company
+
+Northstar Research Network operates shared research-computing and secure data-transfer services for universities and medical-research institutions. Its operating model includes Network Engineering, Systems Engineering, Data Center Operations, Platform Engineering, SRE, Application Engineering, Data Platform Engineering, Identity Engineering, Security, Architecture, Portfolio, Finance, and Privacy.
+
+The prototype names the systems those teams own and models cross-system dependencies. Selecting an affected system derives additional dependencies, technical reviewers, and Capacity Owners. Those derived routes remain claims about participation: they do not commit another team's capacity.
+
+## Code shape
+
+- `model.js` contains the pure fictional-company and lifecycle logic.
+- `app.js` is the throwaway browser shell shared by the three interaction variants.
+- `styles.css` is intentionally prototype-only presentation.
 
 ## Prototype boundaries
 
 - All state is in browser memory.
+- The standalone prototype has no publication control; only its Backstage host can request the current artifact.
 - All routing is deterministic JavaScript, not AI.
-- Ticket identifiers, stakeholders, reviews, and subtasks are illustrative.
+- Proposal identifiers, people, systems, review rules, financial thresholds, and sizing thresholds are illustrative.
+- A reviewable Work Proposal is not shown as an Authorized Work Proposal.
+- Candidate Initiatives, Epics, and Discovery Work Packages are planning outputs, not authorized implementation.
+- Every scenario's architecture, identifiers, changes, workload, people, dates, costs, and requirements are fictional. The one-month, three-month, and two-year retention topology is informed by an earlier implementation pattern, but every number shown by the prototype was created for Northstar and does not disclose a real company's production measurements.
 - This code intentionally lacks production hardening and should be deleted or rewritten after it answers the design question.

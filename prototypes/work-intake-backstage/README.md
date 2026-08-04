@@ -26,7 +26,20 @@ The frontend listens on <http://localhost:3000> and the backend listens on
 Backstage exposes the decision-tree prototype at
 <http://localhost:3000/work-intake> and adds **Work Intake** to its navigation.
 The page embeds the existing `prototypes/work-intake-decision-tree` interface
-inside the Backstage shell.
+inside the Backstage shell. Its native toolbar checks the Jira connection and
+provides the only **Publish to Jira** action. Select a scenario in the embedded
+prototype, inspect or edit it, and publish when its route is **Work Proposal —
+Ready for Ordered Review**.
+
+The embedded prototype sends a versioned publication artifact to its Backstage
+host on request. The Backstage frontend discovers the backend plugin through
+Backstage service discovery; the backend validates the artifact and invokes the
+Jira publisher. Atlassian credentials never enter the browser. Backstage catalog
+entities remain the authority for ownership, dependencies, and Jira routing.
+System dependency edges are catalog annotations under
+`northstar.example/depends-on`; Jira review projections are rebuilt from that
+catalog closure and the owning Groups instead of trusting review or project
+claims supplied by the browser artifact.
 
 `packages/app/public/work-intake-assets` contains relative symbolic links to the
 prototype's four runtime files rather than copies. The original HTML, CSS, and
@@ -36,6 +49,25 @@ helper files; reload the Backstage page to see prototype changes.
 The project-local `yarn` wrapper runs the Yarn release pinned under `.yarn/`.
 It exists because Fedora's Node.js package does not install a global Yarn or
 Corepack launcher.
+
+### Fresh-checkout demo setup
+
+On another machine with Node.js 22 or 24 and the same repository checkout:
+
+```sh
+cd prototypes/work-intake-backstage
+./yarn install
+chmod 600 ~/.atlassian.env
+./yarn jira:bootstrap
+./yarn start
+```
+
+The bootstrap command above is a non-mutating preview and verifies the Backstage
+catalog, Jira credentials, and required project set. Use
+`./yarn jira:bootstrap --apply` only when the fictional projects are absent. No
+Jira records need to be populated by hand. Open <http://localhost:3000>, enter as
+the guest user, select **Work Intake**, and choose **Metrics selection** for the
+complete demonstration.
 
 ## Run as a user service
 
@@ -134,8 +166,8 @@ That check is deliberate: completing intake or clearing specialist review does
 not commit a delivery team's capacity. Candidate work remains in the artifact
 when those decisions do not exist.
 
-The metrics example is a Reviewable Work Proposal, so its dry run shows nine
-`NWI` projections and no delivery issues:
+The metrics example is a Reviewable Work Proposal, so its dry run shows the
+catalog-derived `NWI` proposal and review projections with no delivery issues:
 
 ```sh
 ./yarn jira:publish:sample
@@ -157,3 +189,7 @@ stops on an indeterminate create instead of risking a duplicate. Set
 `JIRA_PUBLICATION_LEDGER` to move the ledger. Cross-project delivery
 dependencies use Jira issue links; candidate delivery records are related
 to—but are not children of—the intake record.
+
+The same publisher is exposed through the Work Intake page. Repeated clicks are
+safe: the owner-only ledger and Jira labels reconcile the same proposal revision
+and local record ids to the existing issues instead of creating duplicates.

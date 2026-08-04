@@ -38,6 +38,14 @@ export function toAdf(value) {
   return { version: 1, type: 'doc', content };
 }
 
+export function jiraIssueMatchesProjection(existing, projection) {
+  return (
+    existing?.fields?.summary === projection.summary &&
+    JSON.stringify(existing?.fields?.description) ===
+      JSON.stringify(toAdf(projection.description))
+  );
+}
+
 export class BackstageCatalogClient {
   constructor({ baseUrl = 'http://localhost:7007', fetchImpl = fetch }) {
     this.baseUrl = normalizedBaseUrl(baseUrl, 'Backstage base URL');
@@ -126,7 +134,7 @@ export class JiraClient {
     const jql = `project = "${projectKey}" AND labels = "${publicationLabel}"`;
     const query = new URLSearchParams({
       jql,
-      fields: 'key,summary',
+      fields: 'key,summary,description',
       maxResults: '2',
     });
     const result = await this.request(`/search/jql?${query}`);
@@ -151,6 +159,7 @@ export class JiraClient {
             value: {
               localId: issue.localId,
               publicationLabel: issue.publicationLabel,
+              fingerprint: issue.fingerprint,
             },
           },
         ],

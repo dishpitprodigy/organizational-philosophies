@@ -15,6 +15,7 @@
     "clean": "backstage-cli repo clean",
     "test": "backstage-cli repo test",
     "test:jira": "node --test scripts/jira/*.test.mjs",
+    "test:decision-tree": "node --test ../work-intake-decision-tree/model.test.js",
     "jira:bootstrap": "node scripts/jira/bootstrap.mjs",
     "jira:publish:sample": "node scripts/jira/publish.mjs examples/northstar/metrics-work-proposal.json",
     "test:all": "backstage-cli repo test --coverage",

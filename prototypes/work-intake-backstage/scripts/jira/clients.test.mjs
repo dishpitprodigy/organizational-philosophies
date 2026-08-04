@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
 
-import { JiraClient, toAdf } from './clients.mjs';
+import { JiraClient, jiraIssueMatchesProjection, toAdf } from './clients.mjs';
 
 function jsonResponse(body, status = 200) {
   return new Response(JSON.stringify(body), {
@@ -123,4 +123,32 @@ test('plain text descriptions become Atlassian Document Format paragraphs', () =
       },
     ],
   });
+});
+
+test('an existing Jira issue must match the current publication projection', () => {
+  const projection = { summary: 'Expected', description: 'Current State' };
+  assert.equal(
+    jiraIssueMatchesProjection(
+      {
+        fields: {
+          summary: 'Expected',
+          description: toAdf('Current State'),
+        },
+      },
+      projection,
+    ),
+    true,
+  );
+  assert.equal(
+    jiraIssueMatchesProjection(
+      {
+        fields: {
+          summary: 'Expected',
+          description: toAdf('Different State'),
+        },
+      },
+      projection,
+    ),
+    false,
+  );
 });

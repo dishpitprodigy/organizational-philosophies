@@ -6,6 +6,7 @@ import {
   buildPublicationPlan,
   firstPositionalArgument,
   publicationLabel,
+  projectionFingerprint,
   resolveArtifactRouting,
 } from './planning.mjs';
 
@@ -14,7 +15,10 @@ const groups = [
     metadata: {
       name: 'sre',
       title: 'Site Reliability Engineering',
-      annotations: { 'northstar.example/jira-project-key': 'SRE' },
+      annotations: {
+        'northstar.example/jira-project-key': 'SRE',
+        'northstar.example/technical-reviewer-role': 'Principal SRE',
+      },
     },
     spec: { type: 'team' },
   },
@@ -22,7 +26,11 @@ const groups = [
     metadata: {
       name: 'platform',
       title: 'Platform Engineering',
-      annotations: { 'northstar.example/jira-project-key': 'PLATFORM' },
+      annotations: {
+        'northstar.example/jira-project-key': 'PLATFORM',
+        'northstar.example/technical-reviewer-role':
+          'Principal Platform Engineer',
+      },
     },
     spec: { type: 'team' },
   },
@@ -30,7 +38,10 @@ const groups = [
     metadata: {
       name: 'security',
       title: 'Information Security',
-      annotations: { 'northstar.example/jira-project-key': 'SECURITY' },
+      annotations: {
+        'northstar.example/jira-project-key': 'SECURITY',
+        'northstar.example/technical-reviewer-role': 'Security Review Board',
+      },
     },
     spec: { type: 'governance' },
   },
@@ -97,6 +108,10 @@ const artifact = {
       state: 'Waiting for predecessor',
     },
   ],
+  routingRequest: {
+    affectedEntities: ['component:default/metrics-service'],
+    facts: { production: true },
+  },
   candidateDelivery: {
     authorized: false,
     reason: 'No Authorized Work Proposal or Capacity Acceptance exists.',
@@ -120,7 +135,11 @@ const catalogEntities = [
     kind: 'Group',
     metadata: {
       name: 'sre',
-      annotations: { 'northstar.example/jira-project-key': 'SRE' },
+      title: 'Site Reliability Engineering',
+      annotations: {
+        'northstar.example/jira-project-key': 'SRE',
+        'northstar.example/technical-reviewer-role': 'Principal SRE',
+      },
     },
     spec: { type: 'team' },
   },
@@ -129,7 +148,12 @@ const catalogEntities = [
     kind: 'Group',
     metadata: {
       name: 'platform',
-      annotations: { 'northstar.example/jira-project-key': 'PLATFORM' },
+      title: 'Platform Engineering',
+      annotations: {
+        'northstar.example/jira-project-key': 'PLATFORM',
+        'northstar.example/technical-reviewer-role':
+          'Principal Platform Engineer',
+      },
     },
     spec: { type: 'team' },
   },
@@ -138,18 +162,42 @@ const catalogEntities = [
     kind: 'Group',
     metadata: {
       name: 'security',
-      annotations: { 'northstar.example/jira-project-key': 'SECURITY' },
+      annotations: {
+        'northstar.example/jira-project-key': 'SECURITY',
+        'northstar.example/technical-reviewer-role': 'Security Review Board',
+      },
     },
     spec: { type: 'governance' },
   },
+  ...[
+    ['portfolio', 'Technology Portfolio Council'],
+    ['privacy', 'Privacy Counsel'],
+    ['finance', 'Technology Finance Partner'],
+    ['architecture', 'Architecture Review Council'],
+  ].map(([name, reviewer]) => ({
+    apiVersion: 'backstage.io/v1alpha1',
+    kind: 'Group',
+    metadata: {
+      name,
+      annotations: {
+        'northstar.example/technical-reviewer-role': reviewer,
+      },
+    },
+    spec: { type: 'governance' },
+  })),
   {
     apiVersion: 'backstage.io/v1alpha1',
     kind: 'Component',
-    metadata: { name: 'metrics-service' },
-    relations: [
-      { type: 'ownedBy', targetRef: 'group:default/sre' },
-      { type: 'dependsOn', targetRef: 'component:default/container-runtime' },
-    ],
+    metadata: {
+      name: 'metrics-service',
+      tags: ['production'],
+      annotations: {
+        'northstar.example/work-intake-review-profile':
+          'production-observability',
+        'northstar.example/depends-on': 'component:default/container-runtime',
+      },
+    },
+    relations: [{ type: 'ownedBy', targetRef: 'group:default/sre' }],
   },
   {
     apiVersion: 'backstage.io/v1alpha1',
@@ -160,22 +208,27 @@ const catalogEntities = [
 ];
 
 test('reviewable proposal publishes intake and review projections, not candidate delivery', () => {
-  const plan = buildPublicationPlan(artifact);
-
-  assert.deepEqual(
-    plan.issues.map(issue => [
-      issue.localId,
-      issue.projectKey,
-      issue.issueType,
-    ]),
-    [
-      ['proposal', 'NWI', 'Epic'],
-      ['review-1', 'NWI', 'Task'],
-      ['review-2', 'NWI', 'Task'],
-    ],
+  const plan = buildPublicationPlan(
+    resolveArtifactRouting(artifact, catalogEntities),
   );
+
+  assert.deepEqual(plan.issues[0], {
+    ...plan.issues[0],
+    localId: 'proposal',
+    projectKey: 'NWI',
+    issueType: 'Epic',
+  });
+  assert.ok(plan.issues.slice(1).every(issue => issue.projectKey === 'NWI'));
+  assert.ok(plan.issues.slice(1).every(issue => issue.issueType === 'Task'));
   assert.equal(plan.links.length, 0);
   assert.match(plan.notes[0], /Candidate delivery was not published/);
+});
+
+test('publication planning rejects reviews that were not resolved by Backstage', () => {
+  assert.throws(
+    () => buildPublicationPlan(artifact),
+    /must be resolved through the Backstage catalog/,
+  );
 });
 
 test('authorized candidate delivery is routed but remains outside the intake hierarchy', () => {
@@ -213,7 +266,9 @@ test('authorized candidate delivery is routed but remains outside the intake hie
   );
 
   assert.deepEqual(
-    plan.issues.slice(3).map(issue => [issue.localId, issue.projectKey]),
+    plan.issues
+      .filter(issue => issue.localId.startsWith('delivery-'))
+      .map(issue => [issue.localId, issue.projectKey]),
     [
       ['delivery-metrics-discovery', 'SRE'],
       ['delivery-platform-readiness', 'PLATFORM'],
@@ -277,6 +332,51 @@ test('Backstage resolves ownership, project routing, and dependency closure', ()
   });
 });
 
+test('Backstage replaces artifact review claims with catalog-derived review routing', () => {
+  const request = structuredClone(artifact);
+  request.reviews = [
+    {
+      stage: 99,
+      name: 'Requester-chosen review',
+      decisionOwner: 'Requester',
+      state: 'Approved',
+    },
+  ];
+  request.routingRequest = {
+    affectedEntities: ['component:default/metrics-service'],
+    facts: { purchase: true, intent: 'Redesign' },
+  };
+
+  const routed = resolveArtifactRouting(request, catalogEntities);
+  assert.deepEqual(routed.routingRequest.routingEvidence, {
+    source: 'backstage-catalog',
+    affectedEntities: [
+      'component:default/metrics-service',
+      'component:default/container-runtime',
+    ],
+  });
+  assert.deepEqual(
+    routed.reviews.map(review => [
+      review.stage,
+      review.name,
+      review.decisionOwner,
+    ]),
+    [
+      [1, 'Administrative Authority Review', 'Technology Portfolio Council'],
+      [2, 'Security Review Board', 'Security Review Board'],
+      [3, 'Finance & Procurement Review', 'Technology Finance Partner'],
+      [3, 'Architecture Review', 'Architecture Review Council'],
+      [3, 'Reliability & Operations Review', 'Principal SRE'],
+      [3, 'Site Reliability Engineering Technical Review', 'Principal SRE'],
+      [
+        3,
+        'Platform Engineering Technical Review',
+        'Principal Platform Engineer',
+      ],
+    ],
+  );
+});
+
 test('governance groups cannot own candidate delivery', () => {
   const invalid = structuredClone(artifact);
   invalid.candidateDelivery.records[0].ownerEntity = 'group:default/security';
@@ -284,6 +384,29 @@ test('governance groups cannot own candidate delivery', () => {
     () => resolveArtifactRouting(invalid, catalogEntities),
     /must resolve to a Backstage delivery team/,
   );
+});
+
+test('artifact cannot route delivery through a team that owns no affected entity', () => {
+  const invalid = structuredClone(artifact);
+  invalid.candidateDelivery.records[0].ownerEntity = 'group:default/platform';
+  invalid.candidateDelivery.records[0].affectedEntities = [
+    'component:default/metrics-service',
+  ];
+  catalogEntities.find(
+    entity => entity.metadata?.name === 'metrics-service',
+  ).metadata.annotations['northstar.example/depends-on'] = '';
+
+  try {
+    assert.throws(
+      () => resolveArtifactRouting(invalid, catalogEntities),
+      /does not show group:default\/platform owning an affected entity/,
+    );
+  } finally {
+    catalogEntities.find(
+      entity => entity.metadata?.name === 'metrics-service',
+    ).metadata.annotations['northstar.example/depends-on'] =
+      'component:default/container-runtime';
+  }
 });
 
 test('authorization must govern the exact proposal revision', () => {
@@ -345,6 +468,14 @@ test('publication labels are deterministic and Jira-safe', () => {
     publicationLabel('WP-2026-0042', 0, 'review-1'),
     /^nwi-[a-f0-9]{16}$/,
   );
+});
+
+test('projection fingerprints change when Jira-visible content changes', () => {
+  const issue = buildPublicationPlan(
+    resolveArtifactRouting(artifact, catalogEntities),
+  ).issues[0];
+  const changed = { ...issue, description: `${issue.description}\nchanged` };
+  assert.notEqual(projectionFingerprint(issue), projectionFingerprint(changed));
 });
 
 test('publish CLI selects the artifact after Node and script arguments', () => {

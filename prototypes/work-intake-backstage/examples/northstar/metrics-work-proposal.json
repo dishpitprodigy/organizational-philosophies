@@ -20,56 +20,25 @@
       "Acceptance authorizes implementation planning only; it does not authorize migration, create delivery capacity, or create an ADR."
     ]
   },
-  "reviews": [
-    {
-      "stage": 1,
-      "name": "Administrative Authority Review",
-      "decisionOwner": "Technology Portfolio Council",
-      "state": "Ready for review"
-    },
-    {
-      "stage": 2,
-      "name": "Security Review Board",
-      "decisionOwner": "Security Review Board",
-      "state": "Waiting for predecessor"
-    },
-    {
-      "stage": 3,
-      "name": "Finance & Procurement Review",
-      "decisionOwner": "Technology Finance Partner",
-      "state": "Waiting for predecessor"
-    },
-    {
-      "stage": 3,
-      "name": "Architecture Review",
-      "decisionOwner": "Architecture Review Council",
-      "state": "Waiting for predecessor"
-    },
-    {
-      "stage": 3,
-      "name": "Reliability & Operations Review",
-      "decisionOwner": "Principal SRE",
-      "state": "Waiting for predecessor"
-    },
-    {
-      "stage": 3,
-      "name": "Network Engineering Technical Review",
-      "decisionOwner": "Principal Network Engineer",
-      "state": "Waiting for predecessor"
-    },
-    {
-      "stage": 3,
-      "name": "Platform Engineering Technical Review",
-      "decisionOwner": "Principal Platform Engineer",
-      "state": "Waiting for predecessor"
-    },
-    {
-      "stage": 3,
-      "name": "Site Reliability Engineering Technical Review",
-      "decisionOwner": "Principal SRE",
-      "state": "Waiting for predecessor"
+  "routingRequest": {
+    "affectedEntities": [
+      "system:default/metrics-alerting-platform",
+      "system:default/researcher-portal",
+      "system:default/compute-scheduler",
+      "system:default/secure-data-transfer",
+      "system:default/container-platform"
+    ],
+    "facts": {
+      "purchase": true,
+      "spendUsd": 1200000,
+      "production": false,
+      "customerFacing": false,
+      "sensitiveData": false,
+      "authenticationPath": false,
+      "internetExposed": false,
+      "intent": "Discovery"
     }
-  ],
+  },
   "candidateDelivery": {
     "authorized": false,
     "reason": "The artifact is a Reviewable Work Proposal. Required review decisions, an Authorized Work Proposal, Planning Interval, and Capacity Acceptances do not yet exist.",
