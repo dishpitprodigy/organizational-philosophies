@@ -28,9 +28,10 @@ Backstage exposes the decision-tree prototype at
 The page embeds the existing `prototypes/work-intake-decision-tree` interface
 inside the Backstage shell.
 
-`packages/app/public/work-intake-assets` is a relative symbolic link to that
-prototype rather than a copy. The original HTML, CSS, and JavaScript therefore
-remain the source of truth; reload the Backstage page to see prototype changes.
+`packages/app/public/work-intake-assets` contains relative symbolic links to the
+prototype's four runtime files rather than copies. The original HTML, CSS, and
+JavaScript therefore remain the source of truth without publishing its notes or
+helper files; reload the Backstage page to see prototype changes.
 
 The project-local `yarn` wrapper runs the Yarn release pinned under `.yarn/`.
 It exists because Fedora's Node.js package does not install a global Yarn or

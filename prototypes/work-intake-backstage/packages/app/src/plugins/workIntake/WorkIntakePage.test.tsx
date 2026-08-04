@@ -7,7 +7,7 @@ describe('WorkIntakePage', () => {
 
     expect(screen.getByTitle('Northstar Work Intake')).toHaveAttribute(
       'src',
-      '/work-intake-assets/index.html',
+      'work-intake-assets/index.html',
     );
   });
 });
