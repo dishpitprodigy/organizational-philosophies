@@ -21,6 +21,17 @@ To start the app, run:
 The frontend listens on <http://localhost:3000> and the backend listens on
 <http://localhost:7007>.
 
+## Work Intake page
+
+Backstage exposes the decision-tree prototype at
+<http://localhost:3000/work-intake> and adds **Work Intake** to its navigation.
+The page embeds the existing `prototypes/work-intake-decision-tree` interface
+inside the Backstage shell.
+
+`packages/app/public/work-intake-assets` is a relative symbolic link to that
+prototype rather than a copy. The original HTML, CSS, and JavaScript therefore
+remain the source of truth; reload the Backstage page to see prototype changes.
+
 The project-local `yarn` wrapper runs the Yarn release pinned under `.yarn/`.
 It exists because Fedora's Node.js package does not install a global Yarn or
 Corepack launcher.
