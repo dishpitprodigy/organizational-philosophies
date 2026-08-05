@@ -6,10 +6,11 @@ After=network.target
 [Service]
 Type=simple
 WorkingDirectory=%h/Documents/code/dishpitprodigy/organizational-philosophies/prototypes/work-intake-backstage
-ExecStart=%h/Documents/code/dishpitprodigy/organizational-philosophies/prototypes/work-intake-backstage/yarn start
+ExecStart=%h/Documents/code/dishpitprodigy/organizational-philosophies/prototypes/work-intake-backstage/yarn start --config %h/Documents/code/dishpitprodigy/organizational-philosophies/prototypes/work-intake-backstage/app-config.yaml --config %h/Documents/code/dishpitprodigy/organizational-philosophies/prototypes/work-intake-backstage/app-config.lan.yaml
 Environment=NODE_ENV=development
 Environment=PATH=/usr/local/bin:/usr/bin:/bin
 EnvironmentFile=-%h/.config/work-intake-backstage/environment
+EnvironmentFile=%h/.config/work-intake-backstage/lan-environment
 Restart=on-failure
 RestartSec=3s
 TimeoutStopSec=20s

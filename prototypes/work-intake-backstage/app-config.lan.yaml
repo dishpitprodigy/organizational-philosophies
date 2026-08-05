@@ -1,0 +1,15 @@
+app:
+  baseUrl: ${WORK_INTAKE_PUBLIC_URL}
+  listen:
+    host: 127.0.0.1
+    port: 3000
+
+backend:
+  baseUrl: ${WORK_INTAKE_PUBLIC_URL}
+  listen:
+    host: 127.0.0.1
+    port: 7007
+  cors:
+    origin: ${WORK_INTAKE_PUBLIC_URL}
+    methods: [GET, HEAD, PATCH, POST, PUT, DELETE]
+    credentials: true

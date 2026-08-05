@@ -567,6 +567,67 @@
     const missing = fields.filter(([key]) => !String(state[key] || "").trim()).map(([, label]) => label);
     if (!(state.affectedSystems || []).length) missing.push("Dependencies / affected systems");
     if (state.knownUnknowns && !String(state.uncertaintyQuestion || "").trim()) missing.push("Known Uncertainty");
+    if (state.guided?.enforce) missing.push(...missingGuidedProposalEvidence(state.guided));
+    return [...new Set(missing)];
+  }
+
+  function missingGuidedProposalEvidence(guided) {
+    const missing = [];
+    const absent = (value) => !String(value || "").trim();
+    const current = guided.currentState || {};
+    if (absent(current.baselineMode)) missing.push("Current State: baseline method");
+    if (current.baselineMode === "reference" && absent(current.baselineReference)) missing.push("Current State: authoritative baseline reference");
+    if (current.baselineMode === "reference" && absent(current.delta)) missing.push("Current State: explicit delta from accepted baseline");
+    if (absent(current.architecture)) missing.push("Current State: architecture and operating path");
+    if (absent(current.measurements)) missing.push("Current State: measured production workload or explicit Discovery obligation");
+    if (absent(current.constraints)) missing.push("Current State: failure, lifecycle, cost, and operator evidence");
+
+    const outcome = guided.outcome || {};
+    if (absent(outcome.scope)) missing.push("Desired Outcome: operating scope");
+    if (absent(outcome.capability)) missing.push("Desired Outcome: capability or removed failure mode");
+    if (absent(outcome.proof)) missing.push("Desired Outcome: decisive proof");
+    if (absent(outcome.horizon)) missing.push("Desired Outcome: operating horizon or event");
+
+    const difference = guided.difference || {};
+    if (absent(difference.preserve)) missing.push("Required Difference: preserved contracts or outcomes");
+    if (absent(difference.change)) missing.push("Required Difference: measured conditions that must change");
+    if (absent(difference.evidence)) missing.push("Required Difference: common evidence basis");
+
+    const requirements = guided.requirements || [];
+    if (!requirements.length) missing.push("Requirements: at least one testable condition");
+    requirements.forEach((item, index) => {
+      const label = `Requirement ${index + 1}`;
+      if (absent(item.force)) missing.push(`${label}: will / shall / should force`);
+      if (absent(item.id)) missing.push(`${label}: stable identifier`);
+      if (absent(item.condition)) missing.push(`${label}: operating condition`);
+      if (absent(item.verification)) missing.push(`${label}: verification method`);
+    });
+
+    const acceptance = guided.acceptance || [];
+    if (!acceptance.length) missing.push("Acceptance Conditions: at least one observable result");
+    acceptance.forEach((item, index) => {
+      if (absent(item.evidence)) missing.push(`Acceptance Condition ${index + 1}: observable result`);
+      if (absent(item.verification)) missing.push(`Acceptance Condition ${index + 1}: retained proof`);
+    });
+
+    const nonGoals = guided.nonGoals || [];
+    if (!nonGoals.length || nonGoals.every((item) => absent(item.exclusion))) missing.push("Non-Goals: at least one explicit boundary");
+
+    const timing = guided.timing || {};
+    if (absent(timing.event)) missing.push("Timing Evidence: event and latest useful date");
+    if (absent(timing.evidence)) missing.push("Timing Evidence: source");
+    if (absent(timing.missedDecision)) missing.push("Timing Evidence: unavailable decision or outcome");
+    if (absent(timing.fallback)) missing.push("Timing Evidence: fallback if missed");
+
+    const dependencies = guided.dependencies || [];
+    if (!dependencies.length) missing.push("Dependency evidence: non-catalog prerequisites or explicit none");
+    dependencies.forEach((item, index) => {
+      const label = `Dependency ${index + 1}`;
+      if (absent(item.dependency)) missing.push(`${label}: prerequisite, commitment, or external event`);
+      if (absent(item.owner)) missing.push(`${label}: fact or decision owner`);
+      if (absent(item.contribution)) missing.push(`${label}: contribution or decision required`);
+      if (absent(item.evidence)) missing.push(`${label}: commitment or source evidence`);
+    });
     return missing;
   }
 
@@ -578,7 +639,30 @@
       ["reusableArtifact", "reusable artifact"],
       ["downstreamEnabled", "downstream work enabled"],
     ];
-    return fields.filter(([key]) => !String(state[key] || "").trim()).map(([, label]) => label);
+    const missing = fields.filter(([key]) => !String(state[key] || "").trim()).map(([, label]) => label);
+    if (!state.guided?.enforce) return missing;
+    const guided = state.guided;
+    const absent = (value) => !String(value || "").trim();
+    (guided.preconditions || []).forEach((item, index) => {
+      if (absent(item.condition)) missing.push(`Precondition ${index + 1}: required prior fact or decision`);
+      if (absent(item.evidenceOwner)) missing.push(`Precondition ${index + 1}: evidence owner and record`);
+    });
+    if (!(guided.preconditions || []).length) missing.push("preconditions: at least one prior fact or decision");
+    if (absent(guided.artifact?.identifier)) missing.push("reusable artifact: stable identifier");
+    if (absent(guided.artifact?.contents)) missing.push("reusable artifact: required contents");
+    if (absent(guided.artifact?.completionProof)) missing.push("reusable artifact: acceptance proof");
+    if (absent(guided.downstream?.work)) missing.push("downstream work enabled: next decision or proposal");
+    if (absent(guided.downstream?.fixedDecisions)) missing.push("downstream work enabled: inherited facts and decisions");
+    if (state.knownUnknowns) {
+      if (absent(guided.discovery?.question)) missing.push("Discovery: decision-critical question");
+      if (absent(guided.discovery?.endDecision)) missing.push("Discovery: timebox-end decision");
+      if (!(guided.discovery?.phases || []).length) missing.push("Discovery: at least one bounded phase");
+      (guided.discovery?.phases || []).forEach((item, index) => {
+        if (absent(item.phase)) missing.push(`Discovery phase ${index + 1}: duration and activity`);
+        if (absent(item.exit)) missing.push(`Discovery phase ${index + 1}: exit evidence`);
+      });
+    }
+    return [...new Set(missing)];
   }
 
   function buildReviews(state, graph) {

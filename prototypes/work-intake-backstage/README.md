@@ -4,6 +4,9 @@ This is a standalone Backstage app for the work-intake prototype. Its catalog
 models the fictional Northstar Research Network used by the decision-tree
 prototype, and it uses the local development database.
 
+For the plain-language explanation of every script, plugin, trust boundary, and
+publication step, start with [How the Work Intake Prototype Works](HOW-IT-WORKS.md).
+
 The catalog includes Northstar's organizational hierarchy, thirteen operating
 and governance teams, three fictional requesters, eleven systems, their primary
 components and resources, seven APIs, cross-system dependencies, and explicit
@@ -69,6 +72,44 @@ Jira records need to be populated by hand. Open <http://localhost:3000>, enter a
 the guest user, select **Work Intake**, and choose **Metrics selection** for the
 complete demonstration.
 
+## LAN HTTPS through nginx
+
+The systemd deployment keeps Backstage's development listeners private on
+`127.0.0.1:3000` and `127.0.0.1:7007`. nginx owns the LAN-facing ports:
+
+- the default port-80 server returns a `301 Moved Permanently` to the same host,
+  path, and query on HTTPS;
+- port 443 terminates TLS;
+- `/api/` proxies to the Backstage backend on port 7007; and
+- every other path, including `/work-intake-assets/`, proxies to the frontend on
+  port 3000.
+
+Install or update the proxy for this machine with:
+
+```sh
+./deployment/install-local-https.sh 192.168.50.103
+systemctl --user daemon-reload
+systemctl --user restart work-intake-backstage.service
+./deployment/check-local-https.sh 192.168.50.103
+```
+
+The installer renders the nginx template, opens the `http` and `https`
+firewalld services, writes the matching `WORK_INTAKE_PUBLIC_URL` to
+`~/.config/work-intake-backstage/lan-environment`, and creates a self-signed
+certificate whose Subject Alternative Names include the supplied IP,
+`127.0.0.1`, and `localhost`. Re-running it for the same IP preserves the
+existing certificate. Passing a different IP replaces it.
+
+The resulting entry point is
+<https://192.168.50.103/work-intake>. Browsing to the corresponding HTTP URL
+redirects to HTTPS. The browser must explicitly accept the self-signed
+certificate, or the public certificate can be imported from
+`/etc/pki/nginx/work-intake/server.crt` into the relevant trust store.
+
+On another machine, pass that machine's LAN IP to the same installer. No source
+file needs to be rewritten: the rendered nginx configuration and systemd
+environment file carry the machine-specific address.
+
 ## Run as a user service
 
 The included user-level systemd unit runs Backstage in the background without
@@ -85,7 +126,10 @@ The unit intentionally targets this workstation's checkout under
 moves, update its `Documentation`, `WorkingDirectory`, and `ExecStart` paths
 before relinking it.
 
-Backstage is then available at <http://localhost:3000>. Common controls are:
+The unit loads both `app-config.yaml` and `app-config.lan.yaml`; run the HTTPS
+installer first so `~/.config/work-intake-backstage/lan-environment` exists.
+Backstage is then available through nginx at the HTTPS URL for that LAN address.
+Common controls are:
 
 ```sh
 systemctl --user status work-intake-backstage.service
@@ -98,10 +142,11 @@ The unit starts automatically with the user's systemd session. Before starting
 it, stop any manually launched `./yarn start` process so ports 3000 and 7007 are
 available.
 
-The optional environment file
+The optional integration environment file
 `~/.config/work-intake-backstage/environment` can supply integration settings
 without storing secrets in the repository. Use one `NAME=value` assignment per
-line, then restart the service. The file is not required for the local demo.
+line, then restart the service. The separate `lan-environment` file is managed
+by the HTTPS installer and contains only the public Backstage URL.
 
 ## Jira prototype
 

@@ -83,3 +83,29 @@ test("draft demand cannot be published as a Work Proposal", () => {
     /requires a Work Proposal that is ready for ordered review/
   );
 });
+
+test("guided intake does not treat a legacy paragraph as complete atomic evidence", () => {
+  const state = structuredClone(SCENARIOS["Metrics selection"]);
+  state.guided = {
+    enforce: true,
+    currentState: {},
+    outcome: {},
+    difference: {},
+    requirements: [{ id: "001", force: "shall", condition: "A result exists.", verification: "" }],
+    acceptance: [],
+    nonGoals: [],
+    timing: {},
+    dependencies: [],
+    preconditions: [],
+    artifact: {},
+    downstream: {},
+    discovery: { phases: [] },
+  };
+
+  const result = evaluate(state);
+
+  assert.equal(result.disposition.key, "draft");
+  assert.ok(result.proposalMissing.includes("Current State: architecture and operating path"));
+  assert.ok(result.proposalMissing.includes("Requirement 1: verification method"));
+  assert.ok(result.framingMissing.includes("reusable artifact: acceptance proof"));
+});

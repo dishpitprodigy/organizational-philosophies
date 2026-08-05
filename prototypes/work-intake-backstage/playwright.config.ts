@@ -53,6 +53,9 @@ export default defineConfig({
 
   use: {
     actionTimeout: 0,
+    // The LAN deployment intentionally uses a locally generated self-signed
+    // certificate. Browser smoke tests still exercise TLS and the proxy route.
+    ignoreHTTPSErrors: true,
     baseURL:
       process.env.PLAYWRIGHT_URL ??
       (process.env.CI ? 'http://localhost:7007' : 'http://localhost:3000'),

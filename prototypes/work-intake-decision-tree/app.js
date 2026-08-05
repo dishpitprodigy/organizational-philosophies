@@ -12,11 +12,147 @@ const { COMPANY, SCENARIOS, blankState } = domainModel;
 const app = document.querySelector("#app");
 
 let state = blankState();
-let wizardStep = 0;
+let wizardStep = Math.max(0, Number(new URLSearchParams(window.location.search).get("step")) || 0);
 const evaluate = () => domainModel.evaluate(state);
 
 const initialScenario = new URLSearchParams(window.location.search).get("scenario");
 if (initialScenario && SCENARIOS[initialScenario]) state = structuredClone(SCENARIOS[initialScenario]);
+
+function paragraphs(value) {
+  return String(value || "").split(/\n{2,}/).map((item) => item.trim()).filter(Boolean);
+}
+
+function firstSentence(value) {
+  const match = String(value || "").match(/^.*?[.!?](?:\s|$)/);
+  return match ? match[0].trim() : "";
+}
+
+function remainderAfter(value, prefix) {
+  return prefix ? String(value || "").slice(prefix.length).trim() : String(value || "").trim();
+}
+
+function requirementRows(value) {
+  return paragraphs(value).map((block, index) => {
+    const match = block.match(/^(WILL|SHALL|SHOULD)(?:-([A-Z0-9-]+))?:\s*(.*)$/is);
+    return match
+      ? { id: match[2] || String(index + 1).padStart(3, "0"), force: match[1].toLowerCase(), condition: match[3].trim(), verification: "" }
+      : { id: String(index + 1).padStart(3, "0"), force: "shall", condition: block, verification: "" };
+  });
+}
+
+function prepareGuidedState(candidate) {
+  if (candidate.guided?.version === 1) return;
+  const current = paragraphs(candidate.currentState);
+  const baseline = firstSentence(current[0]);
+  const artifactMatch = String(candidate.reusableArtifact || "").match(/^([^:]+):\s*(.*)$/s);
+  candidate.guided = {
+    version: 1,
+    enforce: candidate.scenario === "Blank" || candidate.scenario === "Metrics selection",
+    dirty: {},
+    currentState: {
+      baselineMode: baseline ? "reference" : "define",
+      baselineReference: baseline,
+      architecture: remainderAfter(current[0], baseline),
+      measurements: current[1] || "",
+      constraints: current.slice(2).join("\n\n"),
+      delta: "",
+    },
+    outcome: { scope: "", capability: candidate.outcome || "", proof: "", horizon: "" },
+    difference: { preserve: "", change: candidate.difference || "", evidence: "" },
+    requirements: requirementRows(candidate.requirements),
+    acceptance: [{ context: "", evidence: candidate.success || "", verification: "" }],
+    nonGoals: [{ exclusion: candidate.nonGoals || "", reason: "" }],
+    dependencies: [{ dependency: "", owner: "", contribution: candidate.dependencyNotes || "", evidence: "" }],
+    preconditions: [{ condition: candidate.preconditions || "", evidenceOwner: "" }],
+    artifact: {
+      identifier: artifactMatch?.[1]?.trim() || "",
+      contents: artifactMatch?.[2]?.trim() || candidate.reusableArtifact || "",
+      completionProof: "",
+    },
+    downstream: { work: candidate.downstreamEnabled || "", fixedDecisions: "" },
+    timing: {
+      event: candidate.requiredBy || "",
+      evidence: "",
+      missedDecision: candidate.consequence || "",
+      avoidableCommitment: "",
+      fallback: "",
+    },
+    discovery: {
+      question: candidate.uncertaintyQuestion || "",
+      endDecision: "",
+      phases: [{ phase: candidate.discoveryTimebox || "", exit: "" }],
+    },
+    epicOutcomes: String(candidate.epicOutcomes || "").split("\n").filter(Boolean).map((capability) => ({ capability, measure: "", horizon: "" })),
+  };
+
+  if (candidate.scenario === "Metrics selection") {
+    const decision = candidate.capabilityDecision;
+    candidate.guided.currentState.delta = decision.currentState.delta.join(" ");
+    candidate.guided.outcome = {
+      scope: "Metrics emitted by 16 Kubernetes clusters, 1,240 Linux hosts, and 74 application services across two data centers and three cloud regions.",
+      capability: "Northstar has selected a metrics capability that preserves Prometheus remote-write, PromQL, dashboards, alerting, and the accepted retention obligations without carrying forward the unsupported release, seven-month capacity horizon, or current operating burden.",
+      proof: "it sustains 1.74 million samples per second with 14.2 million active series and the 690,000-series churn event; executes the accepted 50-query corpus; evaluates all 8,420 rules through the defined failure tests; and reduces recurring SRE work to no more than 24 person-hours per month",
+      horizon: "31-day, 93-day, and 730-day retention outcomes and a defensible five-year lifecycle-cost horizon",
+    };
+    candidate.guided.difference = {
+      preserve: "the current remote-write, PromQL, dashboard, alert-rule, OIDC-group, service-identity, and 31-day, 93-day, and 730-day retention contracts",
+      change: "The selected capability must remove the March 31, 2027 support deadline, the 730-day tier's seven-month capacity horizon, the observed critical-alert evaluation gap, the unexercised restore path, and an operating model that consumes 56 SRE hours each month.",
+      evidence: "OBS-MEASURE-2026-05, the 1.16-million-sample observed peak and 1.74-million-sample test target, 14.2 million active series, the 690,000-series churn event, OBS-QUERY-050, OBS-RULE-8420, equivalent failure scripts, operator exercises, and a reconciled five-year lifecycle-cost model",
+    };
+    candidate.guided.requirements = decision.requirements.map((item) => ({
+      id: item.id.replace(/^(WILL|SHALL|SHOULD)-/i, ""),
+      force: item.force,
+      condition: item.statement,
+      verification: item.verification,
+    }));
+    candidate.guided.acceptance = [
+      { context: "candidate access opens", evidence: "every candidate has received the same versioned input package and its hashes are retained", verification: "candidate receipts and input-package hash register" },
+      { context: "equivalent proof work ends", evidence: "every SHALL has a retained pass, fail, or explicitly accepted exception; independent scores and the decision narrative identify the same material tradeoffs", verification: "requirement-compliance matrix, evaluator score sheets, POC records, and exception decisions" },
+      { context: "lifecycle cost is compared", evidence: "infrastructure, licenses, network transfer, support, and operator labor reconcile across the five-year horizon", verification: "Finance-accepted cost model tied to measured resource and operator inputs" },
+      { context: "the Decision Owner accepts the selection", evidence: "the selected option, rejected options, material claims, residual uncertainty, implementation preconditions, and later implementation tests are recorded without authorizing migration", verification: "accepted SEL-OBS-007 Selection Decision Record and later acceptance contract" },
+    ];
+    candidate.guided.nonGoals = [
+      { exclusion: "Changing instrumentation libraries, metric names, labels, dashboard ownership, alert thresholds, log aggregation, tracing, or product analytics.", reason: "Those producer and adjacent-observability changes are not required to select the metrics capability." },
+      { exclusion: "Migrating a producer, retiring a retention tier, or entering Managed Runoff.", reason: "Selection authorizes implementation framing only; migration requires a later Authorized Work Proposal and Capacity Acceptances." },
+      { exclusion: "Approving the target-system architecture beyond the evidence needed to compare candidates.", reason: "Later design owns its architectural decisions and records any resulting ADRs outside intake and selection." },
+    ];
+    candidate.guided.dependencies = [
+      { dependency: "Versioned Current-State Baseline and workload replay", owner: "SRE", contribution: "Freeze OBS-ARCH-004 rev 7 plus delta, OBS-MEASURE-2026-05, the query and rule corpora, operator exercises, and failure scripts before candidate testing.", evidence: "Signed input manifest and retained hashes; this does not commit implementation capacity." },
+      { dependency: "Equivalent POC compute and replay path", owner: "Platform and Network Engineering", contribution: "Provide the isolated six-node Kubernetes cluster, record resource use, sustain the 10 Gb/s replay path, and execute packet-loss and zone-isolation tests.", evidence: "POC environment record and accepted test schedule." },
+      { dependency: "Consumer validation", owner: "Named system owners", contribution: "Each affected service owner validates its ten highest-value queries and critical alerts against the same candidate release and input package.", evidence: "Per-owner query and alert validation records." },
+      { dependency: "Five-year comparison and contracting boundary", owner: "Finance & Procurement", contribution: "Validate lifecycle cost; authorize contracting only after the selection decision.", evidence: "$1.2 million comparison envelope; no purchase authorization in this proposal." },
+    ];
+    candidate.guided.preconditions = [
+      { condition: "OBS-ARCH-004 rev 7, its explicit delta, and the May 1–28 workload export are accepted as the comparison baseline.", evidenceOwner: "SRE, Platform, Network Engineering, and the five largest producing teams" },
+      { condition: "The workload replay contains no prohibited labels or research identifiers.", evidenceOwner: "Information Security owns the recorded redaction approval" },
+      { condition: "Every candidate receives the same POC schedule, input package, measurement definitions, and tuning constraints.", evidenceOwner: "The selection facilitator owns the versioned candidate receipt register" },
+      { condition: "The financial envelope is available for comparison but creates no purchase commitment.", evidenceOwner: "Finance owns the $1.2 million five-year planning envelope decision" },
+    ];
+    candidate.guided.artifact.completionProof = "every SHALL has retained pass/fail/accepted-exception evidence; candidate claims reconcile to the POC record and cost model; and the Decision Owner records selection, rejection, tradeoffs, residual uncertainty, and later implementation conditions";
+    candidate.guided.downstream.fixedDecisions = "the capability selection, accepted Current-State Baseline and workload, retention obligations, candidate comparison, and the Selection Decision Record; later design still owns its own architectural decisions and ADRs";
+    candidate.guided.timing = {
+      event: "The Selection Decision Record must be accepted by November 30, 2026, before the FY2027 support-renewal and storage-expansion purchase window.",
+      evidence: "the March 31, 2027 support date, Procurement's January 15 renewal decision, and the 730-day tier's measured 2.8% monthly growth forecast",
+      missedDecision: "Northstar loses the supported window for a planned replacement before the current release leaves support.",
+      avoidableCommitment: "approximately $310,000 for another year of the current architecture plus expansion of the 730-day tier",
+      fallback: "Procurement renews the current platform by January 15 and SRE adds capacity before the tier reaches its 90% operating limit",
+    };
+    candidate.guided.discovery.endDecision = "Select one option, reject all options, or authorize a separately bounded proof for a named residual uncertainty; do not convert the selection result into migration authority.";
+    candidate.guided.discovery.phases = [
+      { phase: "5 working days — freeze inputs", exit: "baseline, delta, datasets, measures, and hashes are accepted" },
+      { phase: "5 working days — Implementation Currency Check and response review", exit: "current options, claims, exceptions, and proof obligations are recorded" },
+      { phase: "15 working days — equivalent POCs", exit: "every SHALL has retained pass/fail evidence and operator exercises are complete" },
+      { phase: "5 working days — independent scoring and selection", exit: "score reconciliation and the Selection Decision Record are accepted or all options are rejected" },
+    ];
+    candidate.guided.epicOutcomes = [{
+      capability: "The metrics capability decision is accepted with enough evidence to frame—but not authorize—the implementation path.",
+      measure: "every mandatory condition has retained evidence; cost and material tradeoffs reconcile; residual uncertainty and later acceptance tests are recorded",
+      horizon: "before the FY2027 renewal and storage-expansion purchase window",
+    }];
+  }
+}
+
+prepareGuidedState(state);
 
 function h(value) {
   return String(value ?? "")
@@ -84,6 +220,153 @@ function textField(field, label, help = "", textarea = false) {
   return `<label class="field"><span>${label}</span>${control}${help ? `<small>${help}</small>` : ""}</label>`;
 }
 
+function guidedValue(path) {
+  return path.split(".").reduce((value, key) => value?.[key], state.guided);
+}
+
+function setGuidedValue(path, value) {
+  const keys = path.split(".");
+  const finalKey = keys.pop();
+  const parent = keys.reduce((object, key) => object[key], state.guided);
+  parent[finalKey] = value;
+}
+
+function guidedField(path, label, help = "", options = {}) {
+  const { textarea = false, placeholder = "", select = [] } = options;
+  const value = guidedValue(path);
+  let control;
+  if (select.length) {
+    control = `<select data-guided-path="${h(path)}"><option value="">Select one…</option>${select.map(([key, text]) => `<option value="${h(key)}" ${value === key ? "selected" : ""}>${h(text)}</option>`).join("")}</select>`;
+  } else if (textarea) {
+    control = `<textarea data-guided-path="${h(path)}" rows="${textareaRows(value)}" placeholder="${h(placeholder)}">${h(value)}</textarea>`;
+  } else {
+    control = `<input type="text" data-guided-path="${h(path)}" value="${h(value)}" placeholder="${h(placeholder)}">`;
+  }
+  return `<label class="field"><span>${h(label)}</span>${control}${help ? `<small>${h(help)}</small>` : ""}</label>`;
+}
+
+function guidedRepeater(path, title, help, columns, addLabel) {
+  const rows = guidedValue(path) || [];
+  return `<section class="guided-repeater wide">
+    <div class="guided-heading"><div><h4>${h(title)}</h4><p>${h(help)}</p></div><button type="button" class="add-row" data-guided-add="${h(path)}">+ ${h(addLabel)}</button></div>
+    <div class="guided-rows">${rows.length ? rows.map((row, index) => `<article class="guided-row">
+      <div class="guided-row-number">${String(index + 1).padStart(2, "0")}</div>
+      <div class="guided-row-fields">${columns.map((column) => {
+        const value = row[column.key] || "";
+        const control = column.options
+          ? `<select data-guided-list="${h(path)}" data-guided-index="${index}" data-guided-key="${h(column.key)}"><option value="">Select…</option>${column.options.map(([key, text]) => `<option value="${h(key)}" ${value === key ? "selected" : ""}>${h(text)}</option>`).join("")}</select>`
+          : column.textarea
+            ? `<textarea rows="${textareaRows(value)}" data-guided-list="${h(path)}" data-guided-index="${index}" data-guided-key="${h(column.key)}" placeholder="${h(column.placeholder || "")}">${h(value)}</textarea>`
+            : `<input type="text" data-guided-list="${h(path)}" data-guided-index="${index}" data-guided-key="${h(column.key)}" value="${h(value)}" placeholder="${h(column.placeholder || "")}">`;
+        return `<label class="field ${column.wide ? "wide" : ""}"><span>${h(column.label)}</span>${control}${column.help ? `<small>${h(column.help)}</small>` : ""}</label>`;
+      }).join("")}</div>
+      <button type="button" class="remove-row" aria-label="Remove row ${index + 1}" data-guided-remove="${h(path)}" data-guided-index="${index}">Remove</button>
+    </article>`).join("") : `<p class="empty-guided">No entries yet. Add one; an empty paragraph cannot stand in for this evidence.</p>`}</div>
+  </section>`;
+}
+
+function compiledPreview(field, label) {
+  return `<details class="compiled-preview wide"><summary>Generated ${h(label)}</summary><pre data-preview-field="${h(field)}">${h(state[field])}</pre></details>`;
+}
+
+function joinParts(parts) {
+  return parts.map((part) => String(part || "").trim()).filter(Boolean).join("\n\n");
+}
+
+function compileGuidedSection(section) {
+  const guided = state.guided;
+  guided.dirty[section] = true;
+  if (section === "currentState") {
+    const current = guided.currentState;
+    state.currentState = joinParts([
+      current.baselineMode === "reference" ? current.baselineReference : "",
+      current.architecture,
+      current.measurements,
+      current.constraints,
+      current.delta ? `Explicit delta from the accepted baseline: ${current.delta}` : "",
+    ]);
+  }
+  if (section === "outcome") {
+    const value = guided.outcome;
+    state.outcome = joinParts([
+      value.scope ? `Operating scope: ${value.scope}` : "",
+      value.capability,
+      value.proof ? `The outcome is real when ${value.proof}` : "",
+      value.horizon ? `Required operating horizon: ${value.horizon}` : "",
+    ]);
+  }
+  if (section === "difference") {
+    const value = guided.difference;
+    state.difference = joinParts([
+      value.preserve ? `The result must preserve ${value.preserve}` : "",
+      value.change,
+      value.evidence ? `The comparison must use ${value.evidence}` : "",
+    ]);
+  }
+  if (section === "requirements") {
+    state.requirements = guided.requirements.filter((item) => String(item.condition || "").trim()).map((item, index) => {
+      const force = String(item.force || "shall").toUpperCase();
+      const identifier = item.id || String(index + 1).padStart(3, "0");
+      return `${force}-${identifier}: ${item.condition}${item.verification ? `\nVerification: ${item.verification}` : ""}`.trim();
+    }).filter(Boolean).join("\n\n");
+  }
+  if (section === "acceptance") {
+    state.success = guided.acceptance.filter((item) => [item.context, item.evidence, item.verification].some((value) => String(value || "").trim())).map((item, index) => joinParts([
+      `AC-${String(index + 1).padStart(3, "0")}: ${item.context ? `Given ${item.context}, ` : ""}${item.evidence}`,
+      item.verification ? `Verification: ${item.verification}` : "",
+    ])).filter(Boolean).join("\n\n");
+  }
+  if (section === "nonGoals") {
+    state.nonGoals = guided.nonGoals.map((item) => `${item.exclusion}${item.reason ? ` Reason: ${item.reason}` : ""}`.trim()).filter(Boolean).join("\n");
+  }
+  if (section === "dependencies") {
+    state.dependencyNotes = guided.dependencies.map((item) => {
+      const subject = [item.dependency, item.owner ? `owned by ${item.owner}` : ""].filter(Boolean).join(" — ");
+      return joinParts([subject, item.contribution, item.evidence ? `Evidence or commitment: ${item.evidence}` : ""]);
+    }).filter(Boolean).join("\n\n");
+  }
+  if (section === "preconditions") {
+    state.preconditions = guided.preconditions.map((item) => `${item.condition}${item.evidenceOwner ? ` Evidence owner: ${item.evidenceOwner}.` : ""}`.trim()).filter(Boolean).join("\n");
+  }
+  if (section === "artifact") {
+    const value = guided.artifact;
+    state.reusableArtifact = `${value.identifier}${value.identifier && value.contents ? ": " : ""}${value.contents}${value.completionProof ? ` Completion is proven by ${value.completionProof}` : ""}`.trim();
+  }
+  if (section === "downstream") {
+    const value = guided.downstream;
+    state.downstreamEnabled = joinParts([value.work, value.fixedDecisions ? `Downstream work must not reopen ${value.fixedDecisions}` : ""]);
+  }
+  if (section === "timing") {
+    const value = guided.timing;
+    state.requiredBy = joinParts([value.event, value.evidence ? `Timing source: ${value.evidence}` : ""]);
+    state.consequence = joinParts([
+      value.missedDecision,
+      value.avoidableCommitment ? `Avoidable commitment or exposure: ${value.avoidableCommitment}` : "",
+      value.fallback ? `Fallback if the condition is missed: ${value.fallback}` : "",
+    ]);
+  }
+  if (section === "discovery") {
+    state.uncertaintyQuestion = guided.discovery.question;
+    state.discoveryTimebox = guided.discovery.phases.map((item) => `${item.phase}${item.exit ? `; exits when ${item.exit}` : ""}`.trim()).filter(Boolean).join("\n");
+  }
+  if (section === "epicOutcomes") {
+    state.epicOutcomes = guided.epicOutcomes.map((item) => joinParts([
+      item.capability,
+      item.measure ? `Verified by ${item.measure}` : "",
+      item.horizon ? `Operating horizon: ${item.horizon}` : "",
+    ])).filter(Boolean).join("\n");
+  }
+}
+
+function compileAllGuidedSections() {
+  ["currentState", "outcome", "difference", "requirements", "acceptance", "nonGoals", "dependencies", "preconditions", "artifact", "downstream", "timing", "discovery", "epicOutcomes"].forEach(compileGuidedSection);
+}
+
+function guidedSectionFor(control) {
+  if (control.dataset.guidedPath) return control.dataset.guidedPath.split(".")[0];
+  return control.dataset.guidedList.split(".")[0];
+}
+
 function numberField(field, label, help = "", min = 0) {
   return `<label class="field"><span>${label}</span><input type="number" min="${min}" data-field="${field}" value="${Number(state[field]) || ""}">${help ? `<small>${help}</small>` : ""}</label>`;
 }
@@ -108,23 +391,90 @@ function boundaryFields() {
   ${state.catalogPath === "inquiry" ? `<div class="form-grid">${numberField("inquiryHours", "Expected expert time (hours)", "This demo treats up to four hours, with no change or purchase, as General Inquiry.")}${booleanChoice("requiresChange", "Would answering this require someone to change a system?")}</div>` : ""}`;
 }
 
-function purposeFields() {
-  return `<div class="form-grid">
+function purposeFields(mode = "all") {
+  const hidden = (part) => mode === "all" || mode === part ? "" : "hidden-part";
+  return `<div class="form-grid purpose-fields">
+    <div class="part subgrid wide ${hidden("identity")}">
     ${textField("requester", "Authenticated requester", "The person who knowingly asks the organization to act. A receiving team may not manufacture this demand.")}
     ${teamSelectField("requestingTeam", "Requesting function")}
     <div class="wide">${textField("title", "Short working title")}</div>
-    <div class="wide">${textField("currentState", "Current State", "What capability, constraint, failure, cost, or operating condition exists now?", true)}</div>
-    <div class="wide">${textField("outcome", "Desired Outcome", "Describe what should become true, not the product you already prefer.", true)}</div>
-    <div class="wide">${textField("difference", "Required Difference", "State the material gap between the Current State and Desired Outcome.", true)}</div>
-    <div class="wide">${textField("requirements", "Requirements", "What must the result do or preserve? Use testable operating conditions where possible.", true)}</div>
-    <div class="wide">${textField("success", "Acceptance Conditions", "What observable evidence will show that the Desired Outcome is real?", true)}</div>
-    <div class="wide">${textField("nonGoals", "Non-Goals", "What does this proposal deliberately not solve?", true)}</div>
+    </div>
+
+    <section class="guided-section wide part ${hidden("current")}">
+      <div class="guided-heading"><div><p class="eyebrow">Current-State Baseline</p><h3>Define the system that exists before proposing its replacement.</h3></div><span class="evidence-rule">Architecture · workload · failure · cost · delta</span></div>
+      <div class="form-grid">
+        ${guidedField("currentState.baselineMode", "How is Current State established?", "Reference an accepted revision only when its delta is explicit.", { select: [["reference", "Reference an accepted baseline and state its delta"], ["define", "Define the Current State in this proposal"]] })}
+        ${guidedField("currentState.baselineReference", "Authoritative baseline reference", "Name the artifact, revision, acceptance date, and owner. Do not write “see existing documentation.”", { placeholder: "OBS-ARCH-004 rev 7, accepted May 18, 2026 by SRE" })}
+        <div class="wide">${guidedField("currentState.architecture", "Architecture and operating path", "Name the live components, quantities, locations, connections, owners, and traffic or data path relevant to this request.", { textarea: true, placeholder: "38 collectors receive Prometheus-format metrics from 16 clusters…" })}</div>
+        <div class="wide">${guidedField("currentState.measurements", "Measured production workload", "Give the observation window, units, sustained behavior, percentiles, maxima, and the retained source. State “not measured” when Discovery must establish it.", { textarea: true, placeholder: "May 1–28: 640,000 sustained samples/s; 910,000 p95… Source: OBS-WORKLOAD-2026-05." })}</div>
+        <div class="wide">${guidedField("currentState.constraints", "Observed failure, lifecycle, cost, and operator effort", "Record actual behavior: support dates, capacity horizon, recovery evidence, incidents, recurring labor, and current cost. Do not turn a suspected cause into a fact.", { textarea: true, placeholder: "The release leaves vendor support on… SRE spends 56 person-hours/month…" })}</div>
+        <div class="wide">${guidedField("currentState.delta", "Explicit delta from the referenced baseline", "If the baseline remains current, say what was checked and that no material delta was found. Otherwise name every change relevant to this proposal.", { textarea: true, placeholder: "Since rev 7, storage nodes were replaced like-for-like; topology and retention behavior are unchanged…" })}</div>
+      </div>
+      ${compiledPreview("currentState", "Current State")}
+    </section>
+
+    <section class="guided-section wide part ${hidden("outcome")}">
+      <div class="guided-heading"><div><p class="eyebrow">Desired Outcome</p><h3>State one operating result, not a preferred implementation.</h3></div><span class="evidence-rule">Scope · capability · proof · horizon</span></div>
+      <div class="form-grid">
+        ${guidedField("outcome.scope", "Who or what must experience the result?", "Name the population, services, sites, workloads, or operating boundary.", { textarea: true, placeholder: "All 6,400 employees and contractors across 147 workforce applications…" })}
+        ${guidedField("outcome.capability", "What must become true?", "Use product-neutral operating language. Include preserved behavior and the failure mode that disappears.", { textarea: true, placeholder: "Northstar has selected a capability that preserves… without carrying forward…" })}
+        ${guidedField("outcome.proof", "How will the organization know it is true?", "Name the decisive measures or observations. Detailed test steps belong in Acceptance Conditions.", { textarea: true, placeholder: "The accepted query corpus passes and recurring operator work is ≤24 hours/month…" })}
+        ${guidedField("outcome.horizon", "For how long or by what event must it remain true?", "Use an operating horizon, contractual event, or sustained observation window—not an arbitrary project deadline.", { textarea: true, placeholder: "Through the five-year planning horizon and a 30-day production burn-in…" })}
+      </div>
+      ${compiledPreview("outcome", "Desired Outcome")}
+    </section>
+
+    <section class="guided-section wide part ${hidden("outcome")}">
+      <div class="guided-heading"><div><p class="eyebrow">Required Difference</p><h3>Make the material gap inspectable.</h3></div><span class="evidence-rule">Preserve · change · compare</span></div>
+      <div class="form-grid">
+        ${guidedField("difference.preserve", "What current contracts or outcomes must remain true?", "Name interfaces, behavior, data obligations, recovery promises, or authorization semantics that cannot be lost.", { textarea: true, placeholder: "Prometheus remote-write, PromQL, dashboards, alert rules, and retention obligations…" })}
+        ${guidedField("difference.change", "Which measured conditions must change?", "Pair each current limitation with the condition required instead. Do not say only “modernize,” “improve,” or “replace.”", { textarea: true, placeholder: "Remove the March 31 support deadline, seven-month capacity horizon, and 56-hour monthly operating burden…" })}
+        <div class="wide">${guidedField("difference.evidence", "What evidence must the decision compare?", "Name the production workload, failure behavior, operator exercise, cost model, retention obligation, or other common test basis.", { textarea: true, placeholder: "The May workload replay, 50-query corpus, 8,420-rule corpus, failure scripts, and five-year lifecycle cost…" })}</div>
+      </div>
+      ${compiledPreview("difference", "Required Difference")}
+    </section>
+
+    <div class="part subgrid wide ${hidden("proof")}">
+    ${guidedRepeater("requirements", "Requirements", "One condition per row. Facts and buyer obligations use will; mandatory pass/fail conditions use shall; scored comparative goals use should. Every row names how it will be verified.", [
+      { key: "force", label: "Force", options: [["will", "will — supplied fact or obligation"], ["shall", "shall — mandatory pass/fail condition"], ["should", "should — scored comparative goal"]] },
+      { key: "id", label: "Stable ID", placeholder: "001" },
+      { key: "condition", label: "Operating condition", textarea: true, wide: true, placeholder: "The candidate shall ingest 1.74 million samples/s for 60 minutes…" },
+      { key: "verification", label: "Verification method", textarea: true, wide: true, placeholder: "Replay the retained May workload; reconcile sent, accepted, rejected, queued, and stored counts…" },
+    ], "requirement")}
+    ${compiledPreview("requirements", "Requirements")}
+
+    ${guidedRepeater("acceptance", "Acceptance Conditions", "Describe observable proof of the Desired Outcome. Acceptance is not “the implementation is complete,” “documentation exists,” or “a ticket was closed.”", [
+      { key: "context", label: "Condition or event", textarea: true, placeholder: "During loss of one availability zone under the accepted peak workload…" },
+      { key: "evidence", label: "Observable result", textarea: true, placeholder: "No acknowledged samples are lost and normal ingestion, query, and alert behavior returns within 30 minutes…" },
+      { key: "verification", label: "Retained proof", textarea: true, wide: true, placeholder: "Failure-test record with timestamps, reconciled counters, query results, and evaluator sign-off…" },
+    ], "acceptance condition")}
+    ${compiledPreview("success", "Acceptance Conditions")}
+
+    ${guidedRepeater("nonGoals", "Non-Goals", "Name adjacent work that a reasonable reader might otherwise assume is included. An exclusion is a boundary, not a parking lot for unresolved scope.", [
+      { key: "exclusion", label: "Explicitly excluded change", textarea: true, placeholder: "This proposal will not change application instrumentation libraries, metric names, or dashboard ownership…" },
+      { key: "reason", label: "Why it is outside this outcome", textarea: true, placeholder: "Those changes have separate owners and are not required to close the stated gap…" },
+    ], "non-goal")}
+    ${compiledPreview("nonGoals", "Non-Goals")}
+    </div>
+
+    <div class="part subgrid wide ${hidden("authority")}">
     ${textField("sponsor", "Work Sponsor", "A name alone is not sponsorship; acceptance must be tied to this proposal revision.")}
     ${selectField("sponsorLevel", "Sponsor level", ["Manager", "Director", "Vice President", "Executive"])}
     ${booleanChoice("sponsorAccepted", "Has the sponsor accepted this proposal revision?", "Sponsorship accepts the priority claim, evaluation capacity, and organizational tradeoffs.")}
     ${textField("acceptanceAuthority", "Acceptance Authority", "Who may decide that the delivered result satisfies the agreed proof and operating conditions?")}
-    <div class="wide">${textField("requiredBy", "Required-by event or date", "A date alone does not establish priority.", true)}</div>
-    <div class="wide">${textField("consequence", "What happens if that date is missed?", "This is evidence for portfolio prioritization, not a requester-selected urgency label.", true)}</div>
+    <section class="guided-section wide">
+      <div class="guided-heading"><div><p class="eyebrow">Timing Evidence</p><h3>Establish the external condition; do not select an urgency label.</h3></div><span class="evidence-rule">Event · source · consequence · fallback</span></div>
+      <div class="form-grid">
+        ${guidedField("timing.event", "Required-by event and latest useful date", "Tie the date to a contract, renewal, capacity limit, compliance event, dependency window, or other observable condition.", { textarea: true, placeholder: "Selection accepted by November 30, before the FY2027 renewal and storage-purchase window…" })}
+        ${guidedField("timing.evidence", "Source of the timing condition", "Name the contract clause, forecast, calendar, accepted plan, or owner who can verify it.", { textarea: true, placeholder: "Current support contract; 2.8% monthly growth forecast; Procurement renewal calendar…" })}
+        ${guidedField("timing.missedDecision", "Which decision or outcome becomes unavailable?", "State the organizational consequence. “The project will be late” is circular and supplies no priority evidence.", { textarea: true, placeholder: "The organization loses the supported replacement window before March 31, 2027…" })}
+        ${guidedField("timing.avoidableCommitment", "What cost, risk, or obligation is created?", "Quantify the consequence where the evidence permits it.", { textarea: true, placeholder: "$310,000 renewal plus another capacity expansion on the current architecture…" })}
+        <div class="wide">${guidedField("timing.fallback", "What will the organization do if it misses the condition?", "Name the real fallback. If no decision has been made, say who must make it.", { textarea: true, placeholder: "Procurement renews for one year and SRE expands the 730-day tier before the 90% limit…" })}</div>
+      </div>
+      ${compiledPreview("requiredBy", "Required-By Evidence")}
+      ${compiledPreview("consequence", "Consequence of Missing It")}
+    </section>
+    </div>
   </div>`;
 }
 
@@ -140,7 +490,13 @@ function scopeFields() {
     ${booleanChoice("purchase", "Could this require a purchase or vendor commitment?")}
     ${numberField("spendUsd", "Potential financial commitment (USD)", "Financial Commitment Class is kept separate from delivery size and risk.")}
     <fieldset class="field wide"><legend>Affected systems</legend><div class="system-choice-grid">${Object.entries(COMPANY.systems).map(([id, system]) => `<label class="choice system-choice"><input type="checkbox" data-system="${h(id)}" ${state.affectedSystems.includes(id) ? "checked" : ""}><span><strong>${h(system.name)}</strong><small>Owned by ${h(COMPANY.teams[system.owner].name)} · depends on ${h(system.dependsOn.map((dependencyId) => COMPANY.systems[dependencyId].name).join(", "))}</small></span></label>`).join("")}</div><small>The system derives participating functions and dependency handoffs from this service map. Routing does not commit their capacity.</small></fieldset>
-    <div class="wide">${textField("dependencyNotes", "Dependency evidence", "Record commitments, decisions, external events, or hidden contracts that the service map cannot derive.", true)}</div>
+    ${guidedRepeater("dependencies", "Non-catalog dependency evidence", "The catalog derives system ownership and dependency closure. Add only a prerequisite decision, contribution, commitment, external event, or hidden contract that it cannot derive. A dependency does not imply Capacity Acceptance.", [
+      { key: "dependency", label: "Dependency", placeholder: "Sanitized production-workload replay" },
+      { key: "owner", label: "Fact or decision owner", placeholder: "SRE Observability Lead" },
+      { key: "contribution", label: "What must be supplied or decided?", textarea: true, wide: true, placeholder: "Freeze the May 1–28 replay and measurement definitions before candidate testing begins…" },
+      { key: "evidence", label: "Existing commitment or source", textarea: true, wide: true, placeholder: "OBS-WORKLOAD-2026-05 accepted by producing teams; no delivery capacity committed…" },
+    ], "dependency")}
+    ${compiledPreview("dependencyNotes", "Dependency Evidence")}
   </div>`;
 }
 
@@ -148,13 +504,52 @@ function framingFields() {
   return `<div class="form-grid">
     ${selectField("intent", "Primary intent", ["Discovery", "Migration", "Redesign", "Enablement", "Optimization"], "One intent per Work Package; if two are required, split the work.")}
     ${selectField("outcomeShape", "Top-level outcome shape", ["single", "multiple"], "One independently valuable result produces an Epic; several produce an Initiative containing Epics.")}
-    <div class="wide">${textField("preconditions", "What must be true before work starts?", "List constraints and prerequisite decisions, not solutions.", true)}</div>
-    <div class="wide">${textField("reusableArtifact", "What reusable artifact must exist at the end?", "For Discovery, this is the proof of completion; it is not running code.", true)}</div>
-    <div class="wide">${textField("downstreamEnabled", "What downstream work should never need to ask why again?", "State what can proceed without reconstructing the reasoning.", true)}</div>
+    ${guidedRepeater("preconditions", "Preconditions", "State conditions that must already be true before this work may start. Do not disguise implementation steps or preferred designs as prerequisites.", [
+      { key: "condition", label: "Required prior fact or decision", textarea: true, placeholder: "Producing teams have accepted OBS-ARCH-004 rev 7 and the May workload export as accurate…" },
+      { key: "evidenceOwner", label: "Who proves it, and with what record?", textarea: true, placeholder: "SRE owns the signed baseline; Security owns replay-redaction approval…" },
+    ], "precondition")}
+    ${compiledPreview("preconditions", "Preconditions")}
+
+    <section class="guided-section wide">
+      <div class="guided-heading"><div><p class="eyebrow">Reusable Output Artifact</p><h3>Name the record that proves completion and survives the work.</h3></div></div>
+      <div class="form-grid">
+        ${guidedField("artifact.identifier", "Stable artifact identifier", "Use the organization’s durable record name—not a Jira issue key generated later.", { placeholder: "SEL-OBS-007" })}
+        ${guidedField("artifact.contents", "Required contents", "Name the baseline, measurements, decisions, rejected options, residual uncertainty, and later acceptance contract the artifact must retain.", { textarea: true, placeholder: "Versioned baseline and delta; workload dataset; requirement compliance; POC results; tradeoffs…" })}
+        <div class="wide">${guidedField("artifact.completionProof", "What makes the artifact accepted rather than merely present?", "Name the required reconciliation, signatures, decision, or evidence closure.", { textarea: true, placeholder: "Every SHALL has pass/fail/accepted-exception evidence and the Decision Owner records the selected and rejected options…" })}</div>
+      </div>
+      ${compiledPreview("reusableArtifact", "Reusable Output Artifact")}
+    </section>
+
+    <section class="guided-section wide">
+      <div class="guided-heading"><div><p class="eyebrow">Downstream Work Enabled</p><h3>Say what can proceed without reconstructing why.</h3></div></div>
+      <div class="form-grid">
+        ${guidedField("downstream.work", "What later work can now be framed?", "Name the next decision or Work Proposal, not a promise that implementation has been authorized.", { textarea: true, placeholder: "A later Work Proposal can name the selected capability and split implementation into producer onboarding…" })}
+        ${guidedField("downstream.fixedDecisions", "Which accepted facts or decisions must not be reopened?", "Name the baseline, obligations, comparison, and boundaries that downstream work inherits.", { textarea: true, placeholder: "Product selection, May workload, retention obligations, and the accepted failure tests…" })}
+      </div>
+      ${compiledPreview("downstreamEnabled", "Downstream Work Enabled")}
+    </section>
+
     ${booleanChoice("knownUnknowns", "Does material Known Uncertainty remain?", "A substantive unknown creates bounded Discovery; Assisted Intake must stop before doing that work.")}
-    <div class="wide">${textField("uncertaintyQuestion", "Decision-critical question", "What question must bounded Discovery answer?", true)}</div>
-    <div class="wide">${textField("discoveryTimebox", "Discovery timebox", "State how the timebox is divided so continuing work cannot hide inside an undifferentiated duration.", true)}</div>
-    <div class="wide">${textField("epicOutcomes", "Candidate independently valuable Epic outcomes", "One outcome per line. These are candidate delivery records, not authorized work.", true)}</div>
+    <section class="guided-section wide ${state.knownUnknowns ? "" : "guided-muted"}">
+      <div class="guided-heading"><div><p class="eyebrow">Bounded Discovery</p><h3>A question, a stop condition, and an end-of-timebox decision.</h3></div><span class="evidence-rule">Never implementation authority</span></div>
+      <div class="form-grid">
+        <div class="wide">${guidedField("discovery.question", "Decision-critical question", "Ask one question whose answer changes the design, option, boundary, or authorization decision.", { textarea: true, placeholder: "Which option passes the accepted workload and failure tests at the lowest defensible lifecycle cost?" })}</div>
+        <div class="wide">${guidedField("discovery.endDecision", "Decision required when the timebox ends", "State the allowed dispositions even if evidence remains incomplete: proceed, reject, split, extend through a new decision, or accept residual uncertainty.", { textarea: true, placeholder: "Select one option, reject all options, or authorize a separately bounded proof for a named residual uncertainty…" })}</div>
+      </div>
+      ${guidedRepeater("discovery.phases", "Timebox phases", "Divide the timebox into evidence-producing phases. Each phase has an exit condition; elapsed time alone is not progress.", [
+        { key: "phase", label: "Bounded phase and duration", textarea: true, placeholder: "5 working days — freeze inputs and candidate claims" },
+        { key: "exit", label: "Phase exit evidence", textarea: true, placeholder: "Versioned input package accepted; unresolved claims entered in the claim register" },
+      ], "timebox phase")}
+      ${compiledPreview("uncertaintyQuestion", "Discovery Question")}
+      ${compiledPreview("discoveryTimebox", "Discovery Timebox")}
+    </section>
+
+    ${guidedRepeater("epicOutcomes", "Candidate independently valuable Epic outcomes", "Use only when the top-level outcome requires an Initiative. Each row states a capability or removed failure mode, its verification, and an operating horizon. These remain candidates, not authorized work.", [
+      { key: "capability", label: "Capability or failure mode changed", textarea: true, placeholder: "The target tenant authenticates test users in both regions and survives primary-region isolation…" },
+      { key: "measure", label: "Measure or decisive check", textarea: true, placeholder: "No more than five minutes of new-session interruption; security events export within five minutes…" },
+      { key: "horizon", label: "Operating horizon", textarea: true, placeholder: "30-day burn-in after the migration wave…" },
+    ], "candidate Epic outcome")}
+    ${compiledPreview("epicOutcomes", "Candidate Epic Outcomes")}
   </div>`;
 }
 
@@ -309,7 +704,11 @@ function resultMarkup(compact = false) {
 
 const WIZARD_STEPS = [
   ["Boundary", "Service request or proposal?", boundaryFields],
-  ["Proposal", "What organizational change is being proposed?", purposeFields],
+  ["Demand", "Who is asking the organization to act?", () => purposeFields("identity")],
+  ["Current State", "What system and operating conditions exist now?", () => purposeFields("current")],
+  ["Outcome", "What must become true, and what must change?", () => purposeFields("outcome")],
+  ["Proof", "What conditions and evidence will govern the result?", () => purposeFields("proof")],
+  ["Authority", "Who accepts the claim, and what makes its timing real?", () => purposeFields("authority")],
   ["Framing", "What kind of thinking does the work require?", framingFields],
   ["Reach", "Which systems and operating boundaries could this touch?", scopeFields],
   ["Capacity", "What does the current delivery forecast say?", effortFields],
@@ -418,7 +817,58 @@ function renderVariantC() {
 function bindInteractions() {
   document.querySelectorAll("[data-scenario]").forEach((button) => button.addEventListener("click", () => {
     state = structuredClone(SCENARIOS[button.dataset.scenario]);
+    prepareGuidedState(state);
+    compileAllGuidedSections();
     setScenarioInUrl(button.dataset.scenario);
+    render();
+  }));
+
+  document.querySelectorAll("[data-guided-path], [data-guided-list]").forEach((control) => {
+    const eventName = control.matches("select") ? "change" : "input";
+    control.addEventListener(eventName, () => {
+      if (control.dataset.guidedPath) setGuidedValue(control.dataset.guidedPath, control.value);
+      else guidedValue(control.dataset.guidedList)[Number(control.dataset.guidedIndex)][control.dataset.guidedKey] = control.value;
+      const section = guidedSectionFor(control);
+      compileGuidedSection(section);
+      markCustom();
+      setScenarioInUrl("Custom");
+      document.querySelectorAll(`[data-preview-field]`).forEach((preview) => { preview.textContent = state[preview.dataset.previewField] || ""; });
+      const variant = currentVariant();
+      if ((variant === "B" || variant === "C") && eventName === "change") render();
+      else if (variant === "B") {
+        const panel = document.querySelector(".live-result");
+        if (panel) panel.innerHTML = `<p class="eyebrow">Live intake artifact</p>${resultMarkup(false)}`;
+      } else if (variant === "C") {
+        const panel = document.querySelector(".map-output");
+        if (panel) panel.innerHTML = resultMarkup(false);
+      } else updateLightweightOutputs();
+    });
+  });
+
+  document.querySelectorAll("[data-guided-add]").forEach((button) => button.addEventListener("click", () => {
+    const path = button.dataset.guidedAdd;
+    const templates = {
+      requirements: { id: "", force: "shall", condition: "", verification: "" },
+      acceptance: { context: "", evidence: "", verification: "" },
+      nonGoals: { exclusion: "", reason: "" },
+      dependencies: { dependency: "", owner: "", contribution: "", evidence: "" },
+      preconditions: { condition: "", evidenceOwner: "" },
+      "discovery.phases": { phase: "", exit: "" },
+      epicOutcomes: { capability: "", measure: "", horizon: "" },
+    };
+    guidedValue(path).push(structuredClone(templates[path]));
+    compileGuidedSection(path.split(".")[0]);
+    markCustom();
+    setScenarioInUrl("Custom");
+    render();
+  }));
+
+  document.querySelectorAll("[data-guided-remove]").forEach((button) => button.addEventListener("click", () => {
+    const path = button.dataset.guidedRemove;
+    guidedValue(path).splice(Number(button.dataset.guidedIndex), 1);
+    compileGuidedSection(path.split(".")[0]);
+    markCustom();
+    setScenarioInUrl("Custom");
     render();
   }));
 
@@ -454,7 +904,7 @@ function bindInteractions() {
   document.querySelectorAll("[data-wizard]").forEach((button) => button.addEventListener("click", () => {
     if (button.dataset.wizard === "next") wizardStep = Math.min(WIZARD_STEPS.length - 1, wizardStep + 1);
     if (button.dataset.wizard === "back") wizardStep = Math.max(0, wizardStep - 1);
-    if (button.dataset.wizard === "restart") { state = blankState(); wizardStep = 0; }
+    if (button.dataset.wizard === "restart") { state = blankState(); prepareGuidedState(state); compileAllGuidedSections(); wizardStep = 0; }
     render();
   }));
 }
@@ -462,14 +912,15 @@ function bindInteractions() {
 function markCustom() {
   if (state.scenario !== "Custom" && state.proposalId) state.proposalRevision = Number(state.proposalRevision) + 1;
   state.scenario = "Custom";
+  if (state.guided) state.guided.enforce = true;
 }
 
 function updateLightweightOutputs() {
-  // Wizard inputs can update without stealing focus. Full result appears in step five.
+  // Wizard inputs can update without stealing focus. Full result appears in the final step.
   const preview = document.querySelector(".wizard-intro .route-preview");
   if (preview) preview.innerHTML = `<strong>Live route preview</strong><br>${h(evaluate().disposition.label)}<br><span class="muted">Nothing is submitted while you answer.</span>`;
   const capacity = document.querySelector(".wizard-card .route-preview");
-  if (capacity && wizardStep === 4) {
+  if (capacity && wizardStep === WIZARD_STEPS.length - 2) {
     const result = evaluate();
     capacity.innerHTML = `<strong>Current size calculation: ${result.deliverySize}</strong><br>Labor: ${result.bands.labor} · Duration: ${result.bands.duration} · Coordination: ${result.bands.coordination}<br>The highest dimension wins. Four XS dimensions could not cancel one XL dimension.`;
   }
@@ -477,6 +928,7 @@ function updateLightweightOutputs() {
 
 function render() {
   const variant = currentVariant();
+  wizardStep = Math.min(wizardStep, WIZARD_STEPS.length - 1);
   document.querySelector("#variant-label").textContent = `${variant} — ${VARIANTS[variant]}`;
   app.innerHTML = variant === "A" ? renderVariantA() : variant === "B" ? renderVariantB() : renderVariantC();
   bindInteractions();
@@ -509,4 +961,5 @@ window.addEventListener("message", (event) => {
   }
 });
 
+compileAllGuidedSections();
 render();

@@ -32,6 +32,19 @@ Use the floating arrows or the keyboard's left and right arrow keys to switch va
 
 Scenario presets populate evidence-complete fictional examples for a metrics capability selection, an SSO migration, and identity-platform Discovery. Their counts, component inventories, measurements, costs, dates, requirements, failure conditions, and acceptance thresholds are internally consistent demonstrations, not statements about a real organization.
 
+## Guided evidence capture
+
+The browser does not ask a requester to author each Work Proposal section as one undifferentiated essay. It captures atomic facts and assembles the canonical artifact language from them:
+
+- Current State separates the authoritative baseline, live architecture, measured workload, observed failure/lifecycle/cost/operator behavior, and explicit delta.
+- Desired Outcome separates operating scope, capability or removed failure mode, decisive proof, and operating horizon.
+- Required Difference separates what must be preserved, what measured condition must change, and the evidence used for comparison.
+- Requirements are repeatable `will` / `shall` / `should` records with stable identifiers and required verification methods.
+- Acceptance Conditions are repeatable observable results with retained proof.
+- Timing, dependencies, preconditions, Discovery phases, reusable artifacts, and candidate Epic outcomes each have their own evidence-shaped fields.
+
+New or edited proposals remain drafts when these atomic fields are incomplete. The generated prose is inspectable in the form, but requesters supply facts; they do not select priority, size, reviewers, or another team's capacity.
+
 The metrics scenario is deliberately much deeper than the others. It treats RFP logic as the invariant Capability Decision Loop for internal redesign, open-source adoption, vendor selection, or retaining the current system. Its result includes a referenced Current-State Baseline and explicit delta, explicit record boundaries, a measurement ledger, `will` / `shall` / `should` requirements, option claims, POC gates, Evidence-System Tailoring decisions, and the acceptance contract a later implementation proposal must satisfy. Historical ADRs remain with the systems they govern; selection produces a Selection Decision Record, not an ADR.
 
 ## Fictional company
