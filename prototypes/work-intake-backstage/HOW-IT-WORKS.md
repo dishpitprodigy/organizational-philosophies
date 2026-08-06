@@ -34,6 +34,38 @@ They are called plugins because Backstage loads them through its frontend and ba
 | Jira               | Store visible projections of proposals, reviews, and properly authorized delivery work.   |
 | nginx and systemd  | Keep the demonstration running and expose it safely enough for a local network.           |
 
+## How the form definition and artifact fit together
+
+The questions are data. The file
+`forms/definitions/technical-work-proposal.v1.json` gives every evidence field a
+stable identifier, its exact label and guidance, its allowed values, the
+condition under which it is required, and the path where its answer belongs in
+the Work Proposal.
+
+`form-definition.js` does three small jobs:
+
+1. select the definition whose intake context matches the request;
+2. evaluate only the declared condition operators—never JavaScript stored in
+   JSON; and
+3. collect the screen values under their stable field identifiers and compile
+   those values into their declared artifact paths.
+
+The browser still has layout code because it must decide where cards and rows
+appear. That layout code asks for a field by stable identifier. It does not own
+the precise evidence prompt for that field.
+
+The publication artifact now uses schema version 2. It contains the form
+identity, the stable-ID answer map, and an atomic proposal whose requirements,
+Acceptance Conditions, Non-Goals, dependencies, preconditions, baseline facts,
+and authority claims remain separate. Jira prose is rendered from those atomic
+records. No later component parses the rendered paragraph to recover them.
+
+`packages/backend/src/workIntake/domain/artifactSchema.ts` is the backend's
+structural entrance check. `canonicalJson.ts` supplies deterministic JSON and a
+SHA-256 content identity for the next publication phase. Jira does not yet store
+that exact JSON or hash durably; that is the next implementation boundary, not a
+capability implied by these files.
+
 ## The whole system in one picture
 
 ```text
@@ -128,7 +160,7 @@ The router exposes two endpoints:
 | `GET /health`   | Verify the authenticated user and test the Jira connection. | None                    |
 | `POST /publish` | Validate and publish a work-intake artifact.                | May create Jira records |
 
-Both endpoints require a Backstage user identity. The publish endpoint accepts no more than 1 MiB of JSON and requires schema version 1, a proposal identifier, and at least one affected Backstage entity before it will invoke the publisher.
+Both endpoints require a Backstage user identity. The publish endpoint accepts no more than 1 MiB of JSON. During migration it accepts the legacy schema version 1 envelope or the complete atomic schema version 2 artifact before it invokes the publisher.
 
 The router's schema check is an entrance check, not the entire governance model. The publication planner performs the deeper checks because those checks also protect command-line publication.
 
@@ -313,8 +345,10 @@ This is a read-only deployment check. It verifies:
 
 - HTTP returns the catch-all 301 redirect to the same HTTPS URL;
 - the HTTPS application page returns HTML;
-- `app.js` and `model.js` return JavaScript rather than an HTML fallback; and
-- both JavaScript files pass Node's syntax check.
+- `app.js`, `model.js`, and `form-definition.js` return JavaScript rather than an
+  HTML fallback;
+- all three JavaScript files pass Node's syntax check; and
+- the versioned Work Proposal definition is served as valid JSON.
 
 The HTML check captures the specific failure that Firefox reports as `expected expression, got '<'`.
 

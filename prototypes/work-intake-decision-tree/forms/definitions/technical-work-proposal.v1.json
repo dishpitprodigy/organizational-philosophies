@@ -1,0 +1,862 @@
+{
+  "id": "technical-work-proposal",
+  "version": 1,
+  "artifactSchemaVersion": 2,
+  "intakeContexts": [
+    {
+      "field": "intakeContext",
+      "equals": "technical-work"
+    }
+  ],
+  "sections": [
+    {
+      "id": "request-and-routing-facts",
+      "title": "Request and Routing Facts",
+      "purpose": "Capture claimed demand and observable routing facts without asking the requester to select the result. Authenticated submission provenance is added by the publishing service, not typed into this form.",
+      "fields": [
+        {
+          "id": "intake.catalog-path",
+          "statePath": "catalogPath",
+          "type": "radio",
+          "label": "First: does this belong in the existing service catalog?",
+          "help": "General Inquiry is a normal service request. Work Proposal intake begins only after this boundary is tested.",
+          "options": [
+            [
+              "inquiry",
+              "I need an expert answer or brief feasibility guidance"
+            ],
+            [
+              "service",
+              "I need an existing, documented service or standard change"
+            ],
+            ["incident", "Something is broken or degraded"],
+            ["change", "I am proposing new or materially changed work"]
+          ],
+          "allowedValues": ["inquiry", "service", "incident", "change"],
+          "freeForm": false,
+          "required": true,
+          "outputPath": "intake.catalogPath"
+        },
+        {
+          "id": "intake.inquiry-hours",
+          "statePath": "inquiryHours",
+          "type": "number",
+          "label": "Expected expert time (hours)",
+          "help": "This demo treats up to four hours, with no change or purchase, as General Inquiry.",
+          "minimum": 0,
+          "requiredWhen": { "equals": ["intake.catalog-path", "inquiry"] },
+          "outputPath": "intake.inquiryHours"
+        },
+        {
+          "id": "intake.requires-change",
+          "statePath": "requiresChange",
+          "type": "boolean",
+          "label": "Would answering this require someone to change a system?",
+          "requiredWhen": { "equals": ["intake.catalog-path", "inquiry"] },
+          "outputPath": "intake.requiresChange"
+        },
+        {
+          "id": "submission.requester",
+          "statePath": "requester",
+          "type": "text",
+          "label": "Requester named in this draft",
+          "help": "Name the person who knowingly asks the organization to act. This field is a claim, not authentication; the publishing service records the authenticated actor separately.",
+          "freeForm": true,
+          "required": true,
+          "outputPath": "submission.requester"
+        },
+        {
+          "id": "submission.requesting-team",
+          "statePath": "requestingTeam",
+          "type": "team-select",
+          "label": "Requesting function",
+          "optionSource": {
+            "type": "backstage-catalog",
+            "kind": "Group",
+            "specType": "team"
+          },
+          "freeForm": false,
+          "required": true,
+          "outputPath": "submission.requestingTeam"
+        },
+        {
+          "id": "proposal.title",
+          "statePath": "title",
+          "type": "text",
+          "label": "Short working title",
+          "freeForm": true,
+          "required": true,
+          "outputPath": "proposal.title"
+        },
+        {
+          "id": "proposal.sponsor.name",
+          "statePath": "sponsor",
+          "type": "text",
+          "label": "Work Sponsor",
+          "help": "A name alone is not sponsorship; acceptance must be tied to this proposal revision.",
+          "freeForm": true,
+          "required": true,
+          "outputPath": "proposal.sponsor.name"
+        },
+        {
+          "id": "proposal.sponsor.level",
+          "statePath": "sponsorLevel",
+          "type": "select",
+          "label": "Sponsor level",
+          "options": [
+            ["Manager", "Manager"],
+            ["Director", "Director"],
+            ["Vice President", "Vice President"],
+            ["Executive", "Executive"]
+          ],
+          "allowedValues": [
+            "Manager",
+            "Director",
+            "Vice President",
+            "Executive"
+          ],
+          "freeForm": false,
+          "required": true,
+          "outputPath": "proposal.sponsor.level"
+        },
+        {
+          "id": "proposal.sponsor.accepted",
+          "statePath": "sponsorAccepted",
+          "type": "boolean",
+          "label": "Does this draft claim sponsor acceptance for this revision?",
+          "help": "This records an intake assertion only. The publishing service must obtain durable, attributable approval tied to this exact revision before it can mark sponsorship accepted.",
+          "required": true,
+          "outputPath": "proposal.sponsor.accepted"
+        },
+        {
+          "id": "proposal.acceptance-authority",
+          "statePath": "acceptanceAuthority",
+          "type": "text",
+          "label": "Acceptance Authority",
+          "help": "Who may decide that the delivered result satisfies the agreed proof and operating conditions?",
+          "freeForm": true,
+          "required": true,
+          "outputPath": "proposal.acceptanceAuthority"
+        },
+        {
+          "id": "proposal.intent",
+          "statePath": "intent",
+          "type": "select",
+          "label": "Primary intent",
+          "help": "One intent per Work Package; if two are required, split the work.",
+          "options": [
+            ["Discovery", "Discovery"],
+            ["Migration", "Migration"],
+            ["Redesign", "Redesign"],
+            ["Enablement", "Enablement"],
+            ["Optimization", "Optimization"]
+          ],
+          "allowedValues": [
+            "Discovery",
+            "Migration",
+            "Redesign",
+            "Enablement",
+            "Optimization"
+          ],
+          "freeForm": false,
+          "required": true,
+          "outputPath": "proposal.intent"
+        },
+        {
+          "id": "proposal.outcome-shape",
+          "statePath": "outcomeShape",
+          "type": "select",
+          "label": "Top-level outcome shape",
+          "help": "One independently valuable result produces an Epic; several produce an Initiative containing Epics.",
+          "options": [
+            ["single", "single"],
+            ["multiple", "multiple"]
+          ],
+          "allowedValues": ["single", "multiple"],
+          "freeForm": false,
+          "required": true,
+          "outputPath": "proposal.outcomeShape"
+        },
+        {
+          "id": "proposal.known-uncertainty",
+          "statePath": "knownUnknowns",
+          "type": "boolean",
+          "label": "Does material Known Uncertainty remain?",
+          "help": "A substantive unknown creates bounded Discovery; Assisted Intake must stop before doing that work.",
+          "required": true,
+          "outputPath": "proposal.knownUncertainty.present"
+        },
+        {
+          "id": "proposal.affected-user-count",
+          "statePath": "affectedUsers",
+          "type": "number",
+          "label": "People or customers affected",
+          "help": "Use the best defensible estimate.",
+          "minimum": 0,
+          "required": true,
+          "outputPath": "proposal.affectedUserCount"
+        },
+        {
+          "id": "proposal.operational-owner",
+          "statePath": "operationalOwner",
+          "type": "team-select",
+          "label": "Operational Ownership",
+          "help": "Who will operate, support, maintain, and respond to failure after acceptance?",
+          "optionSource": {
+            "type": "backstage-catalog",
+            "kind": "Group",
+            "specType": "team"
+          },
+          "freeForm": false,
+          "required": true,
+          "outputPath": "proposal.operationalOwner"
+        },
+        {
+          "id": "routing.production",
+          "statePath": "production",
+          "type": "boolean",
+          "label": "Will this change production?",
+          "required": true,
+          "outputPath": "routingFacts.production"
+        },
+        {
+          "id": "routing.customer-facing",
+          "statePath": "customerFacing",
+          "type": "boolean",
+          "label": "Can customers experience the outcome or a failure?",
+          "required": true,
+          "outputPath": "routingFacts.customerFacing"
+        },
+        {
+          "id": "routing.sensitive-data",
+          "statePath": "sensitiveData",
+          "type": "boolean",
+          "label": "Does it handle sensitive or regulated data?",
+          "required": true,
+          "outputPath": "routingFacts.sensitiveData"
+        },
+        {
+          "id": "routing.authentication-path",
+          "statePath": "authenticationPath",
+          "type": "boolean",
+          "label": "Is it part of authentication or authorization?",
+          "required": true,
+          "outputPath": "routingFacts.authenticationPath"
+        },
+        {
+          "id": "routing.internet-exposed",
+          "statePath": "internetExposed",
+          "type": "boolean",
+          "label": "Is any component exposed to the public internet?",
+          "required": true,
+          "outputPath": "routingFacts.internetExposed"
+        },
+        {
+          "id": "routing.purchase",
+          "statePath": "purchase",
+          "type": "boolean",
+          "label": "Could this require a purchase or vendor commitment?",
+          "required": true,
+          "outputPath": "routingFacts.purchase"
+        },
+        {
+          "id": "routing.spend-usd",
+          "statePath": "spendUsd",
+          "type": "number",
+          "label": "Potential financial commitment (USD)",
+          "help": "Financial Commitment Class is kept separate from delivery size and risk.",
+          "minimum": 0,
+          "required": true,
+          "outputPath": "routingFacts.spendUsd"
+        },
+        {
+          "id": "proposal.affected-systems",
+          "statePath": "affectedSystems",
+          "type": "catalog-multi-select",
+          "label": "Affected systems",
+          "help": "The system derives participating functions and dependency handoffs from this service map. Routing does not commit their capacity.",
+          "optionSource": { "type": "backstage-catalog", "kind": "System" },
+          "freeForm": false,
+          "required": true,
+          "outputPath": "proposal.affectedSystems"
+        },
+        {
+          "id": "planning.labor-days",
+          "statePath": "laborDays",
+          "type": "number",
+          "label": "Current labor forecast (person-days)",
+          "help": "A delivery estimate supplied or accepted by delivery reviewers; it is not requester-selected size.",
+          "minimum": 0,
+          "required": true,
+          "outputPath": "planning.laborDays"
+        },
+        {
+          "id": "planning.duration-weeks",
+          "statePath": "durationWeeks",
+          "type": "number",
+          "label": "Current elapsed-duration forecast (weeks)",
+          "help": "This includes waiting and dependencies; it does not overwrite the Approved Delivery Baseline.",
+          "minimum": 0,
+          "required": true,
+          "outputPath": "planning.durationWeeks"
+        }
+      ]
+    },
+    {
+      "id": "current-state",
+      "title": "Current-State Baseline",
+      "purpose": "Define the system that exists before proposing its replacement.",
+      "completionEvidence": "Architecture, workload, failure behavior, lifecycle, cost, operator effort, and the delta from any referenced baseline are explicit.",
+      "fields": [
+        {
+          "id": "proposal.current-state.baseline-mode",
+          "statePath": "currentState.baselineMode",
+          "type": "select",
+          "label": "How is Current State established?",
+          "help": "Reference an accepted revision only when its delta is explicit.",
+          "options": [
+            ["reference", "Reference an accepted baseline and state its delta"],
+            ["define", "Define the Current State in this proposal"]
+          ],
+          "allowedValues": ["reference", "define"],
+          "freeForm": false,
+          "required": true,
+          "outputPath": "currentState.baseline.mode"
+        },
+        {
+          "id": "proposal.current-state.baseline-reference",
+          "statePath": "currentState.baselineReference",
+          "type": "text",
+          "label": "Authoritative baseline reference",
+          "help": "Name the artifact, revision, acceptance date, and owner. Do not write ‘see existing documentation.’",
+          "placeholder": "OBS-ARCH-004 rev 7, accepted May 18, 2026 by SRE",
+          "freeForm": true,
+          "requiredWhen": {
+            "equals": ["proposal.current-state.baseline-mode", "reference"]
+          },
+          "outputPath": "currentState.baseline.reference"
+        },
+        {
+          "id": "proposal.current-state.architecture",
+          "statePath": "currentState.architecture",
+          "type": "textarea",
+          "label": "Architecture and operating path",
+          "help": "Name the live components, quantities, locations, connections, owners, and traffic or data path relevant to this request.",
+          "placeholder": "38 collectors receive Prometheus-format metrics from 16 clusters…",
+          "freeForm": true,
+          "required": true,
+          "outputPath": "currentState.architecture"
+        },
+        {
+          "id": "proposal.current-state.workload-evidence",
+          "statePath": "currentState.measurements",
+          "type": "textarea",
+          "label": "Measured production workload",
+          "help": "Give the observation window, units, sustained behavior, percentiles, maxima, and the retained source. State ‘not measured’ when Discovery must establish it.",
+          "placeholder": "May 1–28: 640,000 sustained samples/s; 910,000 p95… Source: OBS-WORKLOAD-2026-05.",
+          "freeForm": true,
+          "required": true,
+          "outputPath": "currentState.workloadEvidence"
+        },
+        {
+          "id": "proposal.current-state.constraints",
+          "statePath": "currentState.constraints",
+          "type": "textarea",
+          "label": "Observed failure, lifecycle, cost, and operator effort",
+          "help": "Record actual behavior: support dates, capacity horizon, recovery evidence, incidents, recurring labor, and current cost. Do not turn a suspected cause into a fact.",
+          "placeholder": "The release leaves vendor support on… SRE spends 56 person-hours/month…",
+          "freeForm": true,
+          "required": true,
+          "outputPath": "currentState.constraints"
+        },
+        {
+          "id": "proposal.current-state.delta",
+          "statePath": "currentState.delta",
+          "type": "textarea",
+          "label": "Explicit delta from the referenced baseline",
+          "help": "If the baseline remains current, say what was checked and that no material delta was found. Otherwise name every change relevant to this proposal.",
+          "placeholder": "Since rev 7, storage nodes were replaced like-for-like; topology and retention behavior are unchanged…",
+          "freeForm": true,
+          "requiredWhen": {
+            "equals": ["proposal.current-state.baseline-mode", "reference"]
+          },
+          "outputPath": "currentState.baseline.delta"
+        }
+      ]
+    },
+    {
+      "id": "desired-outcome",
+      "title": "Desired Outcome",
+      "purpose": "State one operating result, not a preferred implementation.",
+      "completionEvidence": "The operating scope, capability, decisive proof, and horizon are explicit.",
+      "fields": [
+        {
+          "id": "proposal.desired-outcome.scope",
+          "statePath": "outcome.scope",
+          "type": "textarea",
+          "label": "Who or what must experience the result?",
+          "help": "Name the population, services, sites, workloads, or operating boundary.",
+          "placeholder": "All 6,400 employees and contractors across 147 workforce applications…",
+          "freeForm": true,
+          "required": true,
+          "outputPath": "desiredOutcome.scope"
+        },
+        {
+          "id": "proposal.desired-outcome.capability",
+          "statePath": "outcome.capability",
+          "type": "textarea",
+          "label": "What must become true?",
+          "help": "Use product-neutral operating language. Include preserved behavior and the failure mode that disappears.",
+          "placeholder": "Northstar has selected a capability that preserves… without carrying forward…",
+          "freeForm": true,
+          "required": true,
+          "outputPath": "desiredOutcome.capability"
+        },
+        {
+          "id": "proposal.desired-outcome.proof",
+          "statePath": "outcome.proof",
+          "type": "textarea",
+          "label": "How will the organization know it is true?",
+          "help": "Name the decisive measures or observations. Detailed test steps belong in Acceptance Conditions.",
+          "placeholder": "The accepted query corpus passes and recurring operator work is ≤24 hours/month…",
+          "freeForm": true,
+          "required": true,
+          "outputPath": "desiredOutcome.proof"
+        },
+        {
+          "id": "proposal.desired-outcome.horizon",
+          "statePath": "outcome.horizon",
+          "type": "textarea",
+          "label": "For how long or by what event must it remain true?",
+          "help": "Use an operating horizon, contractual event, or sustained observation window—not an arbitrary project deadline.",
+          "placeholder": "Through the five-year planning horizon and a 30-day production burn-in…",
+          "freeForm": true,
+          "required": true,
+          "outputPath": "desiredOutcome.horizon"
+        }
+      ]
+    },
+    {
+      "id": "required-difference",
+      "title": "Required Difference",
+      "purpose": "Make the material gap inspectable.",
+      "completionEvidence": "Preserved obligations, changed conditions, and the common comparison evidence are explicit.",
+      "fields": [
+        {
+          "id": "proposal.required-difference.preserve",
+          "statePath": "difference.preserve",
+          "type": "textarea",
+          "label": "What current contracts or outcomes must remain true?",
+          "help": "Name interfaces, behavior, data obligations, recovery promises, or authorization semantics that cannot be lost.",
+          "placeholder": "Prometheus remote-write, PromQL, dashboards, alert rules, and retention obligations…",
+          "freeForm": true,
+          "required": true,
+          "outputPath": "requiredDifference.preserve"
+        },
+        {
+          "id": "proposal.required-difference.change",
+          "statePath": "difference.change",
+          "type": "textarea",
+          "label": "Which measured conditions must change?",
+          "help": "Pair each current limitation with the condition required instead. Do not say only ‘modernize,’ ‘improve,’ or ‘replace.’",
+          "placeholder": "Remove the March 31 support deadline, seven-month capacity horizon, and 56-hour monthly operating burden…",
+          "freeForm": true,
+          "required": true,
+          "outputPath": "requiredDifference.change"
+        },
+        {
+          "id": "proposal.required-difference.evidence-basis",
+          "statePath": "difference.evidence",
+          "type": "textarea",
+          "label": "What evidence must the decision compare?",
+          "help": "Name the production workload, failure behavior, operator exercise, cost model, retention obligation, or other common test basis.",
+          "placeholder": "The May workload replay, 50-query corpus, 8,420-rule corpus, failure scripts, and five-year lifecycle cost…",
+          "freeForm": true,
+          "required": true,
+          "outputPath": "requiredDifference.evidenceBasis"
+        }
+      ]
+    },
+    {
+      "id": "proof",
+      "title": "Requirements, Acceptance Conditions, and Non-Goals",
+      "purpose": "Define what the result must do, how the organization will know, and what remains outside the boundary.",
+      "fields": [
+        {
+          "id": "proposal.requirements",
+          "statePath": "requirements",
+          "type": "repeater",
+          "label": "Requirements",
+          "help": "One condition per row. Facts and buyer obligations use will; mandatory pass/fail conditions use shall; scored comparative goals use should. Every row names how it will be verified.",
+          "addLabel": "requirement",
+          "required": true,
+          "minimumItems": 1,
+          "columns": [
+            {
+              "key": "force",
+              "label": "Force",
+              "required": true,
+              "options": [
+                ["will", "will — supplied fact or obligation"],
+                ["shall", "shall — mandatory pass/fail condition"],
+                ["should", "should — scored comparative goal"]
+              ]
+            },
+            {
+              "key": "id",
+              "label": "Stable ID",
+              "placeholder": "001",
+              "required": true
+            },
+            {
+              "key": "condition",
+              "label": "Operating condition",
+              "required": true,
+              "type": "textarea",
+              "wide": true,
+              "placeholder": "The candidate shall ingest 1.74 million samples/s for 60 minutes…"
+            },
+            {
+              "key": "verification",
+              "label": "Verification method",
+              "required": true,
+              "type": "textarea",
+              "wide": true,
+              "placeholder": "Replay the retained May workload; reconcile sent, accepted, rejected, queued, and stored counts…"
+            }
+          ],
+          "outputPath": "requirements"
+        },
+        {
+          "id": "proposal.acceptance-conditions",
+          "statePath": "acceptance",
+          "type": "repeater",
+          "label": "Acceptance Conditions",
+          "help": "Describe observable proof of the Desired Outcome. Acceptance is not ‘the implementation is complete,’ ‘documentation exists,’ or ‘a ticket was closed.’",
+          "addLabel": "acceptance condition",
+          "required": true,
+          "minimumItems": 1,
+          "columns": [
+            {
+              "key": "context",
+              "label": "Condition or event",
+              "required": true,
+              "type": "textarea",
+              "placeholder": "During loss of one availability zone under the accepted peak workload…"
+            },
+            {
+              "key": "evidence",
+              "label": "Observable result",
+              "required": true,
+              "type": "textarea",
+              "placeholder": "No acknowledged samples are lost and normal ingestion, query, and alert behavior returns within 30 minutes…"
+            },
+            {
+              "key": "verification",
+              "label": "Retained proof",
+              "required": true,
+              "type": "textarea",
+              "wide": true,
+              "placeholder": "Failure-test record with timestamps, reconciled counters, query results, and evaluator sign-off…"
+            }
+          ],
+          "outputPath": "acceptanceConditions"
+        },
+        {
+          "id": "proposal.non-goals",
+          "statePath": "nonGoals",
+          "type": "repeater",
+          "label": "Non-Goals",
+          "help": "Name adjacent work that a reasonable reader might otherwise assume is included. An exclusion is a boundary, not a parking lot for unresolved scope.",
+          "addLabel": "non-goal",
+          "required": true,
+          "minimumItems": 1,
+          "columns": [
+            {
+              "key": "exclusion",
+              "label": "Explicitly excluded change",
+              "required": true,
+              "type": "textarea",
+              "placeholder": "This proposal will not change application instrumentation libraries, metric names, or dashboard ownership…"
+            },
+            {
+              "key": "reason",
+              "label": "Why it is outside this outcome",
+              "required": true,
+              "type": "textarea",
+              "placeholder": "Those changes have separate owners and are not required to close the stated gap…"
+            }
+          ],
+          "outputPath": "nonGoals"
+        }
+      ]
+    },
+    {
+      "id": "dependencies-and-framing",
+      "title": "Dependencies and Framing",
+      "purpose": "Separate prerequisites, reusable evidence, later work, and bounded Discovery from delivery authority.",
+      "fields": [
+        {
+          "id": "proposal.timing.event",
+          "statePath": "timing.event",
+          "type": "textarea",
+          "label": "Required-by event and latest useful date",
+          "help": "Tie the date to a contract, renewal, capacity limit, compliance event, dependency window, or other observable condition.",
+          "placeholder": "Selection accepted by November 30, before the FY2027 renewal and storage-purchase window…",
+          "freeForm": true,
+          "required": true,
+          "outputPath": "timing.event"
+        },
+        {
+          "id": "proposal.timing.evidence",
+          "statePath": "timing.evidence",
+          "type": "textarea",
+          "label": "Source of the timing condition",
+          "help": "Name the contract clause, forecast, calendar, accepted plan, or owner who can verify it.",
+          "placeholder": "Current support contract; 2.8% monthly growth forecast; Procurement renewal calendar…",
+          "freeForm": true,
+          "required": true,
+          "outputPath": "timing.evidence"
+        },
+        {
+          "id": "proposal.timing.missed-decision",
+          "statePath": "timing.missedDecision",
+          "type": "textarea",
+          "label": "Which decision or outcome becomes unavailable?",
+          "help": "State the organizational consequence. ‘The project will be late’ is circular and supplies no priority evidence.",
+          "placeholder": "The organization loses the supported replacement window before March 31, 2027…",
+          "freeForm": true,
+          "required": true,
+          "outputPath": "timing.missedDecision"
+        },
+        {
+          "id": "proposal.timing.avoidable-commitment",
+          "statePath": "timing.avoidableCommitment",
+          "type": "textarea",
+          "label": "What cost, risk, or obligation is created?",
+          "help": "Quantify the consequence where the evidence permits it.",
+          "placeholder": "$310,000 renewal plus another capacity expansion on the current architecture…",
+          "freeForm": true,
+          "required": false,
+          "outputPath": "timing.avoidableCommitment"
+        },
+        {
+          "id": "proposal.timing.fallback",
+          "statePath": "timing.fallback",
+          "type": "textarea",
+          "label": "What will the organization do if it misses the condition?",
+          "help": "Name the real fallback. If no decision has been made, say who must make it.",
+          "placeholder": "Procurement renews for one year and SRE expands the 730-day tier before the 90% limit…",
+          "freeForm": true,
+          "required": true,
+          "outputPath": "timing.fallback"
+        },
+        {
+          "id": "proposal.dependencies",
+          "statePath": "dependencies",
+          "type": "repeater",
+          "label": "Non-catalog dependency evidence",
+          "help": "The catalog derives system ownership and dependency closure. Add only a prerequisite decision, contribution, commitment, external event, or hidden contract that it cannot derive. A dependency does not imply Capacity Acceptance.",
+          "addLabel": "dependency",
+          "required": true,
+          "minimumItems": 1,
+          "columns": [
+            {
+              "key": "dependency",
+              "label": "Dependency",
+              "required": true,
+              "placeholder": "Sanitized production-workload replay"
+            },
+            {
+              "key": "owner",
+              "label": "Fact or decision owner",
+              "required": true,
+              "placeholder": "SRE Observability Lead"
+            },
+            {
+              "key": "contribution",
+              "label": "What must be supplied or decided?",
+              "required": true,
+              "type": "textarea",
+              "wide": true,
+              "placeholder": "Freeze the May 1–28 replay and measurement definitions before candidate testing begins…"
+            },
+            {
+              "key": "evidence",
+              "label": "Existing commitment or source",
+              "required": true,
+              "type": "textarea",
+              "wide": true,
+              "placeholder": "OBS-WORKLOAD-2026-05 accepted by producing teams; no delivery capacity committed…"
+            }
+          ],
+          "outputPath": "dependencies"
+        },
+        {
+          "id": "proposal.preconditions",
+          "statePath": "preconditions",
+          "type": "repeater",
+          "label": "Preconditions",
+          "help": "State conditions that must already be true before this work may start. Do not disguise implementation steps or preferred designs as prerequisites.",
+          "addLabel": "precondition",
+          "required": true,
+          "minimumItems": 1,
+          "columns": [
+            {
+              "key": "condition",
+              "label": "Required prior fact or decision",
+              "required": true,
+              "type": "textarea",
+              "placeholder": "Producing teams have accepted OBS-ARCH-004 rev 7 and the May workload export as accurate…"
+            },
+            {
+              "key": "evidenceOwner",
+              "label": "Who proves it, and with what record?",
+              "required": true,
+              "type": "textarea",
+              "placeholder": "SRE owns the signed baseline; Security owns replay-redaction approval…"
+            }
+          ],
+          "outputPath": "preconditions"
+        },
+        {
+          "id": "proposal.reusable-artifact.identifier",
+          "statePath": "artifact.identifier",
+          "type": "text",
+          "label": "Stable artifact identifier",
+          "help": "Use the organization’s durable record name—not a Jira issue key generated later.",
+          "placeholder": "SEL-OBS-007",
+          "freeForm": true,
+          "required": true,
+          "outputPath": "reusableArtifact.identifier"
+        },
+        {
+          "id": "proposal.reusable-artifact.contents",
+          "statePath": "artifact.contents",
+          "type": "textarea",
+          "label": "Required contents",
+          "help": "Name the baseline, measurements, decisions, rejected options, residual uncertainty, and later acceptance contract the artifact must retain.",
+          "placeholder": "Versioned baseline and delta; workload dataset; requirement compliance; POC results; tradeoffs…",
+          "freeForm": true,
+          "required": true,
+          "outputPath": "reusableArtifact.contents"
+        },
+        {
+          "id": "proposal.reusable-artifact.completion-proof",
+          "statePath": "artifact.completionProof",
+          "type": "textarea",
+          "label": "What makes the artifact accepted rather than merely present?",
+          "help": "Name the required reconciliation, signatures, decision, or evidence closure.",
+          "placeholder": "Every SHALL has pass/fail/accepted-exception evidence and the Decision Owner records the selected and rejected options…",
+          "freeForm": true,
+          "required": true,
+          "outputPath": "reusableArtifact.completionProof"
+        },
+        {
+          "id": "proposal.downstream.work",
+          "statePath": "downstream.work",
+          "type": "textarea",
+          "label": "What later work can now be framed?",
+          "help": "Name the next decision or Work Proposal, not a promise that implementation has been authorized.",
+          "placeholder": "A later Work Proposal can name the selected capability and split implementation into producer onboarding…",
+          "freeForm": true,
+          "required": true,
+          "outputPath": "downstream.work"
+        },
+        {
+          "id": "proposal.downstream.fixed-decisions",
+          "statePath": "downstream.fixedDecisions",
+          "type": "textarea",
+          "label": "Which accepted facts or decisions must not be reopened?",
+          "help": "Name the baseline, obligations, comparison, and boundaries that downstream work inherits.",
+          "placeholder": "Product selection, May workload, retention obligations, and the accepted failure tests…",
+          "freeForm": true,
+          "required": true,
+          "outputPath": "downstream.fixedDecisions"
+        },
+        {
+          "id": "proposal.discovery.question",
+          "statePath": "discovery.question",
+          "type": "textarea",
+          "label": "Decision-critical question",
+          "help": "Ask one question whose answer changes the design, option, boundary, or authorization decision.",
+          "placeholder": "Which option passes the accepted workload and failure tests at the lowest defensible lifecycle cost?",
+          "freeForm": true,
+          "requiredWhen": { "equals": ["proposal.known-uncertainty", true] },
+          "outputPath": "knownUncertainty.question"
+        },
+        {
+          "id": "proposal.discovery.end-decision",
+          "statePath": "discovery.endDecision",
+          "type": "textarea",
+          "label": "Decision required when the timebox ends",
+          "help": "State the allowed dispositions even if evidence remains incomplete: proceed, reject, split, extend through a new decision, or accept residual uncertainty.",
+          "placeholder": "Select one option, reject all options, or authorize a separately bounded proof for a named residual uncertainty…",
+          "freeForm": true,
+          "requiredWhen": { "equals": ["proposal.known-uncertainty", true] },
+          "outputPath": "knownUncertainty.endDecision"
+        },
+        {
+          "id": "proposal.discovery.phases",
+          "statePath": "discovery.phases",
+          "type": "repeater",
+          "label": "Timebox phases",
+          "help": "Divide the timebox into evidence-producing phases. Each phase has an exit condition; elapsed time alone is not progress.",
+          "addLabel": "timebox phase",
+          "requiredWhen": { "equals": ["proposal.known-uncertainty", true] },
+          "minimumItems": 1,
+          "columns": [
+            {
+              "key": "phase",
+              "label": "Bounded phase and duration",
+              "required": true,
+              "type": "textarea",
+              "placeholder": "5 working days — freeze inputs and candidate claims"
+            },
+            {
+              "key": "exit",
+              "label": "Phase exit evidence",
+              "required": true,
+              "type": "textarea",
+              "placeholder": "Versioned input package accepted; unresolved claims entered in the claim register"
+            }
+          ],
+          "outputPath": "knownUncertainty.phases"
+        },
+        {
+          "id": "proposal.candidate-epic-outcomes",
+          "statePath": "epicOutcomes",
+          "type": "repeater",
+          "label": "Candidate independently valuable Epic outcomes",
+          "help": "Use only when the top-level outcome requires an Initiative. Each row states a capability or removed failure mode, its verification, and an operating horizon. These remain candidates, not authorized work.",
+          "addLabel": "candidate Epic outcome",
+          "requiredWhen": { "equals": ["proposal.outcome-shape", "multiple"] },
+          "columns": [
+            {
+              "key": "capability",
+              "label": "Capability or failure mode changed",
+              "required": true,
+              "type": "textarea",
+              "placeholder": "The target tenant authenticates test users in both regions and survives primary-region isolation…"
+            },
+            {
+              "key": "measure",
+              "label": "Measure or decisive check",
+              "required": true,
+              "type": "textarea",
+              "placeholder": "No more than five minutes of new-session interruption; security events export within five minutes…"
+            },
+            {
+              "key": "horizon",
+              "label": "Operating horizon",
+              "required": true,
+              "type": "textarea",
+              "placeholder": "30-day burn-in after the migration wave…"
+            }
+          ],
+          "outputPath": "candidateEpicOutcomes"
+        }
+      ]
+    }
+  ]
+}

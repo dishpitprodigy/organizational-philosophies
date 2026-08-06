@@ -224,6 +224,127 @@ test('reviewable proposal publishes intake and review projections, not candidate
   assert.match(plan.notes[0], /Candidate delivery was not published/);
 });
 
+test('schema version 2 renders Jira prose from atomic evidence', () => {
+  const atomic = structuredClone(artifact);
+  atomic.schemaVersion = 2;
+  atomic.form = { id: 'technical-work-proposal', version: 1 };
+  atomic.proposal.currentState = {
+    summary: 'The current metrics capability has three storage tiers.',
+    baseline: {
+      mode: 'reference',
+      reference: 'OBS-ARCH-004 rev 7',
+      delta: 'Storage hardware changed; topology did not.',
+    },
+    architecture: 'Thirty-eight collectors feed three retention tiers.',
+    workloadEvidence: 'OBS-WORKLOAD-2026-05 records the measured workload.',
+    constraints: 'Support ends March 31, 2027.',
+  };
+  atomic.proposal.desiredOutcome = {
+    summary: 'Select a supportable capability using retained evidence.',
+    scope: 'Shared engineering metrics.',
+    capability: 'A supportable capability is selected.',
+    proof: 'The accepted workload passes.',
+    horizon: 'Five years.',
+  };
+  atomic.proposal.requiredDifference = {
+    summary: 'Compare retain, redesign, adopt, and buy options.',
+    preserve: 'Prometheus interfaces.',
+    change: 'Remove the support deadline.',
+    evidenceBasis: 'Use the same retained workload.',
+  };
+  atomic.proposal.requirements = [
+    {
+      id: 'SHALL-001',
+      modality: 'shall',
+      condition: 'The candidate shall execute the same workload.',
+      verification: 'Replay and reconcile OBS-WORKLOAD-2026-05.',
+    },
+  ];
+  atomic.proposal.acceptanceConditions = [
+    {
+      id: 'AC-001',
+      context: 'Equivalent proof work ends.',
+      result: 'The Decision Owner records the selected option.',
+      evidenceMethod: 'Accepted Selection Decision Record.',
+    },
+  ];
+
+  const plan = buildPublicationPlan(
+    resolveArtifactRouting(atomic, catalogEntities),
+  );
+  const description = plan.issues[0].description;
+
+  assert.match(description, /Baseline: OBS-ARCH-004 rev 7/);
+  assert.match(
+    description,
+    /SHALL-001: The candidate shall execute the same workload\./,
+  );
+  assert.match(description, /Verification: Replay and reconcile/);
+  assert.match(
+    description,
+    /AC-001: Given Equivalent proof work ends\., The Decision Owner records/,
+  );
+  assert.doesNotMatch(description, /\[object Object\]/);
+});
+
+test('an unverified schema-v2 draft is indexed without creating review work', () => {
+  const draft = structuredClone(artifact);
+  draft.schemaVersion = 2;
+  draft.proposal.state = 'Draft Work Proposal — sponsor acceptance unverified';
+  draft.proposal.authority = 'No authority granted';
+  draft.proposal.currentState = {
+    summary: artifact.proposal.currentState,
+    baseline: { mode: 'define' },
+    architecture: artifact.proposal.currentState,
+    workloadEvidence: 'Measured workload evidence.',
+    constraints: 'Observed operating constraints.',
+  };
+  draft.proposal.desiredOutcome = {
+    summary: artifact.proposal.desiredOutcome,
+    scope: 'Shared engineering metrics.',
+    capability: artifact.proposal.desiredOutcome,
+    proof: 'The accepted proof corpus passes.',
+    horizon: 'Five years.',
+  };
+  draft.proposal.requiredDifference = {
+    summary: artifact.proposal.requiredDifference,
+    preserve: 'Existing interfaces.',
+    change: artifact.proposal.requiredDifference,
+    evidenceBasis: 'The retained workload.',
+  };
+  draft.proposal.requirements = [
+    {
+      id: 'SHALL-001',
+      modality: 'shall',
+      condition: artifact.proposal.requirements[0],
+      verification: 'Run the retained workload.',
+    },
+  ];
+  draft.proposal.acceptanceConditions = [
+    {
+      id: 'AC-001',
+      context: 'Proof ends.',
+      result: artifact.proposal.acceptanceConditions[0],
+      evidenceMethod: 'Accepted decision record.',
+    },
+  ];
+  draft.proposal.sponsor = {
+    accepted: false,
+    assertedAccepted: true,
+    verificationStatus: 'unverified',
+  };
+
+  const plan = buildPublicationPlan(
+    resolveArtifactRouting(draft, catalogEntities),
+  );
+
+  assert.deepEqual(
+    plan.issues.map(issue => issue.localId),
+    ['proposal'],
+  );
+  assert.match(plan.notes.join('\n'), /sponsor approval/i);
+});
+
 test('publication planning rejects reviews that were not resolved by Backstage', () => {
   assert.throws(
     () => buildPublicationPlan(artifact),

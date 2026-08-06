@@ -549,7 +549,7 @@
 
   function missingProposalFields(state) {
     const fields = [
-      ["requester", "authenticated requester"],
+      ["requester", "requester named in this draft"],
       ["requestingTeam", "requesting function"],
       ["title", "short working title"],
       ["currentState", "Current State"],
@@ -794,26 +794,26 @@
     } else if (materialChange(state) && (!state.sponsor.trim() || !state.sponsorAccepted)) {
       disposition = {
         key: "blocked",
-        label: "Sponsorship Required",
-        summary: "A named person is not enough. The sponsor must knowingly accept the priority claim, evaluation capacity, and organizational tradeoffs for this proposal revision.",
+        label: "Sponsor Acceptance Claim Required",
+        summary: "A named person is not enough. The draft must identify whether sponsor acceptance is claimed; the publishing workflow must still obtain durable, attributable approval for this exact revision.",
       };
     } else if (proposalMissing.length || framingMissing.length) {
       disposition = {
         key: "draft",
         label: "Draft Work Proposal — Incomplete",
-        summary: "The authenticated requester still owns this draft. Missing facts return to their owners; the receiving teams do not manufacture them.",
+        summary: "The named requester still owns this draft. Missing facts return to their owners; the receiving teams do not manufacture them.",
       };
     } else {
       disposition = {
         key: "proposal",
-        label: "Work Proposal — Ready for Ordered Review",
-        summary: "The proposal contains enough evidence to request review or bounded discovery. It is not an Authorized Work Proposal, and no delivery capacity has been committed.",
+        label: "Draft Work Proposal — Complete for Submission",
+        summary: "The draft contains the required intake evidence. The server must bind authenticated submission provenance and the sponsor workflow must attach durable approval before ordered review can be created.",
       };
     }
 
     const reviews = (materialChange(state) ? buildReviews(state, graph) : []).map((review) => ({
       ...review,
-      state: disposition.key !== "proposal" ? "Not created" : review.stage === 1 ? "Ready for review" : "Waiting for predecessor",
+      state: "Candidate — not created",
     }));
     const capacityDecisions = graph.teamIds.map((teamId) => ({
       teamId,
@@ -827,7 +827,7 @@
     const routing = [
       state.catalogPath === "change" ? "The requester knowingly selected proposed change outside the service catalog." : `Front-door answer: ${state.catalogPath || "not answered"}.`,
     ];
-    if (materialChange(state)) routing.push(state.sponsorAccepted ? `Sponsorship accepted by ${state.sponsor}.` : "Sponsorship has not been durably accepted for this revision.");
+    if (materialChange(state)) routing.push(state.sponsorAccepted ? `The draft claims sponsorship acceptance by ${state.sponsor}; durable approval is still required.` : "The draft does not claim sponsor acceptance.");
     if (proposalMissing.length) routing.push(`Work Proposal evidence is missing: ${proposalMissing.join(", ")}.`);
     if (framingMissing.length) routing.push(`Framing is missing: ${framingMissing.join(", ")}.`);
     if (state.knownUnknowns) routing.push("Known Uncertainty produces a bounded Discovery Work Package; it does not authorize implementation or silently inflate size.");
@@ -849,20 +849,86 @@
       workStructure,
       routing,
       proposalRecord: {
-        type: disposition.key === "proposal" ? "Reviewable Work Proposal" : "Draft Work Proposal",
+        type: "Draft Work Proposal",
         id: state.proposalId,
         revision: Number(state.proposalRevision),
         label: state.proposalId ? `${state.proposalId} rev ${Number(state.proposalRevision)}` : "Unassigned Work Proposal",
-        authority: disposition.key === "proposal" ? "May consume ordered review or bounded discovery capacity" : "No authority granted",
+        authority: "No authority granted",
       },
     };
   }
 
-  function evidenceStatements(value) {
-    return String(value || "")
-      .split(/\n{2,}/)
-      .map((statement) => statement.trim())
-      .filter(Boolean);
+  function evidenceId(prefix, value, index) {
+    const candidate = String(value || "").trim().toUpperCase();
+    if (candidate.startsWith(`${prefix}-`)) return candidate;
+    return `${prefix}-${candidate || String(index + 1).padStart(3, "0")}`;
+  }
+
+  function atomicProposalEvidence(state, result) {
+    const compiled = state.compiledAnswers;
+    if (!compiled?.currentState || !compiled?.desiredOutcome || !compiled?.requiredDifference) {
+      throw new Error("Work Proposal schema version 2 requires validated, compiled form answers.");
+    }
+    const affectedEntities = result.graph.selected.map((systemId) => COMPANY.systems[systemId]?.entityRef).filter(Boolean);
+    return {
+      currentState: {
+        summary: state.currentState,
+        ...compiled.currentState,
+      },
+      desiredOutcome: {
+        summary: state.outcome,
+        ...compiled.desiredOutcome,
+      },
+      requiredDifference: {
+        summary: state.difference,
+        ...compiled.requiredDifference,
+      },
+      requirements: (compiled.requirements || []).map((item, index) => ({
+        id: evidenceId(String(item.force || "shall").toUpperCase(), item.id, index),
+        modality: String(item.force || "shall").toLowerCase(),
+        condition: item.condition,
+        verification: item.verification,
+      })),
+      acceptanceConditions: (compiled.acceptanceConditions || []).map((item, index) => ({
+        id: evidenceId("AC", "", index),
+        context: item.context || "",
+        result: item.evidence,
+        evidenceMethod: item.verification,
+      })),
+      nonGoals: (compiled.nonGoals || []).map((item, index) => ({
+        id: evidenceId("NG", "", index),
+        exclusion: item.exclusion,
+        reason: item.reason || "",
+      })),
+      affectedEntities,
+      dependencies: (compiled.dependencies || []).map((item, index) => ({
+        id: evidenceId("DEP", "", index),
+        dependency: item.dependency,
+        owner: item.owner,
+        contribution: item.contribution,
+        evidence: item.evidence,
+      })),
+      preconditions: (compiled.preconditions || []).map((item, index) => ({
+        id: evidenceId("PRE", "", index),
+        condition: item.condition,
+        evidenceOwner: item.evidenceOwner,
+      })),
+      sponsor: {
+        name: compiled.proposal.sponsor.name,
+        level: compiled.proposal.sponsor.level,
+        accepted: false,
+        assertedAccepted: Boolean(compiled.proposal.sponsor.accepted),
+        verificationStatus: "unverified",
+        evidence: "No durable, attributable sponsor approval is attached to this prototype revision.",
+      },
+      acceptanceAuthority: compiled.proposal.acceptanceAuthority,
+      knownUncertainty: {
+        present: Boolean(compiled.proposal.knownUncertainty.present),
+        question: compiled.knownUncertainty?.question || "",
+        discoveryTimebox: state.discoveryTimebox || "",
+      },
+      reusableArtifact: compiled.reusableArtifact,
+    };
   }
 
   function publicationCandidates(state, result) {
@@ -916,25 +982,34 @@
   function publicationArtifact(state) {
     const result = evaluate(state);
     if (result.disposition.key !== "proposal") {
-      throw new Error(`Jira publication requires a Work Proposal that is ready for ordered review. Current route: ${result.disposition.label}.`);
+      throw new Error(`Jira publication requires a complete Work Proposal draft. Current route: ${result.disposition.label}.`);
     }
     if (!result.proposalRecord.id) {
       throw new Error("Jira publication requires an assigned Work Proposal identifier.");
     }
 
+    const atomicEvidence = atomicProposalEvidence(state, result);
     return {
-      schemaVersion: 1,
+      schemaVersion: 2,
+      form: state.form || {
+        id: "technical-work-proposal",
+        version: 1,
+      },
+      answers: state.formAnswers || {},
+      submission: {
+        requester: state.requester,
+        requestingTeam: `group:default/${state.requestingTeam}`,
+        source: "backstage-work-intake",
+        authenticatedActor: null,
+        submittedAt: null,
+      },
       proposal: {
         id: result.proposalRecord.id,
         revision: result.proposalRecord.revision,
         title: state.title,
-        state: result.disposition.label,
-        authority: result.proposalRecord.authority,
-        currentState: state.currentState,
-        desiredOutcome: state.outcome,
-        requiredDifference: state.difference,
-        requirements: evidenceStatements(state.requirements),
-        acceptanceConditions: evidenceStatements(state.success),
+        state: "Draft Work Proposal — sponsor acceptance unverified",
+        authority: "No authority granted",
+        ...atomicEvidence,
       },
       reviews: result.reviews.map(({ stage, name, decisionOwner, state: reviewState }) => ({
         stage,
@@ -943,7 +1018,7 @@
         state: reviewState,
       })),
       routingRequest: {
-        affectedEntities: result.graph.selected.map((systemId) => COMPANY.systems[systemId]?.entityRef).filter(Boolean),
+        affectedEntities: atomicEvidence.affectedEntities,
         facts: {
           purchase: Boolean(state.purchase),
           spendUsd: Number(state.spendUsd),
@@ -955,9 +1030,14 @@
           intent: state.intent,
         },
       },
+      classifications: {
+        workFunctions: result.graph.teamIds,
+        decisionImpacts: result.risks.map((risk) => risk.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "")),
+        tags: state.tags || [],
+      },
       candidateDelivery: {
         authorized: false,
-        reason: "The artifact is a Reviewable Work Proposal. Required review decisions, an Authorized Work Proposal, Planning Interval, and Capacity Acceptances do not yet exist.",
+        reason: "This draft contains candidate review and delivery projections only. Durable sponsor approval, required review decisions, an Authorized Work Proposal, Planning Interval, and Capacity Acceptances do not yet exist.",
         records: publicationCandidates(state, result),
       },
     };

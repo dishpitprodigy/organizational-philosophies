@@ -9,9 +9,11 @@ const VARIANTS = {
 
 const domainModel = window.WorkIntakePrototype;
 const { COMPANY, SCENARIOS, blankState } = domainModel;
+const formDefinitions = window.WorkIntakeFormDefinitions;
 const app = document.querySelector("#app");
 
 let state = blankState();
+let formDefinition;
 let wizardStep = Math.max(0, Number(new URLSearchParams(window.location.search).get("step")) || 0);
 const evaluate = () => domainModel.evaluate(state);
 
@@ -199,13 +201,17 @@ function topbar(dark = false) {
   </header>`;
 }
 
-function selectField(field, label, options, help = "") {
-  return `<label class="field"><span>${label}</span><select data-field="${field}"><option value="">Select one…</option>${options.map((option) => `<option value="${h(option)}" ${state[field] === option ? "selected" : ""}>${h(option)}</option>`).join("")}</select>${help ? `<small>${help}</small>` : ""}</label>`;
+function selectField(id) {
+  const definition = definedField(id);
+  const field = definition.statePath;
+  return `<label class="field"><span>${h(definition.label)}</span><select data-form-field-id="${h(id)}" data-field="${h(field)}"><option value="">Select one…</option>${definition.options.map(([value, label]) => `<option value="${h(value)}" ${state[field] === value ? "selected" : ""}>${h(label)}</option>`).join("")}</select>${definition.help ? `<small>${h(definition.help)}</small>` : ""}</label>`;
 }
 
-function teamSelectField(field, label, help = "") {
+function teamSelectField(id) {
+  const definition = definedField(id);
+  const field = definition.statePath;
   const options = Object.entries(COMPANY.teams).map(([id, team]) => `<option value="${h(id)}" ${state[field] === id ? "selected" : ""}>${h(team.name)}</option>`).join("");
-  return `<label class="field"><span>${label}</span><select data-field="${field}"><option value="">Select one…</option>${options}</select>${help ? `<small>${help}</small>` : ""}</label>`;
+  return `<label class="field"><span>${h(definition.label)}</span><select data-form-field-id="${h(id)}" data-field="${h(field)}"><option value="">Select one…</option>${options}</select>${definition.help ? `<small>${h(definition.help)}</small>` : ""}</label>`;
 }
 
 function textareaRows(value) {
@@ -213,11 +219,13 @@ function textareaRows(value) {
   return Math.max(4, Math.min(32, wrappedLines + 1));
 }
 
-function textField(field, label, help = "", textarea = false) {
-  const control = textarea
-    ? `<textarea data-field="${field}" rows="${textareaRows(state[field])}">${h(state[field])}</textarea>`
-    : `<input type="text" data-field="${field}" value="${h(state[field])}">`;
-  return `<label class="field"><span>${label}</span>${control}${help ? `<small>${help}</small>` : ""}</label>`;
+function textField(id) {
+  const definition = definedField(id);
+  const field = definition.statePath;
+  const control = definition.type === "textarea"
+    ? `<textarea data-form-field-id="${h(id)}" data-field="${h(field)}" rows="${textareaRows(state[field])}">${h(state[field])}</textarea>`
+    : `<input type="text" data-form-field-id="${h(id)}" data-field="${h(field)}" value="${h(state[field])}">`;
+  return `<label class="field"><span>${h(definition.label)}</span>${control}${definition.help ? `<small>${h(definition.help)}</small>` : ""}</label>`;
 }
 
 function guidedValue(path) {
@@ -231,21 +239,39 @@ function setGuidedValue(path, value) {
   parent[finalKey] = value;
 }
 
-function guidedField(path, label, help = "", options = {}) {
-  const { textarea = false, placeholder = "", select = [] } = options;
+function definedField(id) {
+  const field = formDefinitions.fieldsIn(formDefinition).find((candidate) => candidate.id === id);
+  if (!field) throw new Error(`Form definition field not found: ${id}`);
+  return field;
+}
+
+function guidedField(id) {
+  const field = definedField(id);
+  const path = field.statePath;
+  const label = field.label;
+  const help = field.help || "";
+  const textarea = field.type === "textarea";
+  const placeholder = field.placeholder || "";
+  const select = field.options || [];
   const value = guidedValue(path);
   let control;
   if (select.length) {
-    control = `<select data-guided-path="${h(path)}"><option value="">Select one…</option>${select.map(([key, text]) => `<option value="${h(key)}" ${value === key ? "selected" : ""}>${h(text)}</option>`).join("")}</select>`;
+    control = `<select data-form-field-id="${h(id)}" data-guided-path="${h(path)}"><option value="">Select one…</option>${select.map(([key, text]) => `<option value="${h(key)}" ${value === key ? "selected" : ""}>${h(text)}</option>`).join("")}</select>`;
   } else if (textarea) {
-    control = `<textarea data-guided-path="${h(path)}" rows="${textareaRows(value)}" placeholder="${h(placeholder)}">${h(value)}</textarea>`;
+    control = `<textarea data-form-field-id="${h(id)}" data-guided-path="${h(path)}" rows="${textareaRows(value)}" placeholder="${h(placeholder)}">${h(value)}</textarea>`;
   } else {
-    control = `<input type="text" data-guided-path="${h(path)}" value="${h(value)}" placeholder="${h(placeholder)}">`;
+    control = `<input type="text" data-form-field-id="${h(id)}" data-guided-path="${h(path)}" value="${h(value)}" placeholder="${h(placeholder)}">`;
   }
   return `<label class="field"><span>${h(label)}</span>${control}${help ? `<small>${h(help)}</small>` : ""}</label>`;
 }
 
-function guidedRepeater(path, title, help, columns, addLabel) {
+function guidedRepeater(id) {
+  const field = definedField(id);
+  const path = field.statePath;
+  const title = field.label;
+  const help = field.help;
+  const columns = field.columns;
+  const addLabel = field.addLabel;
   const rows = guidedValue(path) || [];
   return `<section class="guided-repeater wide">
     <div class="guided-heading"><div><h4>${h(title)}</h4><p>${h(help)}</p></div><button type="button" class="add-row" data-guided-add="${h(path)}">+ ${h(addLabel)}</button></div>
@@ -254,10 +280,10 @@ function guidedRepeater(path, title, help, columns, addLabel) {
       <div class="guided-row-fields">${columns.map((column) => {
         const value = row[column.key] || "";
         const control = column.options
-          ? `<select data-guided-list="${h(path)}" data-guided-index="${index}" data-guided-key="${h(column.key)}"><option value="">Select…</option>${column.options.map(([key, text]) => `<option value="${h(key)}" ${value === key ? "selected" : ""}>${h(text)}</option>`).join("")}</select>`
-          : column.textarea
-            ? `<textarea rows="${textareaRows(value)}" data-guided-list="${h(path)}" data-guided-index="${index}" data-guided-key="${h(column.key)}" placeholder="${h(column.placeholder || "")}">${h(value)}</textarea>`
-            : `<input type="text" data-guided-list="${h(path)}" data-guided-index="${index}" data-guided-key="${h(column.key)}" value="${h(value)}" placeholder="${h(column.placeholder || "")}">`;
+          ? `<select data-form-field-id="${h(id)}" data-guided-list="${h(path)}" data-guided-index="${index}" data-guided-key="${h(column.key)}"><option value="">Select…</option>${column.options.map(([key, text]) => `<option value="${h(key)}" ${value === key ? "selected" : ""}>${h(text)}</option>`).join("")}</select>`
+          : column.type === "textarea"
+            ? `<textarea rows="${textareaRows(value)}" data-form-field-id="${h(id)}" data-guided-list="${h(path)}" data-guided-index="${index}" data-guided-key="${h(column.key)}" placeholder="${h(column.placeholder || "")}">${h(value)}</textarea>`
+            : `<input type="text" data-form-field-id="${h(id)}" data-guided-list="${h(path)}" data-guided-index="${index}" data-guided-key="${h(column.key)}" value="${h(value)}" placeholder="${h(column.placeholder || "")}">`;
         return `<label class="field ${column.wide ? "wide" : ""}"><span>${h(column.label)}</span>${control}${column.help ? `<small>${h(column.help)}</small>` : ""}</label>`;
       }).join("")}</div>
       <button type="button" class="remove-row" aria-label="Remove row ${index + 1}" data-guided-remove="${h(path)}" data-guided-index="${index}">Remove</button>
@@ -367,48 +393,47 @@ function guidedSectionFor(control) {
   return control.dataset.guidedList.split(".")[0];
 }
 
-function numberField(field, label, help = "", min = 0) {
-  return `<label class="field"><span>${label}</span><input type="number" min="${min}" data-field="${field}" value="${Number(state[field]) || ""}">${help ? `<small>${help}</small>` : ""}</label>`;
+function numberField(id) {
+  const definition = definedField(id);
+  const field = definition.statePath;
+  return `<label class="field"><span>${h(definition.label)}</span><input type="number" min="${Number(definition.minimum) || 0}" data-form-field-id="${h(id)}" data-field="${h(field)}" value="${Number(state[field]) || ""}">${definition.help ? `<small>${h(definition.help)}</small>` : ""}</label>`;
 }
 
-function booleanChoice(field, label, help = "") {
-  return `<fieldset class="field"><legend>${label}</legend><div class="choice-grid">
-    <label class="choice"><input type="radio" name="${field}" data-field="${field}" value="true" ${state[field] ? "checked" : ""}>Yes</label>
-    <label class="choice"><input type="radio" name="${field}" data-field="${field}" value="false" ${!state[field] ? "checked" : ""}>No</label>
-  </div>${help ? `<small>${help}</small>` : ""}</fieldset>`;
+function booleanChoice(id) {
+  const definition = definedField(id);
+  const field = definition.statePath;
+  return `<fieldset class="field"><legend>${h(definition.label)}</legend><div class="choice-grid">
+    <label class="choice"><input type="radio" name="${h(field)}" data-form-field-id="${h(id)}" data-field="${h(field)}" value="true" ${state[field] ? "checked" : ""}>Yes</label>
+    <label class="choice"><input type="radio" name="${h(field)}" data-form-field-id="${h(id)}" data-field="${h(field)}" value="false" ${!state[field] ? "checked" : ""}>No</label>
+  </div>${definition.help ? `<small>${h(definition.help)}</small>` : ""}</fieldset>`;
 }
 
 function boundaryFields() {
-  const options = [
-    ["inquiry", "I need an expert answer or brief feasibility guidance"],
-    ["service", "I need an existing, documented service or standard change"],
-    ["incident", "Something is broken or degraded"],
-    ["change", "I am proposing new or materially changed work"],
-  ];
-  return `<fieldset class="field"><legend>First: does this belong in the existing service catalog?</legend><div class="choice-grid">
-    ${options.map(([value, label]) => `<label class="choice"><input type="radio" name="catalogPath" data-field="catalogPath" value="${value}" ${state.catalogPath === value ? "checked" : ""}>${label}</label>`).join("")}
-  </div><small>General Inquiry is a normal service request. Work Proposal intake begins only after this boundary is tested.</small></fieldset>
-  ${state.catalogPath === "inquiry" ? `<div class="form-grid">${numberField("inquiryHours", "Expected expert time (hours)", "This demo treats up to four hours, with no change or purchase, as General Inquiry.")}${booleanChoice("requiresChange", "Would answering this require someone to change a system?")}</div>` : ""}`;
+  const definition = definedField("intake.catalog-path");
+  return `<fieldset class="field"><legend>${h(definition.label)}</legend><div class="choice-grid">
+    ${definition.options.map(([value, label]) => `<label class="choice"><input type="radio" name="catalogPath" data-form-field-id="${h(definition.id)}" data-field="${h(definition.statePath)}" value="${h(value)}" ${state.catalogPath === value ? "checked" : ""}>${h(label)}</label>`).join("")}
+  </div><small>${h(definition.help)}</small></fieldset>
+  ${state.catalogPath === "inquiry" ? `<div class="form-grid">${numberField("intake.inquiry-hours")}${booleanChoice("intake.requires-change")}</div>` : ""}`;
 }
 
 function purposeFields(mode = "all") {
   const hidden = (part) => mode === "all" || mode === part ? "" : "hidden-part";
   return `<div class="form-grid purpose-fields">
     <div class="part subgrid wide ${hidden("identity")}">
-    ${textField("requester", "Authenticated requester", "The person who knowingly asks the organization to act. A receiving team may not manufacture this demand.")}
-    ${teamSelectField("requestingTeam", "Requesting function")}
-    <div class="wide">${textField("title", "Short working title")}</div>
+    ${textField("submission.requester")}
+    ${teamSelectField("submission.requesting-team")}
+    <div class="wide">${textField("proposal.title")}</div>
     </div>
 
     <section class="guided-section wide part ${hidden("current")}">
       <div class="guided-heading"><div><p class="eyebrow">Current-State Baseline</p><h3>Define the system that exists before proposing its replacement.</h3></div><span class="evidence-rule">Architecture · workload · failure · cost · delta</span></div>
       <div class="form-grid">
-        ${guidedField("currentState.baselineMode", "How is Current State established?", "Reference an accepted revision only when its delta is explicit.", { select: [["reference", "Reference an accepted baseline and state its delta"], ["define", "Define the Current State in this proposal"]] })}
-        ${guidedField("currentState.baselineReference", "Authoritative baseline reference", "Name the artifact, revision, acceptance date, and owner. Do not write “see existing documentation.”", { placeholder: "OBS-ARCH-004 rev 7, accepted May 18, 2026 by SRE" })}
-        <div class="wide">${guidedField("currentState.architecture", "Architecture and operating path", "Name the live components, quantities, locations, connections, owners, and traffic or data path relevant to this request.", { textarea: true, placeholder: "38 collectors receive Prometheus-format metrics from 16 clusters…" })}</div>
-        <div class="wide">${guidedField("currentState.measurements", "Measured production workload", "Give the observation window, units, sustained behavior, percentiles, maxima, and the retained source. State “not measured” when Discovery must establish it.", { textarea: true, placeholder: "May 1–28: 640,000 sustained samples/s; 910,000 p95… Source: OBS-WORKLOAD-2026-05." })}</div>
-        <div class="wide">${guidedField("currentState.constraints", "Observed failure, lifecycle, cost, and operator effort", "Record actual behavior: support dates, capacity horizon, recovery evidence, incidents, recurring labor, and current cost. Do not turn a suspected cause into a fact.", { textarea: true, placeholder: "The release leaves vendor support on… SRE spends 56 person-hours/month…" })}</div>
-        <div class="wide">${guidedField("currentState.delta", "Explicit delta from the referenced baseline", "If the baseline remains current, say what was checked and that no material delta was found. Otherwise name every change relevant to this proposal.", { textarea: true, placeholder: "Since rev 7, storage nodes were replaced like-for-like; topology and retention behavior are unchanged…" })}</div>
+        ${guidedField("proposal.current-state.baseline-mode")}
+        ${guidedField("proposal.current-state.baseline-reference")}
+        <div class="wide">${guidedField("proposal.current-state.architecture")}</div>
+        <div class="wide">${guidedField("proposal.current-state.workload-evidence")}</div>
+        <div class="wide">${guidedField("proposal.current-state.constraints")}</div>
+        <div class="wide">${guidedField("proposal.current-state.delta")}</div>
       </div>
       ${compiledPreview("currentState", "Current State")}
     </section>
@@ -416,10 +441,10 @@ function purposeFields(mode = "all") {
     <section class="guided-section wide part ${hidden("outcome")}">
       <div class="guided-heading"><div><p class="eyebrow">Desired Outcome</p><h3>State one operating result, not a preferred implementation.</h3></div><span class="evidence-rule">Scope · capability · proof · horizon</span></div>
       <div class="form-grid">
-        ${guidedField("outcome.scope", "Who or what must experience the result?", "Name the population, services, sites, workloads, or operating boundary.", { textarea: true, placeholder: "All 6,400 employees and contractors across 147 workforce applications…" })}
-        ${guidedField("outcome.capability", "What must become true?", "Use product-neutral operating language. Include preserved behavior and the failure mode that disappears.", { textarea: true, placeholder: "Northstar has selected a capability that preserves… without carrying forward…" })}
-        ${guidedField("outcome.proof", "How will the organization know it is true?", "Name the decisive measures or observations. Detailed test steps belong in Acceptance Conditions.", { textarea: true, placeholder: "The accepted query corpus passes and recurring operator work is ≤24 hours/month…" })}
-        ${guidedField("outcome.horizon", "For how long or by what event must it remain true?", "Use an operating horizon, contractual event, or sustained observation window—not an arbitrary project deadline.", { textarea: true, placeholder: "Through the five-year planning horizon and a 30-day production burn-in…" })}
+        ${guidedField("proposal.desired-outcome.scope")}
+        ${guidedField("proposal.desired-outcome.capability")}
+        ${guidedField("proposal.desired-outcome.proof")}
+        ${guidedField("proposal.desired-outcome.horizon")}
       </div>
       ${compiledPreview("outcome", "Desired Outcome")}
     </section>
@@ -427,49 +452,37 @@ function purposeFields(mode = "all") {
     <section class="guided-section wide part ${hidden("outcome")}">
       <div class="guided-heading"><div><p class="eyebrow">Required Difference</p><h3>Make the material gap inspectable.</h3></div><span class="evidence-rule">Preserve · change · compare</span></div>
       <div class="form-grid">
-        ${guidedField("difference.preserve", "What current contracts or outcomes must remain true?", "Name interfaces, behavior, data obligations, recovery promises, or authorization semantics that cannot be lost.", { textarea: true, placeholder: "Prometheus remote-write, PromQL, dashboards, alert rules, and retention obligations…" })}
-        ${guidedField("difference.change", "Which measured conditions must change?", "Pair each current limitation with the condition required instead. Do not say only “modernize,” “improve,” or “replace.”", { textarea: true, placeholder: "Remove the March 31 support deadline, seven-month capacity horizon, and 56-hour monthly operating burden…" })}
-        <div class="wide">${guidedField("difference.evidence", "What evidence must the decision compare?", "Name the production workload, failure behavior, operator exercise, cost model, retention obligation, or other common test basis.", { textarea: true, placeholder: "The May workload replay, 50-query corpus, 8,420-rule corpus, failure scripts, and five-year lifecycle cost…" })}</div>
+        ${guidedField("proposal.required-difference.preserve")}
+        ${guidedField("proposal.required-difference.change")}
+        <div class="wide">${guidedField("proposal.required-difference.evidence-basis")}</div>
       </div>
       ${compiledPreview("difference", "Required Difference")}
     </section>
 
     <div class="part subgrid wide ${hidden("proof")}">
-    ${guidedRepeater("requirements", "Requirements", "One condition per row. Facts and buyer obligations use will; mandatory pass/fail conditions use shall; scored comparative goals use should. Every row names how it will be verified.", [
-      { key: "force", label: "Force", options: [["will", "will — supplied fact or obligation"], ["shall", "shall — mandatory pass/fail condition"], ["should", "should — scored comparative goal"]] },
-      { key: "id", label: "Stable ID", placeholder: "001" },
-      { key: "condition", label: "Operating condition", textarea: true, wide: true, placeholder: "The candidate shall ingest 1.74 million samples/s for 60 minutes…" },
-      { key: "verification", label: "Verification method", textarea: true, wide: true, placeholder: "Replay the retained May workload; reconcile sent, accepted, rejected, queued, and stored counts…" },
-    ], "requirement")}
+    ${guidedRepeater("proposal.requirements")}
     ${compiledPreview("requirements", "Requirements")}
 
-    ${guidedRepeater("acceptance", "Acceptance Conditions", "Describe observable proof of the Desired Outcome. Acceptance is not “the implementation is complete,” “documentation exists,” or “a ticket was closed.”", [
-      { key: "context", label: "Condition or event", textarea: true, placeholder: "During loss of one availability zone under the accepted peak workload…" },
-      { key: "evidence", label: "Observable result", textarea: true, placeholder: "No acknowledged samples are lost and normal ingestion, query, and alert behavior returns within 30 minutes…" },
-      { key: "verification", label: "Retained proof", textarea: true, wide: true, placeholder: "Failure-test record with timestamps, reconciled counters, query results, and evaluator sign-off…" },
-    ], "acceptance condition")}
+    ${guidedRepeater("proposal.acceptance-conditions")}
     ${compiledPreview("success", "Acceptance Conditions")}
 
-    ${guidedRepeater("nonGoals", "Non-Goals", "Name adjacent work that a reasonable reader might otherwise assume is included. An exclusion is a boundary, not a parking lot for unresolved scope.", [
-      { key: "exclusion", label: "Explicitly excluded change", textarea: true, placeholder: "This proposal will not change application instrumentation libraries, metric names, or dashboard ownership…" },
-      { key: "reason", label: "Why it is outside this outcome", textarea: true, placeholder: "Those changes have separate owners and are not required to close the stated gap…" },
-    ], "non-goal")}
+    ${guidedRepeater("proposal.non-goals")}
     ${compiledPreview("nonGoals", "Non-Goals")}
     </div>
 
     <div class="part subgrid wide ${hidden("authority")}">
-    ${textField("sponsor", "Work Sponsor", "A name alone is not sponsorship; acceptance must be tied to this proposal revision.")}
-    ${selectField("sponsorLevel", "Sponsor level", ["Manager", "Director", "Vice President", "Executive"])}
-    ${booleanChoice("sponsorAccepted", "Has the sponsor accepted this proposal revision?", "Sponsorship accepts the priority claim, evaluation capacity, and organizational tradeoffs.")}
-    ${textField("acceptanceAuthority", "Acceptance Authority", "Who may decide that the delivered result satisfies the agreed proof and operating conditions?")}
+    ${textField("proposal.sponsor.name")}
+    ${selectField("proposal.sponsor.level")}
+    ${booleanChoice("proposal.sponsor.accepted")}
+    ${textField("proposal.acceptance-authority")}
     <section class="guided-section wide">
       <div class="guided-heading"><div><p class="eyebrow">Timing Evidence</p><h3>Establish the external condition; do not select an urgency label.</h3></div><span class="evidence-rule">Event · source · consequence · fallback</span></div>
       <div class="form-grid">
-        ${guidedField("timing.event", "Required-by event and latest useful date", "Tie the date to a contract, renewal, capacity limit, compliance event, dependency window, or other observable condition.", { textarea: true, placeholder: "Selection accepted by November 30, before the FY2027 renewal and storage-purchase window…" })}
-        ${guidedField("timing.evidence", "Source of the timing condition", "Name the contract clause, forecast, calendar, accepted plan, or owner who can verify it.", { textarea: true, placeholder: "Current support contract; 2.8% monthly growth forecast; Procurement renewal calendar…" })}
-        ${guidedField("timing.missedDecision", "Which decision or outcome becomes unavailable?", "State the organizational consequence. “The project will be late” is circular and supplies no priority evidence.", { textarea: true, placeholder: "The organization loses the supported replacement window before March 31, 2027…" })}
-        ${guidedField("timing.avoidableCommitment", "What cost, risk, or obligation is created?", "Quantify the consequence where the evidence permits it.", { textarea: true, placeholder: "$310,000 renewal plus another capacity expansion on the current architecture…" })}
-        <div class="wide">${guidedField("timing.fallback", "What will the organization do if it misses the condition?", "Name the real fallback. If no decision has been made, say who must make it.", { textarea: true, placeholder: "Procurement renews for one year and SRE expands the 730-day tier before the 90% limit…" })}</div>
+        ${guidedField("proposal.timing.event")}
+        ${guidedField("proposal.timing.evidence")}
+        ${guidedField("proposal.timing.missed-decision")}
+        ${guidedField("proposal.timing.avoidable-commitment")}
+        <div class="wide">${guidedField("proposal.timing.fallback")}</div>
       </div>
       ${compiledPreview("requiredBy", "Required-By Evidence")}
       ${compiledPreview("consequence", "Consequence of Missing It")}
@@ -479,43 +492,36 @@ function purposeFields(mode = "all") {
 }
 
 function scopeFields() {
+  const affectedSystems = definedField("proposal.affected-systems");
   return `<div class="form-grid">
-    ${numberField("affectedUsers", "People or customers affected", "Use the best defensible estimate.")}
-    ${teamSelectField("operationalOwner", "Operational Ownership", "Who will operate, support, maintain, and respond to failure after acceptance?")}
-    ${booleanChoice("production", "Will this change production?")}
-    ${booleanChoice("customerFacing", "Can customers experience the outcome or a failure?")}
-    ${booleanChoice("sensitiveData", "Does it handle sensitive or regulated data?")}
-    ${booleanChoice("authenticationPath", "Is it part of authentication or authorization?")}
-    ${booleanChoice("internetExposed", "Is any component exposed to the public internet?")}
-    ${booleanChoice("purchase", "Could this require a purchase or vendor commitment?")}
-    ${numberField("spendUsd", "Potential financial commitment (USD)", "Financial Commitment Class is kept separate from delivery size and risk.")}
-    <fieldset class="field wide"><legend>Affected systems</legend><div class="system-choice-grid">${Object.entries(COMPANY.systems).map(([id, system]) => `<label class="choice system-choice"><input type="checkbox" data-system="${h(id)}" ${state.affectedSystems.includes(id) ? "checked" : ""}><span><strong>${h(system.name)}</strong><small>Owned by ${h(COMPANY.teams[system.owner].name)} · depends on ${h(system.dependsOn.map((dependencyId) => COMPANY.systems[dependencyId].name).join(", "))}</small></span></label>`).join("")}</div><small>The system derives participating functions and dependency handoffs from this service map. Routing does not commit their capacity.</small></fieldset>
-    ${guidedRepeater("dependencies", "Non-catalog dependency evidence", "The catalog derives system ownership and dependency closure. Add only a prerequisite decision, contribution, commitment, external event, or hidden contract that it cannot derive. A dependency does not imply Capacity Acceptance.", [
-      { key: "dependency", label: "Dependency", placeholder: "Sanitized production-workload replay" },
-      { key: "owner", label: "Fact or decision owner", placeholder: "SRE Observability Lead" },
-      { key: "contribution", label: "What must be supplied or decided?", textarea: true, wide: true, placeholder: "Freeze the May 1–28 replay and measurement definitions before candidate testing begins…" },
-      { key: "evidence", label: "Existing commitment or source", textarea: true, wide: true, placeholder: "OBS-WORKLOAD-2026-05 accepted by producing teams; no delivery capacity committed…" },
-    ], "dependency")}
+    ${numberField("proposal.affected-user-count")}
+    ${teamSelectField("proposal.operational-owner")}
+    ${booleanChoice("routing.production")}
+    ${booleanChoice("routing.customer-facing")}
+    ${booleanChoice("routing.sensitive-data")}
+    ${booleanChoice("routing.authentication-path")}
+    ${booleanChoice("routing.internet-exposed")}
+    ${booleanChoice("routing.purchase")}
+    ${numberField("routing.spend-usd")}
+    <fieldset class="field wide"><legend>${h(affectedSystems.label)}</legend><div class="system-choice-grid">${Object.entries(COMPANY.systems).map(([id, system]) => `<label class="choice system-choice"><input type="checkbox" data-form-field-id="${h(affectedSystems.id)}" data-system="${h(id)}" ${state.affectedSystems.includes(id) ? "checked" : ""}><span><strong>${h(system.name)}</strong><small>Owned by ${h(COMPANY.teams[system.owner].name)} · depends on ${h(system.dependsOn.map((dependencyId) => COMPANY.systems[dependencyId].name).join(", "))}</small></span></label>`).join("")}</div><small>${h(affectedSystems.help)}</small></fieldset>
+    ${guidedRepeater("proposal.dependencies")}
     ${compiledPreview("dependencyNotes", "Dependency Evidence")}
   </div>`;
 }
 
 function framingFields() {
   return `<div class="form-grid">
-    ${selectField("intent", "Primary intent", ["Discovery", "Migration", "Redesign", "Enablement", "Optimization"], "One intent per Work Package; if two are required, split the work.")}
-    ${selectField("outcomeShape", "Top-level outcome shape", ["single", "multiple"], "One independently valuable result produces an Epic; several produce an Initiative containing Epics.")}
-    ${guidedRepeater("preconditions", "Preconditions", "State conditions that must already be true before this work may start. Do not disguise implementation steps or preferred designs as prerequisites.", [
-      { key: "condition", label: "Required prior fact or decision", textarea: true, placeholder: "Producing teams have accepted OBS-ARCH-004 rev 7 and the May workload export as accurate…" },
-      { key: "evidenceOwner", label: "Who proves it, and with what record?", textarea: true, placeholder: "SRE owns the signed baseline; Security owns replay-redaction approval…" },
-    ], "precondition")}
+    ${selectField("proposal.intent")}
+    ${selectField("proposal.outcome-shape")}
+    ${guidedRepeater("proposal.preconditions")}
     ${compiledPreview("preconditions", "Preconditions")}
 
     <section class="guided-section wide">
       <div class="guided-heading"><div><p class="eyebrow">Reusable Output Artifact</p><h3>Name the record that proves completion and survives the work.</h3></div></div>
       <div class="form-grid">
-        ${guidedField("artifact.identifier", "Stable artifact identifier", "Use the organization’s durable record name—not a Jira issue key generated later.", { placeholder: "SEL-OBS-007" })}
-        ${guidedField("artifact.contents", "Required contents", "Name the baseline, measurements, decisions, rejected options, residual uncertainty, and later acceptance contract the artifact must retain.", { textarea: true, placeholder: "Versioned baseline and delta; workload dataset; requirement compliance; POC results; tradeoffs…" })}
-        <div class="wide">${guidedField("artifact.completionProof", "What makes the artifact accepted rather than merely present?", "Name the required reconciliation, signatures, decision, or evidence closure.", { textarea: true, placeholder: "Every SHALL has pass/fail/accepted-exception evidence and the Decision Owner records the selected and rejected options…" })}</div>
+        ${guidedField("proposal.reusable-artifact.identifier")}
+        ${guidedField("proposal.reusable-artifact.contents")}
+        <div class="wide">${guidedField("proposal.reusable-artifact.completion-proof")}</div>
       </div>
       ${compiledPreview("reusableArtifact", "Reusable Output Artifact")}
     </section>
@@ -523,32 +529,25 @@ function framingFields() {
     <section class="guided-section wide">
       <div class="guided-heading"><div><p class="eyebrow">Downstream Work Enabled</p><h3>Say what can proceed without reconstructing why.</h3></div></div>
       <div class="form-grid">
-        ${guidedField("downstream.work", "What later work can now be framed?", "Name the next decision or Work Proposal, not a promise that implementation has been authorized.", { textarea: true, placeholder: "A later Work Proposal can name the selected capability and split implementation into producer onboarding…" })}
-        ${guidedField("downstream.fixedDecisions", "Which accepted facts or decisions must not be reopened?", "Name the baseline, obligations, comparison, and boundaries that downstream work inherits.", { textarea: true, placeholder: "Product selection, May workload, retention obligations, and the accepted failure tests…" })}
+        ${guidedField("proposal.downstream.work")}
+        ${guidedField("proposal.downstream.fixed-decisions")}
       </div>
       ${compiledPreview("downstreamEnabled", "Downstream Work Enabled")}
     </section>
 
-    ${booleanChoice("knownUnknowns", "Does material Known Uncertainty remain?", "A substantive unknown creates bounded Discovery; Assisted Intake must stop before doing that work.")}
+    ${booleanChoice("proposal.known-uncertainty")}
     <section class="guided-section wide ${state.knownUnknowns ? "" : "guided-muted"}">
       <div class="guided-heading"><div><p class="eyebrow">Bounded Discovery</p><h3>A question, a stop condition, and an end-of-timebox decision.</h3></div><span class="evidence-rule">Never implementation authority</span></div>
       <div class="form-grid">
-        <div class="wide">${guidedField("discovery.question", "Decision-critical question", "Ask one question whose answer changes the design, option, boundary, or authorization decision.", { textarea: true, placeholder: "Which option passes the accepted workload and failure tests at the lowest defensible lifecycle cost?" })}</div>
-        <div class="wide">${guidedField("discovery.endDecision", "Decision required when the timebox ends", "State the allowed dispositions even if evidence remains incomplete: proceed, reject, split, extend through a new decision, or accept residual uncertainty.", { textarea: true, placeholder: "Select one option, reject all options, or authorize a separately bounded proof for a named residual uncertainty…" })}</div>
+        <div class="wide">${guidedField("proposal.discovery.question")}</div>
+        <div class="wide">${guidedField("proposal.discovery.end-decision")}</div>
       </div>
-      ${guidedRepeater("discovery.phases", "Timebox phases", "Divide the timebox into evidence-producing phases. Each phase has an exit condition; elapsed time alone is not progress.", [
-        { key: "phase", label: "Bounded phase and duration", textarea: true, placeholder: "5 working days — freeze inputs and candidate claims" },
-        { key: "exit", label: "Phase exit evidence", textarea: true, placeholder: "Versioned input package accepted; unresolved claims entered in the claim register" },
-      ], "timebox phase")}
+      ${guidedRepeater("proposal.discovery.phases")}
       ${compiledPreview("uncertaintyQuestion", "Discovery Question")}
       ${compiledPreview("discoveryTimebox", "Discovery Timebox")}
     </section>
 
-    ${guidedRepeater("epicOutcomes", "Candidate independently valuable Epic outcomes", "Use only when the top-level outcome requires an Initiative. Each row states a capability or removed failure mode, its verification, and an operating horizon. These remain candidates, not authorized work.", [
-      { key: "capability", label: "Capability or failure mode changed", textarea: true, placeholder: "The target tenant authenticates test users in both regions and survives primary-region isolation…" },
-      { key: "measure", label: "Measure or decisive check", textarea: true, placeholder: "No more than five minutes of new-session interruption; security events export within five minutes…" },
-      { key: "horizon", label: "Operating horizon", textarea: true, placeholder: "30-day burn-in after the migration wave…" },
-    ], "candidate Epic outcome")}
+    ${guidedRepeater("proposal.candidate-epic-outcomes")}
     ${compiledPreview("epicOutcomes", "Candidate Epic Outcomes")}
   </div>`;
 }
@@ -556,8 +555,8 @@ function framingFields() {
 function effortFields() {
   const result = evaluate();
   return `<div class="form-grid">
-    ${numberField("laborDays", "Current labor forecast (person-days)", "A delivery estimate supplied or accepted by delivery reviewers; it is not requester-selected size.")}
-    ${numberField("durationWeeks", "Current elapsed-duration forecast (weeks)", "This includes waiting and dependencies; it does not overwrite the Approved Delivery Baseline.")}
+    ${numberField("planning.labor-days")}
+    ${numberField("planning.duration-weeks")}
   </div>
   <div class="route-preview"><strong>Current size calculation: ${result.deliverySize}</strong><br>
     Labor: ${result.bands.labor} · Duration: ${result.bands.duration} · Coordination: ${result.bands.coordination}<br>
@@ -569,7 +568,7 @@ function artifactTree(result) {
     return `<div class="ticket-tree"><div class="ticket"><span class="ticket-key">DEMAND</span><span>${h(result.disposition.label)} · governed by its operational path and structured capture</span></div></div>`;
   }
   if (result.disposition.key === "blocked") {
-    return `<div class="ticket-tree"><div class="ticket"><span class="ticket-key">DRAFT</span><span>Work Proposal has no authority; sponsorship acceptance is required</span></div></div>`;
+    return `<div class="ticket-tree"><div class="ticket"><span class="ticket-key">DRAFT</span><span>Work Proposal has no authority; the draft must identify whether sponsor acceptance is claimed</span></div></div>`;
   }
   if (result.disposition.key === "assisted") {
     return `<div class="ticket-tree"><div class="ticket"><span class="ticket-key">ASSIST</span><span>Assisted Intake may explain the route; it may not author a Work Proposal or perform Discovery</span></div></div>`;
@@ -578,13 +577,13 @@ function artifactTree(result) {
     const missing = [...result.proposalMissing, ...result.framingMissing];
     return `<div class="ticket-tree"><div class="ticket"><span class="ticket-key">DRAFT</span><span>Draft Work Proposal has no authority; missing evidence: ${h(missing.join(", ") || "unspecified")}</span></div></div>`;
   }
-  const reviewRecords = result.reviews.map((review) => `<div class="ticket child"><span class="ticket-key">STAGE ${review.stage}</span><span>${h(review.name)} record · Decision Owner: ${h(review.decisionOwner)}</span></div>`).join("");
+  const reviewRecords = result.reviews.map((review) => `<div class="ticket child pending"><span class="ticket-key">CANDIDATE STAGE ${review.stage}</span><span>${h(review.name)} · not created · Decision Owner: ${h(review.decisionOwner)}</span></div>`).join("");
   return `<div class="ticket-tree">
     <div class="ticket"><span class="ticket-key">${h(result.proposalRecord.label)}</span><span>${h(result.proposalRecord.type)} · ${h(result.proposalRecord.authority)}</span></div>
-    <div class="ticket child"><span class="ticket-key">FRAME</span><span>${h(state.intent || "Intent missing")} framing record · artifact: ${h(state.reusableArtifact || "missing")}</span></div>
-    ${result.workStructure.discoveryPackage ? `<div class="ticket child"><span class="ticket-key">DISCOVERY</span><span>Bounded Discovery Work Package · ${h(result.workStructure.discoveryPackage.question)}</span></div>` : ""}
+    <div class="ticket child"><span class="ticket-key">FRAME</span><span>${h(state.intent || "Intent missing")} framing evidence · artifact: ${h(state.reusableArtifact || "missing")}</span></div>
+    ${result.workStructure.discoveryPackage ? `<div class="ticket child pending"><span class="ticket-key">DISCOVERY CANDIDATE</span><span>Bounded Discovery Work Package · ${h(result.workStructure.discoveryPackage.question)}</span></div>` : ""}
     ${reviewRecords}
-    <div class="ticket child pending"><span class="ticket-key">PENDING</span><span>Authorized Work Proposal · assembled only after every required review record clears</span></div>
+    <div class="ticket child pending"><span class="ticket-key">PENDING</span><span>Durable sponsor approval must be attached before ordered review work is created</span></div>
   </div>`;
 }
 
@@ -947,6 +946,12 @@ window.addEventListener("message", (event) => {
   if (event.data?.type !== "northstar:work-intake:artifact-request") return;
 
   try {
+    state.formAnswers = formDefinitions.collectAnswers(formDefinition, { ...state, ...state.guided });
+    const missing = formDefinitions.validateAnswers(formDefinition, state.formAnswers);
+    if (missing.length) {
+      throw new Error(`Required proposal evidence is missing: ${missing.map((entry) => `${entry.label} (${entry.id})`).join(", ")}`);
+    }
+    state.compiledAnswers = formDefinitions.compileAnswers(formDefinition, state.formAnswers);
     window.parent.postMessage({
       type: "northstar:work-intake:artifact-response",
       requestId: event.data.requestId,
@@ -961,5 +966,24 @@ window.addEventListener("message", (event) => {
   }
 });
 
-compileAllGuidedSections();
-render();
+async function initialize() {
+  const response = await fetch("forms/definitions/technical-work-proposal.v1.json");
+  if (!response.ok) {
+    throw new Error(`Could not load the Work Proposal form definition (${response.status}).`);
+  }
+  const definition = await response.json();
+  formDefinitions.validateFormDefinition(definition);
+  formDefinition = formDefinitions.selectFormDefinition([definition], {
+    intakeContext: "technical-work",
+  });
+  if (!formDefinition) {
+    throw new Error("No Work Proposal form applies to technical work.");
+  }
+  state.form = { id: formDefinition.id, version: formDefinition.version };
+  compileAllGuidedSections();
+  render();
+}
+
+initialize().catch((error) => {
+  app.innerHTML = `<main class="wizard-page"><section class="wizard-card"><h1>Work Intake could not start</h1><p>${h(error instanceof Error ? error.message : String(error))}</p></section></main>`;
+});

@@ -6,6 +6,9 @@ prototype, and it uses the local development database.
 
 For the plain-language explanation of every script, plugin, trust boundary, and
 publication step, start with [How the Work Intake Prototype Works](HOW-IT-WORKS.md).
+The implementation design for durable Work Proposals, deliberately smaller team
+delivery records, typed Jira relationships, and the Registry-style Backstage
+portfolio view is [Work Proposal Repository and Portfolio Explorer](WORK-PROPOSAL-PORTFOLIO-SPEC.md).
 
 The catalog includes Northstar's organizational hierarchy, thirteen operating
 and governance teams, three fictional requesters, eleven systems, their primary
@@ -45,9 +48,10 @@ catalog closure and the owning Groups instead of trusting review or project
 claims supplied by the browser artifact.
 
 `packages/app/public/work-intake-assets` contains relative symbolic links to the
-prototype's four runtime files rather than copies. The original HTML, CSS, and
-JavaScript therefore remain the source of truth without publishing its notes or
-helper files; reload the Backstage page to see prototype changes.
+prototype's runtime HTML, CSS, JavaScript, and versioned form definitions rather
+than copies. The decision-tree directory therefore remains the source of truth
+without publishing its notes or tests; reload the Backstage page to see
+prototype changes.
 
 The project-local `yarn` wrapper runs the Yarn release pinned under `.yarn/`.
 It exists because Fedora's Node.js package does not install a global Yarn or

@@ -19,7 +19,7 @@ curl -kfsS -D "$temporary_dir/page.headers" "$base_url/work-intake" -o "$tempora
 grep -qi '^Content-Type: text/html' "$temporary_dir/page.headers"
 grep -q '<!DOCTYPE html>' "$temporary_dir/page.html"
 
-for asset in app.js model.js; do
+for asset in app.js model.js form-definition.js; do
   curl -kfsS -D "$temporary_dir/$asset.headers" "$base_url/work-intake-assets/$asset" -o "$temporary_dir/$asset"
   if ! grep -qi '^Content-Type: application/javascript' "$temporary_dir/$asset.headers"; then
     echo "$asset was not served as JavaScript" >&2
@@ -32,4 +32,12 @@ for asset in app.js model.js; do
   node --check "$temporary_dir/$asset"
 done
 
-echo "HTTP redirect, HTTPS page, and JavaScript asset checks passed for $base_url/work-intake"
+definition=technical-work-proposal.v1.json
+curl -kfsS -D "$temporary_dir/$definition.headers" \
+  "$base_url/work-intake-assets/forms/definitions/$definition" \
+  -o "$temporary_dir/$definition"
+grep -qi '^Content-Type: application/json' "$temporary_dir/$definition.headers"
+node -e 'JSON.parse(require("node:fs").readFileSync(process.argv[1], "utf8"))' \
+  "$temporary_dir/$definition"
+
+echo "HTTP redirect, HTTPS page, JavaScript, and form-definition checks passed for $base_url/work-intake"

@@ -18,7 +18,9 @@ function testApp(options: {
     });
   const credentials =
     options.credentials ??
-    jest.fn().mockResolvedValue({ principal: { type: 'user' } });
+    jest.fn().mockResolvedValue({
+      principal: { type: 'user', userEntityRef: 'user:default/test-user' },
+    });
   const logger = { error: jest.fn(), info: jest.fn() };
   const app = express();
   app.use(

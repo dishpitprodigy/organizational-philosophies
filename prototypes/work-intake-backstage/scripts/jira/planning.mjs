@@ -347,26 +347,96 @@ function asLines(value) {
   return value ? [value] : [];
 }
 
-function proposalDescription(proposal) {
+function atomicCurrentState(value) {
+  return [
+    value.summary,
+    `Baseline method: ${value.baseline.mode}`,
+    value.baseline.reference
+      ? `Baseline: ${value.baseline.reference}`
+      : undefined,
+    value.baseline.delta
+      ? `Baseline delta: ${value.baseline.delta}`
+      : undefined,
+    `Architecture and operating path: ${value.architecture}`,
+    `Measured production workload: ${value.workloadEvidence}`,
+    `Observed constraints: ${value.constraints}`,
+  ].filter(Boolean);
+}
+
+function atomicDesiredOutcome(value) {
+  return [
+    value.summary,
+    `Operating scope: ${value.scope}`,
+    `Capability: ${value.capability}`,
+    `Decisive proof: ${value.proof}`,
+    `Operating horizon: ${value.horizon}`,
+  ];
+}
+
+function atomicRequiredDifference(value) {
+  return [
+    value.summary,
+    `Preserve: ${value.preserve}`,
+    `Change: ${value.change}`,
+    `Common evidence basis: ${value.evidenceBasis}`,
+  ];
+}
+
+function atomicRequirement(value) {
+  return `${value.id}: ${value.condition}\n  Verification: ${value.verification}`;
+}
+
+function atomicAcceptanceCondition(value) {
+  const context = value.context ? `Given ${value.context}, ` : '';
+  return `${value.id}: ${context}${value.result}\n  Evidence method: ${value.evidenceMethod}`;
+}
+
+function atomicNonGoal(value) {
+  return `${value.id}: ${value.exclusion}${
+    value.reason ? `\n  Reason: ${value.reason}` : ''
+  }`;
+}
+
+function proposalDescription(proposal, schemaVersion) {
+  const atomic = schemaVersion === 2;
+  const currentState = atomic
+    ? atomicCurrentState(proposal.currentState)
+    : [proposal.currentState];
+  const desiredOutcome = atomic
+    ? atomicDesiredOutcome(proposal.desiredOutcome)
+    : [proposal.desiredOutcome];
+  const requiredDifference = atomic
+    ? atomicRequiredDifference(proposal.requiredDifference)
+    : [proposal.requiredDifference];
+  const requirements = atomic
+    ? proposal.requirements.map(atomicRequirement)
+    : asLines(proposal.requirements);
+  const acceptanceConditions = atomic
+    ? proposal.acceptanceConditions.map(atomicAcceptanceCondition)
+    : asLines(proposal.acceptanceConditions);
+  const nonGoals = atomic ? proposal.nonGoals?.map(atomicNonGoal) ?? [] : [];
   return [
     `Artifact: ${proposal.id} rev ${proposal.revision}`,
     `State: ${proposal.state}`,
     `Authority: ${proposal.authority}`,
     '',
     'Current State',
-    proposal.currentState,
+    ...currentState,
     '',
     'Desired Outcome',
-    proposal.desiredOutcome,
+    ...desiredOutcome,
     '',
     'Required Difference',
-    proposal.requiredDifference,
+    ...requiredDifference,
     '',
     'Requirements',
-    ...asLines(proposal.requirements).map(value => `- ${value}`),
+    ...requirements.map(value => `- ${value}`),
     '',
     'Acceptance Conditions',
-    ...asLines(proposal.acceptanceConditions).map(value => `- ${value}`),
+    ...acceptanceConditions.map(value => `- ${value}`),
+    ...(nonGoals.length
+      ? ['', 'Non-Goals', ...nonGoals.map(value => `- ${value}`)]
+      : []),
   ].join('\n');
 }
 
@@ -457,7 +527,7 @@ function deliveryIssueType(recordType) {
 }
 
 export function buildPublicationPlan(artifact) {
-  if (artifact?.schemaVersion !== 1) {
+  if (![1, 2].includes(artifact?.schemaVersion)) {
     throw new Error(
       'Unsupported or missing work-intake publication schemaVersion.',
     );
@@ -478,12 +548,15 @@ export function buildPublicationPlan(artifact) {
       projectKey: 'NWI',
       issueType: 'Epic',
       summary: `[${proposal.id} rev ${proposal.revision}] ${proposal.title}`,
-      description: proposalDescription(proposal),
+      description: proposalDescription(proposal, artifact.schemaVersion),
       labels: ['northstar-work-intake', 'work-proposal'],
     },
   ];
+  const notes = [];
+  const mayCreateReviewWork =
+    artifact.schemaVersion === 1 || proposal.sponsor?.accepted === true;
 
-  [...(artifact.reviews ?? [])]
+  [...(mayCreateReviewWork ? artifact.reviews ?? [] : [])]
     .sort((left, right) => left.stage - right.stage)
     .forEach((review, index) => {
       issues.push({
@@ -502,8 +575,13 @@ export function buildPublicationPlan(artifact) {
       });
     });
 
+  if (!mayCreateReviewWork) {
+    notes.push(
+      'Ordered review work was not published because durable, attributable sponsor approval is not attached to this proposal revision.',
+    );
+  }
+
   const links = [];
-  const notes = [];
   const candidateDelivery = artifact.candidateDelivery ?? {
     authorized: false,
     records: [],

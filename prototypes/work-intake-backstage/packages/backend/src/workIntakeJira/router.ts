@@ -1,25 +1,10 @@
 import { HttpAuthService, LoggerService } from '@backstage/backend-plugin-api';
 import express from 'express';
 import Router from 'express-promise-router';
-import { z } from 'zod/v3';
 
+import { publicationArtifactSchema } from '../workIntake/domain/artifactSchema';
+import { bindSubmissionProvenance } from '../workIntake/domain/submissionProvenance';
 import { JiraCommandService } from './command';
-
-const publicationSchema = z
-  .object({
-    schemaVersion: z.literal(1),
-    proposal: z
-      .object({
-        id: z.string().min(1),
-      })
-      .passthrough(),
-    routingRequest: z
-      .object({
-        affectedEntities: z.array(z.string().min(1)).min(1),
-      })
-      .passthrough(),
-  })
-  .passthrough();
 
 function errorMessage(error: unknown) {
   return error instanceof Error ? error.message : String(error);
@@ -46,8 +31,14 @@ export function createRouter(options: {
   });
 
   router.post('/publish', async (req, res) => {
-    await options.httpAuth.credentials(req, { allow: ['user'] });
-    const parsed = publicationSchema.safeParse(req.body);
+    const credentials = await options.httpAuth.credentials(req, {
+      allow: ['user'],
+    });
+    const body = bindSubmissionProvenance(
+      req.body,
+      credentials.principal.userEntityRef,
+    );
+    const parsed = publicationArtifactSchema.safeParse(body);
     if (!parsed.success) {
       res
         .status(400)

@@ -56,7 +56,13 @@ The prototype names the systems those teams own and models cross-system dependen
 ## Code shape
 
 - `model.js` contains the pure fictional-company and lifecycle logic.
-- `app.js` is the throwaway browser shell shared by the three interaction variants.
+- `forms/definitions/technical-work-proposal.v1.json` owns the precise evidence
+  prompts, stable field identifiers, controlled values, conditional
+  requirements, and artifact output paths.
+- `form-definition.js` selects a definition, evaluates its bounded condition
+  grammar, collects stable-ID answers, and compiles declared output paths.
+- `app.js` is the throwaway browser shell shared by the three interaction
+  variants. It owns layout, not the evidence-field wording.
 - `styles.css` is intentionally prototype-only presentation.
 
 ## Prototype boundaries

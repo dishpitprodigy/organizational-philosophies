@@ -1,5 +1,9 @@
 const assert = require("node:assert/strict");
+const { readFileSync } = require("node:fs");
+const { join } = require("node:path");
 const test = require("node:test");
+
+const { collectAnswers, compileAnswers } = require("./form-definition.js");
 
 const {
   COMPANY,
@@ -8,6 +12,19 @@ const {
   evaluate,
   publicationArtifact,
 } = require("./model.js");
+
+const formDefinition = JSON.parse(
+  readFileSync(
+    join(__dirname, "forms", "definitions", "technical-work-proposal.v1.json"),
+    "utf8"
+  )
+);
+
+function compileState(state) {
+  state.formAnswers = collectAnswers(formDefinition, { ...state, ...state.guided });
+  state.compiledAnswers = compileAnswers(formDefinition, state.formAnswers);
+  return state;
+}
 
 test("Work Proposal identity is structural rather than parsed from display text", () => {
   const result = evaluate(structuredClone(SCENARIOS["Metrics selection"]));
@@ -22,9 +39,39 @@ test("Work Proposal identity is structural rather than parsed from display text"
 });
 
 test("publication artifact preserves intake authority boundaries", () => {
-  const artifact = publicationArtifact(
-    structuredClone(SCENARIOS["Metrics selection"])
-  );
+  const state = structuredClone(SCENARIOS["Metrics selection"]);
+  state.form = { id: "technical-work-proposal", version: 1 };
+  state.guided = {
+    version: 1,
+    enforce: false,
+    currentState: {
+      baselineMode: "reference",
+      baselineReference: "OBS-ARCH-004 rev 7, accepted May 18, 2026 by SRE",
+      delta: "Storage hardware changed; topology and retention behavior did not.",
+      architecture: "Thirty-eight collectors feed three retention tiers.",
+      measurements: "OBS-WORKLOAD-2026-05 records the measured production workload.",
+      constraints: "Support ends March 31, 2027; recurring work is 56 hours per month.",
+    },
+    outcome: {
+      scope: "Shared engineering metrics producers and consumers.",
+      capability: "A supported, operable metrics capability is selected.",
+      proof: "the accepted workload and failure corpus passes",
+      horizon: "the five-year planning horizon",
+    },
+    difference: {
+      preserve: "Prometheus interfaces and retention obligations",
+      change: "Remove the support, capacity, and operating-effort gaps.",
+      evidence: "the same retained workload and failure corpus for every option",
+    },
+    requirements: [{ id: "001", force: "shall", condition: "The candidate shall sustain the accepted workload.", verification: "Replay and reconcile OBS-WORKLOAD-2026-05." }],
+    acceptance: [{ context: "equivalent proof work ends", evidence: "every SHALL has retained evidence", verification: "the requirement compliance matrix" }],
+    nonGoals: [{ exclusion: "Do not migrate a producer.", reason: "Selection does not authorize delivery." }],
+    dependencies: [{ dependency: "Versioned workload replay", owner: "SRE", contribution: "Freeze the replay before testing.", evidence: "Signed input manifest." }],
+    preconditions: [{ condition: "The Current-State Baseline is accepted.", evidenceOwner: "SRE" }],
+    artifact: { identifier: "SEL-OBS-007", contents: "Selection evidence and decision.", completionProof: "Every SHALL is reconciled." },
+    discovery: { question: "Which option passes the common test basis?", phases: [] },
+  };
+  const artifact = publicationArtifact(compileState(state));
 
   assert.deepEqual(
     {
@@ -35,17 +82,25 @@ test("publication artifact preserves intake authority boundaries", () => {
       authorized: artifact.candidateDelivery.authorized,
     },
     {
-      schemaVersion: 1,
+      schemaVersion: 2,
       id: "WP-2026-0042",
       revision: 2,
-      state: "Work Proposal — Ready for Ordered Review",
+      state: "Draft Work Proposal — sponsor acceptance unverified",
       authorized: false,
     }
   );
-  assert.match(
-    artifact.proposal.authority,
-    /ordered review|bounded discovery/i
-  );
+  assert.deepEqual(artifact.form, { id: "technical-work-proposal", version: 1 });
+  assert.deepEqual(artifact.proposal.requirements[0], {
+    id: "SHALL-001",
+    modality: "shall",
+    condition: "The candidate shall sustain the accepted workload.",
+    verification: "Replay and reconcile OBS-WORKLOAD-2026-05.",
+  });
+  assert.equal(artifact.proposal.currentState.baseline.reference, "OBS-ARCH-004 rev 7, accepted May 18, 2026 by SRE");
+  assert.equal(artifact.proposal.acceptanceConditions[0].evidenceMethod, "the requirement compliance matrix");
+  assert.equal(artifact.proposal.authority, "No authority granted");
+  assert.equal(artifact.proposal.sponsor.accepted, false);
+  assert.equal(artifact.proposal.sponsor.assertedAccepted, true);
   assert.ok(artifact.reviews.length > 1);
   assert.equal(
     artifact.candidateDelivery.records[0].ownerEntity,
@@ -77,10 +132,43 @@ test("publishable scenarios have distinct proposal identities", () => {
   assert.equal(new Set(identities).size, identities.length);
 });
 
+test("SSO migration keeps discovery, dependency routing, and Initiative hierarchy distinct", () => {
+  const result = evaluate(structuredClone(SCENARIOS["SSO migration"]));
+
+  assert.equal(result.disposition.key, "proposal");
+  assert.equal(result.workStructure.type, "Initiative candidate");
+  assert.equal(result.workStructure.epics.length, 5);
+  assert.equal(result.workStructure.discoveryPackage.type, "Discovery Work Package");
+  assert.ok(result.graph.teamIds.includes("identity"));
+  assert.ok(result.graph.teamIds.includes("neteng"));
+  assert.ok(result.graph.teamIds.includes("platform"));
+});
+
+test("identity redesign routes the complete catalog dependency closure without inventing delivery authority", () => {
+  const result = evaluate(
+    structuredClone(SCENARIOS["Identity platform redesign"])
+  );
+
+  assert.equal(result.disposition.key, "proposal");
+  assert.equal(result.workStructure.type, "Epic candidate");
+  assert.equal(result.workStructure.discoveryPackage.type, "Discovery Work Package");
+  assert.deepEqual(result.graph.teamIds, [
+    "identity",
+    "appeng",
+    "platform",
+    "dataeng",
+    "syseng",
+    "neteng",
+    "sre",
+    "dcops",
+  ]);
+  assert.equal(result.proposalRecord.authority, "No authority granted");
+});
+
 test("draft demand cannot be published as a Work Proposal", () => {
   assert.throws(
     () => publicationArtifact(blankState()),
-    /requires a Work Proposal that is ready for ordered review/
+    /requires a complete Work Proposal draft/
   );
 });
 
