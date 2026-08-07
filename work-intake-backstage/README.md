@@ -31,7 +31,7 @@ The frontend listens on <http://localhost:3000> and the backend listens on
 
 Backstage exposes the decision-tree prototype at
 <http://localhost:3000/work-intake> and adds **Work Intake** to its navigation.
-The page embeds the existing `prototypes/work-intake-decision-tree` interface
+The page embeds the existing `work-intake-decision-tree` interface
 inside the Backstage shell. Its native toolbar checks the Jira connection and
 provides the only **Publish to Jira** action. Select a scenario in the embedded
 prototype, inspect or edit it, and publish when its route is **Work Proposal —
@@ -62,7 +62,7 @@ Corepack launcher.
 On another machine with Node.js 22 or 24 and the same repository checkout:
 
 ```sh
-cd prototypes/work-intake-backstage
+cd work-intake-backstage
 ./yarn install
 chmod 600 ~/.atlassian.env
 ./yarn jira:bootstrap
