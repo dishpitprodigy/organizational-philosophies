@@ -10,6 +10,7 @@ export const mixedPublicationReceipt: PublicationReceipt = {
     locator: 'atlassian:MDP-1:artifact.json',
     filename: 'artifact.json',
   },
+  artifactVerified: true,
   results: [
     {
       placementId: 'jpd-proposal',

@@ -82,3 +82,15 @@ export function createProductionPublication(options: {
     artifactStore,
   });
 }
+
+let sharedProductionPublication:
+  | ReturnType<typeof createProductionPublication>
+  | undefined;
+
+/** Both backend route plugins resolve the same in-process publication module. */
+export function getProductionPublication(
+  options: Parameters<typeof createProductionPublication>[0],
+) {
+  sharedProductionPublication ??= createProductionPublication(options);
+  return sharedProductionPublication;
+}

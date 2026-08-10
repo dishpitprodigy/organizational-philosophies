@@ -657,6 +657,7 @@ export class PublicationService implements WorkProposalPublication {
       const relationResults: PublicationReceipt['relations'] = [];
       const notes = [...plan.notes];
       let artifactReference: CanonicalArtifactReference | undefined;
+      let artifactVerified = false;
       const completed = new Set<string>();
       const failed = new Set<string>();
 
@@ -855,11 +856,17 @@ export class PublicationService implements WorkProposalPublication {
               externalId: anchorResult.externalId,
               url: anchorResult.url,
             };
+            artifactReference = {
+              sha256: plan.artifact.sha256,
+              filename: plan.artifact.filename,
+              locator: `pending:${anchor.adapterId}:${anchor.targetId}:${anchor.externalId}`,
+            };
             artifactReference = await artifactStore.persist(
               plan.artifact,
               anchor,
             );
             await artifactStore.verify(artifactReference);
+            artifactVerified = true;
           }
           completed.add(planned.placement.id);
         } catch (error) {
@@ -884,6 +891,7 @@ export class PublicationService implements WorkProposalPublication {
           revision: plan.artifact.artifact.proposal.revision,
         },
         artifact: artifactReference,
+        artifactVerified,
         results,
         relations: relationResults,
         notes,

@@ -245,6 +245,7 @@ export type PublicationReceipt = {
   profileId: string;
   proposal: { id: string; revision: number };
   artifact: CanonicalArtifactReference;
+  artifactVerified: boolean;
   results: PublicationResult[];
   relations: TargetReceipt['relations'];
   notes: string[];

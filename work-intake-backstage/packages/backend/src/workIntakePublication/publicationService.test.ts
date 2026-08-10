@@ -333,4 +333,84 @@ describe('PublicationService publish', () => {
     );
     expect(creates).toBe(2);
   });
+
+  it('returns a retryable partial receipt when artifact persistence fails after anchor creation', async () => {
+    const applied: string[] = [];
+    const target: PublicationTarget = {
+      id: 'jira',
+      status: async () => ({ available: true }),
+      observe: async batch => ({
+        results: batch.records.map(record => ({
+          localId: record.localId,
+          status: 'absent' as const,
+        })),
+      }),
+      apply: async batch => {
+        applied.push(batch.placementId);
+        return {
+          results: batch.records.map(record => ({
+            localId: record.localId,
+            idempotencyKey: record.idempotencyKey,
+            targetFingerprint: batch.targetFingerprints[record.localId],
+            externalId: 'NWI-1',
+            action: 'created' as const,
+          })),
+          relations: [],
+        };
+      },
+    };
+    const entries: JournalEntry[] = [];
+    const journal: PublicationJournal = {
+      withLock: async (_identity, operation) => operation(),
+      observe: async () => ({ entries: [] }),
+      reserve: async values => {
+        entries.push(...values);
+      },
+      recordPublished: async values => {
+        entries.push(...values);
+      },
+    };
+    const artifactStore: ArtifactStore = {
+      persist: async () => {
+        throw new Error('attachment service unavailable');
+      },
+      verify: async () => undefined,
+    };
+    const catalog: CatalogPublicationResolver = {
+      resolve: async () => ({
+        proposalRouting: {
+          affectedEntities: ['system:default/metrics'],
+          evidence: { source: 'backstage-catalog' },
+        },
+        reviews: [
+          {
+            stage: 1,
+            name: 'Architecture Review',
+            decisionOwner: 'group:default/architecture',
+            reason: 'Catalog dependency closure',
+          },
+        ],
+        deliveries: {},
+      }),
+    };
+
+    const receipt = await service(target, catalog, {
+      journal,
+      artifactStore,
+    }).publish(authenticatedActorFromPrincipal('user:default/avery'), {
+      profileId: 'jira-work-management',
+      artifact: artifact(),
+    });
+
+    expect(receipt).toEqual(
+      expect.objectContaining({
+        partial: true,
+        retryable: true,
+        artifactVerified: false,
+        results: [expect.objectContaining({ localId: 'proposal' })],
+      }),
+    );
+    expect(receipt.artifact.locator).toMatch(/^pending:jira:NWI:NWI-1$/);
+    expect(applied).toEqual(['jira-proposal']);
+  });
 });

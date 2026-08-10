@@ -6,7 +6,7 @@ import { catalogServiceRef } from '@backstage/plugin-catalog-node';
 
 import type { WorkProposalPublication } from './contracts';
 import { BackstageCatalogPublicationResolver } from './adapters/catalog/backstageCatalogResolver';
-import { createProductionPublication } from './factory';
+import { getProductionPublication } from './factory';
 import { loadAtlassianEnvironment } from './environment';
 import { createRouter } from './router';
 
@@ -61,7 +61,7 @@ const workIntakePublicationPlugin = createBackendPlugin({
             return response.items;
           },
         );
-        const publication = createProductionPublication({
+        const publication = getProductionPublication({
           catalog: catalogResolver,
           ...(baseUrl && email && token
             ? { atlassian: { baseUrl, email, token } }

@@ -5,7 +5,7 @@ import {
 import { catalogServiceRef } from '@backstage/plugin-catalog-node';
 
 import { BackstageCatalogPublicationResolver } from '../workIntakePublication/adapters/catalog/backstageCatalogResolver';
-import { createProductionPublication } from '../workIntakePublication/factory';
+import { getProductionPublication } from '../workIntakePublication/factory';
 import { loadAtlassianEnvironment } from '../workIntakePublication/environment';
 import { createRouter } from './router';
 
@@ -32,7 +32,7 @@ const workIntakeJiraPlugin = createBackendPlugin({
         const token =
           config.getOptionalString('workIntakePublication.atlassian.token') ??
           process.env.ATLASSIAN_TOKEN;
-        const publication = createProductionPublication({
+        const publication = getProductionPublication({
           catalog: new BackstageCatalogPublicationResolver(async () => {
             const credentials = await auth.getOwnServiceCredentials();
             return (await catalog.getEntities({}, { credentials })).items;
