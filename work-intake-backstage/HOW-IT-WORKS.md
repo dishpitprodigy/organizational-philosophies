@@ -101,7 +101,7 @@ The direction of trust matters: the publisher accepts proposal facts from the fo
 3. The form evaluates its own readiness. An incomplete draft returns an error instead of an artifact that can be published.
 4. The frontend sends the artifact to the backend plugin using Backstage's authenticated fetch client.
 5. The backend verifies that the caller is an authenticated Backstage user and that the request has the minimum publication shape.
-6. The backend writes the artifact to an owner-only temporary file and invokes `publish.mjs --apply --json` as a child process. The temporary file is deleted afterward.
+6. The backend writes the artifact to an owner-only temporary file and invokes `publish.mjs --apply --json` as a child process. It deletes the temporary file after success; after failure it retains an owner-only diagnostic copy and returns that path with the error.
 7. `publish.mjs` authenticates to the local Backstage catalog, follows every affected system's dependency closure, finds the owning Groups, and rebuilds the ordered review route.
 8. The planner converts the routed artifact into Jira issue projections and relationship projections. This remains a plan until the publisher reaches the apply stage.
 9. The publication ledger locks publication so two clicks cannot publish concurrently. For each projection, it reuses a known issue, reconciles an existing matching issue, creates a missing issue, or stops when the previous result is indeterminate.
@@ -171,7 +171,7 @@ The command service adapts TypeScript plugin calls to the existing Node.js scrip
 - `health()` invokes `scripts/jira/health.mjs`;
 - `publish(artifact)` writes an owner-only temporary JSON file and invokes `scripts/jira/publish.mjs --apply --json`;
 - only the final JSON line is accepted as the command result; and
-- temporary publication files are removed whether the command succeeds or fails.
+- successful temporary publication files are removed; failed submissions are retained owner-only under `~/.local/state/work-intake-backstage/failed-publications/` (or `WORK_INTAKE_FAILED_ARTIFACT_DIR`) so the exact rejected artifact can be inspected.
 
 This adapter lets the browser use the same publisher that can be inspected and run from a terminal. There is one publication mechanism, not a UI implementation and a separate CLI implementation that may drift.
 

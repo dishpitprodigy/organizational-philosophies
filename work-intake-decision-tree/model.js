@@ -3,6 +3,7 @@
 // and the terminal logic driver. No I/O belongs in this file.
 
 (function exposeModel(root) {
+  const PUBLICATION_ARTIFACT_SCHEMA_VERSION = 2;
   const SIZE_ORDER = ["XS", "S", "M", "L", "XL"];
 
   const COMPANY = {
@@ -249,7 +250,7 @@
       ...blankState(),
       scenario: "Metrics selection",
       proposalId: "WP-2026-0042",
-      proposalRevision: 2,
+      proposalRevision: 4,
       requester: "Avery Shah",
       requestingTeam: "sre",
       catalogPath: "change",
@@ -990,7 +991,7 @@
 
     const atomicEvidence = atomicProposalEvidence(state, result);
     return {
-      schemaVersion: 2,
+      schemaVersion: PUBLICATION_ARTIFACT_SCHEMA_VERSION,
       form: state.form || {
         id: "technical-work-proposal",
         version: 1,
@@ -1043,7 +1044,23 @@
     };
   }
 
-  const api = { COMPANY, SCENARIOS, blankState, evaluate, financialCommitmentClass, publicationArtifact };
+  function nextProposalRevision(state) {
+    return Number(state.proposalRevision) + 1;
+  }
+
+  function beginNewRevision(state) {
+    if (!state.proposalId) throw new Error("A Work Proposal identifier is required before creating a revision.");
+    state.proposalRevision = nextProposalRevision(state);
+    state.scenario = "Custom";
+    return state.proposalRevision;
+  }
+
+  function markProposalEdited(state) {
+    state.scenario = "Custom";
+    if (state.guided) state.guided.enforce = true;
+  }
+
+  const api = { COMPANY, PUBLICATION_ARTIFACT_SCHEMA_VERSION, SCENARIOS, beginNewRevision, blankState, evaluate, financialCommitmentClass, markProposalEdited, nextProposalRevision, publicationArtifact };
   if (typeof module !== "undefined" && module.exports) module.exports = api;
   root.WorkIntakePrototype = api;
 })(typeof window !== "undefined" ? window : globalThis);

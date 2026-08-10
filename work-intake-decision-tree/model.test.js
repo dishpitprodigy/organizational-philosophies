@@ -1,4 +1,5 @@
 const assert = require("node:assert/strict");
+const { createHash } = require("node:crypto");
 const { readFileSync } = require("node:fs");
 const { join } = require("node:path");
 const test = require("node:test");
@@ -7,9 +8,12 @@ const { collectAnswers, compileAnswers } = require("./form-definition.js");
 
 const {
   COMPANY,
+  PUBLICATION_ARTIFACT_SCHEMA_VERSION,
   SCENARIOS,
+  beginNewRevision,
   blankState,
   evaluate,
+  markProposalEdited,
   publicationArtifact,
 } = require("./model.js");
 
@@ -34,8 +38,47 @@ test("Work Proposal identity is structural rather than parsed from display text"
       revision: result.proposalRecord.revision,
       label: result.proposalRecord.label,
     },
-    { id: "WP-2026-0042", revision: 2, label: "WP-2026-0042 rev 2" }
+    { id: "WP-2026-0042", revision: 4, label: "WP-2026-0042 rev 4" }
   );
+});
+
+test("the Metrics fixture content and artifact schema are governed by revision 4", () => {
+  const fixture = SCENARIOS["Metrics selection"];
+  const fingerprint = createHash("sha256").update(JSON.stringify(fixture)).digest("hex");
+
+  assert.deepEqual(
+    {
+      artifactSchemaVersion: PUBLICATION_ARTIFACT_SCHEMA_VERSION,
+      proposalRevision: fixture.proposalRevision,
+      fixtureSha256: fingerprint,
+    },
+    {
+      artifactSchemaVersion: 2,
+      proposalRevision: 4,
+      fixtureSha256: "a477bb4a57646aed3817205f6829a09e2647b1c807ae44df3e325efd89937450",
+    }
+  );
+});
+
+test("a user explicitly creates the next Work Proposal revision", () => {
+  const state = structuredClone(SCENARIOS["Metrics selection"]);
+
+  const revision = beginNewRevision(state);
+
+  assert.equal(revision, 5);
+  assert.equal(state.proposalRevision, 5);
+  assert.equal(state.scenario, "Custom");
+});
+
+test("editing a Work Proposal does not silently consume a revision", () => {
+  const state = structuredClone(SCENARIOS["Metrics selection"]);
+  state.guided = { enforce: false };
+
+  markProposalEdited(state);
+
+  assert.equal(state.proposalRevision, 4);
+  assert.equal(state.scenario, "Custom");
+  assert.equal(state.guided.enforce, true);
 });
 
 test("publication artifact preserves intake authority boundaries", () => {
@@ -84,7 +127,7 @@ test("publication artifact preserves intake authority boundaries", () => {
     {
       schemaVersion: 2,
       id: "WP-2026-0042",
-      revision: 2,
+      revision: 4,
       state: "Draft Work Proposal — sponsor acceptance unverified",
       authorized: false,
     }

@@ -239,12 +239,16 @@ stops on an indeterminate create instead of risking a duplicate. Set
 dependencies use Jira issue links; candidate delivery records are related
 to—but are not children of—the intake record.
 
-The browser-to-backend adapter uses a private temporary `artifact.json` and
-deletes it after publication. The publisher durably stores the catalog-routed,
-canonical JSON as a content-addressed attachment on the proposal's `NWI` issue.
-Retries reuse the same attachment; changed JSON under the same proposal revision
-is rejected. The local publication ledger stores only reconciliation metadata,
-not the proposal artifact.
+The browser-to-backend adapter uses a private temporary `artifact.json`. After a
+successful publication it deletes that file. After a failed publication it
+retains the exact submitted JSON, owner-only, under
+`~/.local/state/work-intake-backstage/failed-publications/` and includes its
+path in the error. Set `WORK_INTAKE_FAILED_ARTIFACT_DIR` to move that diagnostic
+directory. The publisher durably stores the catalog-routed, canonical JSON as a
+content-addressed attachment on the proposal's `NWI` issue. Retries reuse the
+same attachment; changed JSON under the same proposal revision is rejected. The
+local publication ledger stores only reconciliation metadata, not the proposal
+artifact.
 
 The same publisher is exposed through the Work Intake page. Repeated clicks are
 safe: the owner-only ledger and Jira labels reconcile the same proposal revision

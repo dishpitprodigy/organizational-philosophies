@@ -3,7 +3,9 @@ import {
   mkdir,
   mkdtemp,
   readFile,
+  readdir,
   rm,
+  stat,
   writeFile,
 } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
@@ -79,6 +81,41 @@ describe('JiraCommandService', () => {
     await expect(access(artifactPath)).rejects.toMatchObject({
       code: 'ENOENT',
     });
+  });
+
+  it('retains an owner-only artifact when Jira publication fails', async () => {
+    const failedArtifactDir = await mkdtemp(
+      join(tmpdir(), 'northstar-failed-publications-'),
+    );
+    const artifact = {
+      schemaVersion: 2,
+      proposal: { id: 'WP-2026-0042', revision: 4 },
+    };
+    const service = createJiraCommandService({
+      rootDir: '/prototype',
+      failedArtifactDir,
+      runProcess: async () => {
+        throw new Error('changed without a proposal revision increment');
+      },
+    });
+
+    try {
+      await expect(service.publish(artifact)).rejects.toThrow(
+        /Submitted artifact retained at .*artifact\.json/,
+      );
+      const [failureDirectory] = await readdir(failedArtifactDir);
+      const retainedPath = join(
+        failedArtifactDir,
+        failureDirectory,
+        'artifact.json',
+      );
+      expect(JSON.parse(await readFile(retainedPath, 'utf8'))).toEqual(
+        artifact,
+      );
+      expect((await stat(retainedPath)).mode & 0o777).toBe(0o600);
+    } finally {
+      await rm(failedArtifactDir, { recursive: true, force: true });
+    }
   });
 
   it('rejects command output that is not a JSON result', async () => {

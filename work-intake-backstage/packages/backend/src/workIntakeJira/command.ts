@@ -1,7 +1,14 @@
 import { execFile } from 'node:child_process';
 import { existsSync } from 'node:fs';
-import { mkdtemp, rm, writeFile } from 'node:fs/promises';
-import { tmpdir } from 'node:os';
+import {
+  chmod,
+  copyFile,
+  mkdir,
+  mkdtemp,
+  rm,
+  writeFile,
+} from 'node:fs/promises';
+import { homedir, tmpdir } from 'node:os';
 import { dirname, join, resolve } from 'node:path';
 import { promisify } from 'node:util';
 
@@ -13,6 +20,33 @@ type RunProcess = (
 ) => Promise<ProcessResult>;
 
 const execFileAsync = promisify(execFile);
+
+function defaultFailedArtifactDir(): string {
+  return (
+    process.env.WORK_INTAKE_FAILED_ARTIFACT_DIR ??
+    join(
+      homedir(),
+      '.local',
+      'state',
+      'work-intake-backstage',
+      'failed-publications',
+    )
+  );
+}
+
+async function retainFailedArtifact(
+  artifactPath: string,
+  failedArtifactDir: string,
+): Promise<string> {
+  await mkdir(failedArtifactDir, { recursive: true, mode: 0o700 });
+  const failureDirectory = await mkdtemp(
+    join(failedArtifactDir, 'publication-'),
+  );
+  const retainedPath = join(failureDirectory, 'artifact.json');
+  await copyFile(artifactPath, retainedPath);
+  await chmod(retainedPath, 0o600);
+  return retainedPath;
+}
 
 async function defaultRunProcess(
   file: string,
@@ -59,6 +93,7 @@ export function createJiraCommandService(
   options: {
     rootDir?: string;
     backstageUrl?: string;
+    failedArtifactDir?: string;
     runProcess?: RunProcess;
   } = {},
 ) {
@@ -68,6 +103,8 @@ export function createJiraCommandService(
     process.env.BACKSTAGE_URL ??
     'http://localhost:7007';
   const runProcess = options.runProcess ?? defaultRunProcess;
+  const failedArtifactDir =
+    options.failedArtifactDir ?? defaultFailedArtifactDir();
   const commandEnvironment = {
     ...process.env,
     BACKSTAGE_URL: backstageUrl,
@@ -94,6 +131,16 @@ export function createJiraCommandService(
           mode: 0o600,
         });
         return await run('publish.mjs', [artifactPath, '--apply', '--json']);
+      } catch (error) {
+        const retainedPath = await retainFailedArtifact(
+          artifactPath,
+          failedArtifactDir,
+        );
+        const message = error instanceof Error ? error.message : String(error);
+        throw new Error(
+          `${message}\nSubmitted artifact retained at ${retainedPath}`,
+          { cause: error },
+        );
       } finally {
         await rm(directory, { recursive: true, force: true });
       }

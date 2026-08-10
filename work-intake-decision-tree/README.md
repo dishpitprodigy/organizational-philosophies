@@ -43,6 +43,11 @@ The browser does not ask a requester to author each Work Proposal section as one
 - Acceptance Conditions are repeatable observable results with retained proof.
 - Timing, dependencies, preconditions, Discovery phases, reusable artifacts, and candidate Epic outcomes each have their own evidence-shaped fields.
 
+When a loaded proposal must change after publication, use **Create revision N** in
+the header before publishing the changed artifact. Editing marks the loaded
+scenario as custom but does not silently consume a revision. Jira rejects
+changed content that reuses an already-published proposal revision.
+
 New or edited proposals remain drafts when these atomic fields are incomplete. The generated prose is inspectable in the form, but requesters supply facts; they do not select priority, size, reviewers, or another team's capacity.
 
 The metrics scenario is deliberately much deeper than the others. It treats RFP logic as the invariant Capability Decision Loop for internal redesign, open-source adoption, vendor selection, or retaining the current system. Its result includes a referenced Current-State Baseline and explicit delta, explicit record boundaries, a measurement ledger, `will` / `shall` / `should` requirements, option claims, POC gates, Evidence-System Tailoring decisions, and the acceptance contract a later implementation proposal must satisfy. Historical ADRs remain with the systems they govern; selection produces a Selection Decision Record, not an ADR.

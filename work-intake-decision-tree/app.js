@@ -191,7 +191,10 @@ function cycleVariant(direction) {
 }
 
 function scenarioBar() {
-  return `<div class="scenario-bar"><span>Load scenario</span>${Object.keys(SCENARIOS).map((name) => `<button class="scenario-button ${state.scenario === name ? "active" : ""}" type="button" data-scenario="${h(name)}">${h(name)}</button>`).join("")}</div>`;
+  const revisionControl = state.proposalId
+    ? `<div class="revision-control"><strong>${h(state.proposalId)} rev ${h(state.proposalRevision)}</strong><button class="secondary-button" type="button" data-new-revision>Create revision ${h(domainModel.nextProposalRevision(state))}</button></div>`
+    : "";
+  return `<div class="scenario-tools"><div class="scenario-bar"><span>Load scenario</span>${Object.keys(SCENARIOS).map((name) => `<button class="scenario-button ${state.scenario === name ? "active" : ""}" type="button" data-scenario="${h(name)}">${h(name)}</button>`).join("")}</div>${revisionControl}</div>`;
 }
 
 function topbar(dark = false) {
@@ -822,6 +825,12 @@ function bindInteractions() {
     render();
   }));
 
+  document.querySelector("[data-new-revision]")?.addEventListener("click", () => {
+    domainModel.beginNewRevision(state);
+    setScenarioInUrl("Custom");
+    render();
+  });
+
   document.querySelectorAll("[data-guided-path], [data-guided-list]").forEach((control) => {
     const eventName = control.matches("select") ? "change" : "input";
     control.addEventListener(eventName, () => {
@@ -909,9 +918,7 @@ function bindInteractions() {
 }
 
 function markCustom() {
-  if (state.scenario !== "Custom" && state.proposalId) state.proposalRevision = Number(state.proposalRevision) + 1;
-  state.scenario = "Custom";
-  if (state.guided) state.guided.enforce = true;
+  domainModel.markProposalEdited(state);
 }
 
 function updateLightweightOutputs() {
