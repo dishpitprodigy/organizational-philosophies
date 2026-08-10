@@ -243,6 +243,34 @@ export function projectionFingerprint(issue) {
     .digest('hex');
 }
 
+function canonicalValue(value) {
+  if (Array.isArray(value)) return value.map(canonicalValue);
+  if (value && typeof value === 'object') {
+    return Object.fromEntries(
+      Object.keys(value)
+        .sort()
+        .map(key => [key, canonicalValue(value[key])]),
+    );
+  }
+  return value;
+}
+
+export function artifactAttachment(artifact) {
+  const content = `${JSON.stringify(canonicalValue(artifact), null, 2)}\n`;
+  const sha256 = createHash('sha256').update(content).digest('hex');
+  const proposalId = String(artifact.proposal.id).replace(
+    /[^A-Za-z0-9._-]/g,
+    '-',
+  );
+  const revisionPrefix = `${proposalId}-rev-${artifact.proposal.revision}-`;
+  return {
+    content,
+    sha256,
+    revisionPrefix,
+    filename: `${revisionPrefix}${sha256}.json`,
+  };
+}
+
 function required(value, message) {
   if (value === undefined || value === null || value === '') {
     throw new Error(message);

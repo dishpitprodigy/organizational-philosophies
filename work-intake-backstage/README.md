@@ -239,6 +239,13 @@ stops on an indeterminate create instead of risking a duplicate. Set
 dependencies use Jira issue links; candidate delivery records are related
 to—but are not children of—the intake record.
 
+The browser-to-backend adapter uses a private temporary `artifact.json` and
+deletes it after publication. The publisher durably stores the catalog-routed,
+canonical JSON as a content-addressed attachment on the proposal's `NWI` issue.
+Retries reuse the same attachment; changed JSON under the same proposal revision
+is rejected. The local publication ledger stores only reconciliation metadata,
+not the proposal artifact.
+
 The same publisher is exposed through the Work Intake page. Repeated clicks are
 safe: the owner-only ledger and Jira labels reconcile the same proposal revision
 and local record ids to the existing issues instead of creating duplicates.

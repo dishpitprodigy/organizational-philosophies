@@ -10,6 +10,7 @@ import {
 import { loadAtlassianEnvironment } from './environment.mjs';
 import { PublicationLedger } from './ledger.mjs';
 import {
+  artifactAttachment,
   buildPublicationPlan,
   firstPositionalArgument,
   projectionFingerprint,
@@ -36,6 +37,7 @@ const routedArtifact = resolveArtifactRouting(
   await backstage.entities(),
 );
 const plan = buildPublicationPlan(routedArtifact);
+const proposalAttachment = artifactAttachment(routedArtifact);
 
 log(
   `${apply ? 'Publishing' : 'Dry run:'} ${
@@ -69,9 +71,32 @@ const jira = jiraClientFromEnvironment();
 const ledger = new PublicationLedger();
 const publicationResults = [];
 const linkResults = [];
+let artifactPublication;
 await ledger.withLock(async lockedLedger => {
   const state = await lockedLedger.read();
   const issueKeys = new Map();
+  const persistProposalArtifact = async (issue, issueKey) => {
+    if (issue.localId !== 'proposal') return;
+    const attachment = await jira.ensureJsonAttachment({
+      issueKey,
+      ...proposalAttachment,
+    });
+    await jira.setIssueProperty(issueKey, 'northstar.work-proposal', {
+      schemaVersion: 1,
+      proposalId: plan.proposal.id,
+      proposalRevision: plan.proposal.revision,
+      artifactSha256: proposalAttachment.sha256,
+      artifactAttachmentId: attachment.attachmentId,
+      artifactUrl: null,
+      form: routedArtifact.form ?? null,
+    });
+    artifactPublication = {
+      attachmentId: attachment.attachmentId,
+      attachmentUrl: attachment.attachmentUrl,
+      issueUrl: jira.issueUrl(issueKey),
+    };
+    log(`  ${attachment.action} ${proposalAttachment.filename}`);
+  };
 
   for (const issue of plan.issues) {
     let publication = state.publications[issue.publicationLabel];
@@ -102,6 +127,11 @@ await ledger.withLock(async lockedLedger => {
         issueKey: publication.issueKey,
         action: 'reused',
       });
+      await jira.updateIssueDescription(
+        publication.issueKey,
+        issue.description,
+      );
+      await persistProposalArtifact(issue, publication.issueKey);
       continue;
     }
 
@@ -131,6 +161,8 @@ await ledger.withLock(async lockedLedger => {
         issueKey: existing.key,
         action: 'reconciled',
       });
+      await jira.updateIssueDescription(existing.key, issue.description);
+      await persistProposalArtifact(issue, existing.key);
       continue;
     }
 
@@ -175,6 +207,7 @@ await ledger.withLock(async lockedLedger => {
       issueKey: created.key,
       action: 'created',
     });
+    await persistProposalArtifact(issue, created.key);
   }
 
   for (const link of plan.links) {
@@ -204,7 +237,15 @@ if (jsonOutput) {
     JSON.stringify({
       applied: true,
       proposal: plan.proposal,
-      issues: publicationResults,
+      artifact: {
+        sha256: proposalAttachment.sha256,
+        filename: proposalAttachment.filename,
+        ...artifactPublication,
+      },
+      issues: publicationResults.map(issue => ({
+        ...issue,
+        url: jira.issueUrl(issue.issueKey),
+      })),
       links: linkResults,
       notes: plan.notes,
     }),

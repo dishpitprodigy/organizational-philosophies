@@ -2,6 +2,7 @@ import assert from 'node:assert/strict';
 import test from 'node:test';
 
 import {
+  artifactAttachment,
   buildBootstrapPlan,
   buildPublicationPlan,
   firstPositionalArgument,
@@ -128,6 +129,24 @@ const artifact = {
     ],
   },
 };
+
+test('artifact attachments are canonical, content-addressed JSON', () => {
+  const first = artifactAttachment({
+    proposal: { revision: 0, id: 'WP-2026-0042' },
+    z: true,
+    a: { second: 2, first: 1 },
+  });
+  const second = artifactAttachment({
+    a: { first: 1, second: 2 },
+    z: true,
+    proposal: { id: 'WP-2026-0042', revision: 0 },
+  });
+
+  assert.equal(first.content, second.content);
+  assert.equal(first.sha256, second.sha256);
+  assert.equal(first.filename, `WP-2026-0042-rev-0-${first.sha256}.json`);
+  assert.match(first.content, /^\{\n  "a":/);
+});
 
 const catalogEntities = [
   {
