@@ -4,6 +4,12 @@ This repository contains working prototypes and long-form writing about how
 organizations define, authorize, deliver, operate, and learn from technical
 work.
 
+
+
+https://github.com/user-attachments/assets/c55a8cd1-6740-4198-9b32-808ddf5a6bf1
+
+
+
 ## Work Intake in Backstage
 
 The [Work Intake Backstage prototype](work-intake-backstage/) demonstrates an
