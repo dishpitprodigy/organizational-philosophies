@@ -32,15 +32,16 @@ The frontend listens on <http://localhost:3000> and the backend listens on
 Backstage exposes the decision-tree prototype at
 <http://localhost:3000/work-intake> and adds **Work Intake** to its navigation.
 The page embeds the existing `work-intake-decision-tree` interface
-inside the Backstage shell. Its native toolbar checks the Jira connection and
-provides the only **Publish to Jira** action. Select a scenario in the embedded
+inside the Backstage shell. Its native toolbar loads the publication profiles
+available to the signed-in user and provides one destination-neutral
+**Publish** action. Select a scenario in the embedded
 prototype, inspect or edit it, and publish when its route is **Work Proposal —
 Ready for Ordered Review**.
 
 The embedded prototype sends a versioned publication artifact to its Backstage
 host on request. The Backstage frontend discovers the backend plugin through
 Backstage service discovery; the backend validates the artifact and invokes the
-Jira publisher. Atlassian credentials never enter the browser. Backstage catalog
+Publication Module. Atlassian credentials never enter the browser. Backstage catalog
 entities remain the authority for ownership, dependencies, and Jira routing.
 System dependency edges are catalog annotations under
 `northstar.example/depends-on`; Jira review projections are rebuilt from that
@@ -152,7 +153,34 @@ without storing secrets in the repository. Use one `NAME=value` assignment per
 line, then restart the service. The separate `lan-environment` file is managed
 by the HTTPS installer and contains only the public Backstage URL.
 
-## Jira prototype
+## Publication profiles
+
+The backend initially exposes two server-defined profiles:
+
+- **Jira Work Management** publishes proposals and ordered reviews to `NWI`,
+  then sends authorized delivery to catalog-routed Jira projects.
+- **Atlassian Discovery** publishes the proposal as an Idea in the `MDP` Jira
+  Product Discovery project, while reviews and authorized delivery retain their
+  Jira placements.
+
+The browser chooses a profile, never arbitrary project keys or endpoints. The
+backend validates authority, resolves catalog facts, creates destination-neutral
+records and relations, and then invokes the configured Jira or JPD Adapter. Add
+later destinations by implementing the publication target and artifact-store
+ports; intake artifacts and the browser interface do not change.
+
+The generic backend API is:
+
+```text
+GET  /api/work-intake-publication/profiles
+POST /api/work-intake-publication/preview
+POST /api/work-intake-publication/publish
+```
+
+`/api/work-intake-jira` remains a compatibility route that delegates to the
+`jira-work-management` profile.
+
+## Atlassian configuration
 
 The Jira scripts treat Backstage as the source of organizational structure and
 routing metadata. They authenticate to the local Backstage catalog, read Group
@@ -198,10 +226,12 @@ converge without recreating projects.
 
 ### Publish an artifact
 
-`scripts/jira/publish.mjs` consumes a versioned JSON artifact, then resolves its
-owner entities, Jira routes, and affected-entity dependency closure through the
-live Backstage catalog. An artifact cannot supply its own trusted Jira project
-key. It publishes a Work Proposal and its ordered review records to `NWI`.
+`scripts/jira/publish.mjs` is a compatibility client for the running Backstage
+Publication Module. It consumes a versioned JSON artifact and calls the generic
+preview or publish API with the `jira-work-management` profile. The backend then
+resolves owner entities, routes, and the affected-entity dependency closure
+through the live catalog. An artifact cannot supply its own trusted project key.
+It publishes a Work Proposal and its ordered review records to `NWI`.
 Candidate delivery records are created in their owning teams' projects only
 when the artifact contains all of the following:
 
@@ -215,7 +245,7 @@ That check is deliberate: completing intake or clearing specialist review does
 not commit a delivery team's capacity. Candidate work remains in the artifact
 when those decisions do not exist.
 
-The metrics example is a Reviewable Work Proposal, so its dry run shows the
+Start Backstage before using the CLI. The metrics example is a Reviewable Work Proposal, so its dry run shows the
 catalog-derived `NWI` proposal and review projections with no delivery issues:
 
 ```sh
@@ -229,26 +259,25 @@ For another artifact:
 node scripts/jira/publish.mjs path/to/artifact.json
 ```
 
-Publication labels are derived from proposal id, revision, and local record id.
-The publisher serializes local publication through an owner-only ledger at
+Publication identities include profile, placement, Adapter, concrete target,
+proposal id and revision, and local record id. The Module serializes publication
+through an owner-only journal at
 `~/.local/state/work-intake-backstage/jira-publications.json`. Before a create,
 it records an in-progress reservation; after the Jira response, it records the
-issue key. A retry reconciles an existing Jira label, reuses a recorded key, or
-stops on an indeterminate create instead of risking a duplicate. Set
+external identifier. A retry observes and reconciles an existing projection,
+reuses a recorded projection, or stops on an indeterminate create instead of
+risking a duplicate. Existing Jira ledger entries are read through a
+compatibility key. Set
 `JIRA_PUBLICATION_LEDGER` to move the ledger. Cross-project delivery
 dependencies use Jira issue links; candidate delivery records are related
 to—but are not children of—the intake record.
 
-The browser-to-backend adapter uses a private temporary `artifact.json`. After a
-successful publication it deletes that file. After a failed publication it
-retains the exact submitted JSON, owner-only, under
-`~/.local/state/work-intake-backstage/failed-publications/` and includes its
-path in the error. Set `WORK_INTAKE_FAILED_ARTIFACT_DIR` to move that diagnostic
-directory. The publisher durably stores the catalog-routed, canonical JSON as a
-content-addressed attachment on the proposal's `NWI` issue. Retries reuse the
-same attachment; changed JSON under the same proposal revision is rejected. The
-local publication ledger stores only reconciliation metadata, not the proposal
-artifact.
+The Module durably stores the catalog-routed canonical JSON as a
+content-addressed attachment on the profile's proposal anchor—an `NWI` issue or
+an `MDP` Idea—before dependent review or delivery placements begin. Retries
+verify and reuse the same attachment; changed JSON under the same proposal
+revision is rejected. The local journal stores only reconciliation metadata,
+not the proposal artifact.
 
 The same publisher is exposed through the Work Intake page. Repeated clicks are
 safe: the owner-only ledger and Jira labels reconcile the same proposal revision

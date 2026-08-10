@@ -61,6 +61,7 @@ function fakeTransport() {
     search: async () => ({ issues: [] }),
     request: async (path: string, options?: { body?: unknown }) => {
       calls.push({ path, body: options?.body });
+      if (path === '/myself') return { accountId: 'account-1' };
       return path === '/issue' ? { key: 'NWI-10' } : {};
     },
     setIssueProperty: async () => undefined,

@@ -30,6 +30,9 @@ type AtlassianTargetOptions = {
   id: 'jira' | 'jpd';
   transport: AtlassianTargetTransport;
   issueType(record: PublicationRecord): string;
+  additionalFields?(
+    record: PublicationRecord,
+  ): Promise<Record<string, unknown>>;
 };
 
 const PUBLICATION_PROPERTY = 'northstar.publication';
@@ -75,14 +78,15 @@ function legacyDescription(record: PublicationRecord) {
 }
 
 function recordLabels(record: PublicationRecord) {
-  return [
-    ...(record.kind === 'proposal'
-      ? ['northstar-work-intake', 'work-proposal']
-      : record.kind === 'ordered-review'
-      ? ['northstar-work-intake', 'review-record']
-      : ['northstar-delivery', 'authorized-work-proposal']),
-    publicationLabel(record.idempotencyKey),
-  ];
+  let labels: string[];
+  if (record.kind === 'proposal') {
+    labels = ['northstar-work-intake', 'work-proposal'];
+  } else if (record.kind === 'ordered-review') {
+    labels = ['northstar-work-intake', 'review-record'];
+  } else {
+    labels = ['northstar-delivery', 'authorized-work-proposal'];
+  }
+  return [...labels, publicationLabel(record.idempotencyKey)];
 }
 
 function linkType(relation: PublicationRelation) {
@@ -181,6 +185,8 @@ export class AtlassianPublicationTarget implements PublicationTarget {
         record.kind === 'ordered-review'
           ? await this.findLocalId(batch, 'proposal')
           : undefined;
+      const additionalFields =
+        (await this.options.additionalFields?.(record)) ?? {};
       const fields = {
         project: { key: batch.binding.target.targetId },
         issuetype: { name: this.options.issueType(record) },
@@ -188,6 +194,7 @@ export class AtlassianPublicationTarget implements PublicationTarget {
         description: toAdf(structuredText(record.content)),
         labels: recordLabels(record),
         ...(parent ? { parent: { key: parent.key } } : {}),
+        ...additionalFields,
       };
       const property = {
         profileId: batch.profileId,

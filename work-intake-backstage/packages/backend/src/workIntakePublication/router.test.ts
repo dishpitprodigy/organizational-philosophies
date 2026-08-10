@@ -144,10 +144,18 @@ describe('work-intake publication router', () => {
   it('passes the server-authenticated actor and request to preview', async () => {
     const fixture = testApp();
     const body = { profileId: 'jira', artifact: artifact() };
+    body.artifact.submission.authenticatedActor = 'user:default/attacker';
     await request(fixture.app).post('/preview').send(body).expect(200);
     expect(fixture.preview).toHaveBeenCalledWith(
       expect.objectContaining({ principal: 'user:default/avery' }),
-      body,
+      expect.objectContaining({
+        profileId: 'jira',
+        artifact: expect.objectContaining({
+          submission: expect.objectContaining({
+            authenticatedActor: 'user:default/avery',
+          }),
+        }),
+      }),
     );
   });
 

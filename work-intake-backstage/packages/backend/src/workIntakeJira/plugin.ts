@@ -6,6 +6,7 @@ import { catalogServiceRef } from '@backstage/plugin-catalog-node';
 
 import { BackstageCatalogPublicationResolver } from '../workIntakePublication/adapters/catalog/backstageCatalogResolver';
 import { createProductionPublication } from '../workIntakePublication/factory';
+import { loadAtlassianEnvironment } from '../workIntakePublication/environment';
 import { createRouter } from './router';
 
 const workIntakeJiraPlugin = createBackendPlugin({
@@ -21,6 +22,7 @@ const workIntakeJiraPlugin = createBackendPlugin({
         logger: coreServices.logger,
       },
       async init({ auth, catalog, config, httpAuth, httpRouter, logger }) {
+        loadAtlassianEnvironment();
         const baseUrl =
           config.getOptionalString('workIntakePublication.atlassian.baseUrl') ??
           process.env.ATLASSIAN_URL;

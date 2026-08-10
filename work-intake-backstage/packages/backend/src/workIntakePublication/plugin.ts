@@ -7,6 +7,7 @@ import { catalogServiceRef } from '@backstage/plugin-catalog-node';
 import type { WorkProposalPublication } from './contracts';
 import { BackstageCatalogPublicationResolver } from './adapters/catalog/backstageCatalogResolver';
 import { createProductionPublication } from './factory';
+import { loadAtlassianEnvironment } from './environment';
 import { createRouter } from './router';
 
 /** Creates the plugin around the composed publication module. Composition belongs to P10. */
@@ -43,6 +44,7 @@ const workIntakePublicationPlugin = createBackendPlugin({
         logger: coreServices.logger,
       },
       async init({ auth, catalog, config, httpAuth, httpRouter, logger }) {
+        loadAtlassianEnvironment();
         const baseUrl =
           config.getOptionalString('workIntakePublication.atlassian.baseUrl') ??
           process.env.ATLASSIAN_URL;

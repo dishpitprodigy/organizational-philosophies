@@ -51,7 +51,7 @@ function failureDetail(body: unknown): string | undefined {
     if (Array.isArray(detail)) return detail.map(String).join('; ');
     return typeof detail === 'string' ? detail : JSON.stringify(detail ?? body);
   }
-  return body == null ? undefined : String(body);
+  return body === null || body === undefined ? undefined : String(body);
 }
 
 const DESCRIPTION_HEADINGS = new Set([

@@ -4,6 +4,7 @@ import Router from 'express-promise-router';
 import { z } from 'zod/v3';
 
 import { workProposalArtifactSchema } from '../workIntake/domain/artifactSchema';
+import { bindSubmissionProvenance } from '../workIntake/domain/submissionProvenance';
 import {
   authenticatedActorFromPrincipal,
   type WorkProposalPublication,
@@ -63,8 +64,25 @@ export function createRouter(options: {
     return authenticatedActorFromPrincipal(credentials.principal.userEntityRef);
   }
 
-  async function requestBody(req: express.Request, res: express.Response) {
-    const parsed = publicationRequestSchema.safeParse(req.body);
+  async function requestBody(
+    req: express.Request,
+    res: express.Response,
+    principal: string,
+  ) {
+    const supplied = req.body as { artifact?: unknown };
+    const artifact =
+      supplied?.artifact &&
+      typeof supplied.artifact === 'object' &&
+      !Array.isArray(supplied.artifact)
+        ? bindSubmissionProvenance(
+            supplied.artifact as Record<string, unknown>,
+            principal,
+          )
+        : supplied?.artifact;
+    const parsed = publicationRequestSchema.safeParse({
+      ...(req.body as object),
+      artifact,
+    });
     if (!parsed.success) {
       res.status(400).json({
         error: {
@@ -83,7 +101,7 @@ export function createRouter(options: {
     operation: 'preview' | 'publish',
   ) {
     const authenticatedActor = await actor(req);
-    const body = await requestBody(req, res);
+    const body = await requestBody(req, res, authenticatedActor.principal);
     if (!body) return;
     try {
       res.json(await options.publication[operation](authenticatedActor, body));

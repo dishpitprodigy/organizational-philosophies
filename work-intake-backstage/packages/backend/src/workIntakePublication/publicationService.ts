@@ -4,10 +4,7 @@ import {
   workProposalArtifactSchema,
   type WorkProposalArtifact,
 } from '../workIntake/domain/artifactSchema';
-import {
-  canonicalJson,
-  workProposalSha256,
-} from '../workIntake/domain/canonicalJson';
+import { canonicalJson } from '../workIntake/domain/canonicalJson';
 import {
   AuthenticatedActor,
   ArtifactStore,
@@ -128,8 +125,12 @@ function canonicalArtifact(artifact: WorkProposalArtifact): CanonicalArtifact {
       publication?: unknown;
     };
   void ignored;
-  const content = canonicalJson(contentValue);
-  const digest = workProposalSha256(artifact);
+  const content = `${JSON.stringify(
+    JSON.parse(canonicalJson(contentValue)),
+    null,
+    2,
+  )}\n`;
+  const digest = createHash('sha256').update(content).digest('hex');
   return {
     artifact,
     content,
@@ -502,11 +503,9 @@ function logicalBatch(
 }
 
 function roleKind(role: PublicationProfile['placements'][number]['role']) {
-  return role === 'proposal'
-    ? 'proposal'
-    : role === 'review'
-    ? 'ordered-review'
-    : 'authorized-delivery';
+  if (role === 'proposal') return 'proposal';
+  if (role === 'review') return 'ordered-review';
+  return 'authorized-delivery';
 }
 
 export class PublicationService implements WorkProposalPublication {
