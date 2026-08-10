@@ -1,0 +1,93 @@
+{
+  "capture": {
+    "kind": "live-read-only",
+    "capturedAt": "2026-08-10",
+    "source": "configured Atlassian Cloud tenant via REST API v3",
+    "writesPerformed": false
+  },
+  "connection": {
+    "environmentVariables": [
+      "ATLASSIAN_URL",
+      "ATLASSIAN_EMAIL",
+      "ATLASSIAN_TOKEN"
+    ],
+    "authentication": "HTTP Basic authentication using email and API token",
+    "apiBasePath": "/rest/api/3"
+  },
+  "project": {
+    "key": "MDP",
+    "projectTypeKey": "product_discovery",
+    "style": "next-gen",
+    "simplified": true,
+    "issueType": {
+      "id": "10040",
+      "name": "Idea",
+      "description": "Discovery idea",
+      "subtask": false
+    }
+  },
+  "create": {
+    "endpoint": "POST /issue",
+    "requiredFields": ["project", "summary", "reporter"],
+    "availableStandardFields": [
+      "description",
+      "labels",
+      "attachment",
+      "issuelinks"
+    ],
+    "descriptionFormatObserved": "Atlassian Document Format (ADF)"
+  },
+  "projectScopedFields": [
+    {
+      "id": "customfield_10089",
+      "name": "Idea short description",
+      "type": "string",
+      "operations": ["set"]
+    },
+    {
+      "id": "customfield_10090",
+      "name": "Documents",
+      "type": "url",
+      "operations": ["set"]
+    },
+    {
+      "id": "customfield_10092",
+      "name": "State",
+      "type": "option",
+      "operations": ["set"]
+    },
+    {
+      "id": "customfield_10093",
+      "name": "Impact",
+      "type": "number",
+      "operations": ["set"]
+    },
+    {
+      "id": "customfield_10095",
+      "name": "Theme",
+      "type": "array<option>",
+      "operations": ["add", "set", "remove"]
+    },
+    {
+      "id": "customfield_10096",
+      "name": "Customer segments",
+      "type": "array<option>",
+      "operations": ["add", "set", "remove"]
+    }
+  ],
+  "readAndReconciliation": {
+    "searchEndpoint": "GET /search/jql",
+    "verifiedJql": "project = MDP",
+    "verifiedResultFields": ["key", "summary", "issuetype", "attachment"],
+    "ideaIssueObserved": true,
+    "issuePropertyReadEndpoint": "GET /issue/{issueKey}/properties",
+    "attachmentReadField": "attachment",
+    "observedExistingProperties": []
+  },
+  "unverified": [
+    "A JPD Idea create request was not sent; create-time defaults and validation beyond createmeta remain unverified.",
+    "Attachment upload and property write requests were not sent; their write behavior remains unverified.",
+    "No publication-label lookup was exercised; a deterministic JQL or property lookup must be selected by the JPD adapter implementation.",
+    "No custom-field mapping decision is represented by this fixture."
+  ]
+}
