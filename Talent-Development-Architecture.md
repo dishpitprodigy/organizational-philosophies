@@ -26,9 +26,9 @@ Baseball is the cleanest sports analogy for Talent Development Architecture beca
 
 Baseball is also the closest sports analogue to the business world's measurement fantasy. The Moneyball story is not just "sports with statistics." It is the endgame of every efficiency benchmark: turn scattered observation into structured evidence, use that evidence to find undervalued capability, and make better allocation decisions than competitors who are still relying on impressions.
 
-The ideal is that the organization can tell when someone is ready for the next level from accumulated evidence. Baseball gets unusually close to that ideal. A team looking at a player in AAA is usually not asking whether that player can bring leadership to a struggling major-league roster. It is asking whether the player has demonstrated enough level-appropriate capability to face the next level of competition. The progression model is clean, and the evidence system is mature.
+The ideal is that the organization can tell when someone is ready for the next level from accumulated evidence. Baseball gets unusually close to that ideal. A team looking at a player in AAA is usually not asking whether that player can bring leadership to a struggling major-league roster; it is asking whether the player has demonstrated enough level-appropriate capability to face the next level of competition. The progression model is clean, and the evidence system is mature.
 
-The difference is that baseball outcomes are unusually explicit. A pitch is a ball or a strike. A runner is safe or out. A plate appearance produces a countable result. Business outcomes are more ambiguous and more contextual. Frameworks like DORA work well in their intended domain because they isolate a meaningful slice of engineering performance, but they do not transfer cleanly to every function. TDA should borrow baseball's structured development pipeline and measurement ambition without pretending business outcomes are as clean as box scores.
+Baseball's model works so well because its outcomes are unusually explicit: a pitch is a ball or a strike; a runner is safe or out; a plate appearance produces a countable result. Business outcomes are more ambiguous, more contextual. Frameworks like DORA work well in their intended domain because they isolate a meaningful slice of engineering performance, but they do not transfer cleanly to every function. TDA borrows baseball's structured development pipeline and measurement ambition without pretending business outcomes are as clean as box scores.
 
 ---
 
@@ -36,7 +36,7 @@ The difference is that baseball outcomes are unusually explicit. A pitch is a ba
 
 The main argument should stand without sports knowledge. Sports analogies are useful only when they reveal an organizational pattern more clearly than ordinary business language.
 
-The point is not sports. The point is cross-domain pattern recognition. A reader should be able to say, "I do not care about baseball or football, but I understand the organizational pattern this is trying to expose."
+The point is not sports: the point is cross-domain pattern recognition. A reader should be able to say, "I do not care about baseball or football, but I understand the organizational pattern this is trying to expose."
 
 In this guide, the sports language does three jobs:
 
@@ -103,13 +103,14 @@ A more complete loop looks like this:
 | Checkpoint | What changed, what evidence was produced, what support was missing, and what should be adjusted? |
 | Reconciliation | Did the person build the intended capability, was the target right, and is the next decision more scope, more practice, a different assignment, promotion, external hiring, or a system change? |
 
-That sequence matters because it turns scattered artifacts into an actual development system. A career map without assignments is theater. A competency rubric without observation is vocabulary theater. A development plan without work allocation is self-improvement theater. A review without preserved context is memory theater. The architecture is the loop that prevents those artifacts from becoming performance props.
-
 The stages collapse into a compact decision sequence that can be carried from one development cycle to the next:
 
 > aspiration → target capability → real work → coaching and feedback → evidence → reconciliation → next decision
 
-TDA operates at two connected scales. At the individual scale, it helps a person and manager decide what development should happen next. At the organizational scale, it makes recurring patterns visible: where opportunity is uneven, where capability gaps repeat, where managers are or are not developing people, and where the system around the employee needs to change.
+TDA operates at two connected scales:
+
+- At the individual scale, it helps a person and manager decide what development should happen next.
+- At the organizational scale, it makes recurring patterns visible: where opportunity is uneven, where capability gaps repeat, where managers are or are not developing people, and where the system around the employee needs to change.
 
 ---
 
@@ -127,7 +128,7 @@ It does not replace:
 - board governance
 - every mechanism required to educate or develop managers
 
-*The useful boundary is straightforward: TDA produces evidence and makes patterns visible. Accountable leaders and adjacent organizational systems decide what to do with those patterns.*
+*TDA produces evidence and makes patterns visible. Accountable leaders and adjacent organizational systems decide what to do with those patterns.*
 
 > **When capability genuinely isn't built, the discussion changes, and becomes a separate topic: the evidence ledger you built here is what makes that conversation on that topic an honest one.**
 
@@ -208,7 +209,7 @@ The ratio should not be treated as accounting. The point is design:
 - **20 percent learning from others:** coaching, mentoring, peer feedback, work-owner review, communities of practice, and conversations with people who already perform the capability well.
 - **10 percent formal support:** courses, labs, reading, certifications, internal guides, documentation, reference implementations, or structured study.
 
-This is the piece many companies get backward. They send someone to training and quietly treat completion as readiness. TDA treats formal learning as support for the rep. The rep is where the evidence comes from.
+This is the piece many companies get backward. They send someone to training and pretend that completion equals readiness. TDA treats formal learning as support for the rep. The rep is where the evidence comes from.
 
 A strong 70-20-10 plan answers:
 
@@ -266,13 +267,11 @@ Those answers matter because preference predicts:
 - likely long-term fit
 - where the organization can get disproportionate return from the person
 
-Preference is not veto power. Sometimes the work is the work. A person on a team that owns both on-prem systems and cloud may need to support Terraform competently even if they hate writing it. Baseline competence matters, and nobody gets a role made entirely out of favorite tasks.
-
-But sustained misalignment is waste. If the same person is happiest and strongest writing Ansible, Python, Bash, or working on-prem, a wise manager should bias their long-term assignment mix toward that fit when the business allows it. The goal is not indulgence. The goal is better output from the talent the organization already has. Some necessary work will still be unpleasant; preference is signal, not exemption.
+Some necessary work will still be unpleasant; preference is signal, not exemption. It is still wise for the organization to align the actual work people are doing with work that energizes them.
 
 Employees should be encouraged to discuss these preferences openly with their managers. Managers should treat the information as planning input, not as complaining.
 
-Managers should also use disliked work as a learning opportunity when the exposure is genuinely necessary. If an engineer strongly prefers one tool or operating model over another, the coaching question is not only "can you do the required work?" It is also "can you explain why reasonable people prefer the alternative?" The point is not to force false enthusiasm. The point is to build the ability to operate from another perspective when the business context requires it.
+When someone must do work they find unpleasant, managers should frame it as a growth challenge, or a learning opportunity. Suppose an engineer strongly prefers one tool or operating model over another, the manager should encourage the individual contributor to explore questions like, "can you explain why reasonable people prefer this to the alternative?" or "what would you do to make this tool or process better?" The ability to operate from another perspective when the business context demands it is required for individual growth: if you don't step outside the things that you believe, they'll destroy you.
 
 A person who dislikes Terraform may still need to understand what Terraform users value: provider breadth, declarative workflow, common hiring market, ecosystem support, and familiar patterns across cloud teams. That same person may still prefer Ansible, Pulumi, Python, or another model after doing the work. That is fine. The development value is in learning to understand the opposing case well enough to apply the right tool in the narrow context where it is strongest, not in pretending every preference is equally aligned with every situation.
 

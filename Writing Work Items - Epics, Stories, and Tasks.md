@@ -433,6 +433,8 @@ If you don't yet know *how*, the unknown is its own work. Pull it out as a **Dis
 - is deliberately **scoped small / time-boxed**;
 - produces the information needed to write the *real* story's acceptance criteria.
 
+The decision must name the Current-State Baseline it evaluated. For a substantial redesign, the Discovery work should also include an Implementation Currency Check so the team does not preserve bespoke machinery merely because nobody checked whether a maintained ordinary solution now exists. This discovery record is not an ADR; if later design makes an architectural decision, that decision is recorded with the system it governs.
+
 **The Example Task should have been split:**
 1. **Discovery WP** - "Decide how an instance determines its region and registration endpoint." Done when the approach is written down.
 2. **Story** - "Instance auto-registers to the correct regional endpoint on first boot" (AC from [Section 4](#4-acceptance-criteria-for-stories--work-packages)).
@@ -604,6 +606,7 @@ the registration status check succeeds.
 **Intent:** Discovery
 
 **Question:** <What decision must we make?>
+**Current-State Baseline:** <authoritative architecture/operating revision + explicit delta, or the bounded work required to establish one>
 **Done when:** a decision is recorded (in a comment / linked doc) - NOT when code merges.
 **Scope / time-box:** <keep it small, e.g. 1 day>
 **Output feeds:** <which story this unblocks>

@@ -1,30 +1,29 @@
 # RFPs and Vendor Selection as Evidence Systems
 
-*A strict-but-tailorable framework for buying operational capability instead of merely buying equipment, licenses, or vendor activity.*
+*The external-vendor form of a capability decision system: strict in its evidence obligations, tailorable in its ceremony and controls.*
 
 ## Thesis
 
-An RFP is not a purchasing ritual. It is a structured method for recording organizational need, vendor claims, evaluation criteria, assumptions, tradeoffs, and risk acceptance before money changes hands.
+An RFP records organizational need, vendor claims, evaluation criteria, assumptions, tradeoffs, and risk acceptance before money changes hands.
 
-For high-risk technology purchases, procurement is not complete when equipment arrives, a license is issued, or a vendor declares the installation finished. Procurement is complete when the purchased capability has been proven fit for production use under agreed conditions.
+For high-risk technology purchases, procurement is complete when the purchased capability has been proven fit for production use under agreed conditions.
 
-This matters because many expensive technology failures are not caused by the selected product being impossible to make work. They are caused by vague expectations, missing acceptance criteria, informal vendor promises, weak implementation gates, unclear operational ownership, and payment structures that reward activity instead of proof.
+Many expensive technology failures occur even when the selected product can be made to work. Vague expectations, missing acceptance criteria, informal vendor promises, weak implementation gates, unclear operational ownership, and payment structures that reward activity instead of proof prevent a viable product from becoming a reliable capability.
 
-The core rule is simple:
+**The organization must define "done" before the vendor, the budget cycle, and production pressure redefine "done" as "too late to object."**
 
-**The organization should define "done" before the vendor, the budget cycle, and production pressure redefine "done" as "too late to object."**
+The RFP process turns operational risk into visible requirements, testable evidence, enforceable obligations, and recorded decisions. It gives the organization a way to say what it needs, how it will decide, what it believes the vendor has promised, what evidence will count, and which risks it knowingly accepted.
 
-That is the real job of an RFP. It turns operational risk into visible requirements, testable evidence, enforceable obligations, and recorded decisions. It gives the organization a way to say what it needs, how it will decide, what it believes the vendor has promised, what evidence will count, and which risks it knowingly accepted.
+The same process applies when the candidates are commercial products, managed services, open-source systems, a substantial internal redesign, or continued investment in the current system. The decision boundary changes while the logic remains: every capability decision needs a resolvable Current State, a Desired Outcome, Requirements, alternatives and claims, proportionate proof, a recorded decision, Acceptance Conditions, and later reconciliation.
 
-The strictest version of this model borrows from federal-style acquisition thinking, but the point is not to turn every company into a government procurement office. The point is to start from a complete map, then subtract deliberately when the risk is lower.
+Ceremony and controls should scale with consequence and reversibility. This model borrows from federal-style acquisition thinking while allowing neutral facilitation, sealed scoring, vendor-participation rules, contractual remedies, document length, POC depth, and burn-in duration to change with the decision. Every tier retains the evidence obligations.
 
-Draconian process is not always necessary. A very strict model is still useful because it gives people something coherent to tailor.
 
 ---
 
 ## Why RFPs Exist
 
-Organizations do not need formal RFPs because buying things is inherently complicated. They need formal RFPs because important purchases create commitments the organization will have to live with after the sales cycle ends.
+Organizations need formal RFPs because important purchases create commitments the organization will have to live with after the sales cycle ends.
 
 A technology purchase can commit the organization to:
 
@@ -41,6 +40,8 @@ A technology purchase can commit the organization to:
 
 Those commitments often last longer than the people who approved the purchase. If the original reasoning is not preserved, later teams inherit a system without the answer key. They may know what was bought, but not why it was chosen, what alternatives were rejected, what risks were accepted, what claims were made, or what outcomes the organization expected.
 
+Lost reasoning causes organizations to retest rejected solutions and rediscover the same disqualifying facts. _If you don't write things down, you're just playing games._
+
 The RFP exists to prevent that loss of context.
 
 At its best, an RFP does five jobs:
@@ -51,7 +52,7 @@ At its best, an RFP does five jobs:
 4. It ties selection, implementation, acceptance, and payment to evidence.
 5. It leaves behind a decision record the organization can reconcile against actual outcomes.
 
-This is the same closed-loop pattern that applies to work items, architecture decisions, process improvement, coaching, and talent development. The organization records a judgment when it is made, preserves the evidence and assumptions around it, routes the artifact through the people who must rely on it, then reconciles the original claim against what actually happened.
+The same closed-loop pattern applies to work items, architecture decisions, process improvement, coaching, and talent development. The organization records a judgment when it is made, preserves the evidence and assumptions around it, routes the artifact through the people who must rely on it, then reconciles the original claim against what actually happened.
 
 An RFP is that loop applied to external capability acquisition.
 
@@ -70,15 +71,9 @@ Weak procurement processes tend to optimize for purchase completion:
 - vendor installed it
 - dashboard green for one afternoon
 
-That sequence can produce the appearance of success while leaving the organization with an unproven production system. The vendor may have delivered equipment, labor, or access, but the buyer has not yet proven that the capability works in the environment where it matters.
+The purchase sequence can appear successful while leaving the organization with an unproven production system. Delivered equipment, labor, or access establishes activity; the buyer still needs evidence that the capability works in its production environment.
 
-For a storage cluster, "done" does not mean that racks arrived, disks are visible, and the admin UI loads.
-
-For an HPC cluster, "done" does not mean that users can log in, a sample job runs, and the vendor benchmark looks impressive.
-
-For an identity platform, "done" does not mean that authentication succeeds in a lab tenant.
-
-For a backup system, "done" does not mean that backup jobs completed once.
+Common shallow completion signals include visible storage disks and a working admin UI, one successful HPC job and an impressive vendor benchmark, authentication in a lab tenant, or a single completed backup job.
 
 The operational question is different:
 
@@ -86,7 +81,7 @@ The operational question is different:
 
 A stronger RFP process optimizes for production readiness. It defines what must be true before selection, implementation, payment, handoff, and final acceptance can proceed.
 
-The vendor should be accountable for the operational outcome, not merely the shipment of expensive parts.
+The vendor should be accountable for the operational outcome those parts were purchased to create.
 
 ---
 
@@ -119,13 +114,11 @@ An RFP is how the organization decides which risks sit where.
 
 If the buyer only asks for a bill of materials, most risk stays with the buyer. The vendor can say, "We delivered what you asked for." If the system later fails to meet throughput, resilience, operability, or support expectations, the organization may discover that those expectations were never converted into obligations.
 
-If the buyer defines operational outcomes, acceptance tests, implementation gates, burn-in criteria, remedies, and support obligations, the risk picture changes. The vendor still cannot own everything. No vendor can fix an organization that failed to define its workload, prepare its site, assign operators, or approve required network changes. But the vendor can be held accountable for the claims it made and the outcomes it agreed to deliver.
+If the buyer defines operational outcomes, acceptance tests, implementation gates, burn-in criteria, remedies, and support obligations, the risk picture changes. The buyer retains responsibility for defining its workload, preparing its site, assigning operators, and approving required network changes. The vendor remains accountable for the claims it made and the outcomes it agreed to deliver.
 
-That is operational risk transfer:
+**Operational risk transfer converts uncertain future pain into testable, enforceable vendor obligations before the system becomes too embedded to reject.**
 
-**The organization converts uncertain future pain into testable, enforceable vendor obligations before the system becomes too embedded to reject.**
-
-This is not anti-vendor. Good vendors benefit from clear requirements, explicit assumptions, known acceptance criteria, and realistic buyer obligations. Ambiguity helps weak sales motions more than strong delivery teams.
+Good vendors benefit from clear requirements, explicit assumptions, known acceptance criteria, and realistic buyer obligations. Ambiguity helps weak sales motions more than strong delivery teams.
 
 ![The buyer retains responsibility for defining organizational need and operating conditions; the RFP converts those facts into testable obligations that the vendor can own.](docs/assets/images/rfp-vendor-selection/risk-allocation-boundary.svg){#fig-rfp-risk-allocation-boundary}
 
@@ -158,9 +151,13 @@ Before issuing an RFP, capture:
 - decision gates
 - evidence needed for acceptance
 
-This pre-work records what the organization believed it needed before vendors had a chance to reshape the question.
+The pre-work records what the organization believed it needed before vendors had a chance to reshape the question.
 
-Market research or an RFI can happen before the formal RFP. The purpose is not to let vendors write the requirements. The purpose is to learn what the market can actually provide, where similar deployments fail, what assumptions matter, what vendors will and will not guarantee, and what testing they consider meaningful.
+Every RFP requires Current State. An authoritative architecture package and explicit delta can provide it without repeated prose. The RFP may identify that Current-State Baseline by revision and describe only the changes since it was accepted. The baseline must remain available to every legitimate respondent and reviewer, and the delta must say what was added, removed, upgraded, reconfigured, or newly measured. “See the old RFP” without an authoritative revision and explicit delta is an invitation to make different assumptions.
+
+A Current-State Baseline should identify: component roles and ownership, dependency and trust boundaries, usage and workload profiles, capacity and performance evidence, retention or lifecycle rules, known failure behavior, support boundaries, and the parts of the operating model the new capability must preserve or deliberately change.
+
+Market research and RFIs reveal what the market can provide, where similar deployments fail, which assumptions matter, what vendors will and will not guarantee, and which tests they consider meaningful.
 
 A vendor refusing to guarantee something can be more useful than a vendor promising everything. The refusal tells the buyer where risk may remain internal, where the requirement may be unrealistic, or where the contract needs sharper language.
 
@@ -168,9 +165,7 @@ A vendor refusing to guarantee something can be more useful than a vendor promis
 
 ## RFP Document Anatomy
 
-The RFP document should make the evaluation path visible. A vendor should be able to understand the environment, the target capability, the response format, the decision process, and the acceptance bar without reverse-engineering the buyer's intent from scattered conversations.
-
-A strong infrastructure RFP usually has this shape:
+A strong infrastructure RFP usually looks something like this:
 
 1. Executive summary
 2. Department or business-unit overview
@@ -189,9 +184,9 @@ A strong infrastructure RFP usually has this shape:
 15. Acceptance test
 16. Attachments
 
-The current-environment section should be specific enough for vendors to design against reality. For a storage platform, that may include the existing parallel storage environment, current filesystem architecture, storage nodes, disk shelves or JBODs, protocol or gateway nodes, management nodes, network fabric, application layer, observed performance, storage profile, and the procurement context for the replacement.
+The current-environment section should be specific enough for vendors to design against reality. For a storage platform, that may include descriptions of the existing hardware configuration, observed performance, storage profile, and the procurement context for the replacement.
 
-The conditions-of-participation section is where the buyer defines the rules of engagement. It should cover:
+The buyer defines the rules of engagement in the RFP response instructions. That section should cover:
 
 - general terms
 - eligibility to participate
@@ -216,31 +211,55 @@ The conditions-of-participation section is where the buyer defines the rules of 
 - definitions
 - requirements structure
 
-The technical requirements should then be organized by the operating surfaces the buyer must live with after award. For a storage RFP, that means storage hardware, networking, capacity, data center, software and clients, data protection, benchmarks, documentation, support, and acceptance. For another domain, the headings will change, but the logic should not: describe the environment first, define how vendors must respond, then state the requirements in the same categories operators will later use to validate and run the system.
+The technical requirements should then be organized by the operating surfaces the buyer must live with after the completion of work. For a storage RFP, that means storage hardware, networking, capacity, data center, software and clients, data protection, benchmarks, documentation, support, and acceptance. Other domains use different headings within the same sequence: describe the environment, define how vendors must respond, then state the requirements in the categories operators will later use to validate and run the system.
 
-The definitions section matters more than it looks. Terms such as "available," "supported," "integrated," "real time," "high performance," "production ready," "turnkey," and "accepted" are not self-executing. If the RFP does not define language and measurement, the vendor response will define them implicitly.
+The definitions section needs review and approval from the company's legal department. The RFP must define terms such as "available," "supported," "integrated," "real time," "high performance," "production ready," "turnkey," and "accepted": many industries consider themselves latency sensitive, but relatively few are sensitive to picoseconds of latency. Undefined language and measurement allow each vendor response to supply its own interpretation.
 
-The response format is also a control surface. Vendors should be told how to answer requirements, how to identify exceptions, how to attach assumptions, how to price options, how many alternates they may submit, and which claims require supporting evidence. Without that discipline, comparison becomes a writing contest between sales teams.
+The response format is also a control surface. Vendors should be told how to answer requirements, how to identify exceptions, how to attach assumptions, how to price options, how many alternates they may submit, and which claims require supporting evidence.
 
-The formal contact should usually be detached from the project team. That does not mean technical people stop talking to vendors. It means official questions, answers, schedule changes, requirement clarifications, and addenda flow through a controlled channel so one vendor does not receive private guidance that others never see.
+The formal contact should usually be detached from the project team. Technical staff may continue speaking with vendors, while official questions, answers, schedule changes, requirement clarifications, and addenda flow through a controlled channel available to the full field.
 
 ---
 
-## Requirements Structure
+## Requirements
 
-RFP requirements should describe what must be true in production, not merely which equipment or product the buyer thinks might make it true.
+An RFP must define the language that distinguishes facts, obligations, and options before using that language to state requirements. Controlled language determines what kind of claim a sentence makes, and the sentence itself describes a condition that can be evaluated.
 
-Do not only say:
+### Requirements Structure
+
+Every RFP should define its requirements language before the first numbered requirement. One useful notation distinguishes facts, requirements, and goals through the governing verb:
+
+- `will` statements describe current facts, buyer constraints, or environmental conditions
+- `shall` statements define mandatory requirements that must be met and verified
+- `should` statements define goals, preferences, or non-mandatory provisions that vendors must address but that may not be formally verified
+
+Controlled notation distinguishes each kind of obligation and gives evaluators a stable reference. For example, `Requirement 7[3]` identifies the third `shall` statement in section 7; `Option 7[2]` identifies the second `should` statement in that section.
+
+Examples:
+
+- The proposed platform `will[1]` be installed in the buyer's primary production data center.
+- The buyer `will[2]` provide rack space, network drops, power, and identity-provider access according to the site-readiness plan.
+- The vendor `shall[1]` provide a concise architecture summary that identifies each major component, its role, and its relationship to the rest of the system.
+- The vendor `shall[2]` include any auxiliary systems required for user access, orchestration, management, monitoring, or normal operation.
+- The proposed design `shall[3]` allow routine service of individual components without interrupting the full platform, except where an exception is explicitly identified and accepted.
+- The proposal `shall[4]` identify the model, configuration, firmware or software baseline, and support status of all major components.
+- The vendor `shall[5]` provide current administrator documentation, troubleshooting documentation, configuration guidance, and update procedures electronically.
+- The vendor `shall[6]` describe the warranty, maintenance, escalation, and software-update model for the full proposed solution.
+- The vendor `should[1]` describe any design option that would improve resilience, observability, serviceability, or long-term expansion without changing the core scope of the purchase.
+
+### Writing Requirements
+
+RFP requirements should describe what must be true in production. Equipment and product specifications belong where they express a real constraint on that capability.
+
+Insufficient:
 
 > Provide a storage cluster with N nodes and X capacity.
 
-Say:
+Capability requirement:
 
-> Provide a storage capability that supports these workloads, these throughput and latency requirements, these failure modes, these recovery expectations, these protocol requirements, these operational integrations, and these acceptance tests.
+> Provide a storage capability that supports this list of workloads, throughput and latency requirements, failure modes, recovery expectations, protocol requirements, operational integrations, and acceptance tests.
 
-Design requirements are still valid when they are real constraints. Rack density, power, cooling, network topology, supported protocols, operating-system compatibility, encryption, FIPS posture, backup integration, identity integration, and datacenter limits may all be legitimate requirements.
-
-The distinction is not outcome requirements versus design requirements. The distinction is whether the requirement represents a real operating condition or merely a guessed solution.
+Constraints must be included in the requirements. Vendor solutions must account for real-life constraints like physical space, or a facility's heating and cooling capabilities, or available electrical capacity, and so forth.
 
 Useful requirement categories include:
 
@@ -257,30 +276,6 @@ Useful requirement categories include:
 - exit requirements
 - documentation and training requirements
 - acceptance requirements
-
-One useful requirement notation is to distinguish facts, requirements, and goals:
-
-- `will` statements describe current facts, buyer constraints, or environmental conditions
-- `shall` statements define mandatory requirements that must be met and verified
-- `should` statements define goals, preferences, or non-mandatory provisions that vendors must address but that may not be formally verified
-
-This keeps the RFP from treating every sentence as the same kind of obligation. It also gives evaluators a way to reference requirements later. For example, a requirement can be referenced as `Requirement 7[3]`, meaning the third `shall` statement in section 7. An option can be referenced as `Option 7[2]`, meaning the second `should` statement in section 7.
-
-Examples:
-
-- The proposed platform `will[1]` be installed in the buyer's primary production data center.
-- The buyer `will[2]` provide rack space, network drops, power, and identity-provider access according to the site-readiness plan.
-- The vendor `shall[1]` provide a concise architecture summary that identifies each major component, its role, and its relationship to the rest of the system.
-- The vendor `shall[2]` include any auxiliary systems required for user access, orchestration, management, monitoring, or normal operation.
-- The proposed design `shall[3]` allow routine service of individual components without interrupting the full platform, except where an exception is explicitly identified and accepted.
-- The proposal `shall[4]` identify the model, configuration, firmware or software baseline, and support status of all major components.
-- The vendor `shall[5]` provide current administrator documentation, troubleshooting documentation, configuration guidance, and update procedures electronically.
-- The vendor `shall[6]` describe the warranty, maintenance, escalation, and software-update model for the full proposed solution.
-- The vendor `should[1]` describe any design option that would improve resilience, observability, serviceability, or long-term expansion without changing the core scope of the purchase.
-
-The requirement package should also identify disqualifiers. If the system cannot integrate with the identity provider, cannot meet encryption requirements, cannot support the expected operating system, cannot fit in the site power envelope, or cannot be supported in the required geography, the organization should know that before the vendor becomes the favorite.
-
-The goal is not to make the requirements long. The goal is to make them real.
 
 ---
 
@@ -313,30 +308,64 @@ A strict model looks like this:
 21. Functional validation
 22. Performance validation
 23. Failure-mode validation
-24. Operational handoff
-25. Burn-in
+24. Burn-in testing
+25. Operational handoff
 26. Final acceptance
 27. Warranty and support lifecycle
 28. Post-implementation review
 29. Lessons learned
 
-Most organizations will not need every stage for every purchase. That is fine. The important habit is that omitted stages are consciously omitted because the risk is low, not accidentally omitted because nobody had a complete model.
+As risk lowers, stages can be combined, an existing Current-State Baseline can be reused, a short option comparison can replace formal scoring, and ordinary validation can replace a dedicated POC when the consequence and reversibility justify it. The underlying obligations remain, though.
 
-The public-facing RFP schedule should also protect fairness and decision quality. A practical sequence is:
+### Controlled Vendor Communication
+
+The vendor-facing schedule should establish when the RFP is issued, when vendors may ask questions, when the buyer will publish answers or addenda, when briefings or site visits will occur, which RFP revision governs the response, and when proposals are due. Internal evaluation and award dates may remain estimates, but every vendor needs the same authoritative planning baseline.
+
+A practical sequence before the RFP closes is:
 
 1. RFP issued
-2. vendors submit written questions
-3. buyer publishes a shared FAQ or addendum
-4. vendor briefing held so vendors understand the buyer's environment
-5. final written question round
-6. RFP closes
-7. compliance screen completed
-8. proposal clarification meetings held with individual vendors
-9. scoring, demos, POCs, and selection proceed from the recorded responses
+2. vendors submit an initial round of written questions
+3. vendor briefing or site visit held so vendors can understand the buyer's environment
+4. buyer publishes all material answers in a shared FAQ or addendum
+5. vendors submit a final round of written questions
+6. buyer publishes the final answers and any resulting RFP revision
+7. vendors acknowledge the applicable addenda and prepare proposals against the final revision
+8. RFP closes
 
-The vendor briefing is not a substitute for requirements. Its purpose is to help vendors understand the environment well enough to respond accurately. The shared FAQ is what keeps that understanding from becoming uneven private context.
+The vendor briefing helps vendors understand the environment well enough to respond accurately. Any fact, clarification, or changed instruction that another vendor would need to prepare a comparable proposal enters the shared record through an FAQ, addendum, or revised RFP.
 
-For foundational infrastructure, the strict model is often appropriate because the cost of late discovery is high. Storage, HPC, virtualization, backup, identity, and network core purchases can reshape operations for years. They deserve a lot more than quote comparisons and vendor lunches.
+Fairness requires every vendor to prepare its proposal from the same authoritative buyer information. Vendors may ask different questions, expose different assumptions, and discuss proprietary aspects of their proposed designs; the buyer's material facts and clarifications remain available to the full field.
+
+### Proposal Intake and Clarification
+
+Each proposal should be recorded against the exact RFP revision and addenda it answers. Compliance screening then determines whether the proposal satisfies the mandatory submission and requirement gates before brand familiarity, presentation quality, price, or evaluator preference begins influencing comparative judgment.
+
+Clarification is limited to the proposal that was submitted: resolving an ambiguity, identifying where an answer appears, or confirming how the vendor interpreted a requirement. Replacing the architecture, curing a failed mandatory requirement, introducing a new commercial offer, or rewriting material portions of the response requires a controlled revision round.
+
+A vendor that misunderstands the requirements after ample opportunity for questions presents a substantial implementation risk.
+
+If the buyer discovers that the requirement itself must change, or decides that vendors should be allowed to submit materially revised proposals, the buyer should open a controlled revision round for every affected vendor. The new information, submission rules, and deadline enter the authoritative record for the full field.
+
+### Evaluation Sequence
+
+Evaluation should preserve the difference between the vendor's claim, the evaluator's initial judgment, and evidence produced later. A practical sequence is:
+
+1. compliance screening against mandatory gates
+2. independent initial evaluation against the published criteria
+3. recorded clarification of material ambiguities
+4. initial comparative scoring
+5. demonstrations, benchmarks, or POCs against declared scenarios and success conditions
+6. vendor claim register and risk review updated from the resulting evidence
+7. final scoring and documented evaluator rationale
+8. selection decision recorded against the requirements, evidence, residual uncertainty, and accepted risk
+
+A polished demonstration leaves a weak proposal weak, and a successful POC supports only claims within the tested boundary. Evidence produced after submission should remain linked to the claim it tested, the conditions under which it was produced, and any judgment it changed. Any permitted proposal revision occurs as a declared stage with a new authoritative record.
+
+### When the Strict Model Applies
+
+For foundational infrastructure, the strict model is often appropriate because late discovery becomes expensive precisely when the organization has become least willing to reconsider its favorite. Storage, HPC, virtualization, backup, identity, and network core purchases can reshape operations for years; an unresolved requirement or unsupported claim can become a long-lived operating constraint after selection, contracting, and implementation create pressure to proceed.
+
+Quote comparisons and vendor lunches may produce useful market information. Shared requirements, controlled comparison, verified evidence, and a durable account of accepted risk require the larger process.
 
 ---
 
@@ -344,15 +373,15 @@ For foundational infrastructure, the strict model is often appropriate because t
 
 The evaluation model must exist before responses are scored.
 
-That rule matters because people form preferences early. A persuasive vendor, familiar brand, strong incumbent relationship, impressive demo, or attractive price can quietly become the answer before the organization has agreed on the question. Once that happens, evaluation criteria often become decoration.
+People form preferences early: a persuasive vendor, familiar brand, strong incumbent relationship, impressive demo, or attractive price can become the answer before the organization has agreed on the question. Once that happens, evaluation criteria often become decoration.
 
 The scorecard should be visible to evaluators before vendor responses arrive. It should identify must-have gates, disqualifiers, weighted criteria, and risk factors.
 
-Separate musts from wants.
+### Separate musts from wants.
 
 Musts are pass/fail conditions. If a vendor cannot meet them, the proposal is noncompliant or the organization must explicitly rewrite the requirement and notify the field. Wants are comparative criteria. They distinguish acceptable proposals from stronger ones.
 
-That distinction keeps the evaluation honest. A vendor should not be able to compensate for a failed hard requirement with a beautiful demo, a discount, or a pile of attractive extras. Likewise, a preference should not be smuggled into the process as if it were a non-negotiable constraint.
+A failed hard requirement remains disqualifying regardless of a beautiful demo, discount, or pile of attractive extras. A preference has comparative weight and no disqualifying force.
 
 Useful evaluation categories include:
 
@@ -377,7 +406,7 @@ Useful evaluation categories include:
 - contractual accountability
 - commercial risk
 
-Price matters. It should not be ignored, and a framework that pretends cost is secondary to every technical preference will lose credibility quickly. But price should be evaluated alongside lifecycle cost, operational burden, support quality, implementation risk, and the cost of being wrong.
+Price is unavoidable and belongs alongside lifecycle cost, operational burden, support quality, implementation risk, and the cost of being wrong.
 
 For high-stakes decisions, the weights themselves should be decided before scoring and stress-tested for outliers. One useful method is a lightweight Band Delphi:
 
@@ -387,9 +416,9 @@ For high-stakes decisions, the weights themselves should be decided before scori
 4. Evaluators revote after hearing the rationale.
 5. The final weights are recorded before vendor scores are applied.
 
-Neutral does not mean senior, adjacent, or willing to claim objectivity. The facilitator should be detached from which solution wins. In many organizations, that means someone from procurement, legal, HR, finance, or another governance function whose job is to protect process integrity rather than win the technical argument. Procurement may be tightly coupled to budget rules, approval thresholds, and purchasing policy, but it should not care whether the systems team buys one storage platform over another except where cost, compliance, or process rules require a yes, no, or additional approval. If a systems engineering team is buying a storage cluster, the CTO is not neutral, the director of front-end engineering is not neutral, and an IC from the virtualization team is not neutral. Each may have useful judgment, but each is attached to the operating, political, or architectural consequences of the decision.
+Neutrality requires detachment from which solution wins. In many organizations, that means a facilitator from a governance function whose job is to protect process integrity. If a systems engineering team is buying a storage cluster, the CTO and the director of front-end engineering may each contribute useful judgment, but each is attached to the operating, political, or architectural consequences of the decision.
 
-The same pattern can be used for value scores. The point is not to remove judgment. The point is to surface judgment before vendor preference hardens.
+The same pattern can be used for value scores to surface judgment before vendor preference hardens.
 
 A simple scoring model can then separate technical merit from cost:
 
@@ -400,27 +429,26 @@ A simple scoring model can then separate technical merit from cost:
 - combine normalized merit and normalized cost using the agreed formula
 - preserve any narrative override or accepted risk in the decision record
 
-The highest combined score should create a strong presumption, not an automatic purchase order. A scorecard can show that a vendor performed best against the model. It cannot by itself prove that the model captured every material risk. That is why the final decision still needs a written record.
+The highest combined score should create a strong presumption. The final written decision records material risks outside the model and explains why the result remains acceptable.
 
-The selected vendor should not merely have the best sales motion. It should have the strongest case that it can deliver the required capability under the buyer's actual operating conditions.
+Where possible, separate scoring from narrative judgment. The scorecard records how the vendor performed against known criteria. The narrative records the material risks, evidence, and judgments the score cannot express.
 
-Where possible, separate scoring from narrative judgment. The scorecard records how the vendor performed against known criteria. The narrative records why the organization believes the score does or does not tell the whole story.
+Narrative judgment should capture risks the scorecard misses. A vendor may count an automated ticket reply or a message that someone is looking into the issue as satisfying a two-hour first-response SLA, while the buyer must still escalate incidents through the sales team to obtain useful action. That support behavior directly affects stability and availability risk.
 
-Both matter. A numeric score without explanation hides judgment. A narrative without scoring invites memory drift.
 
 ---
 
 ## Vendor Demonstrations and Proofs of Concept
 
-A demo is not evidence by default.
+RFI, RFP, and POC work often get compressed into one ambiguous word: demo.
 
-A good demo can clarify workflow, expose product assumptions, reveal support maturity, and help operators understand how the system behaves. A vendor-controlled path through a happy-case environment with no realistic load, no buyer data, no integration pressure, no failure mode, and no operational handoff can be useful during discovery (RFI), but remains insufficient for the RFP process.
+A vendor-controlled path through a happy-case environment with no realistic load, no buyer data, no integration pressure, no failure mode, and no operational handoff can be useful during discovery (RFI), but remains insufficient for the RFP process.
 
-Before a demo, define what the demo is supposed to prove. If the organization does not know what the demo is supposed to prove, it may be operating in the wrong stage.
+Before a demo, define what it is supposed to prove. An undefined proof objective places the organization in the RFI phase.
 
-This is where RFI, RFP, and POC work often get compressed into one ambiguous word: demo. In an RFI, a broad vendor demo can be legitimate discovery. It helps the buyer learn the market, sharpen language, and understand what a category of products can do. In an RFP, the demo should be evidence against stated requirements. In a POC, the demonstration should give way to direct contact with the buyer's workload, environment, operators, and failure modes.
+In an RFI, a broad vendor demo can be legitimate discovery. It helps the buyer learn the market, sharpen language, and understand what a category of products can do. In an RFP, the demo should be evidence against stated requirements. In a POC, the demonstration should give way to direct contact with the buyer's workload, environment, operators, and failure modes.
 
-Stage confusion matters because it changes the meaning of the evidence. A discovery demo can inform requirements. It should not become proof of production readiness.
+Stage confusion changes the meaning of the evidence. A discovery demo can inform requirements; production readiness requires proof under declared production conditions.
 
 At minimum, record:
 
@@ -435,11 +463,11 @@ At minimum, record:
 - what would count as a concern
 - what evidence must be supplied afterward
 
-A proof of concept should be even tighter. It should not be a sales demo with engineering labor attached.
+A proof of concept should apply declared workloads, conditions, and success criteria to specific vendor claims.
 
 Any meaningful platform, vendor, or open-source selection should include a live proof of concept unless the cost of doing so is clearly disproportionate to the decision. Research narrows the field. Demos explain the promise. POCs expose the operating reality.
 
-For serious technology selections, the organization should prefer competing live POCs over paper comparison alone. If research identifies three plausible candidates, stand up the candidates, drive representative workload through them, observe how they behave, and record the tradeoffs. The point is not to create a perfect laboratory. The point is to replace sales motion, popularity, and assumption with contact against reality.
+For serious technology selections, the organization should prefer competing live POCs over paper comparison alone. If research identifies three plausible candidates, stand up the candidates, drive representative workload through them, observe how they behave, and record the tradeoffs. Contact against reality replaces sales motion, popularity, and assumption; a perfect laboratory is unnecessary.
 
 A POC should define:
 
@@ -460,9 +488,11 @@ The closed-loop rule is that demonstrations and POCs produce evidence against pr
 
 If the vendor says a storage platform can sustain a required workload, the POC should preserve what workload was tested, what scale was used, what results were observed, what tuning was required, and what remains unproven.
 
-If the vendor says an HPC cluster can support a workload profile, the POC should distinguish a vendor benchmark from a buyer workload benchmark. A benchmark can be useful, but it is not the same as proof that the buyer's scheduler, filesystem, identity integration, monitoring, and user environment will work.
+If the vendor says an HPC cluster can support a workload profile, the POC should distinguish a vendor benchmark from a buyer workload benchmark. The buyer workload benchmark must exercise the scheduler, filesystem, identity integration, monitoring, and user environment together.
 
-If the organization is replacing an internal system, the POC should test the candidate against the operating burden that caused replacement to be considered in the first place. A metrics platform replacement, for example, should not be evaluated only by feature checklist. It should be tested with representative metrics volume, retention expectations, query patterns, ingestion behavior, operational architecture, failure modes, and the team's ability to run it. The selected solution may still require redesign later; evidence does not eliminate risk. It makes the decision educated enough to learn from.
+If the organization is replacing an internal system, the POC should test the candidate against the operating burden that caused replacement to be considered in the first place. Evaluate a metrics platform replacement with representative metrics volume, retention expectations, query patterns, ingestion behavior, operational architecture, failure modes, and the team's ability to run it. The selected solution may still require redesign later; evidence makes the remaining risk explicit enough to learn from.
+
+For a metrics platform, “representative volume” should resolve into recorded measurements: sustained and burst samples per second, active-series cardinality, series churn, bytes ingested and stored by retention tier, label and tenant concentration, query concurrency and range, dashboard and alert-query latency distributions, rule-evaluation duration and misses, collector backlog, data loss during failure, recovery duration, and operator effort for backup, restore, upgrade, capacity expansion, and incident diagnosis. Unknown measurements enter Discovery and must be resolved before the buyer declares a baseline.
 
 The demonstration should never become the whole evaluation. It is one evidence source.
 
@@ -472,22 +502,16 @@ The demonstration should never become the whole evaluation. It is one evidence s
 
 Benchmarks are useful only when they match the decision being made. A benchmark that proves one kind of capability can be noise, or even misdirection, for another.
 
-For HPC-style parallel filesystems, IO500, IOR, and mdtest can provide useful evidence because the workload shape is massively parallel metadata and throughput behavior. They still need to be tied to the buyer's scheduler, filesystem layout, identity integration, monitoring, user environment, and representative job profile.
-
-For enterprise NVMe block storage or transactional storage, FIO and VDBench are often more useful. The test should define block size, read/write mix, queue depth, random versus sequential access, working set size, test duration, IOPS, throughput, and latency percentiles. SPC-1 and SPC-2 may also provide useful industry-standard context. For latency-sensitive NVMe purchases, queue-depth-1 latency and p99.9 tail latency under sustained load may matter more than peak IOPS.
-
-For latency-deterministic compute, the workload should emphasize jitter, tail spikes, cache behavior, NUMA locality, and single-thread performance instead of aggregate throughput alone. STAC-M3, STAC-A2, network jitter tests, PTP-synced round-trip timing, Intel MLC, and core-pinned synthetic tests may be more relevant than generic compute benchmarks.
-
-For cloud-vendor comparisons, the buyer is not comparing like-for-like hardware. The test should focus on service behavior: provisioning tiers, noisy-neighbor exposure, network paths, scale-up time, cold-start behavior, cost under load, and the actual workload. Load replay through tools such as k6, Locust, or JMeter may be more meaningful than a synthetic benchmark. Database-shaped workloads may justify TPC-C, TPC-H, or TPC-DS. Raw storage and network numbers from FIO and iperf3 still help, but they should be normalized by cost because instance, storage, and network tiers rarely map cleanly across providers.
-
-The buyer should also ask vendors for their own system-exercise tools. If the vendor has a burn-in harness, diagnostic suite, workload generator, or validation procedure, the RFP should require it to be disclosed and made available for acceptance testing when appropriate. A vendor's preferred test is not automatically sufficient, but it is useful evidence about what the vendor believes stresses the system.
+The buyer should also ask vendors for their own system-exercise tools. If the vendor has a burn-in harness, diagnostic suite, workload generator, or validation procedure, the RFP should require it to be disclosed and made available for acceptance testing when appropriate. The vendor's preferred test reveals what the vendor believes stresses the system; the buyer determines whether additional tests are required.
 
 ### Application to Open Source Tooling
-This matters for open-source tools as much as vendor products. A free license does not make a tool low-risk. The organization may still be choosing an operating model, a staffing profile, an integration burden, a support path, an upgrade lifecycle, a state-management problem, and a future migration cost. No serious platform decision should be made only because the tool is popular, widely adopted, well-marketed, or already common in large companies.
+Open-source selection carries the same evidence obligations as vendor selection. A free license can still commit the organization to an operating model, staffing profile, integration burden, support path, upgrade lifecycle, state-management problem, and future migration cost. Popularity, adoption, marketing, and prevalence in large companies provide market evidence; architectural fit still requires proof against the buyer's environment.
 
-Tool adoption should distinguish between reducing accidental complexity and relocating it. A tool that replaces bespoke automation may still impose a new operating model, hiring profile, workflow, state-management burden, and ecosystem dependency. The question is not only "does this tool have market adoption?" The question is "what complexity does it remove, what complexity does it introduce, and is the organization prepared to operate the model it requires?"
+Every substantial redesign should therefore include an Implementation Currency Check. The team should inspect current authoritative guidance, releases, deprecations, maintained alternatives, and known failure modes before extending a homegrown component whose original differentiation may have disappeared. If a maintained external capability now provides the ordinary solution, retiring the bespoke burden can be the more responsible engineering decision. That is how an organization builds without volunteering to maintain every mechanism forever.
 
-Jane Street's Mailcore story is a useful example. The firm had been using a widely deployed open-source mail server that could perform the required work, but its bespoke configuration language made critical compliance behavior hard to reason about, hard to test in smaller units, and dependent on specialist knowledge. Building a replacement in OCaml was not a rejection of external tools on principle. It was a decision that the real long-term cost sat in operability, staffing, testability, and change safety. The replacement still required evidence: they shadowed the old and new systems, diffed real mail behavior for months, found classes of mismatches, and migrated users gradually.
+Tool adoption should distinguish between reducing accidental complexity and relocating it. A tool that replaces bespoke automation may still impose a new operating model, hiring profile, workflow, state-management burden, and ecosystem dependency. Ask what complexity the tool removes, what complexity it introduces, and whether the organization is prepared to operate the model it requires.
+
+Jane Street's Mailcore story is a useful example. The firm had been using a widely deployed open-source mail server that could perform the required work, but its bespoke configuration language made critical compliance behavior hard to reason about, hard to test in smaller units, and dependent on specialist knowledge. The replacement decision rested on operability, staffing, testability, and change safety. The replacement still required evidence: they shadowed the old and new systems, diffed real mail behavior for months, found classes of mismatches, and migrated users gradually.
 
 ---
 
@@ -511,9 +535,7 @@ A vendor claim register should record:
 - status: unverified, verified, contradicted, accepted risk, or not tested
 - later implementation result
 
-This is not about trapping vendors with gotcha notes. It is about preserving the operating memory of the selection.
-
-If a claim is important enough to influence the decision, it is important enough to verify, contract, or explicitly accept as risk. If it cannot be verified and cannot be contracted, it should not quietly become a reason to buy.
+Every claim that influences the purchase must be verified, converted into a contract obligation, or explicitly accepted as risk.
 
 The claim register is the RFP equivalent of an evidence ledger. It connects selection to implementation and implementation to post-implementation review.
 
@@ -521,7 +543,7 @@ The claim register is the RFP equivalent of an evidence ledger. It connects sele
 
 ## Decision Records
 
-The final selection should leave behind a decision record.
+The final selection should leave behind a Selection Decision Record.
 
 The decision record should preserve:
 
@@ -538,11 +560,7 @@ The decision record should preserve:
 - who owns follow-up
 - when the decision should be reviewed
 
-This record is not a press release for the chosen vendor. It should not pretend the choice was perfect. The best decision records are often plain about the compromise:
-
-> We selected Vendor A because it met the operational requirements with the strongest support model and lowest integration risk. Vendor B had a stronger roadmap, but the missing identity integration would have created unacceptable implementation risk. Vendor C was cheaper, but the support model did not meet the required severity expectations. We accepted Vendor A's higher three-year cost because the operational burden was lower and the migration plan was more credible.
-
-That kind of record gives future operators something to reconcile. If Vendor A later fails on support, the organization knows which assumption broke. If Vendor B later ships the missing integration, the next evaluation starts smarter. If Vendor C proves reliable elsewhere, the organization can revisit whether its concern was correct.
+A durable claim record gives future operators something to reconcile. If Vendor A later fails on support, the organization knows which assumption broke. If Vendor B later ships the missing integration, the next evaluation starts smarter. If Vendor C proves reliable elsewhere, the organization can revisit whether its concern was correct.
 
 Without the decision record, later teams inherit folklore.
 
@@ -550,11 +568,11 @@ Without the decision record, later teams inherit folklore.
 
 ## Acceptance, Burn-In, and Payment
 
-Acceptance criteria are not ceremony. They are the buyer's defense against ambiguity.
+Acceptance criteria are the buyer's defense against ambiguity.
 
-If the RFP does not define how success will be tested, success becomes whatever the vendor can persuade the buyer to accept.
+Define how success will be tested before the vendor can redefine success around whatever was delivered.
 
-Acceptance should be planned before award and finalized before implementation. It should not be improvised after the system starts failing.
+Plan acceptance before award and finalize it before implementation.
 
 Useful acceptance layers include:
 
@@ -593,9 +611,9 @@ The burn-in period should define:
 - what failures trigger vendor-funded remediation
 - what failures trigger replacement, credit, rejection, or termination
 
-Final payment should follow final acceptance, not vendor optimism.
+Final payment should follow final acceptance.
 
-Invoicing should not be treated as complete merely because delivery occurred. Delivery proves that the buyer received the contracted items. It does not prove that the buyer received the contracted capability.
+Delivery invoicing can reflect receipt of the contracted items. Payment for the completed capability waits for final acceptance.
 
 Payment structure is one of the strongest ways to assign risk. For well-defined infrastructure purchases, milestone-based payment is often more appropriate than paying the full amount when equipment arrives.
 
@@ -620,11 +638,11 @@ The exact remedy language belongs with procurement and legal counsel. The operat
 
 ---
 
-## What to Strip Down Under Lower-Risk Conditions
+## What to Scale Under Lower-Risk Conditions
 
-Not every purchase needs the full process.
+Risk determines the depth of ceremony and controls.
 
-The lightweight process should be a conscious reduction of the strict process, not a guessing game about what might matter.
+The lightweight process consciously compresses the strict process. Every tier retains a resolvable Current-State Baseline, need and Desired Outcome, Requirements, reasonable alternatives, verification, a decision record, Acceptance Conditions, and a reconciliation point. At lower tiers, one short record may satisfy several of those obligations.
 
 ### Tier 1: Low-Risk Purchase
 
@@ -632,11 +650,13 @@ Examples include small non-critical tools, easily reversible purchases, and purc
 
 Minimum process:
 
-- define the need
-- confirm basic requirements
-- compare reasonable options
-- document the decision
-- verify delivery
+- identify the Current-State Baseline and material delta
+- define the need and Desired Outcome
+- confirm basic Requirements
+- compare reasonable options, including the current system
+- document the decision and accepted uncertainty
+- verify Acceptance Conditions
+- set the reconciliation point
 - preserve receipts, terms, and renewal dates
 
 Usually stripped down:
@@ -648,7 +668,7 @@ Usually stripped down:
 - proof of concept
 - staged payment
 - long burn-in
-- post-implementation review
+- separate post-implementation-review ceremony
 
 The decision still needs a record, but the record can be short.
 
@@ -658,15 +678,17 @@ Examples include team-level infrastructure, non-critical storage, monitoring too
 
 Minimum process:
 
-- define the operational capability
+- identify the Current-State Baseline and material delta
+- define the operational capability and Desired Outcome
 - document requirements
-- compare vendors
+- compare commercial, open-source, internal, and status-quo options that are genuinely available
 - define acceptance criteria
 - require an implementation plan
 - verify integration
 - complete a short burn-in
 - document handoff
 - record the selection decision
+- reconcile the accepted capability against live operation
 
 Usually stripped down:
 
@@ -731,7 +753,7 @@ Credible people agree that a credible tool is the right choice, but nobody prove
 
 ### Adoption Gravity Is Mistaken for Fit
 
-The selected tool is popular, common in large companies, or strongly recommended by vendors and peers, so the organization assumes it is architecturally fit. Popularity may reduce some risks, but it does not prove the tool matches the workload, skill base, operating model, or failure modes the buyer actually has.
+The selected tool is popular, common in large companies, or strongly recommended by vendors and peers, so the organization assumes it is architecturally fit. Fit still requires evidence against the buyer's workload, skill base, operating model, and failure modes.
 
 ### Vendor Claims Are Not Preserved
 
@@ -757,7 +779,7 @@ The selected tool works, but only by creating staffing load, alert fatigue, manu
 
 The purchase is approved, implemented, and forgotten. Nobody compares actual outcomes against the original problem statement, scorecard, vendor claims, cost model, implementation plan, and operator experience.
 
-That final failure is the most important one. Without reconciliation, every RFP starts from organizational amnesia.
+Without reconciliation, every RFP starts from organizational amnesia.
 
 ---
 
@@ -782,7 +804,7 @@ After implementation, compare actuals against:
 - accepted risks
 - final acceptance criteria
 
-The purpose is not to punish the selection team. The purpose is to make the next RFP smarter.
+The post-implementation review makes the next RFP smarter while preserving an honest record of the selection team's judgment.
 
 Useful questions:
 
@@ -800,7 +822,7 @@ Useful questions:
 - Did the payment and acceptance structure preserve enough leverage?
 - What should the next RFP do differently?
 
-This review should feed back into requirement templates, scorecards, contract language, demo rules, POC design, acceptance criteria, and the vendor claim register.
+Feed the review findings into requirement templates, scorecards, contract language, demo rules, POC design, acceptance criteria, and the vendor claim register.
 
 The organization is allowed to learn. The system should make learning hard to lose.
 
@@ -808,7 +830,7 @@ The organization is allowed to learn. The system should make learning hard to lo
 
 ## Appendix: Lightweight Templates
 
-These templates are intentionally plain. Real organizations already have forms, master purchase agreements, universal terms and conditions, NDAs, insurance requirements, approval workflows, and legal language that should not be recreated in an RFP philosophy document. The purpose here is to show the shape of the evidence, not to replace procurement, legal, finance, security, or contract specialists.
+These intentionally plain templates show the shape of the evidence. Existing forms, master purchase agreements, universal terms and conditions, NDAs, insurance requirements, approval workflows, and legal language remain under procurement, legal, finance, security, and contract specialists.
 
 ### Sample Vendor Claim Register
 
@@ -823,7 +845,7 @@ Useful status values include: unverified, verified, contradicted, accepted risk,
 
 ### Sample Selection Decision Record
 
-Use this as a lightweight decision record, not a ceremony.
+Use this as a lightweight decision record.
 
 - Decision title:
 - Date:
@@ -853,7 +875,7 @@ The decision record should be short enough that people will actually write it an
 
 ### Sample Evaluation Scorecards
 
-The numbers below are examples, not doctrine. Criteria, weights, and gates should be changed for the purchase in front of the organization.
+The numbers below are examples. Criteria, weights, and gates should be changed for the purchase in front of the organization.
 
 **Storage Cluster**
 
@@ -907,7 +929,7 @@ The numbers below are examples, not doctrine. Criteria, weights, and gates shoul
 
 ### Sample Conditions of Vendor Participation
 
-This section should be reviewed by procurement and legal before use. The point is to make the participation rules explicit, not to invent contract language from scratch.
+Procurement and legal should review this section before use and supply the applicable contract language. These examples make the participation rules explicit.
 
 **General terms**
 
@@ -952,7 +974,7 @@ This section should be reviewed by procurement and legal before use. The point i
 - State whether the briefing is optional or mandatory.
 - Require preregistration through the formal contact.
 - State whether summaries, recordings, or written addenda will be provided afterward.
-- Keep authoritative clarifications in written addenda or shared FAQ form so the briefing does not create uneven private context.
+- Publish authoritative clarifications in written addenda or shared FAQ form available to the full field.
 
 **Proposal response**
 
@@ -1022,7 +1044,7 @@ Useful definitions include business day, closing time, timezone, measurement con
 
 ### Sample Acceptance Test Structure
 
-Acceptance testing should prove that the buyer received the contracted capability, not merely the delivered equipment. The exact test belongs in the RFP, statement of work, or implementation plan, but a useful acceptance structure often looks like this:
+Acceptance testing should prove that the buyer received the contracted capability represented by the delivered equipment. The exact test belongs in the RFP, statement of work, or implementation plan, but a useful acceptance structure often looks like this:
 
 - The selected vendor shall submit an acceptance-test plan that maps each test to the agreed requirements.
 - The buyer shall approve, reject, or request changes to the plan using the stated acceptance criteria.
@@ -1042,7 +1064,7 @@ Availability language should be precise. If one failed component makes another c
 
 ### Sample Company Background Survey
 
-Ask only for information that is relevant to the purchase, risk level, and contracting process. A low-risk SaaS purchase does not need the same company survey as a foundational infrastructure purchase.
+Scale the company survey to the purchase, risk level, and contracting process. A low-risk SaaS purchase requires less company evidence than foundational infrastructure.
 
 **About the respondent**
 
@@ -1072,7 +1094,7 @@ Ask only for information that is relevant to the purchase, risk level, and contr
 
 ### Organizational Ownership Boundary
 
-An RFP does not need to explain how to run the whole enterprise. It should name the interfaces where the purchase depends on other parts of the organization.
+An RFP should name the interfaces where the purchase depends on other parts of the organization.
 
 For many purchases:
 
@@ -1084,4 +1106,4 @@ For many purchases:
 - finance owns budget availability, capitalization or expense treatment, payment timing, renewal exposure, and long-term cost visibility
 - executive sponsors own priority, risk acceptance, funding escalation, and organizational commitment
 
-The RFP does not have to teach each function its profession. It has to make sure the purchase cannot silently pass through gaps between them.
+The RFP should prevent the purchase from passing silently through gaps among these functions by naming the required interfaces, owners, and decisions.

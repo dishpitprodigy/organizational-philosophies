@@ -80,6 +80,8 @@ Assisted Intake should record why assistance was necessary: unclear requirement,
 
 The requester seeks to evaluate or deliver a change that cannot be fulfilled through an existing service request path. The request requires sponsorship, evidence, review, capacity, and an explicit decision before implementation begins.
 
+Every Work Proposal resolves a Current-State Baseline before it asks the organization to judge the change. The baseline may be written into the proposal or referenced by authoritative revision with an explicit delta. Existing architecture artifacts are reusable organizational memory; copying them into every proposal adds work without adding evidence, while an unversioned reference leaves reviewers deciding against different realities. The Work Proposal does not create or own ADRs.
+
 These paths should remain separate because they preserve different facts. Converting an inquiry into a proposal or asking a receiving team to submit on a customer's behalf may feel efficient, but it destroys the cleanest evidence of who knowingly asked the organization to act.
 
 ![The front door routes authenticated demand according to the kind of commitment it requires.](docs/assets/images/work-intake/front-door-routing.svg){#fig-front-door-routing}

@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="2800" height="2080" viewBox="0 0 2800 2080" role="img" aria-labelledby="title description">
+<title id="title">Organizational Method Domain Crosswalk</title>
+<desc id="description">A graphical crosswalk mapping hiring, work intake, vendor acquisition, talent development, defect correction, and managed runoff onto the same nine-stage organizational method.</desc>
+<defs>
+<marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="9" markerHeight="9" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#24364b"/></marker>
+<filter id="shadow" x="-20%" y="-20%" width="140%" height="140%"><feDropShadow dx="0" dy="4" stdDeviation="5" flood-color="#122033" flood-opacity="0.14"/></filter>
+</defs>
+<rect width="2800" height="2080" fill="#f7f8fa"/>
+<text x="1400.0" y="66.0" text-anchor="middle" font-family="Inter, Liberation Sans, Arial, sans-serif" font-size="42" font-weight="750" fill="#122033"><tspan x="1400.0" dy="0">One Method, Six Organizational Domains</tspan></text>
+<text x="1400.0" y="104.0" text-anchor="middle" font-family="Inter, Liberation Sans, Arial, sans-serif" font-size="24" font-weight="450" fill="#506176"><tspan x="1400.0" dy="0">Domain records and authorities differ; the inquiry, implementation, and reconciliation architecture</tspan><tspan x="1400.0" dy="28">does not.</tspan></text>
+<rect x="70" y="165" width="330" height="78" rx="16" fill="#122033" stroke="#122033" stroke-width="3"/>
+<text x="235.0" y="204.0" text-anchor="middle" font-family="Inter, Liberation Sans, Arial, sans-serif" font-size="24" font-weight="700" fill="#ffffff"><tspan x="235.0" dy="0">Canonical stage</tspan></text>
+<rect x="424" y="165" width="380" height="78" rx="16" fill="#122033" stroke="#122033" stroke-width="3"/>
+<text x="614.0" y="204.0" text-anchor="middle" font-family="Inter, Liberation Sans, Arial, sans-serif" font-size="23" font-weight="700" fill="#ffffff"><tspan x="614.0" dy="0">Hiring</tspan></text>
+<rect x="818" y="165" width="380" height="78" rx="16" fill="#122033" stroke="#122033" stroke-width="3"/>
+<text x="1008.0" y="204.0" text-anchor="middle" font-family="Inter, Liberation Sans, Arial, sans-serif" font-size="23" font-weight="700" fill="#ffffff"><tspan x="1008.0" dy="0">Work intake</tspan></text>
+<rect x="1212" y="165" width="380" height="78" rx="16" fill="#122033" stroke="#122033" stroke-width="3"/>
+<text x="1402.0" y="204.0" text-anchor="middle" font-family="Inter, Liberation Sans, Arial, sans-serif" font-size="23" font-weight="700" fill="#ffffff"><tspan x="1402.0" dy="0">Vendor acquisition</tspan></text>
+<rect x="1606" y="165" width="380" height="78" rx="16" fill="#122033" stroke="#122033" stroke-width="3"/>
+<text x="1796.0" y="204.0" text-anchor="middle" font-family="Inter, Liberation Sans, Arial, sans-serif" font-size="23" font-weight="700" fill="#ffffff"><tspan x="1796.0" dy="0">Talent development</tspan></text>
+<rect x="2000" y="165" width="380" height="78" rx="16" fill="#122033" stroke="#122033" stroke-width="3"/>
+<text x="2190.0" y="204.0" text-anchor="middle" font-family="Inter, Liberation Sans, Arial, sans-serif" font-size="23" font-weight="700" fill="#ffffff"><tspan x="2190.0" dy="0">Defect correction</tspan></text>
+<rect x="2394" y="165" width="380" height="78" rx="16" fill="#122033" stroke="#122033" stroke-width="3"/>
+<text x="2584.0" y="204.0" text-anchor="middle" font-family="Inter, Liberation Sans, Arial, sans-serif" font-size="23" font-weight="700" fill="#ffffff"><tspan x="2584.0" dy="0">Managed runoff</tspan></text>
+<rect x="58" y="259" width="2684" height="186" rx="18" fill="#dce7f2" stroke="#dce7f2" stroke-width="0"/>
+<rect x="70" y="265" width="330" height="174" rx="18" fill="#dce7f2" stroke="#315c82" stroke-width="4" filter="url(#shadow)"/>
+<text x="115.0" y="352.0" text-anchor="middle" font-family="Inter, Liberation Sans, Arial, sans-serif" font-size="29" font-weight="750" fill="#315c82"><tspan x="115.0" dy="0">1</tspan></text>
+<text x="263.0" y="352.0" text-anchor="middle" font-family="Inter, Liberation Sans, Arial, sans-serif" font-size="21" font-weight="700" fill="#122033"><tspan x="263.0" dy="0">Observation</tspan></text>
+<line x1="235.0" y1="439" x2="235.0" y2="453" stroke="#315c82" stroke-width="3" fill="none" marker-end="url(#arrow)"/>
+<rect x="58" y="447" width="2684" height="186" rx="18" fill="#d9e9fb" stroke="#d9e9fb" stroke-width="0"/>
+<rect x="70" y="453" width="330" height="174" rx="18" fill="#d9e9fb" stroke="#2f6ea6" stroke-width="4" filter="url(#shadow)"/>
+<text x="115.0" y="540.0" text-anchor="middle" font-family="Inter, Liberation Sans, Arial, sans-serif" font-size="29" font-weight="750" fill="#2f6ea6"><tspan x="115.0" dy="0">2</tspan></text>
+<text x="263.0" y="540.0" text-anchor="middle" font-family="Inter, Liberation Sans, Arial, sans-serif" font-size="21" font-weight="700" fill="#122033"><tspan x="263.0" dy="0">Question</tspan></text>
+<line x1="235.0" y1="627" x2="235.0" y2="641" stroke="#2f6ea6" stroke-width="3" fill="none" marker-end="url(#arrow)"/>
+<rect x="58" y="635" width="2684" height="186" rx="18" fill="#dcefe8" stroke="#dcefe8" stroke-width="0"/>
+<rect x="70" y="641" width="330" height="174" rx="18" fill="#dcefe8" stroke="#32755e" stroke-width="4" filter="url(#shadow)"/>
+<text x="115.0" y="728.0" text-anchor="middle" font-family="Inter, Liberation Sans, Arial, sans-serif" font-size="29" font-weight="750" fill="#32755e"><tspan x="115.0" dy="0">3</tspan></text>
+<text x="263.0" y="715.5" text-anchor="middle" font-family="Inter, Liberation Sans, Arial, sans-serif" font-size="21" font-weight="700" fill="#122033"><tspan x="263.0" dy="0">Background</tspan><tspan x="263.0" dy="25">research</tspan></text>
+<line x1="235.0" y1="815" x2="235.0" y2="829" stroke="#32755e" stroke-width="3" fill="none" marker-end="url(#arrow)"/>
+<rect x="58" y="823" width="2684" height="186" rx="18" fill="#fff0c9" stroke="#fff0c9" stroke-width="0"/>
+<rect x="70" y="829" width="330" height="174" rx="18" fill="#fff0c9" stroke="#9a6a00" stroke-width="4" filter="url(#shadow)"/>
+<text x="115.0" y="916.0" text-anchor="middle" font-family="Inter, Liberation Sans, Arial, sans-serif" font-size="29" font-weight="750" fill="#9a6a00"><tspan x="115.0" dy="0">4</tspan></text>
+<text x="263.0" y="916.0" text-anchor="middle" font-family="Inter, Liberation Sans, Arial, sans-serif" font-size="21" font-weight="700" fill="#122033"><tspan x="263.0" dy="0">Hypothesis</tspan></text>
+<line x1="235.0" y1="1003" x2="235.0" y2="1017" stroke="#9a6a00" stroke-width="3" fill="none" marker-end="url(#arrow)"/>
+<rect x="58" y="1011" width="2684" height="186" rx="18" fill="#dff2d9" stroke="#dff2d9" stroke-width="0"/>
+<rect x="70" y="1017" width="330" height="174" rx="18" fill="#dff2d9" stroke="#477b37" stroke-width="4" filter="url(#shadow)"/>
+<text x="115.0" y="1104.0" text-anchor="middle" font-family="Inter, Liberation Sans, Arial, sans-serif" font-size="29" font-weight="750" fill="#477b37"><tspan x="115.0" dy="0">5</tspan></text>
+<text x="263.0" y="1091.5" text-anchor="middle" font-family="Inter, Liberation Sans, Arial, sans-serif" font-size="21" font-weight="700" fill="#122033"><tspan x="263.0" dy="0">Adaptive business</tspan><tspan x="263.0" dy="25">implementation</tspan></text>
+<line x1="235.0" y1="1191" x2="235.0" y2="1205" stroke="#477b37" stroke-width="3" fill="none" marker-end="url(#arrow)"/>
+<rect x="58" y="1199" width="2684" height="186" rx="18" fill="#ffe2d8" stroke="#ffe2d8" stroke-width="0"/>
+<rect x="70" y="1205" width="330" height="174" rx="18" fill="#ffe2d8" stroke="#a64f33" stroke-width="4" filter="url(#shadow)"/>
+<text x="115.0" y="1292.0" text-anchor="middle" font-family="Inter, Liberation Sans, Arial, sans-serif" font-size="29" font-weight="750" fill="#a64f33"><tspan x="115.0" dy="0">6</tspan></text>
+<text x="263.0" y="1292.0" text-anchor="middle" font-family="Inter, Liberation Sans, Arial, sans-serif" font-size="21" font-weight="700" fill="#122033"><tspan x="263.0" dy="0">Results</tspan></text>
+<line x1="235.0" y1="1379" x2="235.0" y2="1393" stroke="#a64f33" stroke-width="3" fill="none" marker-end="url(#arrow)"/>
+<rect x="58" y="1387" width="2684" height="186" rx="18" fill="#e7def7" stroke="#e7def7" stroke-width="0"/>
+<rect x="70" y="1393" width="330" height="174" rx="18" fill="#e7def7" stroke="#6a4e9f" stroke-width="4" filter="url(#shadow)"/>
+<text x="115.0" y="1480.0" text-anchor="middle" font-family="Inter, Liberation Sans, Arial, sans-serif" font-size="29" font-weight="750" fill="#6a4e9f"><tspan x="115.0" dy="0">7</tspan></text>
+<text x="263.0" y="1467.5" text-anchor="middle" font-family="Inter, Liberation Sans, Arial, sans-serif" font-size="21" font-weight="700" fill="#122033"><tspan x="263.0" dy="0">Examine</tspan><tspan x="263.0" dy="25">and reconcile</tspan></text>
+<line x1="235.0" y1="1567" x2="235.0" y2="1581" stroke="#6a4e9f" stroke-width="3" fill="none" marker-end="url(#arrow)"/>
+<rect x="58" y="1575" width="2684" height="186" rx="18" fill="#d8eff0" stroke="#d8eff0" stroke-width="0"/>
+<rect x="70" y="1581" width="330" height="174" rx="18" fill="#d8eff0" stroke="#34767a" stroke-width="4" filter="url(#shadow)"/>
+<text x="115.0" y="1668.0" text-anchor="middle" font-family="Inter, Liberation Sans, Arial, sans-serif" font-size="29" font-weight="750" fill="#34767a"><tspan x="115.0" dy="0">8</tspan></text>
+<text x="263.0" y="1655.5" text-anchor="middle" font-family="Inter, Liberation Sans, Arial, sans-serif" font-size="21" font-weight="700" fill="#122033"><tspan x="263.0" dy="0">Communicate</tspan><tspan x="263.0" dy="25">and route</tspan></text>
+<line x1="235.0" y1="1755" x2="235.0" y2="1769" stroke="#34767a" stroke-width="3" fill="none" marker-end="url(#arrow)"/>
+<rect x="58" y="1763" width="2684" height="186" rx="18" fill="#dbe1f5" stroke="#dbe1f5" stroke-width="0"/>
+<rect x="70" y="1769" width="330" height="174" rx="18" fill="#dbe1f5" stroke="#455b9b" stroke-width="4" filter="url(#shadow)"/>
+<text x="115.0" y="1856.0" text-anchor="middle" font-family="Inter, Liberation Sans, Arial, sans-serif" font-size="29" font-weight="750" fill="#455b9b"><tspan x="115.0" dy="0">9</tspan></text>
+<text x="263.0" y="1831.0" text-anchor="middle" font-family="Inter, Liberation Sans, Arial, sans-serif" font-size="21" font-weight="700" fill="#122033"><tspan x="263.0" dy="0">Change knowledge,</tspan><tspan x="263.0" dy="25">system, or next</tspan><tspan x="263.0" dy="25">decision</tspan></text>
+<rect x="424" y="275" width="380" height="342" rx="16" fill="#dce7f2" stroke="#315c82" stroke-width="3" filter="url(#shadow)"/>
+<text x="614.0" y="446.0" text-anchor="middle" font-family="Inter, Liberation Sans, Arial, sans-serif" font-size="22" font-weight="680" fill="#122033"><tspan x="614.0" dy="0">Capability need</tspan></text>
+<rect x="424" y="651" width="380" height="342" rx="16" fill="#dcefe8" stroke="#32755e" stroke-width="3" filter="url(#shadow)"/>
+<text x="614.0" y="796.0" text-anchor="middle" font-family="Inter, Liberation Sans, Arial, sans-serif" font-size="22" font-weight="680" fill="#122033"><tspan x="614.0" dy="0">Role reality</tspan><tspan x="614.0" dy="26">+</tspan><tspan x="614.0" dy="26">Candidate forecast</tspan></text>
+<rect x="424" y="1027" width="380" height="154" rx="16" fill="#dff2d9" stroke="#477b37" stroke-width="3" filter="url(#shadow)"/>
+<text x="614.0" y="1104.0" text-anchor="middle" font-family="Inter, Liberation Sans, Arial, sans-serif" font-size="20" font-weight="680" fill="#122033"><tspan x="614.0" dy="0">Selection + onboarding</tspan></text>
+<rect x="424" y="1215" width="380" height="154" rx="16" fill="#ffe2d8" stroke="#a64f33" stroke-width="3" filter="url(#shadow)"/>
+<text x="614.0" y="1292.0" text-anchor="middle" font-family="Inter, Liberation Sans, Arial, sans-serif" font-size="20" font-weight="680" fill="#122033"><tspan x="614.0" dy="0">Live work</tspan></text>
+<rect x="424" y="1403" width="380" height="342" rx="16" fill="#e7def7" stroke="#6a4e9f" stroke-width="3" filter="url(#shadow)"/>
+<text x="614.0" y="1574.0" text-anchor="middle" font-family="Inter, Liberation Sans, Arial, sans-serif" font-size="22" font-weight="680" fill="#122033"><tspan x="614.0" dy="0">Post-hire reconciliation</tspan></text>
+<rect x="424" y="1779" width="380" height="154" rx="16" fill="#dbe1f5" stroke="#455b9b" stroke-width="3" filter="url(#shadow)"/>
+<text x="614.0" y="1843.0" text-anchor="middle" font-family="Inter, Liberation Sans, Arial, sans-serif" font-size="20" font-weight="680" fill="#122033"><tspan x="614.0" dy="0">Change role, support,</tspan><tspan x="614.0" dy="26">or hiring system</tspan></text>
+<rect x="818" y="275" width="380" height="342" rx="16" fill="#dce7f2" stroke="#315c82" stroke-width="3" filter="url(#shadow)"/>
+<text x="1008.0" y="446.0" text-anchor="middle" font-family="Inter, Liberation Sans, Arial, sans-serif" font-size="22" font-weight="680" fill="#122033"><tspan x="1008.0" dy="0">Observed demand</tspan></text>
+<rect x="818" y="651" width="380" height="342" rx="16" fill="#dcefe8" stroke="#32755e" stroke-width="3" filter="url(#shadow)"/>
+<text x="1008.0" y="796.0" text-anchor="middle" font-family="Inter, Liberation Sans, Arial, sans-serif" font-size="22" font-weight="680" fill="#122033"><tspan x="1008.0" dy="0">Authenticated need</tspan><tspan x="1008.0" dy="26">+</tspan><tspan x="1008.0" dy="26">Proposal claim</tspan></text>
+<rect x="818" y="1027" width="380" height="154" rx="16" fill="#dff2d9" stroke="#477b37" stroke-width="3" filter="url(#shadow)"/>
+<text x="1008.0" y="1104.0" text-anchor="middle" font-family="Inter, Liberation Sans, Arial, sans-serif" font-size="20" font-weight="680" fill="#122033"><tspan x="1008.0" dy="0">Authorize + deliver</tspan></text>
+<rect x="818" y="1215" width="380" height="154" rx="16" fill="#ffe2d8" stroke="#a64f33" stroke-width="3" filter="url(#shadow)"/>
+<text x="1008.0" y="1292.0" text-anchor="middle" font-family="Inter, Liberation Sans, Arial, sans-serif" font-size="20" font-weight="680" fill="#122033"><tspan x="1008.0" dy="0">Delivered condition</tspan></text>
+<rect x="818" y="1403" width="380" height="342" rx="16" fill="#e7def7" stroke="#6a4e9f" stroke-width="3" filter="url(#shadow)"/>
+<text x="1008.0" y="1574.0" text-anchor="middle" font-family="Inter, Liberation Sans, Arial, sans-serif" font-size="22" font-weight="680" fill="#122033"><tspan x="1008.0" dy="0">Acceptance + benefits review</tspan></text>
+<rect x="818" y="1779" width="380" height="154" rx="16" fill="#dbe1f5" stroke="#455b9b" stroke-width="3" filter="url(#shadow)"/>
+<text x="1008.0" y="1843.0" text-anchor="middle" font-family="Inter, Liberation Sans, Arial, sans-serif" font-size="20" font-weight="680" fill="#122033"><tspan x="1008.0" dy="0">Continue, change, stop,</tspan><tspan x="1008.0" dy="26">or reprioritize</tspan></text>
+<rect x="1212" y="275" width="380" height="342" rx="16" fill="#dce7f2" stroke="#315c82" stroke-width="3" filter="url(#shadow)"/>
+<text x="1402.0" y="446.0" text-anchor="middle" font-family="Inter, Liberation Sans, Arial, sans-serif" font-size="22" font-weight="680" fill="#122033"><tspan x="1402.0" dy="0">External capability gap</tspan></text>
+<rect x="1212" y="651" width="380" height="342" rx="16" fill="#dcefe8" stroke="#32755e" stroke-width="3" filter="url(#shadow)"/>
+<text x="1402.0" y="796.0" text-anchor="middle" font-family="Inter, Liberation Sans, Arial, sans-serif" font-size="22" font-weight="680" fill="#122033"><tspan x="1402.0" dy="0">Buyer requirements</tspan><tspan x="1402.0" dy="26">+</tspan><tspan x="1402.0" dy="26">Vendor claim</tspan></text>
+<rect x="1212" y="1027" width="380" height="154" rx="16" fill="#dff2d9" stroke="#477b37" stroke-width="3" filter="url(#shadow)"/>
+<text x="1402.0" y="1091.0" text-anchor="middle" font-family="Inter, Liberation Sans, Arial, sans-serif" font-size="20" font-weight="680" fill="#122033"><tspan x="1402.0" dy="0">RFP, POC, contract</tspan><tspan x="1402.0" dy="26">+ implementation</tspan></text>
+<rect x="1212" y="1215" width="380" height="154" rx="16" fill="#ffe2d8" stroke="#a64f33" stroke-width="3" filter="url(#shadow)"/>
+<text x="1402.0" y="1292.0" text-anchor="middle" font-family="Inter, Liberation Sans, Arial, sans-serif" font-size="20" font-weight="680" fill="#122033"><tspan x="1402.0" dy="0">Burn-in + operation</tspan></text>
+<rect x="1212" y="1403" width="380" height="342" rx="16" fill="#e7def7" stroke="#6a4e9f" stroke-width="3" filter="url(#shadow)"/>
+<text x="1402.0" y="1561.0" text-anchor="middle" font-family="Inter, Liberation Sans, Arial, sans-serif" font-size="22" font-weight="680" fill="#122033"><tspan x="1402.0" dy="0">Acceptance + post-</tspan><tspan x="1402.0" dy="26">implementation review</tspan></text>
+<rect x="1212" y="1779" width="380" height="154" rx="16" fill="#dbe1f5" stroke="#455b9b" stroke-width="3" filter="url(#shadow)"/>
+<text x="1402.0" y="1843.0" text-anchor="middle" font-family="Inter, Liberation Sans, Arial, sans-serif" font-size="20" font-weight="680" fill="#122033"><tspan x="1402.0" dy="0">Renew, remediate,</tspan><tspan x="1402.0" dy="26">or replace</tspan></text>
+<rect x="1606" y="275" width="380" height="342" rx="16" fill="#dce7f2" stroke="#315c82" stroke-width="3" filter="url(#shadow)"/>
+<text x="1796.0" y="433.0" text-anchor="middle" font-family="Inter, Liberation Sans, Arial, sans-serif" font-size="22" font-weight="680" fill="#122033"><tspan x="1796.0" dy="0">Capability or utilization</tspan><tspan x="1796.0" dy="26">signal</tspan></text>
+<rect x="1606" y="651" width="380" height="342" rx="16" fill="#dcefe8" stroke="#32755e" stroke-width="3" filter="url(#shadow)"/>
+<text x="1796.0" y="796.0" text-anchor="middle" font-family="Inter, Liberation Sans, Arial, sans-serif" font-size="22" font-weight="680" fill="#122033"><tspan x="1796.0" dy="0">Target capability</tspan><tspan x="1796.0" dy="26">+</tspan><tspan x="1796.0" dy="26">Safe-reps hypothesis</tspan></text>
+<rect x="1606" y="1027" width="380" height="154" rx="16" fill="#dff2d9" stroke="#477b37" stroke-width="3" filter="url(#shadow)"/>
+<text x="1796.0" y="1104.0" text-anchor="middle" font-family="Inter, Liberation Sans, Arial, sans-serif" font-size="20" font-weight="680" fill="#122033"><tspan x="1796.0" dy="0">Assign, coach + support</tspan></text>
+<rect x="1606" y="1215" width="380" height="154" rx="16" fill="#ffe2d8" stroke="#a64f33" stroke-width="3" filter="url(#shadow)"/>
+<text x="1796.0" y="1292.0" text-anchor="middle" font-family="Inter, Liberation Sans, Arial, sans-serif" font-size="20" font-weight="680" fill="#122033"><tspan x="1796.0" dy="0">Demonstrated behavior</tspan></text>
+<rect x="1606" y="1403" width="380" height="342" rx="16" fill="#e7def7" stroke="#6a4e9f" stroke-width="3" filter="url(#shadow)"/>
+<text x="1796.0" y="1561.0" text-anchor="middle" font-family="Inter, Liberation Sans, Arial, sans-serif" font-size="22" font-weight="680" fill="#122033"><tspan x="1796.0" dy="0">Calibration + development</tspan><tspan x="1796.0" dy="26">review</tspan></text>
+<rect x="1606" y="1779" width="380" height="154" rx="16" fill="#dbe1f5" stroke="#455b9b" stroke-width="3" filter="url(#shadow)"/>
+<text x="1796.0" y="1843.0" text-anchor="middle" font-family="Inter, Liberation Sans, Arial, sans-serif" font-size="20" font-weight="680" fill="#122033"><tspan x="1796.0" dy="0">More scope, practice,</tspan><tspan x="1796.0" dy="26">support, or reassignment</tspan></text>
+<rect x="2000" y="275" width="380" height="342" rx="16" fill="#dce7f2" stroke="#315c82" stroke-width="3" filter="url(#shadow)"/>
+<text x="2190.0" y="446.0" text-anchor="middle" font-family="Inter, Liberation Sans, Arial, sans-serif" font-size="22" font-weight="680" fill="#122033"><tspan x="2190.0" dy="0">Failure or nonconformance</tspan></text>
+<rect x="2000" y="651" width="380" height="342" rx="16" fill="#dcefe8" stroke="#32755e" stroke-width="3" filter="url(#shadow)"/>
+<text x="2190.0" y="796.0" text-anchor="middle" font-family="Inter, Liberation Sans, Arial, sans-serif" font-size="22" font-weight="680" fill="#122033"><tspan x="2190.0" dy="0">Cause analysis</tspan><tspan x="2190.0" dy="26">+</tspan><tspan x="2190.0" dy="26">Correction hypothesis</tspan></text>
+<rect x="2000" y="1027" width="380" height="154" rx="16" fill="#dff2d9" stroke="#477b37" stroke-width="3" filter="url(#shadow)"/>
+<text x="2190.0" y="1091.0" text-anchor="middle" font-family="Inter, Liberation Sans, Arial, sans-serif" font-size="20" font-weight="680" fill="#122033"><tspan x="2190.0" dy="0">Contain, correct,</tspan><tspan x="2190.0" dy="26">test + deploy</tspan></text>
+<rect x="2000" y="1215" width="380" height="154" rx="16" fill="#ffe2d8" stroke="#a64f33" stroke-width="3" filter="url(#shadow)"/>
+<text x="2190.0" y="1292.0" text-anchor="middle" font-family="Inter, Liberation Sans, Arial, sans-serif" font-size="20" font-weight="680" fill="#122033"><tspan x="2190.0" dy="0">Post-correction behavior</tspan></text>
+<rect x="2000" y="1403" width="380" height="342" rx="16" fill="#e7def7" stroke="#6a4e9f" stroke-width="3" filter="url(#shadow)"/>
+<text x="2190.0" y="1574.0" text-anchor="middle" font-family="Inter, Liberation Sans, Arial, sans-serif" font-size="22" font-weight="680" fill="#122033"><tspan x="2190.0" dy="0">Conformity + guardrail review</tspan></text>
+<rect x="2000" y="1779" width="380" height="154" rx="16" fill="#dbe1f5" stroke="#455b9b" stroke-width="3" filter="url(#shadow)"/>
+<text x="2190.0" y="1843.0" text-anchor="middle" font-family="Inter, Liberation Sans, Arial, sans-serif" font-size="20" font-weight="680" fill="#122033"><tspan x="2190.0" dy="0">Close, reopen,</tspan><tspan x="2190.0" dy="26">or revise</tspan></text>
+<rect x="2394" y="275" width="380" height="342" rx="16" fill="#dce7f2" stroke="#315c82" stroke-width="3" filter="url(#shadow)"/>
+<text x="2584.0" y="446.0" text-anchor="middle" font-family="Inter, Liberation Sans, Arial, sans-serif" font-size="22" font-weight="680" fill="#122033"><tspan x="2584.0" dy="0">Liability or exit signal</tspan></text>
+<rect x="2394" y="651" width="380" height="342" rx="16" fill="#dcefe8" stroke="#32755e" stroke-width="3" filter="url(#shadow)"/>
+<text x="2584.0" y="796.0" text-anchor="middle" font-family="Inter, Liberation Sans, Arial, sans-serif" font-size="22" font-weight="680" fill="#122033"><tspan x="2584.0" dy="0">Exposure inventory</tspan><tspan x="2584.0" dy="26">+</tspan><tspan x="2584.0" dy="26">Runoff hypothesis</tspan></text>
+<rect x="2394" y="1027" width="380" height="154" rx="16" fill="#dff2d9" stroke="#477b37" stroke-width="3" filter="url(#shadow)"/>
+<text x="2584.0" y="1104.0" text-anchor="middle" font-family="Inter, Liberation Sans, Arial, sans-serif" font-size="20" font-weight="680" fill="#122033"><tspan x="2584.0" dy="0">Freeze, migrate + retire</tspan></text>
+<rect x="2394" y="1215" width="380" height="154" rx="16" fill="#ffe2d8" stroke="#a64f33" stroke-width="3" filter="url(#shadow)"/>
+<text x="2584.0" y="1292.0" text-anchor="middle" font-family="Inter, Liberation Sans, Arial, sans-serif" font-size="20" font-weight="680" fill="#122033"><tspan x="2584.0" dy="0">Remaining dependency + risk</tspan></text>
+<rect x="2394" y="1403" width="380" height="342" rx="16" fill="#e7def7" stroke="#6a4e9f" stroke-width="3" filter="url(#shadow)"/>
+<text x="2584.0" y="1561.0" text-anchor="middle" font-family="Inter, Liberation Sans, Arial, sans-serif" font-size="22" font-weight="680" fill="#122033"><tspan x="2584.0" dy="0">Exit checkpoint + routed</tspan><tspan x="2584.0" dy="26">evidence</tspan></text>
+<rect x="2394" y="1779" width="380" height="154" rx="16" fill="#dbe1f5" stroke="#455b9b" stroke-width="3" filter="url(#shadow)"/>
+<text x="2584.0" y="1843.0" text-anchor="middle" font-family="Inter, Liberation Sans, Arial, sans-serif" font-size="20" font-weight="680" fill="#122033"><tspan x="2584.0" dy="0">Kill, extend, or</tspan><tspan x="2584.0" dy="26">approve exception</tspan></text>
+<path d="M 70 1856.0 C 18 1856.0, 18 352.0, 70 352.0" stroke="#455b9b" stroke-width="4" fill="none" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<text x="1400.0" y="2020.0" text-anchor="middle" font-family="Inter, Liberation Sans, Arial, sans-serif" font-size="23" font-weight="700" fill="#122033"><tspan x="1400.0" dy="0">The final decision changes the conditions from which the next observation or question emerges.</tspan></text>
+</svg>

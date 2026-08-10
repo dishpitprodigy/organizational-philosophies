@@ -19,6 +19,8 @@ Some questions are **Design Gates**: they must be addressed before architectural
 
 The distinction prevents premature convergence. It also makes constraints, operational costs, decision rights, and failure modes visible before the organization commits itself to a solution.
 
+Framing does not begin from a blank page. It consumes the Work Proposal's Current-State Baseline: the accepted architecture, operating profile, dependencies, constraints, and failure behavior against which change is being proposed. Current State is always required. Rewriting it is not. A framing artifact may link an authoritative version and state the material delta since that version; if no reliable baseline exists, establishing one is bounded Discovery before design. Historical ADRs remain with the systems they govern and may be consulted during design to understand why the old architecture took its current shape.
+
 ![Framing moves from the request through the Five-Box Scaffold and bounded discovery into design gates; unanswered gate questions return to discovery, while answered gates permit commitment and execution planning.](docs/assets/images/framing-technical-work/framing-to-execution.svg){#fig-framing-to-execution}
 
 ---
@@ -70,6 +72,8 @@ If the answer is only "running code," this framing framework is probably no long
 ### 5. What downstream work should never need to ask "why" again?
 
 That is the success measure for framing. The artifact should preserve the reasoning downstream work depends on: what was decided, which evidence supported it, what remained outside the boundary, and which conditions would require the decision to be revisited.
+
+The reusable artifact should preserve its Current-State Basis and evidence rather than becoming isolated planning prose. It does not create an ADR merely because architecture may happen later. If design makes an architectural decision, the design team records that ADR with the system it governs and may cite the framing evidence that informed it.
 
 ---
 
