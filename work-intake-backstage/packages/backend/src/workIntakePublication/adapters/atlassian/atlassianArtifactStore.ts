@@ -1,3 +1,5 @@
+import { createHash } from 'node:crypto';
+
 import type {
   ArtifactStore,
   CanonicalArtifact,
@@ -34,9 +36,10 @@ export class AtlassianArtifactStore implements ArtifactStore {
       await this.verifyContent(reference, artifact.content);
       return reference;
     }
+    const revisionPrefix = artifact.filename.replace(/[a-f0-9]{64}\.json$/, '');
     const conflict = attachments.find(
       attachment =>
-        attachment.filename?.endsWith('.json') &&
+        attachment.filename?.startsWith(revisionPrefix) &&
         attachment.filename !== artifact.filename,
     );
     if (conflict)
@@ -83,4 +86,3 @@ export class AtlassianArtifactStore implements ArtifactStore {
       });
   }
 }
-import { createHash } from 'node:crypto';

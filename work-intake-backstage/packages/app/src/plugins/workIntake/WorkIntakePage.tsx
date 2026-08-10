@@ -6,59 +6,49 @@ import {
 import { Paper, Typography } from '@material-ui/core';
 import { useEffect, useRef, useState } from 'react';
 import { requestCurrentArtifact } from './artifactBridge';
+import {
+  PublicationClient,
+  PublicationProfile,
+  PublicationReceipt,
+} from './publicationClient';
 
-type JiraHealth = {
-  connected: boolean;
-  account?: { displayName?: string };
-  error?: string;
-};
-
-type PublicationResponse = {
-  issues?: Array<{ issueKey: string }>;
-  error?: string;
-};
-
-async function responseJson<T>(response: Response): Promise<T> {
-  const body = (await response.json().catch(() => ({}))) as T & {
-    error?: string;
-  };
-  if (!response.ok) {
-    throw new Error(
-      body.error ?? `Request failed with status ${response.status}`,
-    );
-  }
-  return body;
-}
+const publicationPluginId = 'work-intake-publication';
 
 export function WorkIntakePage() {
   const fetchApi = useApi(fetchApiRef);
   const discoveryApi = useApi(discoveryApiRef);
   const iframe = useRef<HTMLIFrameElement>(null);
-  const [backendUrl, setBackendUrl] = useState('');
-  const [health, setHealth] = useState<JiraHealth | null>(null);
+  const [profiles, setProfiles] = useState<PublicationProfile[]>([]);
+  const [selectedProfileId, setSelectedProfileId] = useState('');
+  const [loading, setLoading] = useState(true);
   const [publishing, setPublishing] = useState(false);
-  const [result, setResult] = useState('');
+  const [receipt, setReceipt] = useState<PublicationReceipt | null>(null);
   const [error, setError] = useState('');
+  const selectedProfile = profiles.find(
+    profile => profile.id === selectedProfileId,
+  );
 
   useEffect(() => {
     let active = true;
     discoveryApi
-      .getBaseUrl('work-intake-jira')
-      .then(baseUrl => {
-        if (active) setBackendUrl(baseUrl);
-        return fetchApi.fetch(`${baseUrl}/health`);
-      })
-      .then(responseJson<JiraHealth>)
+      .getBaseUrl(publicationPluginId)
+      .then(baseUrl =>
+        new PublicationClient(baseUrl, fetchApi.fetch).profiles(),
+      )
       .then(value => {
-        if (active) setHealth(value);
+        if (!active) return;
+        setProfiles(value);
+        setSelectedProfileId(
+          value.find(profile => profile.available)?.id ?? '',
+        );
       })
       .catch(cause => {
         if (active) {
-          setHealth({
-            connected: false,
-            error: cause instanceof Error ? cause.message : String(cause),
-          });
+          setError(cause instanceof Error ? cause.message : String(cause));
         }
+      })
+      .finally(() => {
+        if (active) setLoading(false);
       });
     return () => {
       active = false;
@@ -66,40 +56,25 @@ export function WorkIntakePage() {
   }, [discoveryApi, fetchApi]);
 
   async function publish() {
-    if (!iframe.current) return;
+    if (!iframe.current || !selectedProfile?.available) return;
     setPublishing(true);
-    setResult('');
+    setReceipt(null);
     setError('');
     try {
-      const artifact = await requestCurrentArtifact(iframe.current);
-      if (!backendUrl) throw new Error('Jira publisher is not ready');
-      const response = await fetchApi.fetch(`${backendUrl}/publish`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(artifact),
-      });
-      const publication = await responseJson<PublicationResponse>(response);
-      const issueKeys = publication.issues?.map(issue => issue.issueKey) ?? [];
-      setResult(
-        issueKeys.length
-          ? `Published ${issueKeys.join(', ')}`
-          : 'Publication completed without delivery records.',
-      );
+      const [baseUrl, artifact] = await Promise.all([
+        discoveryApi.getBaseUrl(publicationPluginId),
+        requestCurrentArtifact(iframe.current),
+      ]);
+      const result = await new PublicationClient(
+        baseUrl,
+        fetchApi.fetch,
+      ).publish(selectedProfile.id, artifact);
+      setReceipt(result);
     } catch (cause) {
       setError(cause instanceof Error ? cause.message : String(cause));
     } finally {
       setPublishing(false);
     }
-  }
-
-  const connected = health?.connected === true;
-  let connectionText = 'Checking Jira connection…';
-  if (connected) {
-    connectionText = `Jira connected as ${
-      health.account?.displayName ?? 'configured account'
-    }`;
-  } else if (health) {
-    connectionText = `Jira unavailable: ${health.error ?? 'connection failed'}`;
   }
 
   return (
@@ -117,18 +92,65 @@ export function WorkIntakePage() {
         }}
       >
         <div style={{ flex: 1 }}>
-          <Typography variant="subtitle1">Jira publication boundary</Typography>
-          <Typography
-            color={connected ? 'textSecondary' : 'error'}
-            variant="body2"
-          >
-            {connectionText}
-          </Typography>
-          <Typography color="textSecondary" variant="body2">
-            Publication re-derives dependencies, owners, and ordered reviews
-            from the Backstage catalog.
-          </Typography>
-          {result ? <Typography variant="body2">{result}</Typography> : null}
+          <Typography variant="subtitle1">Publication</Typography>
+          {loading ? (
+            <Typography color="textSecondary" variant="body2">
+              Loading publication profiles…
+            </Typography>
+          ) : null}
+          {profiles.length ? (
+            <label>
+              <Typography component="span" variant="body2">
+                Publication profile
+              </Typography>
+              <select
+                aria-label="Publication profile"
+                onChange={event => setSelectedProfileId(event.target.value)}
+                value={selectedProfileId}
+              >
+                {profiles.map(profile => (
+                  <option
+                    disabled={!profile.available}
+                    key={profile.id}
+                    value={profile.id}
+                  >
+                    {profile.displayName}
+                    {profile.available ? '' : ' (unavailable)'}
+                  </option>
+                ))}
+              </select>
+            </label>
+          ) : null}
+          {selectedProfile && !selectedProfile.available ? (
+            <Typography color="error" variant="body2">
+              {selectedProfile.unavailableReason ??
+                'This profile is unavailable.'}
+            </Typography>
+          ) : null}
+          {receipt ? (
+            <>
+              <Typography variant="body2">Publication completed.</Typography>
+              {receipt.results.map(result =>
+                result.url ? (
+                  <Typography
+                    component="span"
+                    key={`${result.externalId}-${result.url}`}
+                    variant="body2"
+                  >
+                    <a href={result.url}>{result.externalId}</a>{' '}
+                  </Typography>
+                ) : (
+                  <Typography
+                    component="span"
+                    key={result.externalId}
+                    variant="body2"
+                  >
+                    {result.externalId}{' '}
+                  </Typography>
+                ),
+              )}
+            </>
+          ) : null}
           {error ? (
             <Typography color="error" variant="body2">
               {error}
@@ -136,21 +158,21 @@ export function WorkIntakePage() {
           ) : null}
         </div>
         <button
-          disabled={!connected || !backendUrl || publishing}
+          disabled={!selectedProfile?.available || publishing}
           onClick={publish}
           style={{
-            background: connected ? '#00695c' : '#9e9e9e',
+            background: selectedProfile?.available ? '#00695c' : '#9e9e9e',
             border: 0,
             borderRadius: 4,
             color: 'white',
-            cursor: connected ? 'pointer' : 'not-allowed',
+            cursor: selectedProfile?.available ? 'pointer' : 'not-allowed',
             fontSize: 14,
             fontWeight: 700,
             padding: '10px 18px',
           }}
           type="button"
         >
-          {publishing ? 'Publishing…' : 'Publish to Jira'}
+          {publishing ? 'Publishing…' : 'Publish'}
         </button>
       </Paper>
       <iframe

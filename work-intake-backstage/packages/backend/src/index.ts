@@ -13,6 +13,7 @@ const backend = createBackend();
 backend.add(import('@backstage/plugin-app-backend'));
 backend.add(import('@backstage/plugin-proxy-backend'));
 backend.add(import('./workIntakeJira/plugin'));
+backend.add(import('./workIntakePublication/plugin'));
 
 // scaffolder plugin
 backend.add(import('@backstage/plugin-scaffolder-backend'));

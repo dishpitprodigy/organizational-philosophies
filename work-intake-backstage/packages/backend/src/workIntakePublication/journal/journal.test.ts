@@ -1,3 +1,4 @@
+import { createHash } from 'node:crypto';
 import { mkdtemp, rm, writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
@@ -107,11 +108,19 @@ describe('FilePublicationJournal', () => {
     const path = join(directory, 'journal.json');
     const journal = new FilePublicationJournal(path);
     try {
+      const legacyLabel = `nwi-${createHash('sha256')
+        .update(`${key.proposalId}:rev-${key.proposalRevision}:${key.localId}`)
+        .digest('hex')
+        .slice(0, 16)}`;
       await writeFile(
         path,
         `${JSON.stringify({
           publications: {
-            'nwi-example': { state: 'published', issueKey: 'NWI-1' },
+            [legacyLabel]: {
+              state: 'published',
+              issueKey: 'NWI-1',
+              fingerprint: 'legacy-fingerprint',
+            },
           },
         })}\n`,
       );
@@ -119,7 +128,7 @@ describe('FilePublicationJournal', () => {
       expect((await journal.observe([key])).entries).toEqual([
         {
           ...key,
-          logicalFingerprint: '',
+          logicalFingerprint: 'legacy-fingerprint',
           targetFingerprint: '',
           mappingVersion: 0,
           state: 'published',

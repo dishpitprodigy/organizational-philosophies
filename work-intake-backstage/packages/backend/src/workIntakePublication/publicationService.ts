@@ -10,8 +10,14 @@ import {
 } from '../workIntake/domain/canonicalJson';
 import {
   AuthenticatedActor,
+  ArtifactStore,
   CanonicalArtifact,
+  CanonicalArtifactReference,
+  ExternalProjection,
+  JournalEntry,
+  JournalKey,
   PublicationPlan,
+  PublicationJournal,
   PublicationProfile,
   PublicationProfileSummary,
   PublicationReceipt,
@@ -23,9 +29,41 @@ import {
   ResolvedTargetBinding,
   StructuredPublicationContent,
   TargetBinding,
+  TargetBatch,
   WorkProposalPublication,
 } from './contracts';
 import { PublicationError } from './errors';
+
+function normalizedPublicationError(error: unknown) {
+  if (error instanceof PublicationError) return error;
+  const candidate = error as {
+    name?: string;
+    status?: number;
+    message?: string;
+  };
+  if (candidate.name === 'RevisionRequired') {
+    return new PublicationError(
+      'RevisionRequired',
+      candidate.message ?? 'A new revision is required.',
+    );
+  }
+  if (candidate.name === 'ConcurrentPublication') {
+    return new PublicationError(
+      'ConcurrentPublication',
+      candidate.message ?? 'Publication is already running.',
+    );
+  }
+  if (candidate.status === 401 || candidate.status === 403) {
+    return new PublicationError(
+      'TargetAuthenticationError',
+      candidate.message ?? 'Target authentication failed.',
+    );
+  }
+  return new PublicationError(
+    'TargetUnavailable',
+    candidate.message ?? String(error),
+  );
+}
 
 export type CatalogReview = {
   stage: number;
@@ -59,6 +97,8 @@ export type PublicationServiceOptions = {
   targets: Map<string, PublicationTarget>;
   catalog: CatalogPublicationResolver;
   resolveConfig(configRef: string): Readonly<Record<string, unknown>>;
+  journal?: PublicationJournal;
+  artifactStore?: ArtifactStore;
 };
 
 type CandidateRecord =
@@ -88,7 +128,7 @@ function canonicalArtifact(artifact: WorkProposalArtifact): CanonicalArtifact {
       publication?: unknown;
     };
   void ignored;
-  const content = `${canonicalJson(contentValue)}\n`;
+  const content = canonicalJson(contentValue);
   const digest = workProposalSha256(artifact);
   return {
     artifact,
@@ -111,21 +151,53 @@ function proposalContent(
     sections: [
       {
         heading: 'Current State',
-        paragraphs: [
-          proposal.currentState.summary,
-          proposal.currentState.architecture,
-          proposal.currentState.workloadEvidence,
-          proposal.currentState.constraints,
+        paragraphs: [proposal.currentState.summary],
+        fields: [
+          {
+            label: 'Baseline method',
+            value: proposal.currentState.baseline.mode,
+          },
+          ...(proposal.currentState.baseline.reference
+            ? [
+                {
+                  label: 'Baseline',
+                  value: proposal.currentState.baseline.reference,
+                },
+              ]
+            : []),
+          ...(proposal.currentState.baseline.delta
+            ? [
+                {
+                  label: 'Baseline delta',
+                  value: proposal.currentState.baseline.delta,
+                },
+              ]
+            : []),
+          {
+            label: 'Architecture and operating path',
+            value: proposal.currentState.architecture,
+          },
+          {
+            label: 'Measured production workload',
+            value: proposal.currentState.workloadEvidence,
+          },
+          {
+            label: 'Observed constraints',
+            value: proposal.currentState.constraints,
+          },
         ],
       },
       {
         heading: 'Desired Outcome',
         paragraphs: [proposal.desiredOutcome.summary],
         fields: [
-          { label: 'Scope', value: proposal.desiredOutcome.scope },
+          { label: 'Operating scope', value: proposal.desiredOutcome.scope },
           { label: 'Capability', value: proposal.desiredOutcome.capability },
-          { label: 'Proof', value: proposal.desiredOutcome.proof },
-          { label: 'Horizon', value: proposal.desiredOutcome.horizon },
+          { label: 'Decisive proof', value: proposal.desiredOutcome.proof },
+          {
+            label: 'Operating horizon',
+            value: proposal.desiredOutcome.horizon,
+          },
         ],
       },
       {
@@ -135,7 +207,7 @@ function proposalContent(
           { label: 'Preserve', value: proposal.requiredDifference.preserve },
           { label: 'Change', value: proposal.requiredDifference.change },
           {
-            label: 'Evidence basis',
+            label: 'Common evidence basis',
             value: proposal.requiredDifference.evidenceBasis,
           },
         ],
@@ -144,20 +216,25 @@ function proposalContent(
         heading: 'Requirements',
         items: proposal.requirements.map(
           item =>
-            `${item.id}: ${item.condition} — Verification: ${item.verification}`,
+            `${item.id}: ${item.condition}\n  Verification: ${item.verification}`,
         ),
       },
       {
         heading: 'Acceptance Conditions',
         items: proposal.acceptanceConditions.map(
           item =>
-            `${item.id}: ${item.result} — Evidence: ${item.evidenceMethod}`,
+            `${item.id}: ${item.context ? `Given ${item.context}, ` : ''}${
+              item.result
+            }\n  Evidence method: ${item.evidenceMethod}`,
         ),
       },
       {
         heading: 'Non-Goals',
         items: proposal.nonGoals.map(
-          item => `${item.id}: ${item.exclusion} — ${item.reason}`,
+          item =>
+            `${item.id}: ${item.exclusion}${
+              item.reason ? `\n  Reason: ${item.reason}` : ''
+            }`,
         ),
       },
     ],
@@ -232,7 +309,9 @@ function catalogEnrichedArtifact(
   artifact: WorkProposalArtifact,
   catalog: CatalogPublicationResolution,
 ): WorkProposalArtifact {
-  const enriched = JSON.parse(JSON.stringify(artifact)) as WorkProposalArtifact & {
+  const enriched = JSON.parse(
+    JSON.stringify(artifact),
+  ) as WorkProposalArtifact & {
     reviews?: CatalogReview[];
   };
   enriched.reviews = catalog.reviews;
@@ -362,6 +441,18 @@ function logicalBatch(
           content: {
             summary: [
               { label: 'Candidate type', value: delivery.type },
+              {
+                label: 'Authorized Work Proposal',
+                value: authorization.authorizedWorkProposal!.id!,
+              },
+              {
+                label: 'Governing proposal',
+                value: `${
+                  authorization.authorizedWorkProposal!.proposalId
+                } rev ${
+                  authorization.authorizedWorkProposal!.proposalRevision
+                }`,
+              },
               {
                 label: 'Planning Interval',
                 value: authorization.planningInterval!,
@@ -546,13 +637,353 @@ export class PublicationService implements WorkProposalPublication {
   }
 
   async publish(
-    _actor: AuthenticatedActor,
-    _request: PublicationRequest,
+    actor: AuthenticatedActor,
+    request: PublicationRequest,
   ): Promise<PublicationReceipt> {
-    throw new PublicationError(
-      'TargetConfigurationError',
-      'Publication execution is not composed.',
+    const journal = this.options.journal;
+    const artifactStore = this.options.artifactStore;
+    if (!journal || !artifactStore) {
+      throw new PublicationError(
+        'TargetConfigurationError',
+        'Publication journal and artifact store are not configured.',
+      );
+    }
+    const plan = await this.preview(actor, request);
+    const profile = this.options.profiles.find(
+      item => item.id === plan.profileId,
+    )!;
+    const lockIdentity = `${plan.profileId}:${plan.artifact.artifact.proposal.id}:${plan.artifact.artifact.proposal.revision}`;
+    return journal.withLock(lockIdentity, async () => {
+      const results: PublicationReceipt['results'] = [];
+      const relationResults: PublicationReceipt['relations'] = [];
+      const notes = [...plan.notes];
+      let artifactReference: CanonicalArtifactReference | undefined;
+      const completed = new Set<string>();
+      const failed = new Set<string>();
+
+      for (const planned of this.orderedPlacements(profile, plan)) {
+        if (planned.placement.dependsOn.some(id => failed.has(id))) {
+          failed.add(planned.placement.id);
+          notes.push(
+            `Skipped ${planned.placement.id} because a required placement failed.`,
+          );
+          continue;
+        }
+        if (
+          planned.placement.dependsOn.some(id => !completed.has(id)) &&
+          profile.failurePolicy === 'stop-after-failure'
+        ) {
+          break;
+        }
+        try {
+          const target = this.options.targets.get(planned.binding.adapterId);
+          if (!target) {
+            throw new PublicationError(
+              'TargetConfigurationError',
+              `Adapter ${planned.binding.adapterId} is not configured.`,
+            );
+          }
+          const records = plan.records.filter(record =>
+            planned.recordLocalIds.includes(record.localId),
+          );
+          const fingerprints = Object.fromEntries(
+            records.map(record => [
+              record.localId,
+              targetFingerprint(record, planned.placement.id, planned.binding),
+            ]),
+          );
+          const batch: TargetBatch = {
+            profileId: plan.profileId,
+            placementId: planned.placement.id,
+            binding: planned.binding,
+            mappingVersion: planned.binding.mappingVersion,
+            artifact: plan.artifact,
+            records,
+            relations: plan.relations,
+            targetFingerprints: fingerprints,
+          };
+          const keys = records.map(record =>
+            this.journalKey(
+              plan,
+              planned.placement.id,
+              planned.binding,
+              record,
+            ),
+          );
+          const journalObservation = await journal.observe(keys);
+          const existingByLocalId = new Map(
+            journalObservation.entries.map(entry => [entry.localId, entry]),
+          );
+          for (const record of records) {
+            const existing = existingByLocalId.get(record.localId);
+            if (
+              existing?.targetFingerprint &&
+              existing.targetFingerprint !== fingerprints[record.localId]
+            ) {
+              throw new PublicationError(
+                'RevisionRequired',
+                `${record.localId} changed without a proposal revision increment.`,
+              );
+            }
+          }
+          const observed = await target.observe(batch, journalObservation);
+          const observedByLocalId = new Map(
+            observed.results.map(result => [result.localId, result]),
+          );
+          const toApply: PublicationRecord[] = [];
+          for (const record of records) {
+            const observation = observedByLocalId.get(record.localId);
+            if (!observation) {
+              throw new PublicationError(
+                'IndeterminatePublication',
+                `Adapter ${target.id} did not report ${record.localId}.`,
+              );
+            }
+            if (observation.status === 'conflict') {
+              throw new PublicationError(
+                'RevisionRequired',
+                `${record.localId} conflicts with the existing external projection.`,
+              );
+            }
+            if (observation.status === 'indeterminate') {
+              throw new PublicationError(
+                'IndeterminatePublication',
+                `The state of ${record.localId} could not be determined safely.`,
+              );
+            }
+            const existing = existingByLocalId.get(record.localId);
+            if (
+              observation.status === 'found' &&
+              existing?.state === 'published' &&
+              existing.targetFingerprint === fingerprints[record.localId] &&
+              observation.externalId
+            ) {
+              results.push({
+                placementId: planned.placement.id,
+                adapterId: target.id,
+                targetId: planned.binding.target.targetId,
+                localId: record.localId,
+                externalId: observation.externalId,
+                url: observation.url,
+                action: 'reused',
+                canonicalArtifactSha256: plan.artifact.sha256,
+              });
+            } else {
+              toApply.push(record);
+            }
+          }
+
+          if (toApply.length) {
+            const reservations = toApply.map(record =>
+              this.journalEntry(
+                this.journalKey(
+                  plan,
+                  planned.placement.id,
+                  planned.binding,
+                  record,
+                ),
+                record,
+                fingerprints[record.localId],
+                planned.binding.mappingVersion,
+                'creating',
+              ),
+            );
+            await journal.reserve(reservations);
+            const applyBatch = {
+              ...batch,
+              records: toApply,
+              targetFingerprints: Object.fromEntries(
+                toApply.map(record => [
+                  record.localId,
+                  fingerprints[record.localId],
+                ]),
+              ),
+            };
+            const receipt = await target.apply(applyBatch);
+            this.validateTargetReceipt(applyBatch, receipt);
+            relationResults.push(...receipt.relations);
+            const publishedEntries: JournalEntry[] = [];
+            for (const item of receipt.results) {
+              const record = toApply.find(
+                candidate => candidate.localId === item.localId,
+              )!;
+              const key = this.journalKey(
+                plan,
+                planned.placement.id,
+                planned.binding,
+                record,
+              );
+              publishedEntries.push({
+                ...this.journalEntry(
+                  key,
+                  record,
+                  item.targetFingerprint,
+                  planned.binding.mappingVersion,
+                  'published',
+                ),
+                externalId: item.externalId,
+                url: item.url,
+              });
+              results.push({
+                placementId: planned.placement.id,
+                adapterId: target.id,
+                targetId: planned.binding.target.targetId,
+                localId: item.localId,
+                externalId: item.externalId,
+                url: item.url,
+                action: item.action,
+                canonicalArtifactSha256: plan.artifact.sha256,
+              });
+            }
+            await journal.recordPublished(publishedEntries);
+          }
+
+          if (planned.placement.id === profile.artifactPlacementId) {
+            const anchorResult = results.find(
+              result =>
+                result.placementId === planned.placement.id &&
+                result.localId === 'proposal',
+            );
+            if (!anchorResult) {
+              throw new PublicationError(
+                'PartialPublication',
+                'The proposal anchor was not returned by its Adapter.',
+              );
+            }
+            const anchor: ExternalProjection = {
+              adapterId: anchorResult.adapterId,
+              targetId: anchorResult.targetId,
+              externalId: anchorResult.externalId,
+              url: anchorResult.url,
+            };
+            artifactReference = await artifactStore.persist(
+              plan.artifact,
+              anchor,
+            );
+            await artifactStore.verify(artifactReference);
+          }
+          completed.add(planned.placement.id);
+        } catch (error) {
+          const normalized = normalizedPublicationError(error);
+          failed.add(planned.placement.id);
+          if (!results.length) throw normalized;
+          notes.push(`${planned.placement.id} failed: ${normalized.message}`);
+          if (profile.failurePolicy === 'stop-after-failure') break;
+        }
+      }
+
+      if (!artifactReference) {
+        throw new PublicationError(
+          'PartialPublication',
+          'The canonical artifact was not persisted.',
+        );
+      }
+      return {
+        profileId: plan.profileId,
+        proposal: {
+          id: plan.artifact.artifact.proposal.id,
+          revision: plan.artifact.artifact.proposal.revision,
+        },
+        artifact: artifactReference,
+        results,
+        relations: relationResults,
+        notes,
+        partial: failed.size > 0,
+        retryable: failed.size > 0,
+      };
+    });
+  }
+
+  private orderedPlacements(
+    profile: PublicationProfile,
+    plan: PublicationPlan,
+  ): PublicationPlan['placements'] {
+    const remaining = [...plan.placements];
+    const ordered: PublicationPlan['placements'] = [];
+    const completed = new Set<string>();
+    while (remaining.length) {
+      const index = remaining.findIndex(item =>
+        item.placement.dependsOn.every(id => completed.has(id)),
+      );
+      if (index < 0) {
+        throw new PublicationError(
+          'TargetConfigurationError',
+          `Profile ${profile.id} contains a placement cycle or missing dependency.`,
+        );
+      }
+      const [next] = remaining.splice(index, 1);
+      ordered.push(next);
+      completed.add(next.placement.id);
+    }
+    return ordered;
+  }
+
+  private journalKey(
+    plan: PublicationPlan,
+    placementId: string,
+    binding: ResolvedTargetBinding,
+    record: PublicationRecord,
+  ): JournalKey {
+    return {
+      profileId: plan.profileId,
+      placementId,
+      adapterId: binding.adapterId,
+      targetId: binding.target.targetId,
+      proposalId: record.identity.proposalId,
+      proposalRevision: record.identity.proposalRevision,
+      localId: record.localId,
+    };
+  }
+
+  private journalEntry(
+    key: JournalKey,
+    record: PublicationRecord,
+    fingerprint: string,
+    mappingVersion: number,
+    state: JournalEntry['state'],
+  ): JournalEntry {
+    return {
+      ...key,
+      logicalFingerprint: record.logicalFingerprint,
+      targetFingerprint: fingerprint,
+      mappingVersion,
+      state,
+    };
+  }
+
+  private validateTargetReceipt(
+    batch: TargetBatch,
+    receipt: Awaited<ReturnType<PublicationTarget['apply']>>,
+  ) {
+    const requested = new Map(
+      batch.records.map(record => [record.localId, record]),
     );
+    const seen = new Set<string>();
+    for (const result of receipt.results) {
+      const record = requested.get(result.localId);
+      if (!record || seen.has(result.localId)) {
+        throw new PublicationError(
+          'PartialPublication',
+          `Adapter ${batch.binding.adapterId} returned an unexpected or duplicate result for ${result.localId}.`,
+        );
+      }
+      if (
+        result.idempotencyKey !== record.idempotencyKey ||
+        result.targetFingerprint !== batch.targetFingerprints[result.localId]
+      ) {
+        throw new PublicationError(
+          'PartialPublication',
+          `Adapter ${batch.binding.adapterId} returned mismatched identity for ${result.localId}.`,
+        );
+      }
+      seen.add(result.localId);
+    }
+    if (seen.size !== requested.size) {
+      throw new PublicationError(
+        'PartialPublication',
+        `Adapter ${batch.binding.adapterId} omitted one or more publication records.`,
+      );
+    }
   }
 
   private resolveBinding(

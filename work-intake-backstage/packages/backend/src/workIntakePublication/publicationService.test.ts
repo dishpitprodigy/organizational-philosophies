@@ -1,9 +1,17 @@
 import { workProposalArtifactSchema } from '../workIntake/domain/artifactSchema';
 import {
   authenticatedActorFromPrincipal,
+  ArtifactStore,
+  JournalEntry,
+  JournalKey,
+  PublicationJournal,
   PublicationTarget,
 } from './contracts';
-import { jiraWorkManagementProfile, targetBindings } from './fixtures/profiles';
+import {
+  jiraWorkManagementProfile,
+  mixedAtlassianProfile,
+  targetBindings,
+} from './fixtures/profiles';
 import {
   CatalogPublicationResolver,
   PublicationService,
@@ -101,6 +109,7 @@ function artifact() {
 function service(
   target: PublicationTarget,
   catalog: CatalogPublicationResolver,
+  execution?: { journal: PublicationJournal; artifactStore: ArtifactStore },
 ) {
   return new PublicationService({
     profiles: [jiraWorkManagementProfile],
@@ -108,6 +117,7 @@ function service(
     targets: new Map([[target.id, target]]),
     catalog,
     resolveConfig: () => ({}),
+    ...execution,
   });
 }
 
@@ -157,5 +167,170 @@ describe('PublicationService preview', () => {
       'NWI',
       'NWI',
     ]);
+  });
+
+  it('places discovery proposals in JPD and ordered reviews in Jira', async () => {
+    const available = (id: string): PublicationTarget => ({
+      id,
+      status: async () => ({ available: true }),
+      observe: async () => ({ results: [] }),
+      apply: async () => ({ results: [], relations: [] }),
+    });
+    const catalog: CatalogPublicationResolver = {
+      resolve: async () => ({
+        proposalRouting: {
+          affectedEntities: ['system:default/metrics'],
+          evidence: { source: 'backstage-catalog' },
+        },
+        reviews: [
+          {
+            stage: 1,
+            name: 'Architecture Review',
+            decisionOwner: 'group:default/architecture',
+            reason: 'Catalog dependency closure',
+          },
+        ],
+        deliveries: {},
+      }),
+    };
+    const publication = new PublicationService({
+      profiles: [mixedAtlassianProfile],
+      targetBindings,
+      targets: new Map([
+        ['jpd', available('jpd')],
+        ['jira', available('jira')],
+      ]),
+      catalog,
+      resolveConfig: () => ({}),
+    });
+
+    const plan = await publication.preview(
+      authenticatedActorFromPrincipal('user:default/avery'),
+      { profileId: 'atlassian-discovery', artifact: artifact() },
+    );
+
+    expect(
+      plan.placements.map(item => [
+        item.placement.role,
+        item.binding.adapterId,
+        item.binding.target.targetId,
+      ]),
+    ).toEqual([
+      ['proposal', 'jpd', 'MDP'],
+      ['review', 'jira', 'NWI'],
+    ]);
+  });
+});
+
+describe('PublicationService publish', () => {
+  it('persists and verifies the artifact before dependent work and reuses a retry', async () => {
+    const events: string[] = [];
+    const external = new Map<string, string>();
+    let creates = 0;
+    const target: PublicationTarget = {
+      id: 'jira',
+      status: async () => ({ available: true }),
+      observe: async batch => ({
+        results: batch.records.map(record =>
+          external.has(record.localId)
+            ? {
+                localId: record.localId,
+                status: 'found' as const,
+                externalId: external.get(record.localId),
+                targetFingerprint: batch.targetFingerprints[record.localId],
+              }
+            : { localId: record.localId, status: 'absent' as const },
+        ),
+      }),
+      apply: async batch => {
+        creates += 1;
+        events.push(`apply:${batch.placementId}`);
+        return {
+          results: batch.records.map(record => {
+            const externalId = `${batch.binding.target.targetId}-${
+              external.size + 1
+            }`;
+            external.set(record.localId, externalId);
+            return {
+              localId: record.localId,
+              idempotencyKey: record.idempotencyKey,
+              targetFingerprint: batch.targetFingerprints[record.localId],
+              externalId,
+              action: 'created' as const,
+            };
+          }),
+          relations: [],
+        };
+      },
+    };
+    const entries = new Map<string, JournalEntry>();
+    const key = (value: JournalKey) =>
+      [
+        value.profileId,
+        value.placementId,
+        value.adapterId,
+        value.targetId,
+        value.proposalId,
+        value.proposalRevision,
+        value.localId,
+      ].join(':');
+    const journal: PublicationJournal = {
+      withLock: async (_identity, operation) => operation(),
+      observe: async keys => ({
+        entries: keys.flatMap(item => entries.get(key(item)) ?? []),
+      }),
+      reserve: async values =>
+        values.forEach(value => entries.set(key(value), value)),
+      recordPublished: async values =>
+        values.forEach(value => entries.set(key(value), value)),
+    };
+    const artifactStore: ArtifactStore = {
+      persist: async canonical => {
+        events.push('artifact:persist');
+        return {
+          sha256: canonical.sha256,
+          filename: canonical.filename,
+          locator: 'memory:artifact',
+        };
+      },
+      verify: async () => {
+        events.push('artifact:verify');
+      },
+    };
+    const catalog: CatalogPublicationResolver = {
+      resolve: async () => ({
+        proposalRouting: {
+          affectedEntities: ['system:default/metrics'],
+          evidence: { source: 'backstage-catalog' },
+        },
+        reviews: [
+          {
+            stage: 1,
+            name: 'Architecture Review',
+            decisionOwner: 'group:default/architecture',
+            reason: 'Catalog dependency closure',
+          },
+        ],
+        deliveries: {},
+      }),
+    };
+    const publication = service(target, catalog, { journal, artifactStore });
+    const request = { profileId: 'jira-work-management', artifact: artifact() };
+    const actor = authenticatedActorFromPrincipal('user:default/avery');
+
+    const first = await publication.publish(actor, request);
+    const second = await publication.publish(actor, request);
+
+    expect(events.slice(0, 4)).toEqual([
+      'apply:jira-proposal',
+      'artifact:persist',
+      'artifact:verify',
+      'apply:jira-reviews',
+    ]);
+    expect(first.results).toHaveLength(2);
+    expect(second.results.every(result => result.action === 'reused')).toBe(
+      true,
+    );
+    expect(creates).toBe(2);
   });
 });

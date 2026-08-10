@@ -4,6 +4,10 @@ import Router from 'express-promise-router';
 
 import { publicationArtifactSchema } from '../workIntake/domain/artifactSchema';
 import { bindSubmissionProvenance } from '../workIntake/domain/submissionProvenance';
+import {
+  authenticatedActorFromPrincipal,
+  type WorkProposalPublication,
+} from '../workIntakePublication/contracts';
 import { JiraCommandService } from './command';
 
 function errorMessage(error: unknown) {
@@ -12,16 +16,32 @@ function errorMessage(error: unknown) {
 
 export function createRouter(options: {
   httpAuth: HttpAuthService;
-  jira: JiraCommandService;
+  jira?: JiraCommandService;
+  publication?: WorkProposalPublication;
   logger: LoggerService;
 }) {
   const router = Router();
   router.use(express.json({ limit: '1mb' }));
 
   router.get('/health', async (req, res) => {
-    await options.httpAuth.credentials(req, { allow: ['user'] });
+    const credentials = await options.httpAuth.credentials(req, {
+      allow: ['user'],
+    });
     try {
-      res.json(await options.jira.health());
+      if (options.publication) {
+        const profiles = await options.publication.profiles(
+          authenticatedActorFromPrincipal(credentials.principal.userEntityRef),
+        );
+        const jira = profiles.find(
+          profile => profile.id === 'jira-work-management',
+        );
+        res.json({
+          connected: jira?.available === true,
+          ...(jira?.unavailableReason ? { error: jira.unavailableReason } : {}),
+        });
+      } else {
+        res.json(await options.jira!.health());
+      }
     } catch (error) {
       options.logger.error('Jira health check failed', {
         error: errorMessage(error),
@@ -47,7 +67,27 @@ export function createRouter(options: {
     }
 
     try {
-      res.json(await options.jira.publish(parsed.data));
+      if (options.publication && parsed.data.schemaVersion === 2) {
+        const receipt = await options.publication.publish(
+          authenticatedActorFromPrincipal(credentials.principal.userEntityRef),
+          { profileId: 'jira-work-management', artifact: parsed.data },
+        );
+        res.json({
+          ...receipt,
+          issues: receipt.results.map(result => ({
+            localId: result.localId,
+            issueKey: result.externalId,
+            action: result.action,
+            url: result.url,
+          })),
+        });
+      } else if (options.publication) {
+        res.status(400).json({
+          error: 'The compatibility route requires schema version 2.',
+        });
+      } else {
+        res.json(await options.jira!.publish(parsed.data));
+      }
     } catch (error) {
       options.logger.error('Jira publication failed', {
         proposalId: parsed.data.proposal.id,

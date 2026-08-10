@@ -20,7 +20,12 @@ type JournalStateFile = {
   entries?: Record<string, JournalEntry>;
   publications?: Record<
     string,
-    { state: 'creating' | 'published'; issueKey?: string; url?: string }
+    {
+      state: 'creating' | 'published';
+      issueKey?: string;
+      url?: string;
+      fingerprint?: string;
+    }
   >;
 };
 
@@ -153,12 +158,15 @@ export class FilePublicationJournal implements PublicationJournal {
     key: JournalKey,
   ): JournalEntry | undefined {
     if (!key.adapterId.toLowerCase().includes('jira')) return undefined;
-    const legacy =
-      state.publications?.[key.proposalId] ?? state.publications?.[key.localId];
+    const legacyLabel = `nwi-${createHash('sha256')
+      .update(`${key.proposalId}:rev-${key.proposalRevision}:${key.localId}`)
+      .digest('hex')
+      .slice(0, 16)}`;
+    const legacy = state.publications?.[legacyLabel];
     if (!legacy) return undefined;
     return {
       ...key,
-      logicalFingerprint: '',
+      logicalFingerprint: legacy.fingerprint ?? '',
       targetFingerprint: '',
       mappingVersion: 0,
       state: legacy.state,

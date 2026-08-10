@@ -18,12 +18,10 @@ describe('AtlassianArtifactStore', () => {
   it('uploads the canonical artifact to its anchor and returns an attachment reference', async () => {
     const transport = {
       attachments: jest.fn().mockResolvedValue([]),
-      uploadAttachment: jest
-        .fn()
-        .mockResolvedValue({
-          id: '10001',
-          content: 'https://northstar.example/attachment/10001',
-        }),
+      uploadAttachment: jest.fn().mockResolvedValue({
+        id: '10001',
+        content: 'https://northstar.example/attachment/10001',
+      }),
       download: jest.fn(),
     } as unknown as AtlassianTransport;
     const store = new AtlassianArtifactStore({ transport });
@@ -42,15 +40,13 @@ describe('AtlassianArtifactStore', () => {
 
   it('reuses and verifies exact content-addressed attachment bytes', async () => {
     const transport = {
-      attachments: jest
-        .fn()
-        .mockResolvedValue([
-          {
-            id: '10001',
-            filename: artifact.filename,
-            content: 'https://northstar.example/attachment/10001',
-          },
-        ]),
+      attachments: jest.fn().mockResolvedValue([
+        {
+          id: '10001',
+          filename: artifact.filename,
+          content: 'https://northstar.example/attachment/10001',
+        },
+      ]),
       uploadAttachment: jest.fn(),
       download: jest.fn().mockResolvedValue(artifact.content),
     } as unknown as AtlassianTransport;
