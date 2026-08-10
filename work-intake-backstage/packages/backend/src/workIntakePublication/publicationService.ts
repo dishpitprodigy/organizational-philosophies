@@ -14,6 +14,7 @@ import {
   JournalEntry,
   JournalKey,
   PublicationPlan,
+  PublicationArtifactReceipt,
   PublicationJournal,
   PublicationProfile,
   PublicationProfileSummary,
@@ -657,7 +658,7 @@ export class PublicationService implements WorkProposalPublication {
       const relationResults: PublicationReceipt['relations'] = [];
       const notes = [...plan.notes];
       let artifactReference: CanonicalArtifactReference | undefined;
-      let artifactVerified = false;
+      let artifactReceipt: PublicationArtifactReceipt | undefined;
       const completed = new Set<string>();
       const failed = new Set<string>();
 
@@ -856,17 +857,17 @@ export class PublicationService implements WorkProposalPublication {
               externalId: anchorResult.externalId,
               url: anchorResult.url,
             };
-            artifactReference = {
+            artifactReceipt = {
+              status: 'pending',
               sha256: plan.artifact.sha256,
               filename: plan.artifact.filename,
-              locator: `pending:${anchor.adapterId}:${anchor.targetId}:${anchor.externalId}`,
             };
             artifactReference = await artifactStore.persist(
               plan.artifact,
               anchor,
             );
             await artifactStore.verify(artifactReference);
-            artifactVerified = true;
+            artifactReceipt = { status: 'verified', ...artifactReference };
           }
           completed.add(planned.placement.id);
         } catch (error) {
@@ -878,7 +879,7 @@ export class PublicationService implements WorkProposalPublication {
         }
       }
 
-      if (!artifactReference) {
+      if (!artifactReceipt) {
         throw new PublicationError(
           'PartialPublication',
           'The canonical artifact was not persisted.',
@@ -890,8 +891,7 @@ export class PublicationService implements WorkProposalPublication {
           id: plan.artifact.artifact.proposal.id,
           revision: plan.artifact.artifact.proposal.revision,
         },
-        artifact: artifactReference,
-        artifactVerified,
+        artifact: artifactReceipt,
         results,
         relations: relationResults,
         notes,

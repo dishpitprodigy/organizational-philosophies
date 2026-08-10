@@ -241,11 +241,18 @@ export type PublicationResult = {
   canonicalArtifactSha256: string;
 };
 
+export type PublicationArtifactReceipt =
+  | (CanonicalArtifactReference & { status: 'verified' })
+  | {
+      status: 'pending';
+      sha256: string;
+      filename: string;
+    };
+
 export type PublicationReceipt = {
   profileId: string;
   proposal: { id: string; revision: number };
-  artifact: CanonicalArtifactReference;
-  artifactVerified: boolean;
+  artifact: PublicationArtifactReceipt;
   results: PublicationResult[];
   relations: TargetReceipt['relations'];
   notes: string[];

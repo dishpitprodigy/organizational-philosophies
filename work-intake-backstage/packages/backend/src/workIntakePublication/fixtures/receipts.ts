@@ -6,11 +6,11 @@ export const mixedPublicationReceipt: PublicationReceipt = {
   profileId: 'atlassian-discovery',
   proposal: { id: 'WP-2026-0042', revision: 4 },
   artifact: {
+    status: 'verified',
     sha256,
     locator: 'atlassian:MDP-1:artifact.json',
     filename: 'artifact.json',
   },
-  artifactVerified: true,
   results: [
     {
       placementId: 'jpd-proposal',

@@ -406,11 +406,11 @@ describe('PublicationService publish', () => {
       expect.objectContaining({
         partial: true,
         retryable: true,
-        artifactVerified: false,
+        artifact: expect.objectContaining({ status: 'pending' }),
         results: [expect.objectContaining({ localId: 'proposal' })],
       }),
     );
-    expect(receipt.artifact.locator).toMatch(/^pending:jira:NWI:NWI-1$/);
+    expect('locator' in receipt.artifact).toBe(false);
     expect(applied).toEqual(['jira-proposal']);
   });
 });

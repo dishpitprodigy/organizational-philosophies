@@ -282,3 +282,14 @@ not the proposal artifact.
 The same publisher is exposed through the Work Intake page. Repeated clicks are
 safe: the owner-only ledger and Jira labels reconcile the same proposal revision
 and local record ids to the existing issues instead of creating duplicates.
+
+The normal test suite is hermetic. To exercise one disposable JPD Idea against
+the configured Atlassian sandbox, run the focused opt-in test with
+`WORK_INTAKE_JPD_SANDBOX=1`; the created Idea is prefixed `[DISPOSABLE]` and may
+be deleted afterward.
+
+```sh
+WORK_INTAKE_JPD_SANDBOX=1 ./yarn workspace backend test \
+  --runTestsByPath src/workIntakePublication/adapters/atlassian/jpdTarget.sandbox.test.ts \
+  --watch=false
+```
