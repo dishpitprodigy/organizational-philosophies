@@ -4,11 +4,7 @@ This repository contains working prototypes and long-form writing about how
 organizations define, authorize, deliver, operate, and learn from technical
 work.
 
-
-
-https://github.com/user-attachments/assets/c55a8cd1-6740-4198-9b32-808ddf5a6bf1
-
-
+https://github.com/user-attachments/assets/a06a9468-e56b-459c-b4af-1ad6f95e8e68
 
 ## Work Intake in Backstage
 
