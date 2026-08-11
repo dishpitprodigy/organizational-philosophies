@@ -4,7 +4,7 @@ const { readFileSync } = require("node:fs");
 const { join } = require("node:path");
 const test = require("node:test");
 
-const { collectAnswers, compileAnswers } = require("./form-definition.js");
+const { collectAnswers, compileAnswers, validateAnswers } = require("./form-definition.js");
 
 const {
   COMPANY,
@@ -42,22 +42,27 @@ test("Work Proposal identity is structural rather than parsed from display text"
   );
 });
 
-test("the Metrics fixture content and artifact schema are governed by revision 4", () => {
-  const fixture = SCENARIOS["Metrics selection"];
-  const fingerprint = createHash("sha256").update(JSON.stringify(fixture)).digest("hex");
+test("publishable fixture content and artifact schema are governed by proposal revision", () => {
+  const contracts = [
+    ["Metrics selection", 4, "a477bb4a57646aed3817205f6829a09e2647b1c807ae44df3e325efd89937450"],
+    ["SSO migration", 1, "eb4f3818cb4462ac45c65b03b16c4e078b62bb62f75d8c0cb45fe56b93a51b52"],
+    ["Identity platform redesign", 1, "c07e47503f699dfb94144597595a8db291ac573e9f3607ead764f46c34a7b4a1"],
+  ];
 
-  assert.deepEqual(
-    {
-      artifactSchemaVersion: PUBLICATION_ARTIFACT_SCHEMA_VERSION,
-      proposalRevision: fixture.proposalRevision,
-      fixtureSha256: fingerprint,
-    },
-    {
-      artifactSchemaVersion: 2,
-      proposalRevision: 4,
-      fixtureSha256: "a477bb4a57646aed3817205f6829a09e2647b1c807ae44df3e325efd89937450",
-    }
-  );
+  for (const [scenarioName, proposalRevision, fixtureSha256] of contracts) {
+    const fixture = SCENARIOS[scenarioName];
+    const fingerprint = createHash("sha256").update(JSON.stringify(fixture)).digest("hex");
+
+    assert.deepEqual(
+      {
+        artifactSchemaVersion: PUBLICATION_ARTIFACT_SCHEMA_VERSION,
+        proposalRevision: fixture.proposalRevision,
+        fixtureSha256: fingerprint,
+      },
+      { artifactSchemaVersion: 2, proposalRevision, fixtureSha256 },
+      `${scenarioName} changed without updating its publication contract`
+    );
+  }
 });
 
 test("a user explicitly creates the next Work Proposal revision", () => {
@@ -207,6 +212,23 @@ test("identity redesign routes the complete catalog dependency closure without i
   ]);
   assert.equal(result.proposalRecord.authority, "No authority granted");
 });
+
+for (const [scenarioName, expectedRevision] of [
+  ["SSO migration", 1],
+  ["Identity platform redesign", 1],
+]) {
+  test(`${scenarioName} supplies complete structured evidence for publication`, () => {
+    const state = structuredClone(SCENARIOS[scenarioName]);
+    const answers = collectAnswers(formDefinition, { ...state, ...state.guided });
+
+    assert.deepEqual(validateAnswers(formDefinition, answers), []);
+
+    const artifact = publicationArtifact(compileState(state));
+    assert.equal(artifact.proposal.revision, expectedRevision);
+    assert.equal(artifact.proposal.desiredOutcome.scope.length > 0, true);
+    assert.equal(artifact.proposal.requirements.every((requirement) => requirement.verification.length > 0), true);
+  });
+}
 
 test("draft demand cannot be published as a Work Proposal", () => {
   assert.throws(
