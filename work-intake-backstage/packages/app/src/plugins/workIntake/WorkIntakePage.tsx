@@ -172,7 +172,9 @@ export function WorkIntakePage() {
                     key={`${result.externalId}-${result.url}`}
                     variant="body2"
                   >
-                    <a href={result.url}>{result.externalId}</a>{' '}
+                    <a href={result.url}>
+                      {result.externalKey ?? result.externalId}
+                    </a>{' '}
                   </Typography>
                 ) : (
                   <Typography
@@ -180,7 +182,7 @@ export function WorkIntakePage() {
                     key={result.externalId}
                     variant="body2"
                   >
-                    {result.externalId}{' '}
+                    {result.externalKey ?? result.externalId}{' '}
                   </Typography>
                 ),
               )}

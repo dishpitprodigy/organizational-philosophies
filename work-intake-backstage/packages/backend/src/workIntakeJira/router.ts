@@ -70,7 +70,7 @@ export function createRouter(options: {
           ...receipt,
           issues: receipt.results.map(result => ({
             localId: result.localId,
-            issueKey: result.externalId,
+            issueKey: result.externalKey ?? result.externalId,
             action: result.action,
             url: result.url,
           })),

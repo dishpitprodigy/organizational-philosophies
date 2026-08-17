@@ -133,6 +133,7 @@ export type ExternalProjection = {
   adapterId: string;
   targetId: string;
   externalId: string;
+  externalKey?: string;
   url?: string;
 };
 
@@ -159,6 +160,7 @@ export type JournalEntry = JournalKey & {
   mappingVersion: number;
   state: JournalState;
   externalId?: string;
+  externalKey?: string;
   url?: string;
   lastObservation?: TargetObservation;
 };
@@ -171,6 +173,7 @@ export type TargetObservationResult = {
   localId: string;
   status: 'found' | 'absent' | 'indeterminate' | 'conflict';
   externalId?: string;
+  externalKey?: string;
   url?: string;
   targetFingerprint?: string;
   evidence?: Readonly<Record<string, unknown>>;
@@ -184,6 +187,7 @@ export type TargetReceipt = {
     idempotencyKey: string;
     targetFingerprint: string;
     externalId: string;
+    externalKey?: string;
     url?: string;
     action: 'created' | 'reused' | 'reconciled';
   }>;
@@ -237,6 +241,7 @@ export type PublicationResult = {
   targetId: string;
   localId: string;
   externalId: string;
+  externalKey?: string;
   url?: string;
   action: 'created' | 'reused' | 'reconciled';
   canonicalArtifactSha256: string;

@@ -21,6 +21,7 @@ type JournalRow = {
   mapping_version: number;
   state: JournalEntry['state'];
   external_id?: string | null;
+  external_key?: string | null;
   external_url?: string | null;
   last_observation?: JournalEntry['lastObservation'] | string | null;
 };
@@ -74,6 +75,7 @@ function toRow(entry: JournalEntry, client: string): JournalRow {
     mapping_version: entry.mappingVersion,
     state: entry.state,
     external_id: entry.externalId ?? null,
+    external_key: entry.externalKey ?? null,
     external_url: entry.url ?? null,
     last_observation: lastObservation,
   };
@@ -97,6 +99,7 @@ function fromRow(row: JournalRow): JournalEntry {
     mappingVersion: row.mapping_version,
     state: row.state,
     ...(row.external_id ? { externalId: row.external_id } : {}),
+    ...(row.external_key ? { externalKey: row.external_key } : {}),
     ...(row.external_url ? { url: row.external_url } : {}),
     ...(lastObservation ? { lastObservation } : {}),
   };

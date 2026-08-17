@@ -39,6 +39,10 @@ export type StoredProposal = {
 
 export type MissingEvidence = { id: string; label: string };
 
+export function allocateProposalId(now = new Date()): string {
+  return `WP-${now.getUTCFullYear()}-${randomUUID().slice(0, 8).toUpperCase()}`;
+}
+
 export type ProposalChangeInput = {
   proposalId?: string;
   artifact: Readonly<Record<string, unknown>>;
@@ -79,7 +83,7 @@ export type PublicationClaimInput = {
 };
 
 export type PublicationClaim =
-  | { status: 'claimed'; publicationId: string }
+  | { status: 'claimed'; publicationId: string; attemptId: string }
   | { status: 'completed'; receipt: PublicationReceipt }
   | { status: 'concurrent' };
 
@@ -91,6 +95,8 @@ type PublicationRow = {
   publication_profile_id: string;
   source_sha256: string;
   state: 'publishing' | 'failed' | 'completed';
+  active_attempt_id: string;
+  lease_expires_at: Date | string;
   receipt_json?: unknown;
   last_error?: string | null;
   created_at: Date | string;
@@ -123,7 +129,10 @@ function storedRevision(row: ProposalRevisionRow): StoredProposalRevision {
 }
 
 export class PostgresWorkIntakeStore {
-  constructor(private readonly database: Knex) {}
+  constructor(
+    private readonly database: Knex,
+    private readonly publicationLeaseMs = 5 * 60 * 1000,
+  ) {}
 
   async saveProposalRevision(
     input: ProposalRevisionInput,
@@ -138,6 +147,11 @@ export class PostgresWorkIntakeStore {
         })
         .onConflict('id')
         .ignore();
+      const proposal = await transaction<ProposalRow>('proposal')
+        .where({ id: input.proposalId })
+        .forUpdate()
+        .first();
+      this.requireProposalOwner(proposal, input.actor, input.proposalId);
 
       const existing = await transaction<ProposalRevisionRow>(
         'proposal_revision',
@@ -197,20 +211,17 @@ export class PostgresWorkIntakeStore {
     input: ProposalChangeInput,
   ): Promise<SavedProposalChange> {
     return this.database.transaction(async transaction => {
-      const proposalId =
-        input.proposalId ??
-        `WP-${new Date().getUTCFullYear()}-${randomUUID()
-          .slice(0, 8)
-          .toUpperCase()}`;
+      const proposalId = input.proposalId ?? allocateProposalId();
       const now = new Date();
       await transaction<ProposalRow>('proposal')
         .insert({ id: proposalId, created_by: input.actor, created_at: now })
         .onConflict('id')
         .ignore();
-      await transaction<ProposalRow>('proposal')
+      const proposal = await transaction<ProposalRow>('proposal')
         .where({ id: proposalId })
         .forUpdate()
         .first();
+      this.requireProposalOwner(proposal, input.actor, proposalId);
       const latest = await transaction<ProposalRevisionRow>('proposal_revision')
         .where({ proposal_id: proposalId })
         .max<{ revision?: number | string | null }>({ revision: 'revision' })
@@ -263,9 +274,12 @@ export class PostgresWorkIntakeStore {
     });
   }
 
-  async getProposal(id: string): Promise<StoredProposal | undefined> {
+  async getProposal(
+    id: string,
+    actor: string,
+  ): Promise<StoredProposal | undefined> {
     const proposal = await this.database<ProposalRow>('proposal')
-      .where({ id })
+      .where({ id, created_by: actor })
       .first();
     if (!proposal) return undefined;
     const revisions = await this.database<ProposalRevisionRow>(
@@ -285,8 +299,16 @@ export class PostgresWorkIntakeStore {
   getProposalRevision(
     proposalId: string,
     revision: number,
+    actor: string,
   ): Promise<StoredProposalRevision | undefined> {
-    return this.getProposalRevisionWith(this.database, proposalId, revision);
+    return this.database<ProposalRow>('proposal')
+      .where({ id: proposalId, created_by: actor })
+      .first()
+      .then(proposal =>
+        proposal
+          ? this.getProposalRevisionWith(this.database, proposalId, revision)
+          : undefined,
+      );
   }
 
   async claimPublication(
@@ -294,7 +316,9 @@ export class PostgresWorkIntakeStore {
   ): Promise<PublicationClaim> {
     return this.database.transaction(async transaction => {
       const publicationId = randomUUID();
+      const attemptId = randomUUID();
       const now = new Date();
+      const leaseExpiresAt = new Date(now.getTime() + this.publicationLeaseMs);
       await transaction<PublicationRow>('publication')
         .insert({
           id: publicationId,
@@ -304,6 +328,8 @@ export class PostgresWorkIntakeStore {
           publication_profile_id: input.publicationProfileId,
           source_sha256: input.sourceSha256,
           state: 'publishing',
+          active_attempt_id: attemptId,
+          lease_expires_at: leaseExpiresAt,
           created_at: now,
           updated_at: now,
         })
@@ -333,7 +359,7 @@ export class PostgresWorkIntakeStore {
         );
       }
       if (existing.id === publicationId) {
-        return { status: 'claimed', publicationId };
+        return { status: 'claimed', publicationId, attemptId };
       }
       if (existing.state === 'completed' && existing.receipt_json) {
         return {
@@ -343,20 +369,37 @@ export class PostgresWorkIntakeStore {
           ),
         };
       }
-      if (existing.state === 'publishing') {
+      if (
+        existing.state === 'publishing' &&
+        new Date(existing.lease_expires_at).getTime() > now.getTime()
+      ) {
         return { status: 'concurrent' };
       }
 
       await transaction<PublicationRow>('publication')
-        .where({ id: existing.id, state: 'failed' })
-        .update({ state: 'publishing', updated_at: now, last_error: null });
-      return { status: 'claimed', publicationId: existing.id };
+        .where({ id: existing.id })
+        .update({
+          state: 'publishing',
+          active_attempt_id: attemptId,
+          lease_expires_at: leaseExpiresAt,
+          updated_at: now,
+          last_error: null,
+        });
+      return { status: 'claimed', publicationId: existing.id, attemptId };
     });
   }
 
-  async failPublication(publicationId: string, error: string): Promise<void> {
+  async failPublication(
+    publicationId: string,
+    attemptId: string,
+    error: string,
+  ): Promise<void> {
     await this.database<PublicationRow>('publication')
-      .where({ id: publicationId })
+      .where({
+        id: publicationId,
+        active_attempt_id: attemptId,
+        state: 'publishing',
+      })
       .update({
         state: 'failed',
         last_error: error,
@@ -364,26 +407,103 @@ export class PostgresWorkIntakeStore {
       });
   }
 
+  async withPublicationLease<T>(
+    publicationId: string,
+    attemptId: string,
+    operation: () => Promise<T>,
+  ): Promise<T> {
+    let timer: NodeJS.Timeout | undefined;
+    let stopped = false;
+    let rejectLeaseLoss!: (error: Error) => void;
+    const leaseLoss = new Promise<never>((_resolve, reject) => {
+      rejectLeaseLoss = reject;
+    });
+    const renew = async () => {
+      try {
+        const retained = await this.renewPublicationLease(
+          publicationId,
+          attemptId,
+        );
+        if (!retained) {
+          throw new PublicationError(
+            'ConcurrentPublication',
+            `Publication ${publicationId} lost its fenced attempt lease.`,
+          );
+        }
+      } catch (error) {
+        rejectLeaseLoss(
+          error instanceof Error ? error : new Error(String(error)),
+        );
+        return;
+      }
+      if (!stopped) {
+        timer = setTimeout(
+          renew,
+          Math.max(1, Math.floor(this.publicationLeaseMs / 3)),
+        );
+        timer.unref();
+      }
+    };
+    timer = setTimeout(
+      renew,
+      Math.max(1, Math.floor(this.publicationLeaseMs / 3)),
+    );
+    timer.unref();
+    try {
+      return await Promise.race([operation(), leaseLoss]);
+    } finally {
+      stopped = true;
+      if (timer) clearTimeout(timer);
+    }
+  }
+
   async completePublication(
     publicationId: string,
+    attemptId: string,
     receipt: PublicationReceipt,
   ): Promise<void> {
-    await this.recordPublicationReceipt(publicationId, receipt, 'completed');
+    await this.recordPublicationReceipt(
+      publicationId,
+      attemptId,
+      receipt,
+      'completed',
+    );
   }
 
   async recordPartialPublication(
     publicationId: string,
+    attemptId: string,
     receipt: PublicationReceipt,
   ): Promise<void> {
-    await this.recordPublicationReceipt(publicationId, receipt, 'failed');
+    await this.recordPublicationReceipt(
+      publicationId,
+      attemptId,
+      receipt,
+      'failed',
+    );
   }
 
   private async recordPublicationReceipt(
     publicationId: string,
+    attemptId: string,
     receipt: PublicationReceipt,
     state: 'completed' | 'failed',
   ): Promise<void> {
     await this.database.transaction(async transaction => {
+      const active = await transaction<PublicationRow>('publication')
+        .where({
+          id: publicationId,
+          active_attempt_id: attemptId,
+          state: 'publishing',
+        })
+        .forUpdate()
+        .first();
+      if (!active) {
+        throw new PublicationError(
+          'ConcurrentPublication',
+          `Publication ${publicationId} is owned by a newer attempt.`,
+        );
+      }
       const artifactIds =
         receipt.artifact.status === 'verified'
           ? receipt.artifact.externalArtifactIds ?? []
@@ -400,7 +520,7 @@ export class PostgresWorkIntakeStore {
             adapter_id: result.adapterId,
             target_id: result.targetId,
             external_id: result.externalId,
-            external_key: result.externalId,
+            external_key: result.externalKey ?? null,
             external_url: result.url ?? null,
             artifact_ids: this.jsonDatabaseValue(artifactIds),
             published_sha256: result.canonicalArtifactSha256,
@@ -411,7 +531,7 @@ export class PostgresWorkIntakeStore {
       }
       const now = new Date();
       await transaction<PublicationRow>('publication')
-        .where({ id: publicationId })
+        .where({ id: publicationId, active_attempt_id: attemptId })
         .update({
           state,
           receipt_json: this.jsonDatabaseValue(receipt),
@@ -434,6 +554,37 @@ export class PostgresWorkIntakeStore {
       .where({ proposal_id: proposalId, revision })
       .first();
     return row ? storedRevision(row) : undefined;
+  }
+
+  private async renewPublicationLease(
+    publicationId: string,
+    attemptId: string,
+  ): Promise<boolean> {
+    const now = new Date();
+    const updated = await this.database<PublicationRow>('publication')
+      .where({
+        id: publicationId,
+        active_attempt_id: attemptId,
+        state: 'publishing',
+      })
+      .update({
+        lease_expires_at: new Date(now.getTime() + this.publicationLeaseMs),
+        updated_at: now,
+      });
+    return updated === 1;
+  }
+
+  private requireProposalOwner(
+    proposal: ProposalRow | undefined,
+    actor: string,
+    proposalId: string,
+  ): void {
+    if (!proposal || proposal.created_by !== actor) {
+      throw new PublicationError(
+        'AuthorityViolation',
+        `${actor} is not authorized to change proposal ${proposalId}.`,
+      );
+    }
   }
 
   private jsonDatabaseValue(value: unknown): unknown {

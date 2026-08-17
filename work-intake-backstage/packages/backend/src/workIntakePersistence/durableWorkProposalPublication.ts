@@ -71,7 +71,11 @@ export class DurableWorkProposalPublication implements WorkProposalPublication {
     }
 
     try {
-      const receipt = await this.delegate.publishPrepared(plan);
+      const receipt = await this.store.withPublicationLease(
+        claim.publicationId,
+        claim.attemptId,
+        () => this.delegate.publishPrepared(plan),
+      );
       if (receipt.artifact.sha256 !== plan.artifact.sha256) {
         throw new PublicationError(
           'RevisionRequired',
@@ -79,14 +83,23 @@ export class DurableWorkProposalPublication implements WorkProposalPublication {
         );
       }
       if (receipt.partial) {
-        await this.store.recordPartialPublication(claim.publicationId, receipt);
+        await this.store.recordPartialPublication(
+          claim.publicationId,
+          claim.attemptId,
+          receipt,
+        );
       } else {
-        await this.store.completePublication(claim.publicationId, receipt);
+        await this.store.completePublication(
+          claim.publicationId,
+          claim.attemptId,
+          receipt,
+        );
       }
       return receipt;
     } catch (error) {
       await this.store.failPublication(
         claim.publicationId,
+        claim.attemptId,
         error instanceof Error ? error.message : String(error),
       );
       throw error;

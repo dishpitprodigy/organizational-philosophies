@@ -99,9 +99,14 @@ Before publication, **Save** sends the current structured intake record and its
 missing-evidence inventory to the same authenticated backend. PostgreSQL assigns
 the stable Proposal Lineage identity when needed and creates the next immutable
 revision on every save. Missing evidence returns an Assisted Intake route rather
-than rejecting or discarding the record. Publishing a durably saved form first
+than rejecting or discarding the record. The backend validates the saved record
+and requires a schema-valid reviewable artifact before it permits the Proposal
+Development route; it does not trust the browser's inventory alone. Publishing
+a durably saved form first
 advances it to a new frozen review revision, so the saved history is never
 overwritten.
+The authenticated actor that creates the lineage owns it; other users cannot
+read it or append revisions through the Work Intake service.
 
 1. The frontend verifies that the Jira health check succeeded. If Jira is unavailable, the button remains disabled.
 2. The frontend sends a same-origin message to the embedded form: “Give me the artifact for the state currently on screen.”
@@ -291,7 +296,9 @@ publication identity is the source kind, source id, source revision, and
 Publication Profile. Per-placement journal rows retain fingerprints, mapping
 versions, external ids, URLs, and the last observation used for reconciliation.
 The database constraint is authoritative; Jira labels provide independent
-evidence used to reconcile retries.
+evidence used to reconcile retries. Expiring attempt leases allow repair after
+a process crash, active workers renew their lease, and attempt fencing prevents
+a late worker from changing the new owner's publication row.
 
 ## The commands in `package.json`
 

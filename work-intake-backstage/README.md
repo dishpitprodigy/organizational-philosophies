@@ -277,7 +277,10 @@ records. Before external work, the backend atomically claims the proposal
 revision and profile. After Jira responds, it retains every external identity
 and the complete receipt. A completed retry returns that receipt; a failed
 attempt retains partial results and can repair the same logical publication
-without creating a second one.
+without creating a second one. Publication claims use expiring, fenced attempt
+identifiers: a process crash can be reclaimed, while a late abandoned attempt
+cannot overwrite the repair attempt's result. Healthy workers renew the lease
+while external work is in progress.
 Cross-project delivery dependencies use Jira issue links; candidate delivery
 records are related to—but are not children of—the intake record.
 
@@ -308,6 +311,10 @@ Lineages and immutable Proposal Revisions, Decisions, Authorized Work,
 Deliverables, Outcome Observations, Closure Decisions, Publications, Publication
 Results, and reconciliation journal entries. PostgreSQL triggers reject updates
 and deletes to append-only governance records.
+Jira's immutable issue id and human-readable issue key are stored separately;
+attachment ids returned during publication are retained with the receipt.
+Proposal lineage reads and writes are restricted to the authenticated lineage
+owner in this prototype.
 
 The normal test suite is hermetic. To exercise one disposable JPD Idea against
 the configured Atlassian sandbox, run the focused opt-in test with

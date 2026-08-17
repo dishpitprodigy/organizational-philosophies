@@ -14,7 +14,7 @@ import type {
 } from '../../contracts';
 import { AtlassianTransport, toAdf } from './transport';
 
-type SearchResult = { issues?: Array<{ key: string }> };
+type SearchResult = { issues?: Array<{ id: string; key: string }> };
 
 export type AtlassianTargetTransport = Pick<
   AtlassianTransport,
@@ -154,7 +154,8 @@ export class AtlassianPublicationTarget implements PublicationTarget {
             compatibleLegacy
               ? 'found'
               : 'conflict',
-          externalId: issue.key,
+          externalId: issue.id,
+          externalKey: issue.key,
           url: this.issueUrl(issue.key),
           targetFingerprint: compatibleLegacy
             ? batch.targetFingerprints[record.localId]
@@ -178,7 +179,7 @@ export class AtlassianPublicationTarget implements PublicationTarget {
 
   async apply(batch: TargetBatch): Promise<TargetReceipt> {
     const results: TargetReceipt['results'] = [];
-    const externalIds = new Map<string, string>();
+    const externalKeys = new Map<string, string>();
     for (const record of batch.records) {
       const existing = await this.find(record, batch.binding.target.targetId);
       const parent =
@@ -208,43 +209,47 @@ export class AtlassianPublicationTarget implements PublicationTarget {
         artifactSha256: batch.artifact.sha256,
       };
       let externalId: string;
+      let externalKey: string;
       let action: 'created' | 'reconciled';
       if (existing) {
-        externalId = existing.key;
+        externalId = existing.id;
+        externalKey = existing.key;
         action = 'reconciled';
         await this.options.transport.request(
-          `/issue/${encodeURIComponent(externalId)}`,
+          `/issue/${encodeURIComponent(externalKey)}`,
           {
             method: 'PUT',
             body: { fields },
           },
         );
         await this.options.transport.setIssueProperty(
-          externalId,
+          externalKey,
           PUBLICATION_PROPERTY,
           property,
         );
       } else {
-        const created = await this.options.transport.request<{ key: string }>(
-          '/issue',
-          {
-            method: 'POST',
-            body: {
-              fields,
-              properties: [{ key: PUBLICATION_PROPERTY, value: property }],
-            },
+        const created = await this.options.transport.request<{
+          id: string;
+          key: string;
+        }>('/issue', {
+          method: 'POST',
+          body: {
+            fields,
+            properties: [{ key: PUBLICATION_PROPERTY, value: property }],
           },
-        );
-        externalId = created.key;
+        });
+        externalId = created.id;
+        externalKey = created.key;
         action = 'created';
       }
-      externalIds.set(record.localId, externalId);
+      externalKeys.set(record.localId, externalKey);
       results.push({
         localId: record.localId,
         idempotencyKey: record.idempotencyKey,
         targetFingerprint: batch.targetFingerprints[record.localId],
         externalId,
-        url: this.issueUrl(externalId),
+        externalKey,
+        url: this.issueUrl(externalKey),
         action,
       });
     }
@@ -252,10 +257,10 @@ export class AtlassianPublicationTarget implements PublicationTarget {
     const relations: TargetReceipt['relations'] = [];
     for (const relation of batch.relations) {
       const from =
-        externalIds.get(relation.fromLocalId) ??
+        externalKeys.get(relation.fromLocalId) ??
         (await this.findLocalId(batch, relation.fromLocalId))?.key;
       const to =
-        externalIds.get(relation.toLocalId) ??
+        externalKeys.get(relation.toLocalId) ??
         (await this.findLocalId(batch, relation.toLocalId))?.key;
       if (!from || !to) continue;
       const linked = await this.options.transport.ensureLink({
@@ -275,7 +280,7 @@ export class AtlassianPublicationTarget implements PublicationTarget {
     const label = publicationLabel(record.idempotencyKey);
     const result = (await this.options.transport.search(
       `project = "${projectKey}" AND labels = "${label}"`,
-      ['key'],
+      ['id', 'key'],
     )) as SearchResult;
     if ((result.issues?.length ?? 0) > 1)
       throw new Error(`Multiple Atlassian records use ${label}.`);

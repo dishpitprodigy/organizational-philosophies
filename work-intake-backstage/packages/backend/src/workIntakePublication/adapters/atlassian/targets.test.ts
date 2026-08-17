@@ -62,7 +62,7 @@ function fakeTransport() {
     request: async (path: string, options?: { body?: unknown }) => {
       calls.push({ path, body: options?.body });
       if (path === '/myself') return { accountId: 'account-1' };
-      return path === '/issue' ? { key: 'NWI-10' } : {};
+      return path === '/issue' ? { id: '10010', key: 'NWI-10' } : {};
     },
     setIssueProperty: async () => undefined,
     ensureLink: async () => ({ created: true }),
@@ -93,7 +93,8 @@ describe.each([
     expect(receipt.results).toEqual([
       expect.objectContaining({
         localId: 'proposal',
-        externalId: 'NWI-10',
+        externalId: '10010',
+        externalKey: 'NWI-10',
         action: 'created',
       }),
     ]);

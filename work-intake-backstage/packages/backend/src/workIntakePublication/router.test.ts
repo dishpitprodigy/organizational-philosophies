@@ -207,8 +207,15 @@ describe('work-intake publication router', () => {
 
     await request(fixture.app).get('/proposals/WP-1').expect(200, proposal);
     await request(fixture.app).get('/proposals/WP-1/1').expect(200, revision);
-    expect(store.getProposal).toHaveBeenCalledWith('WP-1');
-    expect(store.getProposalRevision).toHaveBeenCalledWith('WP-1', 1);
+    expect(store.getProposal).toHaveBeenCalledWith(
+      'WP-1',
+      'user:default/avery',
+    );
+    expect(store.getProposalRevision).toHaveBeenCalledWith(
+      'WP-1',
+      1,
+      'user:default/avery',
+    );
   });
 
   it('saves incomplete demand as an attributable Assisted Intake revision', async () => {
@@ -230,7 +237,17 @@ describe('work-intake publication router', () => {
     await request(fixture.app)
       .post('/proposals')
       .send({
-        artifact: { title: 'Investigate metrics lifecycle' },
+        artifact: {
+          form: { id: 'technical-work-proposal', version: 1 },
+          answers: {},
+          demand: {
+            requester: 'Avery',
+            requestingTeam: 'SRE',
+            title: 'Investigate metrics lifecycle',
+          },
+          route: 'assisted-intake',
+          state: {},
+        },
         missingEvidence: saved.missingEvidence,
         changeReason: 'Initial demand capture',
       })
@@ -241,6 +258,134 @@ describe('work-intake publication router', () => {
         changeReason: 'Initial demand capture',
       }),
     );
+  });
+
+  it('rejects an unstructured save instead of trusting its missing-evidence claim', async () => {
+    const store = {
+      getProposal: jest.fn(),
+      getProposalRevision: jest.fn(),
+      saveProposalChange: jest.fn(),
+    };
+    const fixture = testApp({}, store);
+    await request(fixture.app)
+      .post('/proposals')
+      .send({
+        artifact: {},
+        missingEvidence: [],
+        changeReason: 'Bypass Assisted Intake',
+      })
+      .expect(400);
+    expect(store.saveProposalChange).not.toHaveBeenCalled();
+  });
+
+  it('rejects a saved record that contradicts its claimed reviewable artifact', async () => {
+    const store = {
+      getProposal: jest.fn(),
+      getProposalRevision: jest.fn(),
+      saveProposalChange: jest.fn(),
+    };
+    const fixture = testApp({}, store);
+    await request(fixture.app)
+      .post('/proposals')
+      .send({
+        proposalId: 'WP-1',
+        artifact: {
+          form: { id: 'technical-work-proposal', version: 1 },
+          answers: {},
+          demand: {
+            requester: 'Avery',
+            requestingTeam: 'SRE',
+            title: 'A different title',
+          },
+          route: 'proposal-development',
+          state: {},
+        },
+        reviewableArtifact: artifact(),
+        missingEvidence: [],
+        changeReason: 'Contradictory edit',
+      })
+      .expect(400);
+    expect(store.saveProposalChange).not.toHaveBeenCalled();
+  });
+
+  it('assigns a server identity without routing a complete first save to Assisted Intake', async () => {
+    const store = {
+      getProposal: jest.fn(),
+      getProposalRevision: jest.fn(),
+      saveProposalChange: jest.fn().mockImplementation(input => ({
+        proposalId: input.proposalId,
+        revision: 0,
+        intakeRoute: input.missingEvidence.length
+          ? 'assisted-intake'
+          : 'proposal-development',
+        missingEvidence: input.missingEvidence,
+      })),
+    };
+    const fixture = testApp({}, store);
+    const complete = artifact();
+    await request(fixture.app)
+      .post('/proposals')
+      .send({
+        artifact: {
+          form: complete.form,
+          answers: complete.answers,
+          demand: {
+            requester: 'Avery',
+            requestingTeam: 'SRE',
+            title: complete.proposal.title,
+          },
+          route: 'proposal-development',
+          state: {},
+        },
+        reviewableArtifact: complete,
+        missingEvidence: [],
+        changeReason: 'Complete initial capture',
+      })
+      .expect(201)
+      .expect(response => {
+        expect(response.body).toMatchObject({
+          revision: 0,
+          intakeRoute: 'proposal-development',
+          missingEvidence: [],
+        });
+        expect(response.body.proposalId).toMatch(/^WP-\d{4}-[A-F0-9]{8}$/);
+      });
+  });
+
+  it("returns an explicit authorization error for another user's lineage", async () => {
+    const store = {
+      getProposal: jest.fn(),
+      getProposalRevision: jest.fn(),
+      saveProposalChange: jest
+        .fn()
+        .mockRejectedValue(
+          publicationError(
+            'AuthorityViolation',
+            'The actor does not own this lineage.',
+          ),
+        ),
+    };
+    const fixture = testApp({}, store);
+    await request(fixture.app)
+      .post('/proposals')
+      .send({
+        proposalId: 'WP-OTHER',
+        artifact: {
+          form: { id: 'technical-work-proposal', version: 1 },
+          answers: {},
+          demand: { requester: '', requestingTeam: '', title: '' },
+          route: 'assisted-intake',
+          state: {},
+        },
+        missingEvidence: [{ id: 'title', label: 'Title' }],
+        changeReason: 'Unauthorized edit',
+      })
+      .expect(403, {
+        error: {
+          kind: 'AuthorityViolation',
+          message: 'The actor does not own this lineage.',
+        },
+      });
   });
 
   it('returns 404 for an unknown proposal revision', async () => {
@@ -258,6 +403,10 @@ describe('work-intake publication router', () => {
           message: 'Proposal WP-404 revision 9 was not found.',
         },
       });
-    expect(store.getProposalRevision).toHaveBeenCalledWith('WP-404', 9);
+    expect(store.getProposalRevision).toHaveBeenCalledWith(
+      'WP-404',
+      9,
+      'user:default/avery',
+    );
   });
 });

@@ -36,6 +36,7 @@ export function requestCurrentArtifact(
 export type IntakeRecord = {
   proposalId?: string;
   artifact: Record<string, unknown>;
+  reviewableArtifact?: Record<string, unknown>;
   missingEvidence: Array<{ id: string; label: string }>;
   changeReason: string;
 };

@@ -967,6 +967,19 @@ window.addEventListener("message", (event) => {
         ...result.proposalMissing.map((label) => ({ id: `proposal-${label.toLowerCase().replace(/[^a-z0-9]+/g, "-")}`, label })),
         ...result.framingMissing.map((label) => ({ id: `framing-${label.toLowerCase().replace(/[^a-z0-9]+/g, "-")}`, label })),
       ].filter((entry, index, entries) => entries.findIndex((candidate) => candidate.id === entry.id) === index);
+      let reviewableArtifact;
+      if (missingEvidence.length === 0) {
+        try {
+          const reviewableState = structuredClone(state);
+          reviewableState.proposalId ||= "SERVER-ASSIGNED";
+          reviewableState.proposalRevision ??= 0;
+          reviewableState.formAnswers = answers;
+          reviewableState.compiledAnswers = formDefinitions.compileAnswers(formDefinition, answers);
+          reviewableArtifact = domainModel.publicationArtifact(reviewableState);
+        } catch {
+          // The backend treats an omitted artifact as incomplete evidence.
+        }
+      }
       window.parent.postMessage({
         type: "northstar:work-intake:record-response",
         requestId: event.data.requestId,
@@ -979,6 +992,7 @@ window.addEventListener("message", (event) => {
             route: result.disposition,
             state: structuredClone(state),
           },
+          ...(reviewableArtifact ? { reviewableArtifact } : {}),
           missingEvidence,
           changeReason: state.proposalId ? "Saved intake changes" : "Initial demand capture",
         },

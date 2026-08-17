@@ -768,6 +768,7 @@ export class PublicationService implements WorkProposalPublication {
                 targetId: planned.binding.target.targetId,
                 localId: record.localId,
                 externalId: observation.externalId,
+                externalKey: observation.externalKey,
                 url: observation.url,
                 action: 'reused',
                 canonicalArtifactSha256: plan.artifact.sha256,
@@ -826,6 +827,7 @@ export class PublicationService implements WorkProposalPublication {
                   'published',
                 ),
                 externalId: item.externalId,
+                externalKey: item.externalKey,
                 url: item.url,
               });
               results.push({
@@ -834,6 +836,7 @@ export class PublicationService implements WorkProposalPublication {
                 targetId: planned.binding.target.targetId,
                 localId: item.localId,
                 externalId: item.externalId,
+                externalKey: item.externalKey,
                 url: item.url,
                 action: item.action,
                 canonicalArtifactSha256: plan.artifact.sha256,
@@ -858,6 +861,7 @@ export class PublicationService implements WorkProposalPublication {
               adapterId: anchorResult.adapterId,
               targetId: anchorResult.targetId,
               externalId: anchorResult.externalId,
+              externalKey: anchorResult.externalKey,
               url: anchorResult.url,
             };
             artifactReceipt = {
