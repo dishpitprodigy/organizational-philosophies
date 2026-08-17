@@ -588,7 +588,7 @@ export class PostgresWorkIntakeStore {
   }
 
   private jsonDatabaseValue(value: unknown): unknown {
-    return this.database.client.config.client === 'pg'
+    return this.database.client.config.client === 'pg' && !Array.isArray(value)
       ? value
       : JSON.stringify(value);
   }
