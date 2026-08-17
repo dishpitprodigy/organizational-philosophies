@@ -16,6 +16,7 @@
     "test": "backstage-cli repo test",
     "test:jira": "node --test scripts/jira/*.test.mjs",
     "test:decision-tree": "node --test ../work-intake-decision-tree/*.test.js",
+    "test:postgres": "WORK_INTAKE_POSTGRES_INTEGRATION=1 backstage-cli repo test --watch=false --runInBand postgresWorkIntakeStore.postgres.test.ts",
     "jira:bootstrap": "node scripts/jira/bootstrap.mjs",
     "jira:publish:sample": "node scripts/jira/publish.mjs examples/northstar/metrics-work-proposal.json",
     "test:all": "backstage-cli repo test --coverage",

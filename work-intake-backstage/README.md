@@ -300,7 +300,7 @@ instead of creating duplicates.
 ## PostgreSQL persistence
 
 The prototype uses PostgreSQL by default, including local development. Start the
-included PostgreSQL 17 service with `docker compose up -d postgres`; its named
+included PostgreSQL 18 service with `podman compose up -d postgres`; its named
 volume survives container recreation. The checked-in credentials are local-only
 and bind PostgreSQL to `127.0.0.1`. Production continues to read
 `POSTGRES_HOST`, `POSTGRES_PORT`, `POSTGRES_USER`, and `POSTGRES_PASSWORD` from
@@ -320,6 +320,11 @@ The normal test suite is hermetic. To exercise one disposable JPD Idea against
 the configured Atlassian sandbox, run the focused opt-in test with
 `WORK_INTAKE_JPD_SANDBOX=1`; the created Idea is prefixed `[DISPOSABLE]` and may
 be deleted afterward.
+
+Run the retained PostgreSQL integration suite against the local service with
+`./yarn test:postgres`. It creates an isolated schema, applies the production
+migrations, checks immutable lineage and fenced publication behavior, and drops
+only that schema afterward.
 
 ```sh
 WORK_INTAKE_JPD_SANDBOX=1 ./yarn workspace backend test \
