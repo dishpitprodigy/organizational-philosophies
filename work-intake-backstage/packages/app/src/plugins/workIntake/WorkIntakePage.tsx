@@ -5,7 +5,11 @@ import {
 } from '@backstage/core-plugin-api';
 import { Paper, Typography } from '@material-ui/core';
 import { useEffect, useRef, useState } from 'react';
-import { requestCurrentArtifact } from './artifactBridge';
+import {
+  applyProposalIdentity,
+  requestCurrentArtifact,
+  requestCurrentIntakeRecord,
+} from './artifactBridge';
 import {
   PublicationClient,
   PublicationProfile,
@@ -22,6 +26,8 @@ export function WorkIntakePage() {
   const [selectedProfileId, setSelectedProfileId] = useState('');
   const [loading, setLoading] = useState(true);
   const [publishing, setPublishing] = useState(false);
+  const [saving, setSaving] = useState(false);
+  const [saveMessage, setSaveMessage] = useState('');
   const [receipt, setReceipt] = useState<PublicationReceipt | null>(null);
   const [error, setError] = useState('');
   const selectedProfile = profiles.find(
@@ -74,6 +80,35 @@ export function WorkIntakePage() {
       setError(cause instanceof Error ? cause.message : String(cause));
     } finally {
       setPublishing(false);
+    }
+  }
+
+  async function save() {
+    if (!iframe.current) return;
+    setSaving(true);
+    setSaveMessage('');
+    setError('');
+    try {
+      const [baseUrl, record] = await Promise.all([
+        discoveryApi.getBaseUrl(publicationPluginId),
+        requestCurrentIntakeRecord(iframe.current),
+      ]);
+      const saved = await new PublicationClient(
+        baseUrl,
+        fetchApi.fetch,
+      ).saveProposal(record);
+      applyProposalIdentity(iframe.current, saved.proposalId, saved.revision);
+      setSaveMessage(
+        `${saved.proposalId} rev ${saved.revision} saved${
+          saved.intakeRoute === 'assisted-intake'
+            ? ' and routed to Assisted Intake'
+            : ''
+        }.`,
+      );
+    } catch (cause) {
+      setError(cause instanceof Error ? cause.message : String(cause));
+    } finally {
+      setSaving(false);
     }
   }
 
@@ -151,14 +186,20 @@ export function WorkIntakePage() {
               )}
             </>
           ) : null}
+          {saveMessage ? (
+            <Typography variant="body2">{saveMessage}</Typography>
+          ) : null}
           {error ? (
             <Typography color="error" variant="body2">
               {error}
             </Typography>
           ) : null}
         </div>
+        <button disabled={saving || publishing} onClick={save} type="button">
+          {saving ? 'Saving…' : 'Save'}
+        </button>
         <button
-          disabled={!selectedProfile?.available || publishing}
+          disabled={!selectedProfile?.available || publishing || saving}
           onClick={publish}
           style={{
             background: selectedProfile?.available ? '#00695c' : '#9e9e9e',

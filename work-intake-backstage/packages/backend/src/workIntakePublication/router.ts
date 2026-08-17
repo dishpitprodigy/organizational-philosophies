@@ -19,6 +19,17 @@ const publicationRequestSchema = z
   })
   .strict();
 
+const proposalSaveRequestSchema = z
+  .object({
+    proposalId: z.string().min(1).optional(),
+    artifact: z.record(z.unknown()),
+    missingEvidence: z.array(
+      z.object({ id: z.string().min(1), label: z.string().min(1) }).strict(),
+    ),
+    changeReason: z.string().min(1),
+  })
+  .strict();
+
 function errorMessage(error: unknown) {
   return error instanceof Error ? error.message : String(error);
 }
@@ -54,7 +65,10 @@ export function createRouter(options: {
   httpAuth: HttpAuthService;
   publication: WorkProposalPublication;
   logger: LoggerService;
-  store?: Pick<PostgresWorkIntakeStore, 'getProposal' | 'getProposalRevision'>;
+  store?: Pick<
+    PostgresWorkIntakeStore,
+    'getProposal' | 'getProposalRevision' | 'saveProposalChange'
+  >;
 }) {
   const router = Router();
   router.use(express.json({ limit: '1mb' }));
@@ -146,6 +160,34 @@ export function createRouter(options: {
         },
       });
     }
+  });
+  router.post('/proposals', async (req, res) => {
+    const authenticatedActor = await actor(req);
+    const parsed = proposalSaveRequestSchema.safeParse(req.body);
+    if (!parsed.success) {
+      res.status(400).json({
+        error: {
+          kind: 'InvalidArtifact',
+          message:
+            'Expected a structured intake artifact, missing-evidence inventory, and change reason.',
+        },
+      });
+      return;
+    }
+    if (!options.store) {
+      res.status(503).json({
+        error: {
+          kind: 'TargetConfigurationError',
+          message: 'Work Intake persistence is unavailable.',
+        },
+      });
+      return;
+    }
+    const saved = await options.store.saveProposalChange({
+      ...parsed.data,
+      actor: authenticatedActor.principal,
+    });
+    res.status(201).json(saved);
   });
   router.get('/proposals/:id', async (req, res) => {
     await actor(req);

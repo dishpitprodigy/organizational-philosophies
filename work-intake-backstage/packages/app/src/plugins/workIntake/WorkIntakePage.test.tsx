@@ -2,6 +2,8 @@ import { fireEvent, render, screen } from '@testing-library/react';
 
 const mockFetch = jest.fn();
 const mockRequestCurrentArtifact = jest.fn();
+const mockRequestCurrentIntakeRecord = jest.fn();
+const mockApplyProposalIdentity = jest.fn();
 const mockFetchApi = { fetch: mockFetch };
 const mockDiscoveryApi = {
   getBaseUrl: jest
@@ -17,8 +19,12 @@ jest.mock('@backstage/core-plugin-api', () => ({
   },
 }));
 jest.mock('./artifactBridge', () => ({
+  applyProposalIdentity: (...args: unknown[]) =>
+    mockApplyProposalIdentity(...args),
   requestCurrentArtifact: (...args: unknown[]) =>
     mockRequestCurrentArtifact(...args),
+  requestCurrentIntakeRecord: (...args: unknown[]) =>
+    mockRequestCurrentIntakeRecord(...args),
 }));
 
 import { WorkIntakePage } from './WorkIntakePage';
@@ -36,9 +42,18 @@ describe('WorkIntakePage', () => {
   beforeEach(() => {
     mockFetch.mockReset();
     mockRequestCurrentArtifact.mockReset();
+    mockRequestCurrentIntakeRecord.mockReset();
+    mockApplyProposalIdentity.mockReset();
     mockRequestCurrentArtifact.mockResolvedValue({
       schemaVersion: 1,
       proposal: { id: 'WP-2026-0042' },
+    });
+    mockRequestCurrentIntakeRecord.mockResolvedValue({
+      artifact: { title: 'Metrics lifecycle' },
+      missingEvidence: [
+        { id: 'desired-outcome', label: 'Desired operating outcome' },
+      ],
+      changeReason: 'Initial demand capture',
     });
     mockFetch.mockImplementation((url: string) => {
       if (url.endsWith('/profiles')) {
@@ -55,6 +70,16 @@ describe('WorkIntakePage', () => {
             unavailableReason: 'Publication target is unavailable.',
           },
         ]);
+      }
+      if (url.endsWith('/proposals')) {
+        return jsonResponse({
+          proposalId: 'WP-2026-0045',
+          revision: 0,
+          intakeRoute: 'assisted-intake',
+          missingEvidence: [
+            { id: 'desired-outcome', label: 'Desired operating outcome' },
+          ],
+        });
       }
       return jsonResponse({
         profileId: 'jira-work-management',
@@ -122,6 +147,31 @@ describe('WorkIntakePage', () => {
     expect(screen.getByRole('link', { name: 'record-1' })).toHaveAttribute(
       'href',
       'https://example.test/record-1',
+    );
+  });
+
+  it('saves incomplete intake, reports Assisted Intake, and returns the durable identity to the form', async () => {
+    render(<WorkIntakePage />);
+    await screen.findByText('Jira Work Management');
+
+    fireEvent.click(screen.getByRole('button', { name: 'Save' }));
+
+    expect(
+      await screen.findByText(
+        'WP-2026-0045 rev 0 saved and routed to Assisted Intake.',
+      ),
+    ).toBeInTheDocument();
+    expect(mockFetch).toHaveBeenLastCalledWith(
+      'http://localhost:7007/api/work-intake-publication/proposals',
+      expect.objectContaining({
+        method: 'POST',
+        body: expect.stringContaining('Initial demand capture'),
+      }),
+    );
+    expect(mockApplyProposalIdentity).toHaveBeenCalledWith(
+      screen.getByTitle('Northstar Work Intake'),
+      'WP-2026-0045',
+      0,
     );
   });
 });

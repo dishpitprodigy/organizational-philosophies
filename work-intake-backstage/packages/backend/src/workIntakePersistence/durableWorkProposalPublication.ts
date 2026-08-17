@@ -10,7 +10,7 @@ import { PublicationError } from '../workIntakePublication/errors';
 import { PostgresWorkIntakeStore } from './postgresWorkIntakeStore';
 
 type PreparedPublication = WorkProposalPublication & {
-  publishPrepared?: (plan: PublicationPlan) => Promise<PublicationReceipt>;
+  publishPrepared: (plan: PublicationPlan) => Promise<PublicationReceipt>;
 };
 
 export class DurableWorkProposalPublication implements WorkProposalPublication {
@@ -71,9 +71,7 @@ export class DurableWorkProposalPublication implements WorkProposalPublication {
     }
 
     try {
-      const receipt = this.delegate.publishPrepared
-        ? await this.delegate.publishPrepared(plan)
-        : await this.delegate.publish(actor, request);
+      const receipt = await this.delegate.publishPrepared(plan);
       if (receipt.artifact.sha256 !== plan.artifact.sha256) {
         throw new PublicationError(
           'RevisionRequired',
@@ -81,10 +79,7 @@ export class DurableWorkProposalPublication implements WorkProposalPublication {
         );
       }
       if (receipt.partial) {
-        await this.store.failPublication(
-          claim.publicationId,
-          'Publication completed only partially and remains retryable.',
-        );
+        await this.store.recordPartialPublication(claim.publicationId, receipt);
       } else {
         await this.store.completePublication(claim.publicationId, receipt);
       }

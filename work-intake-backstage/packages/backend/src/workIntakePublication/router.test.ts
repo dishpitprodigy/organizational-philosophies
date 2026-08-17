@@ -91,6 +91,7 @@ function testApp(
   store?: {
     getProposal: jest.Mock;
     getProposalRevision: jest.Mock;
+    saveProposalChange?: jest.Mock;
   },
 ) {
   const profiles =
@@ -208,6 +209,38 @@ describe('work-intake publication router', () => {
     await request(fixture.app).get('/proposals/WP-1/1').expect(200, revision);
     expect(store.getProposal).toHaveBeenCalledWith('WP-1');
     expect(store.getProposalRevision).toHaveBeenCalledWith('WP-1', 1);
+  });
+
+  it('saves incomplete demand as an attributable Assisted Intake revision', async () => {
+    const saved = {
+      proposalId: 'WP-2026-0045',
+      revision: 0,
+      intakeRoute: 'assisted-intake',
+      missingEvidence: [
+        { id: 'desired-outcome', label: 'Desired operating outcome' },
+      ],
+    };
+    const store = {
+      getProposal: jest.fn(),
+      getProposalRevision: jest.fn(),
+      saveProposalChange: jest.fn().mockResolvedValue(saved),
+    };
+    const fixture = testApp({}, store);
+
+    await request(fixture.app)
+      .post('/proposals')
+      .send({
+        artifact: { title: 'Investigate metrics lifecycle' },
+        missingEvidence: saved.missingEvidence,
+        changeReason: 'Initial demand capture',
+      })
+      .expect(201, saved);
+    expect(store.saveProposalChange).toHaveBeenCalledWith(
+      expect.objectContaining({
+        actor: 'user:default/avery',
+        changeReason: 'Initial demand capture',
+      }),
+    );
   });
 
   it('returns 404 for an unknown proposal revision', async () => {

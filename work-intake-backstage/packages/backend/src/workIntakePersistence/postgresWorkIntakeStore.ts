@@ -1,9 +1,10 @@
-import { randomUUID } from 'node:crypto';
+import { createHash, randomUUID } from 'node:crypto';
 
 import type { Knex } from 'knex';
 
 import type { PublicationReceipt } from '../workIntakePublication/contracts';
 import { PublicationError } from '../workIntakePublication/errors';
+import { canonicalJson } from '../workIntake/domain/canonicalJson';
 
 export type ProposalRevisionInput = {
   proposalId: string;
@@ -34,6 +35,21 @@ export type StoredProposal = {
   createdAt: string;
   currentRevision: number;
   revisions: StoredProposalRevision[];
+};
+
+export type MissingEvidence = { id: string; label: string };
+
+export type ProposalChangeInput = {
+  proposalId?: string;
+  artifact: Readonly<Record<string, unknown>>;
+  missingEvidence: MissingEvidence[];
+  actor: string;
+  changeReason: string;
+};
+
+export type SavedProposalChange = StoredProposalRevision & {
+  intakeRoute: 'assisted-intake' | 'proposal-development';
+  missingEvidence: MissingEvidence[];
 };
 
 type ProposalRow = {
@@ -107,15 +123,7 @@ function storedRevision(row: ProposalRevisionRow): StoredProposalRevision {
 }
 
 export class PostgresWorkIntakeStore {
-  private readonly publicationAttemptTimeoutMs: number;
-
-  constructor(
-    private readonly database: Knex,
-    options: { publicationAttemptTimeoutMs?: number } = {},
-  ) {
-    this.publicationAttemptTimeoutMs =
-      options.publicationAttemptTimeoutMs ?? 5 * 60 * 1000;
-  }
+  constructor(private readonly database: Knex) {}
 
   async saveProposalRevision(
     input: ProposalRevisionInput,
@@ -182,6 +190,76 @@ export class PostgresWorkIntakeStore {
         input.proposalId,
         input.revision,
       ))!;
+    });
+  }
+
+  async saveProposalChange(
+    input: ProposalChangeInput,
+  ): Promise<SavedProposalChange> {
+    return this.database.transaction(async transaction => {
+      const proposalId =
+        input.proposalId ??
+        `WP-${new Date().getUTCFullYear()}-${randomUUID()
+          .slice(0, 8)
+          .toUpperCase()}`;
+      const now = new Date();
+      await transaction<ProposalRow>('proposal')
+        .insert({ id: proposalId, created_by: input.actor, created_at: now })
+        .onConflict('id')
+        .ignore();
+      await transaction<ProposalRow>('proposal')
+        .where({ id: proposalId })
+        .forUpdate()
+        .first();
+      const latest = await transaction<ProposalRevisionRow>('proposal_revision')
+        .where({ proposal_id: proposalId })
+        .max<{ revision?: number | string | null }>({ revision: 'revision' })
+        .first();
+      const revision =
+        latest?.revision === null || latest?.revision === undefined
+          ? 0
+          : Number(latest.revision) + 1;
+      const intakeRoute = input.missingEvidence.length
+        ? ('assisted-intake' as const)
+        : ('proposal-development' as const);
+      const artifact = {
+        schemaVersion: 1,
+        kind: 'work-intake-record',
+        proposal: { id: proposalId, revision },
+        intake: {
+          route: intakeRoute,
+          missingEvidence: input.missingEvidence,
+        },
+        content: input.artifact,
+      };
+      const artifactSha256 = createHash('sha256')
+        .update(canonicalJson(artifact))
+        .digest('hex');
+      await transaction<ProposalRevisionRow>('proposal_revision').insert({
+        proposal_id: proposalId,
+        revision,
+        artifact_json: this.jsonDatabaseValue(artifact),
+        artifact_sha256: artifactSha256,
+        schema_version: 1,
+        generator_provenance: this.jsonDatabaseValue({
+          name: 'work-intake-backstage',
+          component: 'proposal-save-api',
+          version: '1.0.0',
+        }),
+        changed_by: input.actor,
+        changed_at: now,
+        change_reason: input.changeReason,
+      });
+      const stored = (await this.getProposalRevisionWith(
+        transaction,
+        proposalId,
+        revision,
+      ))!;
+      return {
+        ...stored,
+        intakeRoute,
+        missingEvidence: input.missingEvidence,
+      };
     });
   }
 
@@ -266,15 +344,7 @@ export class PostgresWorkIntakeStore {
         };
       }
       if (existing.state === 'publishing') {
-        const attemptAge =
-          now.getTime() - new Date(existing.updated_at).getTime();
-        if (attemptAge < this.publicationAttemptTimeoutMs) {
-          return { status: 'concurrent' };
-        }
-        await transaction<PublicationRow>('publication')
-          .where({ id: existing.id })
-          .update({ updated_at: now, last_error: null });
-        return { status: 'claimed', publicationId: existing.id };
+        return { status: 'concurrent' };
       }
 
       await transaction<PublicationRow>('publication')
@@ -298,7 +368,26 @@ export class PostgresWorkIntakeStore {
     publicationId: string,
     receipt: PublicationReceipt,
   ): Promise<void> {
+    await this.recordPublicationReceipt(publicationId, receipt, 'completed');
+  }
+
+  async recordPartialPublication(
+    publicationId: string,
+    receipt: PublicationReceipt,
+  ): Promise<void> {
+    await this.recordPublicationReceipt(publicationId, receipt, 'failed');
+  }
+
+  private async recordPublicationReceipt(
+    publicationId: string,
+    receipt: PublicationReceipt,
+    state: 'completed' | 'failed',
+  ): Promise<void> {
     await this.database.transaction(async transaction => {
+      const artifactIds =
+        receipt.artifact.status === 'verified'
+          ? receipt.artifact.externalArtifactIds ?? []
+          : [];
       await transaction('publication_result')
         .where({ publication_id: publicationId })
         .delete();
@@ -313,9 +402,7 @@ export class PostgresWorkIntakeStore {
             external_id: result.externalId,
             external_key: result.externalId,
             external_url: result.url ?? null,
-            artifact_ids: this.jsonDatabaseValue({
-              canonical: receipt.artifact,
-            }),
+            artifact_ids: this.jsonDatabaseValue(artifactIds),
             published_sha256: result.canonicalArtifactSha256,
             action: result.action,
             state: 'published',
@@ -326,11 +413,14 @@ export class PostgresWorkIntakeStore {
       await transaction<PublicationRow>('publication')
         .where({ id: publicationId })
         .update({
-          state: 'completed',
+          state,
           receipt_json: this.jsonDatabaseValue(receipt),
-          last_error: null,
+          last_error:
+            state === 'failed'
+              ? 'Publication completed only partially and remains retryable.'
+              : null,
           updated_at: now,
-          completed_at: now,
+          completed_at: state === 'completed' ? now : null,
         });
     });
   }

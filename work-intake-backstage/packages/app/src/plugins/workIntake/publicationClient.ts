@@ -15,6 +15,13 @@ export type PublicationReceipt = {
   retryable: boolean;
 };
 
+export type SavedProposalChange = {
+  proposalId: string;
+  revision: number;
+  intakeRoute: 'assisted-intake' | 'proposal-development';
+  missingEvidence: Array<{ id: string; label: string }>;
+};
+
 type Fetch = (
   input: RequestInfo | URL,
   init?: RequestInit,
@@ -50,5 +57,18 @@ export class PublicationClient {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ profileId, artifact }),
     }).then(response => responseJson<PublicationReceipt>(response));
+  }
+
+  saveProposal(record: {
+    proposalId?: string;
+    artifact: Record<string, unknown>;
+    missingEvidence: Array<{ id: string; label: string }>;
+    changeReason: string;
+  }): Promise<SavedProposalChange> {
+    return this.fetch(`${this.baseUrl}/proposals`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(record),
+    }).then(response => responseJson<SavedProposalChange>(response));
   }
 }

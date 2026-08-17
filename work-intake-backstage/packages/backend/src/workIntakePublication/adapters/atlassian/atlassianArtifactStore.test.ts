@@ -30,6 +30,7 @@ describe('AtlassianArtifactStore', () => {
       sha256: artifact.sha256,
       filename: artifact.filename,
       locator: 'https://northstar.example/attachment/10001',
+      externalArtifactIds: ['10001'],
     });
     expect(transport.uploadAttachment).toHaveBeenCalledWith(
       'MDP-42',
@@ -53,6 +54,7 @@ describe('AtlassianArtifactStore', () => {
     const store = new AtlassianArtifactStore({ transport });
 
     const reference = await store.persist(artifact, anchor);
+    expect(reference.externalArtifactIds).toEqual(['10001']);
     await expect(store.verify(reference)).resolves.toBeUndefined();
     expect(transport.uploadAttachment).not.toHaveBeenCalled();
     expect(transport.download).toHaveBeenCalledWith(reference.locator);

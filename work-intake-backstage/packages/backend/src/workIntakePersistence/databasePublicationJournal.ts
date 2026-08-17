@@ -25,6 +25,28 @@ type JournalRow = {
   last_observation?: JournalEntry['lastObservation'] | string | null;
 };
 
+const journalIdentityColumns = [
+  'profile_id',
+  'placement_id',
+  'adapter_id',
+  'target_id',
+  'proposal_id',
+  'proposal_revision',
+  'local_id',
+] as const;
+
+function requireMatchingFingerprint(
+  existing: JournalRow | undefined,
+  entry: JournalEntry,
+) {
+  if (existing?.target_fingerprint !== entry.targetFingerprint) {
+    throw new PublicationError(
+      'RevisionRequired',
+      `${entry.localId} changed without a proposal revision increment.`,
+    );
+  }
+}
+
 function keyWhere(key: JournalKey) {
   return {
     profile_id: key.profileId,
@@ -147,27 +169,14 @@ export class DatabasePublicationJournal implements PublicationJournal {
       for (const entry of entries) {
         await transaction<JournalRow>('publication_journal_entry')
           .insert(toRow(entry, this.client))
-          .onConflict([
-            'profile_id',
-            'placement_id',
-            'adapter_id',
-            'target_id',
-            'proposal_id',
-            'proposal_revision',
-            'local_id',
-          ])
+          .onConflict([...journalIdentityColumns])
           .ignore();
         const existing = await transaction<JournalRow>(
           'publication_journal_entry',
         )
           .where(keyWhere(entry))
           .first();
-        if (existing?.target_fingerprint !== entry.targetFingerprint) {
-          throw new PublicationError(
-            'RevisionRequired',
-            `${entry.localId} changed without a proposal revision increment.`,
-          );
-        }
+        requireMatchingFingerprint(existing, entry);
       }
     });
   }
@@ -180,26 +189,10 @@ export class DatabasePublicationJournal implements PublicationJournal {
         )
           .where(keyWhere(entry))
           .first();
-        if (
-          existing &&
-          existing.target_fingerprint !== entry.targetFingerprint
-        ) {
-          throw new PublicationError(
-            'RevisionRequired',
-            `${entry.localId} changed without a proposal revision increment.`,
-          );
-        }
+        if (existing) requireMatchingFingerprint(existing, entry);
         await transaction<JournalRow>('publication_journal_entry')
           .insert(toRow(entry, this.client))
-          .onConflict([
-            'profile_id',
-            'placement_id',
-            'adapter_id',
-            'target_id',
-            'proposal_id',
-            'proposal_revision',
-            'local_id',
-          ])
+          .onConflict([...journalIdentityColumns])
           .merge(toRow(entry, this.client));
       }
     });

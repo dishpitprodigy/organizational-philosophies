@@ -32,6 +32,7 @@ export class AtlassianArtifactStore implements ArtifactStore {
         sha256: artifact.sha256,
         filename: artifact.filename,
         locator,
+        externalArtifactIds: [existing.id],
       };
       await this.verifyContent(reference, artifact.content);
       return reference;
@@ -60,6 +61,7 @@ export class AtlassianArtifactStore implements ArtifactStore {
         `${
           this.options.transport.baseUrl
         }/rest/api/3/attachment/content/${encodeURIComponent(created.id)}`,
+      externalArtifactIds: [created.id],
     };
   }
 

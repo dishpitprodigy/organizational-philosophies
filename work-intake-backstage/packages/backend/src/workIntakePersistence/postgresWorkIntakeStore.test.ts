@@ -115,6 +115,44 @@ describe('PostgresWorkIntakeStore proposal lineage', () => {
       }),
     ).rejects.toMatchObject({ kind: 'RevisionRequired' });
   });
+
+  it('creates a new revision for every ordinary save and routes missing evidence to Assisted Intake', async () => {
+    const first = await store.saveProposalChange({
+      artifact: { title: 'Investigate metrics lifecycle' },
+      missingEvidence: [
+        { id: 'desired-outcome', label: 'Desired operating outcome' },
+      ],
+      actor: 'user:default/avery',
+      changeReason: 'Initial demand capture',
+    });
+    const second = await store.saveProposalChange({
+      proposalId: first.proposalId,
+      artifact: {
+        title: 'Investigate metrics lifecycle',
+        desiredOutcome: 'Select a supported capability',
+      },
+      missingEvidence: [],
+      actor: 'user:default/avery',
+      changeReason: 'Added outcome evidence',
+    });
+
+    expect(first).toMatchObject({
+      revision: 0,
+      intakeRoute: 'assisted-intake',
+      missingEvidence: [
+        { id: 'desired-outcome', label: 'Desired operating outcome' },
+      ],
+    });
+    expect(second).toMatchObject({
+      proposalId: first.proposalId,
+      revision: 1,
+      intakeRoute: 'proposal-development',
+      missingEvidence: [],
+    });
+    expect((await store.getProposal(first.proposalId))?.revisions).toHaveLength(
+      2,
+    );
+  });
 });
 
 describe('PostgresWorkIntakeStore publication claims', () => {
@@ -206,25 +244,5 @@ describe('PostgresWorkIntakeStore publication claims', () => {
         state: 'published',
       },
     ]);
-  });
-
-  it('reclaims an abandoned publication attempt for repair', async () => {
-    const input = {
-      sourceKind: 'proposal-revision' as const,
-      sourceId: 'WP-2026-0043',
-      sourceRevision: 1,
-      publicationProfileId: 'jira-work-management',
-      sourceSha256: 'a'.repeat(64),
-    };
-    const first = await store.claimPublication(input);
-    if (first.status !== 'claimed') throw new Error('Expected claim');
-    await database('publication')
-      .where({ id: first.publicationId })
-      .update({ updated_at: new Date(0) });
-
-    await expect(store.claimPublication(input)).resolves.toEqual({
-      status: 'claimed',
-      publicationId: first.publicationId,
-    });
   });
 });

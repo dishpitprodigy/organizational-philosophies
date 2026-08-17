@@ -107,6 +107,7 @@ export type CanonicalArtifactReference = {
   sha256: string;
   locator: string;
   filename: string;
+  externalArtifactIds?: string[];
 };
 
 export type PublicationBatch = {

@@ -950,9 +950,52 @@ document.addEventListener("keydown", (event) => {
 
 window.addEventListener("message", (event) => {
   if (event.source !== window.parent || event.origin !== window.location.origin) return;
+  if (event.data?.type === "northstar:work-intake:proposal-identity") {
+    state.proposalId = event.data.proposalId;
+    state.proposalRevision = Number(event.data.revision);
+    state.durablySavedRevision = Number(event.data.revision);
+    render();
+    return;
+  }
+  if (event.data?.type === "northstar:work-intake:record-request") {
+    try {
+      const answers = formDefinitions.collectAnswers(formDefinition, { ...state, ...state.guided });
+      const missing = formDefinitions.validateAnswers(formDefinition, answers);
+      const result = evaluate();
+      const missingEvidence = [
+        ...missing.map((entry) => ({ id: entry.id, label: entry.label })),
+        ...result.proposalMissing.map((label) => ({ id: `proposal-${label.toLowerCase().replace(/[^a-z0-9]+/g, "-")}`, label })),
+        ...result.framingMissing.map((label) => ({ id: `framing-${label.toLowerCase().replace(/[^a-z0-9]+/g, "-")}`, label })),
+      ].filter((entry, index, entries) => entries.findIndex((candidate) => candidate.id === entry.id) === index);
+      window.parent.postMessage({
+        type: "northstar:work-intake:record-response",
+        requestId: event.data.requestId,
+        record: {
+          ...(state.proposalId ? { proposalId: state.proposalId } : {}),
+          artifact: {
+            form: state.form,
+            answers,
+            demand: { requester: state.requester, requestingTeam: state.requestingTeam, title: state.title },
+            route: result.disposition,
+            state: structuredClone(state),
+          },
+          missingEvidence,
+          changeReason: state.proposalId ? "Saved intake changes" : "Initial demand capture",
+        },
+      }, event.origin);
+    } catch (error) {
+      window.parent.postMessage({
+        type: "northstar:work-intake:record-response",
+        requestId: event.data.requestId,
+        error: error instanceof Error ? error.message : String(error),
+      }, event.origin);
+    }
+    return;
+  }
   if (event.data?.type !== "northstar:work-intake:artifact-request") return;
 
   try {
+    if (event.data.advanceSavedRevision && Number(state.durablySavedRevision) === Number(state.proposalRevision)) domainModel.beginNewRevision(state);
     state.formAnswers = formDefinitions.collectAnswers(formDefinition, { ...state, ...state.guided });
     const missing = formDefinitions.validateAnswers(formDefinition, state.formAnswers);
     if (missing.length) {

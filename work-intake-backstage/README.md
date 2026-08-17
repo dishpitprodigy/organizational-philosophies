@@ -38,7 +38,9 @@ Backstage exposes the decision-tree prototype at
 The page embeds the existing `work-intake-decision-tree` interface
 inside the Backstage shell. Its native toolbar loads the publication profiles
 available to the signed-in user and provides one destination-neutral
-**Publish** action. Select a scenario in the embedded
+**Publish** action. **Save** records the current state as the next immutable
+Proposal Revision; incomplete evidence returns the saved revision and its
+missing-evidence inventory through Assisted Intake. Select a scenario in the embedded
 prototype, inspect or edit it, and publish when its route is **Work Proposal —
 Ready for Ordered Review**.
 
@@ -180,6 +182,7 @@ The generic backend API is:
 GET  /api/work-intake-publication/profiles
 POST /api/work-intake-publication/preview
 POST /api/work-intake-publication/publish
+POST /api/work-intake-publication/proposals
 GET  /api/work-intake-publication/proposals/:id
 GET  /api/work-intake-publication/proposals/:id/:revision
 ```
@@ -273,7 +276,8 @@ claim, normalized Publication Results, and per-projection reconciliation
 records. Before external work, the backend atomically claims the proposal
 revision and profile. After Jira responds, it retains every external identity
 and the complete receipt. A completed retry returns that receipt; a failed
-attempt can repair the same logical publication without creating a second one.
+attempt retains partial results and can repair the same logical publication
+without creating a second one.
 Cross-project delivery dependencies use Jira issue links; candidate delivery
 records are related to—but are not children of—the intake record.
 

@@ -2,7 +2,7 @@
 
 ## Executive summary
 
-The form describes proposed work. Backstage decides where that proposal belongs. Jira stores the resulting records. Those are three different jobs, and the prototype keeps them separate so a requester cannot create authority merely by filling in a form.
+The form describes proposed work. PostgreSQL retains each deliberate save and routes incomplete evidence to Assisted Intake. Backstage decides where a reviewable proposal belongs. Jira stores the resulting projections. Those are different jobs, and the prototype keeps them separate so a requester cannot create authority merely by filling in a form.
 
 When someone presses **Publish to Jira**, the browser asks the embedded intake form for its current Work Proposal. The browser sends that proposal to an authenticated Backstage backend plugin. The backend reads the Backstage catalog again to determine affected systems, dependencies, owning teams, reviewers, and Jira projects. It does not trust the browser to supply those decisions.
 
@@ -94,6 +94,14 @@ Backstage catalog      Jira Cloud
 The direction of trust matters: the publisher accepts proposal facts from the form, but it accepts organizational ownership and routing only from the Backstage catalog.
 
 ## What happens when someone presses Publish to Jira
+
+Before publication, **Save** sends the current structured intake record and its
+missing-evidence inventory to the same authenticated backend. PostgreSQL assigns
+the stable Proposal Lineage identity when needed and creates the next immutable
+revision on every save. Missing evidence returns an Assisted Intake route rather
+than rejecting or discarding the record. Publishing a durably saved form first
+advances it to a new frozen review revision, so the saved history is never
+overwritten.
 
 1. The frontend verifies that the Jira health check succeeded. If Jira is unavailable, the button remains disabled.
 2. The frontend sends a same-origin message to the embedded form: “Give me the artifact for the state currently on screen.”
