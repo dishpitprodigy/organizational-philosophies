@@ -23,7 +23,7 @@ source descriptors are under `examples/northstar/`.
 To start the app, run:
 
 ```sh
-docker compose up -d postgres
+podman compose up -d postgres
 ./yarn install
 ./yarn start
 ```
@@ -70,7 +70,7 @@ On another machine with Node.js 22 or 24 and the same repository checkout:
 
 ```sh
 cd work-intake-backstage
-docker compose up -d postgres
+podman compose up -d postgres
 ./yarn install
 chmod 600 ~/.atlassian.env
 ./yarn jira:bootstrap
