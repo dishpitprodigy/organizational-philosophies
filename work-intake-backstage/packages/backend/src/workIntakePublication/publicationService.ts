@@ -640,6 +640,10 @@ export class PublicationService implements WorkProposalPublication {
     actor: AuthenticatedActor,
     request: PublicationRequest,
   ): Promise<PublicationReceipt> {
+    return this.publishPrepared(await this.preview(actor, request));
+  }
+
+  async publishPrepared(plan: PublicationPlan): Promise<PublicationReceipt> {
     const journal = this.options.journal;
     const artifactStore = this.options.artifactStore;
     if (!journal || !artifactStore) {
@@ -648,7 +652,6 @@ export class PublicationService implements WorkProposalPublication {
         'Publication journal and artifact store are not configured.',
       );
     }
-    const plan = await this.preview(actor, request);
     const profile = this.options.profiles.find(
       item => item.id === plan.profileId,
     )!;

@@ -8,7 +8,7 @@ When someone presses **Publish to Jira**, the browser asks the embedded intake f
 
 The publisher first builds a plan. A normal Reviewable Work Proposal produces one proposal record and its required review records in the `NWI` Jira project. Candidate Discovery, Initiative, and Epic records remain candidates unless the artifact also contains the Authorized Work Proposal, Planning Interval, Acceptance Authority, and Capacity Acceptances required to create delivery work. Completing intake does not silently commit another team's capacity.
 
-Every Jira record receives a stable publication label derived from the proposal identifier, proposal revision, and local record identifier. A local ledger records whether each publication is being created or has been published. On retry, the publisher reuses or reconciles the same Jira issue; if it cannot tell whether an earlier create succeeded, it stops instead of risking a duplicate.
+Every Jira record receives a stable publication label derived from the proposal identifier, proposal revision, and local record identifier. PostgreSQL records whether each publication is being created or has been published, together with the canonical revision and complete receipt. On retry, the publisher reuses or reconciles the same Jira issue; if it cannot tell whether an earlier create succeeded, it stops instead of risking a duplicate.
 
 The deployment scripts solve a separate problem: they run Backstage as a user service, keep ports 3000 and 7007 on loopback, and expose one nginx HTTPS endpoint to the local network. Port 80 performs a catch-all redirect to HTTPS. The certificate is self-signed because this is a transferable internal demonstration, not a public service.
 
@@ -23,16 +23,16 @@ The two work-intake plugins are local to the applications that run them:
 
 They are called plugins because Backstage loads them through its frontend and backend plugin systems.
 
-| Piece              | Its one job                                                                               |
-| ------------------ | ----------------------------------------------------------------------------------------- |
-| Intake form        | Collect and structure facts about proposed work.                                          |
-| Frontend plugin    | Show the form and provide the deliberate Publish button.                                  |
-| Backend plugin     | Guard the server-side publication boundary.                                               |
-| Backstage catalog  | State which systems depend on which systems, who owns them, and where their work belongs. |
-| Jira scripts       | Convert an accepted artifact and catalog structure into a repeatable publication plan.    |
-| Publication ledger | Remember what was already created and stop unsafe retries.                                |
-| Jira               | Store visible projections of proposals, reviews, and properly authorized delivery work.   |
-| nginx and systemd  | Keep the demonstration running and expose it safely enough for a local network.           |
+| Piece                | Its one job                                                                               |
+| -------------------- | ----------------------------------------------------------------------------------------- |
+| Intake form          | Collect and structure facts about proposed work.                                          |
+| Frontend plugin      | Show the form and provide the deliberate Publish button.                                  |
+| Backend plugin       | Guard the server-side publication boundary.                                               |
+| Backstage catalog    | State which systems depend on which systems, who owns them, and where their work belongs. |
+| Jira scripts         | Convert an accepted artifact and catalog structure into a repeatable publication plan.    |
+| Work Intake database | Retain canonical revisions, publication claims, receipts, and reconciliation state.       |
+| Jira                 | Store visible projections of proposals, reviews, and properly authorized delivery work.   |
+| nginx and systemd    | Keep the demonstration running and expose it safely enough for a local network.           |
 
 ## How the form definition and artifact fit together
 
@@ -62,9 +62,8 @@ records. No later component parses the rendered paragraph to recover them.
 
 `packages/backend/src/workIntake/domain/artifactSchema.ts` is the backend's
 structural entrance check. `canonicalJson.ts` supplies deterministic JSON and a
-SHA-256 content identity for the next publication phase. Jira does not yet store
-that exact JSON or hash durably; that is the next implementation boundary, not a
-capability implied by these files.
+SHA-256 content identity. PostgreSQL retains that canonical JSON and hash before
+external publication; Jira then receives a hashed projection and attachment.
 
 ## The whole system in one picture
 
@@ -83,9 +82,9 @@ Backstage frontend plugin
    v
 Backstage backend plugin
    |
-   | temporary JSON file; invokes publisher
+   | canonical revision + atomic publication claim
    v
-Jira publication scripts
+Publication Module
    |                    |
    | reads structure    | creates/reuses records
    v                    v
@@ -101,11 +100,11 @@ The direction of trust matters: the publisher accepts proposal facts from the fo
 3. The form evaluates its own readiness. An incomplete draft returns an error instead of an artifact that can be published.
 4. The frontend sends the artifact to the backend plugin using Backstage's authenticated fetch client.
 5. The backend verifies that the caller is an authenticated Backstage user and that the request has the minimum publication shape.
-6. The backend writes the artifact to an owner-only temporary file and invokes `publish.mjs --apply --json` as a child process. It deletes the temporary file after success; after failure it retains an owner-only diagnostic copy and returns that path with the error.
-7. `publish.mjs` authenticates to the local Backstage catalog, follows every affected system's dependency closure, finds the owning Groups, and rebuilds the ordered review route.
+6. The backend resolves catalog-owned facts, stores the exact canonical Proposal Revision in PostgreSQL, and atomically claims publication for that revision and profile.
+7. The in-process Publication Module follows every affected system's dependency closure, finds the owning Groups, and rebuilds the ordered review route.
 8. The planner converts the routed artifact into Jira issue projections and relationship projections. This remains a plan until the publisher reaches the apply stage.
-9. The publication ledger locks publication so two clicks cannot publish concurrently. For each projection, it reuses a known issue, reconciles an existing matching issue, creates a missing issue, or stops when the previous result is indeterminate.
-10. The backend returns the Jira issue keys to the page. The page reports what was published; it does not reinterpret the result as delivery authorization.
+9. PostgreSQL constraints and an advisory lock stop duplicate concurrent publication. For each projection, the Module reuses a known issue, reconciles an existing matching issue, creates a missing issue, or stops when the previous result is indeterminate.
+10. The backend stores the complete receipt and returns it to the page. A completed retry returns the same receipt; the page does not reinterpret the result as delivery authorization.
 
 ## The frontend plugin
 
@@ -277,26 +276,14 @@ The clients file contains the HTTP mechanics:
 
 Every non-success HTTP response becomes an error containing the operation and returned detail. The callers decide whether that error is safe to retry.
 
-### `scripts/jira/ledger.mjs`
+### PostgreSQL publication journal
 
-The ledger prevents duplicate or conflicting publication.
-
-Its default location is:
-
-```text
-~/.local/state/work-intake-backstage/jira-publications.json
-```
-
-Before creating an issue, the publisher records a `creating` reservation. After Jira returns the issue key, it records `published`. Each record also carries a fingerprint of the projected project, type, parent, summary, description, and labels.
-
-On a later run:
-
-- a matching published record is reused;
-- a matching Jira issue missing from the ledger is reconciled into it;
-- changed content with the same proposal revision is rejected; and
-- an unresolved `creating` reservation stops publication rather than guessing whether Jira created the issue.
-
-The ledger uses an owner-only lock file so two publishers cannot operate concurrently. Writes use a temporary file followed by rename so a partial write does not replace the last complete state.
+The backend database prevents duplicate or conflicting publication. The unique
+publication identity is the source kind, source id, source revision, and
+Publication Profile. Per-placement journal rows retain fingerprints, mapping
+versions, external ids, URLs, and the last observation used for reconciliation.
+The database constraint is authoritative; Jira labels provide independent
+evidence used to reconcile retries.
 
 ## The commands in `package.json`
 
@@ -313,7 +300,7 @@ The `scripts` block gives memorable names to commands implemented elsewhere. The
 | `./yarn clean`               | Removes Backstage-generated build output and caches.                                                              |
 | `./yarn test`                | Runs the normal Backstage unit-test command.                                                                      |
 | `./yarn test:all`            | Runs Backstage unit tests with coverage.                                                                          |
-| `./yarn test:jira`           | Runs the Jira client, planning, and ledger tests.                                                                 |
+| `./yarn test:jira`           | Runs the Jira client and planning tests.                                                                          |
 | `./yarn test:decision-tree`  | Runs the standalone intake model tests.                                                                           |
 | `./yarn test:e2e`            | Runs Playwright against the assembled browser application.                                                        |
 | `./yarn jira:bootstrap`      | Runs `bootstrap.mjs`; it remains a dry run unless `--apply` is appended.                                          |

@@ -1,12 +1,13 @@
 import {
   coreServices,
   createBackendPlugin,
+  resolvePackagePath,
 } from '@backstage/backend-plugin-api';
 import { catalogServiceRef } from '@backstage/plugin-catalog-node';
 
 import type { WorkProposalPublication } from './contracts';
 import { BackstageCatalogPublicationResolver } from './adapters/catalog/backstageCatalogResolver';
-import { getProductionPublication } from './factory';
+import { initializeProductionPublication } from './factory';
 import { loadAtlassianEnvironment } from './environment';
 import { createRouter } from './router';
 
@@ -39,11 +40,20 @@ const workIntakePublicationPlugin = createBackendPlugin({
         auth: coreServices.auth,
         catalog: catalogServiceRef,
         config: coreServices.rootConfig,
+        database: coreServices.database,
         httpAuth: coreServices.httpAuth,
         httpRouter: coreServices.httpRouter,
         logger: coreServices.logger,
       },
-      async init({ auth, catalog, config, httpAuth, httpRouter, logger }) {
+      async init({
+        auth,
+        catalog,
+        config,
+        database,
+        httpAuth,
+        httpRouter,
+        logger,
+      }) {
         loadAtlassianEnvironment();
         const baseUrl =
           config.getOptionalString('workIntakePublication.atlassian.baseUrl') ??
@@ -61,13 +71,20 @@ const workIntakePublicationPlugin = createBackendPlugin({
             return response.items;
           },
         );
-        const publication = getProductionPublication({
+        const client = await database.getClient();
+        if (!database.migrations?.skip) {
+          await client.migrate.latest({
+            directory: resolvePackagePath('backend', 'migrations'),
+          });
+        }
+        const { publication, store } = initializeProductionPublication({
           catalog: catalogResolver,
+          database: client,
           ...(baseUrl && email && token
             ? { atlassian: { baseUrl, email, token } }
             : {}),
         });
-        httpRouter.use(createRouter({ httpAuth, publication, logger }));
+        httpRouter.use(createRouter({ httpAuth, publication, logger, store }));
       },
     });
   },

@@ -86,7 +86,13 @@ function artifact() {
   };
 }
 
-function testApp(publication: Partial<WorkProposalPublication> = {}) {
+function testApp(
+  publication: Partial<WorkProposalPublication> = {},
+  store?: {
+    getProposal: jest.Mock;
+    getProposalRevision: jest.Mock;
+  },
+) {
   const profiles =
     publication.profiles ??
     jest
@@ -110,6 +116,7 @@ function testApp(publication: Partial<WorkProposalPublication> = {}) {
       httpAuth: { credentials } as never,
       publication: { profiles, preview, publish },
       logger: logger as never,
+      store: store as never,
     }),
   );
   return { app, profiles, preview, publish, credentials, logger };
@@ -178,5 +185,46 @@ describe('work-intake publication router', () => {
         },
       });
     expect(fixture.logger.error).toHaveBeenCalled();
+  });
+
+  it('returns proposal lineage and an exact immutable revision', async () => {
+    const revision = {
+      proposalId: 'WP-1',
+      revision: 1,
+      artifact: artifact(),
+    };
+    const proposal = {
+      id: 'WP-1',
+      currentRevision: 1,
+      revisions: [revision],
+    };
+    const store = {
+      getProposal: jest.fn().mockResolvedValue(proposal),
+      getProposalRevision: jest.fn().mockResolvedValue(revision),
+    };
+    const fixture = testApp({}, store);
+
+    await request(fixture.app).get('/proposals/WP-1').expect(200, proposal);
+    await request(fixture.app).get('/proposals/WP-1/1').expect(200, revision);
+    expect(store.getProposal).toHaveBeenCalledWith('WP-1');
+    expect(store.getProposalRevision).toHaveBeenCalledWith('WP-1', 1);
+  });
+
+  it('returns 404 for an unknown proposal revision', async () => {
+    const store = {
+      getProposal: jest.fn().mockResolvedValue(undefined),
+      getProposalRevision: jest.fn().mockResolvedValue(undefined),
+    };
+    const fixture = testApp({}, store);
+
+    await request(fixture.app)
+      .get('/proposals/WP-404/9')
+      .expect(404, {
+        error: {
+          kind: 'NotFound',
+          message: 'Proposal WP-404 revision 9 was not found.',
+        },
+      });
+    expect(store.getProposalRevision).toHaveBeenCalledWith('WP-404', 9);
   });
 });

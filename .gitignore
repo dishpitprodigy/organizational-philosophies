@@ -2,6 +2,7 @@
 context_artifacts/
 0.*
 CONTEXT.md
+!work-intake-backstage/CONTEXT.md
 .claude/worktrees/
 __pycache__/
 *.py[cod]

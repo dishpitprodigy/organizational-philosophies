@@ -1,7 +1,10 @@
-import { homedir } from 'node:os';
-import { join } from 'node:path';
+import type { Knex } from 'knex';
 
-import type { ArtifactStore, PublicationTarget } from './contracts';
+import type {
+  ArtifactStore,
+  PublicationTarget,
+  WorkProposalPublication,
+} from './contracts';
 import {
   jiraWorkManagementProfile,
   mixedAtlassianProfile,
@@ -9,12 +12,14 @@ import {
 } from './fixtures/profiles';
 import type { CatalogPublicationResolver } from './publicationService';
 import { PublicationService } from './publicationService';
-import { FilePublicationJournal } from './journal/journal';
 import { AtlassianTransport } from './adapters/atlassian/transport';
 import { AtlassianArtifactStore } from './adapters/atlassian/atlassianArtifactStore';
 import { JiraTarget } from './adapters/atlassian/jiraTarget';
 import { JpdTarget } from './adapters/atlassian/jpdTarget';
 import { PublicationError } from './errors';
+import { DatabasePublicationJournal } from '../workIntakePersistence/databasePublicationJournal';
+import { DurableWorkProposalPublication } from '../workIntakePersistence/durableWorkProposalPublication';
+import { PostgresWorkIntakeStore } from '../workIntakePersistence/postgresWorkIntakeStore';
 
 class UnavailableTarget implements PublicationTarget {
   constructor(readonly id: string, private readonly reason: string) {}
@@ -41,8 +46,8 @@ class UnavailableArtifactStore implements ArtifactStore {
 
 export function createProductionPublication(options: {
   catalog: CatalogPublicationResolver;
+  database: Knex;
   atlassian?: { baseUrl: string; email: string; token: string };
-  journalPath?: string;
 }) {
   let artifactStore: ArtifactStore;
   let targets: Map<string, PublicationTarget>;
@@ -61,36 +66,58 @@ export function createProductionPublication(options: {
       ['jpd', new UnavailableTarget('jpd', reason)],
     ]);
   }
-  return new PublicationService({
+  const publication = new PublicationService({
     profiles: [jiraWorkManagementProfile, mixedAtlassianProfile],
     targetBindings,
     targets,
     catalog: options.catalog,
     resolveConfig: () => ({}),
-    journal: new FilePublicationJournal(
-      options.journalPath ??
-        process.env.WORK_INTAKE_PUBLICATION_JOURNAL ??
-        process.env.JIRA_PUBLICATION_LEDGER ??
-        join(
-          homedir(),
-          '.local',
-          'state',
-          'work-intake-backstage',
-          'jira-publications.json',
-        ),
-    ),
+    journal: new DatabasePublicationJournal(options.database),
     artifactStore,
   });
+  const store = new PostgresWorkIntakeStore(options.database);
+  return {
+    publication: new DurableWorkProposalPublication({
+      delegate: publication,
+      store,
+      generatorProvenance: {
+        name: 'work-intake-backstage',
+        component: 'backend',
+        version: '1.0.0',
+      },
+    }),
+    store,
+  };
 }
 
-let sharedProductionPublication:
-  | ReturnType<typeof createProductionPublication>
-  | undefined;
+type ProductionPublication = ReturnType<typeof createProductionPublication>;
+let sharedProductionPublication: ProductionPublication | undefined;
+let resolveProductionPublication: (value: ProductionPublication) => void;
+const productionPublicationReady = new Promise<ProductionPublication>(
+  resolve => {
+    resolveProductionPublication = resolve;
+  },
+);
 
-/** Both backend route plugins resolve the same in-process publication module. */
-export function getProductionPublication(
+export function initializeProductionPublication(
   options: Parameters<typeof createProductionPublication>[0],
 ) {
-  sharedProductionPublication ??= createProductionPublication(options);
+  if (!sharedProductionPublication) {
+    sharedProductionPublication = createProductionPublication(options);
+    resolveProductionPublication(sharedProductionPublication);
+  }
   return sharedProductionPublication;
+}
+
+/** Compatibility routes wait for the authoritative plugin/database to start. */
+export function getProductionPublication() {
+  return {
+    profiles: async (
+      ...args: Parameters<WorkProposalPublication['profiles']>
+    ) => (await productionPublicationReady).publication.profiles(...args),
+    preview: async (...args: Parameters<WorkProposalPublication['preview']>) =>
+      (await productionPublicationReady).publication.preview(...args),
+    publish: async (...args: Parameters<WorkProposalPublication['publish']>) =>
+      (await productionPublicationReady).publication.publish(...args),
+  } satisfies WorkProposalPublication;
 }

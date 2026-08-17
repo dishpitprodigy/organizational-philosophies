@@ -5,6 +5,7 @@ import { z } from 'zod/v3';
 
 import { workProposalArtifactSchema } from '../workIntake/domain/artifactSchema';
 import { bindSubmissionProvenance } from '../workIntake/domain/submissionProvenance';
+import type { PostgresWorkIntakeStore } from '../workIntakePersistence/postgresWorkIntakeStore';
 import {
   authenticatedActorFromPrincipal,
   type WorkProposalPublication,
@@ -53,6 +54,7 @@ export function createRouter(options: {
   httpAuth: HttpAuthService;
   publication: WorkProposalPublication;
   logger: LoggerService;
+  store?: Pick<PostgresWorkIntakeStore, 'getProposal' | 'getProposalRevision'>;
 }) {
   const router = Router();
   router.use(express.json({ limit: '1mb' }));
@@ -144,6 +146,47 @@ export function createRouter(options: {
         },
       });
     }
+  });
+  router.get('/proposals/:id', async (req, res) => {
+    await actor(req);
+    const proposal = await options.store?.getProposal(req.params.id);
+    if (!proposal) {
+      res.status(404).json({
+        error: {
+          kind: 'NotFound',
+          message: `Proposal ${req.params.id} was not found.`,
+        },
+      });
+      return;
+    }
+    res.json(proposal);
+  });
+  router.get('/proposals/:id/:revision', async (req, res) => {
+    await actor(req);
+    const revision = Number(req.params.revision);
+    if (!Number.isSafeInteger(revision) || revision < 0) {
+      res.status(400).json({
+        error: {
+          kind: 'InvalidRevision',
+          message: 'Proposal revision must be a non-negative integer.',
+        },
+      });
+      return;
+    }
+    const proposalRevision = await options.store?.getProposalRevision(
+      req.params.id,
+      revision,
+    );
+    if (!proposalRevision) {
+      res.status(404).json({
+        error: {
+          kind: 'NotFound',
+          message: `Proposal ${req.params.id} revision ${revision} was not found.`,
+        },
+      });
+      return;
+    }
+    res.json(proposalRevision);
   });
   router.post('/preview', (req, res) => invoke(req, res, 'preview'));
   router.post('/publish', (req, res) => invoke(req, res, 'publish'));

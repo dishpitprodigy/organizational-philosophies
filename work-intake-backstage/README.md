@@ -6,6 +6,9 @@ prototype, and it uses the local development database.
 
 For the plain-language explanation of every script, plugin, trust boundary, and
 publication step, start with [How the Work Intake Prototype Works](HOW-IT-WORKS.md).
+The canonical domain language is defined in [Work Governance Context](CONTEXT.md),
+and the durable closed-loop direction is specified in
+[Work Governance Control Plane](WORK-GOVERNANCE-CONTROL-PLANE-SPEC.md).
 The implementation design for durable Work Proposals, deliberately smaller team
 delivery records, typed Jira relationships, and the Registry-style Backstage
 portfolio view is [Work Proposal Repository and Portfolio Explorer](WORK-PROPOSAL-PORTFOLIO-SPEC.md).
@@ -20,6 +23,7 @@ source descriptors are under `examples/northstar/`.
 To start the app, run:
 
 ```sh
+docker compose up -d postgres
 ./yarn install
 ./yarn start
 ```
@@ -64,6 +68,7 @@ On another machine with Node.js 22 or 24 and the same repository checkout:
 
 ```sh
 cd work-intake-backstage
+docker compose up -d postgres
 ./yarn install
 chmod 600 ~/.atlassian.env
 ./yarn jira:bootstrap
@@ -175,6 +180,8 @@ The generic backend API is:
 GET  /api/work-intake-publication/profiles
 POST /api/work-intake-publication/preview
 POST /api/work-intake-publication/publish
+GET  /api/work-intake-publication/proposals/:id
+GET  /api/work-intake-publication/proposals/:id/:revision
 ```
 
 `/api/work-intake-jira` remains a compatibility route that delegates to the
@@ -260,28 +267,43 @@ node scripts/jira/publish.mjs path/to/artifact.json
 ```
 
 Publication identities include profile, placement, Adapter, concrete target,
-proposal id and revision, and local record id. The Module serializes publication
-through an owner-only journal at
-`~/.local/state/work-intake-backstage/jira-publications.json`. Before a create,
-it records an in-progress reservation; after the Jira response, it records the
-external identifier. A retry observes and reconciles an existing projection,
-reuses a recorded projection, or stops on an indeterminate create instead of
-risking a duplicate. Existing Jira ledger entries are read through a
-compatibility key. Set
-`JIRA_PUBLICATION_LEDGER` to move the ledger. Cross-project delivery
-dependencies use Jira issue links; candidate delivery records are related
-to—but are not children of—the intake record.
+proposal id and revision, and local record id. PostgreSQL owns the canonical
+Proposal Lineage, immutable Proposal Revisions, one-per-profile publication
+claim, normalized Publication Results, and per-projection reconciliation
+records. Before external work, the backend atomically claims the proposal
+revision and profile. After Jira responds, it retains every external identity
+and the complete receipt. A completed retry returns that receipt; a failed
+attempt can repair the same logical publication without creating a second one.
+Cross-project delivery dependencies use Jira issue links; candidate delivery
+records are related to—but are not children of—the intake record.
 
 The Module durably stores the catalog-routed canonical JSON as a
 content-addressed attachment on the profile's proposal anchor—an `NWI` issue or
 an `MDP` Idea—before dependent review or delivery placements begin. Retries
 verify and reuse the same attachment; changed JSON under the same proposal
-revision is rejected. The local journal stores only reconciliation metadata,
-not the proposal artifact.
+revision is rejected. PostgreSQL also retains the catalog-routed canonical JSON,
+its SHA-256, schema version, generator provenance, and reconciliation metadata.
+Jira's attachment remains a projection of that authoritative revision.
 
 The same publisher is exposed through the Work Intake page. Repeated clicks are
-safe: the owner-only ledger and Jira labels reconcile the same proposal revision
-and local record ids to the existing issues instead of creating duplicates.
+safe: PostgreSQL constraints, database reconciliation records, and Jira labels
+reconcile the same proposal revision and local record ids to the existing issues
+instead of creating duplicates.
+
+## PostgreSQL persistence
+
+The prototype uses PostgreSQL by default, including local development. Start the
+included PostgreSQL 17 service with `docker compose up -d postgres`; its named
+volume survives container recreation. The checked-in credentials are local-only
+and bind PostgreSQL to `127.0.0.1`. Production continues to read
+`POSTGRES_HOST`, `POSTGRES_PORT`, `POSTGRES_USER`, and `POSTGRES_PASSWORD` from
+`app-config.production.yaml`.
+
+The backend applies its Knex migrations at startup. The schema includes Proposal
+Lineages and immutable Proposal Revisions, Decisions, Authorized Work,
+Deliverables, Outcome Observations, Closure Decisions, Publications, Publication
+Results, and reconciliation journal entries. PostgreSQL triggers reject updates
+and deletes to append-only governance records.
 
 The normal test suite is hermetic. To exercise one disposable JPD Idea against
 the configured Atlassian sandbox, run the focused opt-in test with
