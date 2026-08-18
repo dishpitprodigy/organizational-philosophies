@@ -13,10 +13,23 @@ for database_name in "$legacy_database" "$target_database"; do
 done
 
 database_exists() {
-  podman compose exec -T postgres \
-    psql --username "$postgres_user" --dbname postgres --tuples-only --no-align \
-    --command "SELECT 1 FROM pg_database WHERE datname = '$1'" \
-    | grep -qx 1
+  run_psql --tuples-only --no-align \
+    --command "SELECT 1 FROM pg_database WHERE datname = '$1'" | grep -qx 1
+}
+
+run_psql() {
+  if [[ -n "${POSTGRES_HOST:-}" ]]; then
+    PGPASSWORD="${POSTGRES_PASSWORD:-}" psql \
+      --host "$POSTGRES_HOST" \
+      --port "${POSTGRES_PORT:-5432}" \
+      --username "$postgres_user" \
+      --dbname postgres \
+      "$@"
+    return
+  fi
+
+  podman compose exec -T postgres psql \
+    --username "$postgres_user" --dbname postgres "$@"
 }
 
 if database_exists "$target_database"; then
@@ -33,8 +46,7 @@ if ! database_exists "$legacy_database"; then
   exit 1
 fi
 
-podman compose exec -T postgres \
-  psql --username "$postgres_user" --dbname postgres --set ON_ERROR_STOP=1 \
+run_psql --set ON_ERROR_STOP=1 \
   --command "SELECT pg_terminate_backend(pid) FROM pg_stat_activity WHERE datname = '$legacy_database' AND pid <> pg_backend_pid()" \
   --command "ALTER DATABASE \"$legacy_database\" RENAME TO \"$target_database\""
 

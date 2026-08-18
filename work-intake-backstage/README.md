@@ -330,6 +330,24 @@ overwrite anything when both database names exist. Set
 `WORK_INTAKE_LEGACY_DATABASE` only if the prior plugin database used a different
 name. Take a volume snapshot or `pg_dump` before any production cutover.
 
+For a production or other non-Compose PostgreSQL server, the same guarded
+migration uses the normal PostgreSQL client when `POSTGRES_HOST` is set:
+
+```sh
+POSTGRES_HOST=db.example.internal \
+POSTGRES_PORT=5432 \
+POSTGRES_USER=work_intake \
+POSTGRES_PASSWORD='replace-me' \
+POSTGRES_DB=work_intake \
+PGSSLMODE=require \
+./yarn postgres:migrate-dedicated
+```
+
+The PostgreSQL role must be allowed to rename the legacy database and terminate
+its remaining connections. Stop every backend instance before running it. The
+script uses `psql` on the host in this mode and honors libpq settings such as
+`PGSSLMODE` and `PGSSLROOTCERT`.
+
 The backend applies its Knex migrations at startup. The schema includes Proposal
 Lineages and immutable Proposal Revisions, Decisions, Authorized Work,
 Deliverables, Outcome Observations, Closure Decisions, Publications, Publication
