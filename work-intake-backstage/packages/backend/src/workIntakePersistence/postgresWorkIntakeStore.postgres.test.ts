@@ -14,7 +14,7 @@ function connection() {
     port: Number(process.env.POSTGRES_PORT ?? 5432),
     user: process.env.POSTGRES_USER ?? 'work_intake',
     password: process.env.POSTGRES_PASSWORD ?? 'work_intake',
-    database: process.env.POSTGRES_DB ?? 'backstage',
+    database: process.env.POSTGRES_DB ?? 'work_intake',
     allowExitOnIdle: true,
   };
 }

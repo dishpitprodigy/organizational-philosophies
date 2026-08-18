@@ -34,15 +34,21 @@ backend:
     origin: http://localhost:3000
     methods: [GET, HEAD, PATCH, POST, PUT, DELETE]
     credentials: true
-  # Durable local Work Intake state. The compose service below supplies these
-  # development-only credentials; production overrides them separately.
+  # Backstage's own prototype plugins remain ephemeral. Only the Work Intake
+  # control plane receives the dedicated PostgreSQL database below.
   database:
-    client: pg
-    connection:
-      host: 127.0.0.1
-      port: 5432
-      user: work_intake
-      password: work_intake
+    client: better-sqlite3
+    connection: ':memory:'
+    plugin:
+      work-intake-publication:
+        client: pg
+        ensureExists: false
+        connection:
+          host: 127.0.0.1
+          port: 5432
+          user: work_intake
+          password: work_intake
+          database: work_intake
   # see https://backstage.io/docs/ai/mcp-actions#actions-configuration for more details
   actions:
     pluginSources:

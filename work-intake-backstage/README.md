@@ -303,8 +303,14 @@ The prototype uses PostgreSQL by default, including local development. Start the
 included PostgreSQL 18 service with `podman compose up -d postgres`; its named
 volume survives container recreation. The checked-in credentials are local-only
 and bind PostgreSQL to `127.0.0.1`. Production continues to read
-`POSTGRES_HOST`, `POSTGRES_PORT`, `POSTGRES_USER`, and `POSTGRES_PASSWORD` from
-`app-config.production.yaml`.
+`POSTGRES_HOST`, `POSTGRES_PORT`, `POSTGRES_USER`, `POSTGRES_PASSWORD`, and
+`POSTGRES_DB` from `app-config.production.yaml`.
+
+PostgreSQL is dedicated to the Work Intake control plane. The
+`work-intake-publication` plugin connects to database `work_intake` through a
+plugin-specific Backstage database override. Other prototype Backstage plugins
+retain their default ephemeral SQLite storage and do not create PostgreSQL
+databases.
 
 The backend applies its Knex migrations at startup. The schema includes Proposal
 Lineages and immutable Proposal Revisions, Decisions, Authorized Work,
