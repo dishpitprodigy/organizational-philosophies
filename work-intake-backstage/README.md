@@ -312,6 +312,24 @@ plugin-specific Backstage database override. Other prototype Backstage plugins
 retain their default ephemeral SQLite storage and do not create PostgreSQL
 databases.
 
+If the named volume predates this dedicated-database configuration, stop the
+Backstage backend and migrate its former plugin database before starting the
+new configuration:
+
+```sh
+systemctl --user stop work-intake-backstage.service
+./yarn postgres:migrate-dedicated
+systemctl --user start work-intake-backstage.service
+```
+
+The guarded migration renames
+`backstage_plugin_work-intake-publication` to `work_intake` inside PostgreSQL,
+so Proposal Lineages, revisions, and publication receipts keep their existing
+identities. It is idempotent when only `work_intake` exists and refuses to
+overwrite anything when both database names exist. Set
+`WORK_INTAKE_LEGACY_DATABASE` only if the prior plugin database used a different
+name. Take a volume snapshot or `pg_dump` before any production cutover.
+
 The backend applies its Knex migrations at startup. The schema includes Proposal
 Lineages and immutable Proposal Revisions, Decisions, Authorized Work,
 Deliverables, Outcome Observations, Closure Decisions, Publications, Publication
@@ -329,8 +347,9 @@ be deleted afterward.
 
 Run the retained PostgreSQL integration suite against the local service with
 `./yarn test:postgres`. It creates an isolated schema, applies the production
-migrations, checks immutable lineage and fenced publication behavior, and drops
-only that schema afterward.
+migrations, verifies that only the Work Intake plugin is routed to PostgreSQL,
+checks immutable lineage and fenced publication behavior, and drops only that
+schema afterward.
 
 ```sh
 WORK_INTAKE_JPD_SANDBOX=1 ./yarn workspace backend test \
