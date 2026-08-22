@@ -55,6 +55,23 @@ function artifact() {
         proof: 'Replay passes',
         horizon: 'Five years',
       },
+      feasibilityBasis: {
+        assessments: [
+          {
+            id: 'FB-001',
+            covers: ['SHALL-1', 'AC-1'],
+            target: 'Sustain the accepted workload.',
+            hardLimits:
+              'The replay path and cluster resource envelope are fixed.',
+            evidence: 'A retained replay demonstrates the target load.',
+            assumptions:
+              'The replay preserves production workload characteristics.',
+            margin:
+              'The target remains 21% below the demonstrated replay boundary.',
+            finding: 'supported',
+          },
+        ],
+      },
       requiredDifference: {
         summary: 'Support gap closes.',
         preserve: 'Protocols',
@@ -182,6 +199,16 @@ describe('PublicationService preview', () => {
         ],
       },
     ]);
+    expect(
+      plan.records[0].content.sections.find(
+        section => section.heading === 'Feasibility Basis',
+      ),
+    ).toEqual({
+      heading: 'Feasibility Basis',
+      items: [
+        'FB-001 [supported]\nCovers: SHALL-1, AC-1\nTarget: Sustain the accepted workload.\nHard limits and irreducible steps: The replay path and cluster resource envelope are fixed.\nSupporting evidence: A retained replay demonstrates the target load.\nAssumptions: The replay preserves production workload characteristics.\nOperating margin: The target remains 21% below the demonstrated replay boundary.',
+      ],
+    });
     expect(JSON.stringify(plan)).not.toContain('Browser supplied');
     expect(plan.placements.map(item => item.binding.target.targetId)).toEqual([
       'NWI',

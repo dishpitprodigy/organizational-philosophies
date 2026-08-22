@@ -211,6 +211,19 @@ function proposalContent(
         ],
       },
       {
+        heading: 'Feasibility Basis',
+        items: proposal.feasibilityBasis.assessments.map(
+          assessment =>
+            `${assessment.id} [${assessment.finding}]\n` +
+            `Covers: ${assessment.covers.join(', ')}\n` +
+            `Target: ${assessment.target}\n` +
+            `Hard limits and irreducible steps: ${assessment.hardLimits}\n` +
+            `Supporting evidence: ${assessment.evidence}\n` +
+            `Assumptions: ${assessment.assumptions}\n` +
+            `Operating margin: ${assessment.margin}`,
+        ),
+      },
+      {
         heading: 'Required Difference',
         paragraphs: [proposal.requiredDifference.summary],
         fields: [

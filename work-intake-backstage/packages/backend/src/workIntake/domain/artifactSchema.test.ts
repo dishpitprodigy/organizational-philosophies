@@ -53,6 +53,25 @@ function atomicArtifact() {
         proof: 'The accepted workload and failure corpus passes.',
         horizon: 'Five years.',
       },
+      feasibilityBasis: {
+        assessments: [
+          {
+            id: 'FB-001',
+            covers: ['SHALL-001', 'AC-001'],
+            target:
+              'Sustain 1.74M samples per second under the accepted workload.',
+            hardLimits:
+              'The 10 Gb/s replay path and six-node cluster are fixed.',
+            evidence:
+              'The retained replay harness generates and reconciles the target load.',
+            assumptions:
+              'The replay preserves production encoding, cardinality, and churn.',
+            margin:
+              'The target remains 21% below the demonstrated replay boundary.',
+            finding: 'supported',
+          },
+        ],
+      },
       requiredDifference: {
         summary: 'The support, capacity, and operating gaps are removed.',
         preserve: 'Prometheus and retention contracts.',
@@ -112,6 +131,7 @@ function atomicArtifact() {
       knownUncertainty: {
         present: true,
         question: 'Which option passes the common test basis?',
+        discoveryTimebox: '',
       },
     },
     classifications: {
@@ -159,6 +179,58 @@ describe('atomic Work Proposal artifact schema', () => {
   it('requires the problem and the benefit of solving it as separate evidence', () => {
     const artifact = atomicArtifact();
     delete (artifact.proposal as { problem?: unknown }).problem;
+
+    expect(workProposalArtifactSchema.safeParse(artifact).success).toBe(false);
+  });
+
+  it('requires the evidence and finding that make the target physically achievable', () => {
+    const artifact = atomicArtifact();
+    delete (artifact.proposal as { feasibilityBasis?: unknown })
+      .feasibilityBasis;
+
+    expect(workProposalArtifactSchema.safeParse(artifact).success).toBe(false);
+  });
+
+  it('allows an unproven target only when bounded Discovery will establish it', () => {
+    const artifact = atomicArtifact();
+    artifact.proposal.feasibilityBasis.assessments[0].finding = 'unproven';
+    artifact.routingRequest.facts.intent = 'Migration';
+
+    expect(workProposalArtifactSchema.safeParse(artifact).success).toBe(false);
+
+    artifact.routingRequest.facts.intent = 'Discovery';
+    artifact.proposal.knownUncertainty = {
+      present: false,
+      question: '',
+      discoveryTimebox: '',
+    };
+    expect(workProposalArtifactSchema.safeParse(artifact).success).toBe(false);
+
+    artifact.proposal.knownUncertainty = {
+      present: true,
+      question: 'Which implementation can satisfy the target?',
+      discoveryTimebox: 'Ten working days with a retained benchmark.',
+    };
+    expect(workProposalArtifactSchema.safeParse(artifact).success).toBe(true);
+  });
+
+  it('rejects a target contradicted by its hard limits', () => {
+    const artifact = atomicArtifact();
+    artifact.proposal.feasibilityBasis.assessments[0].finding = 'contradicted';
+
+    expect(workProposalArtifactSchema.safeParse(artifact).success).toBe(false);
+  });
+
+  it('requires every mandatory result and Acceptance Condition to be covered', () => {
+    const artifact = atomicArtifact();
+    artifact.proposal.feasibilityBasis.assessments[0].covers = ['SHALL-001'];
+
+    expect(workProposalArtifactSchema.safeParse(artifact).success).toBe(false);
+  });
+
+  it('requires unique identifiers across the Feasibility Basis coverage namespace', () => {
+    const artifact = atomicArtifact();
+    artifact.proposal.acceptanceConditions[0].id = 'SHALL-001';
 
     expect(workProposalArtifactSchema.safeParse(artifact).success).toBe(false);
   });

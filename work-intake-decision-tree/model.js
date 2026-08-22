@@ -210,6 +210,9 @@
     spendUsd: 0,
     title: "",
     problem: { statement: "", benefit: "" },
+    feasibility: {
+      assessments: [],
+    },
     outcome: "",
     currentState: "",
     difference: "",
@@ -251,7 +254,7 @@
       ...blankState(),
       scenario: "Metrics selection",
       proposalId: "WP-2026-0042",
-      proposalRevision: 5,
+      proposalRevision: 6,
       requester: "Avery Shah",
       requestingTeam: "sre",
       catalogPath: "change",
@@ -261,6 +264,36 @@
       problem: {
         statement: "The current metrics platform cannot remain supported at the forecast workload. Its longest-retention tier reaches its operating limit in seven months, the installed release leaves vendor support on March 31, 2027, recovery has not been proven, and routine operation already consumes 56 SRE hours each month.",
         benefit: "Solving the problem preserves reliable dashboards and alerts as engineering demand grows, prevents an unsupported or capacity-constrained metrics service from hiding production failures, and returns recurring SRE capacity to reliability work instead of emergency expansion and platform maintenance.",
+      },
+      feasibility: {
+        assessments: [{
+        id: "FB-OBS-001",
+        covers: "SHALL-001, SHALL-002, SHALL-003",
+        target: "A candidate sustains 1.74 million samples per second for 60 minutes with 14.2 million active series and the accepted 690,000-series churn event while serving the query and rule corpora.",
+        hardLimits: "The six-node POC resource envelope and 10 Gb/s replay path are fixed. Signal propagation, serialization, ingestion acknowledgement, storage work, query execution, and rule evaluation each consume nonzero time and cannot be optimized below zero.",
+        evidence: "OBS-REPLAY-017 demonstrates that the retained generator, fixed path, and reconciliation sink sustain 2.2 million production-encoded samples per second. The 1.74-million target is 1.5 times the observed 1.16-million production maximum. Candidate performance under the same cardinality, churn, queries, and rules remains to be established by equivalent POCs.",
+        assumptions: "The replay preserves production encoding, label cardinality, the 690,000-series churn event, query concurrency, and rule schedules. Every candidate receives the same six-node envelope, 10 Gb/s path, reset procedure, and prohibition on unreproducible vendor tuning.",
+        margin: "The 1.74-million target is 460,000 samples per second, or about 21%, below the replay system's demonstrated 2.2-million generation and reconciliation boundary. No candidate implementation margin is claimed before POC evidence exists.",
+        finding: "unproven",
+        }, {
+        id: "FB-OBS-002",
+        covers: "SHALL-004",
+        target: "Loss of one ingest, query, or storage instance leaves no critical-rule gap longer than 90 seconds; loss of one availability zone has acknowledged-sample RPO 0 and restores normal service within 30 minutes.",
+        hardLimits: "Failure detection, quorum decisions, route convergence, retained-sample replay, and storage recovery consume irreducible time. A candidate cannot restore service before the platform detects and isolates the failed path.",
+        evidence: "OBS-FAILURE-HARNESS-006 injects the required instance and zone failures and timestamps detection, isolation, replay, query recovery, and rule evaluation. The harness detects and redirects the fixed POC path in 18 seconds; candidate recovery behavior remains unproven until equivalent POCs run.",
+        assumptions: "The POC uses the production failure domains, rule intervals, acknowledgement semantics, and network routes. No candidate may exclude detection or replay time from its reported recovery result.",
+        margin: "The harness consumes 18 seconds of the 90-second critical-rule budget, leaving 72 seconds for candidate failover and evaluation. The 30-minute zone-recovery margin remains unclaimed until a candidate completes the test.",
+        finding: "unproven",
+        }, {
+        id: "FB-OBS-003",
+        covers: "SHALL-005, SHALL-006, SHOULD-001, AC-001",
+        target: "Northstar operators complete the required lifecycle exercises from retained documentation and the selected option reduces recurring work from 56 to no more than 24 person-hours per month.",
+        hardLimits: "Human execution time, data movement, restart sequences, and mandatory validation cannot be optimized away. The exercise uses an eight-hour operator window, and monthly work includes every upgrade, expansion, tenant, and incident obligation.",
+        evidence: "OBS-OPS-BASELINE-009 decomposes the current 56 monthly hours by operation. The POC schedule reserves eight hours per candidate for the same five operator exercises and retains timestamps and interventions; candidate results remain unproven before those exercises run.",
+        assumptions: "Operators are unfamiliar with each candidate, documentation is frozen before the exercise, vendor advocates do not drive the work, and recurring-hour estimates use the same event frequencies as the current baseline.",
+        margin: "The operating target leaves 32 person-hours per month below the current baseline. No option receives that margin unless the observed exercise times and five-year event model reconcile to 24 hours or less.",
+        finding: "unproven",
+        }],
       },
       outcome: "Northstar has selected a metrics capability that can ingest 1.74 million samples per second, preserve 31-day, 93-day, and 730-day retention outcomes, evaluate 8,420 alert and recording rules, and serve the accepted query corpus without carrying forward the current platform's unsupported release, seven-month capacity horizon, or 56 person-hours of monthly operating work.",
       currentState: "OBS-ARCH-004 rev 7, accepted May 18, 2026, is the Current-State Baseline. Thirty-eight vmagent collectors receive Prometheus-format metrics from 16 Kubernetes clusters, 1,240 Linux hosts, and 74 application services in two data centers and three cloud regions. Relabeling routes each series to one of three VictoriaMetrics clusters: 31-day retention has 24 TiB usable and 11.6 TiB consumed; 93-day retention has 36 TiB usable and 21.8 TiB consumed; 730-day retention has 42 TiB usable and 31.4 TiB consumed. Four Grafana replicas query the three clusters through separate data sources; four vmalert replicas evaluate 8,420 alert and recording rules.\n\nThe May 1–28 workload baseline recorded 640,000 sustained samples per second, 910,000 p95, and a 1.16-million maximum lasting 22 minutes. Daily active-series cardinality was 11.8 million at p95 and 14.2 million at maximum; series churn was 212,000 new series per hour at p95 and 690,000 at maximum during coordinated deployments. The service executed 38,600 dashboard and API queries per day. Query p95 was 1.8 seconds over six hours, 7.4 seconds over 30 days, and 22.8 seconds over one year. Rule evaluation p95 was 4.8 seconds and p99 was 12.6 seconds; the platform recorded 31 late or missed evaluations per day.\n\nThe current release leaves vendor support on March 31, 2027. At the observed 2.8% monthly growth rate, the 730-day tier reaches the 90% operating limit in seven months. SRE spent 56 person-hours per month on upgrades, storage expansion, tenant changes, and incidents during the last quarter. Direct infrastructure cost averaged $42,800 per month. A vmselect rollout on June 11 created an 11-minute critical-alert evaluation gap; no full retention-tier restore has been exercised.",
@@ -392,7 +425,7 @@
       ...blankState(),
       scenario: "SSO migration",
       proposalId: "WP-2026-0043",
-      proposalRevision: 2,
+      proposalRevision: 3,
       requester: "Morgan Lee",
       requestingTeam: "identity",
       catalogPath: "change",
@@ -402,6 +435,45 @@
       problem: {
         statement: "Northstar's workforce access is split across two identity providers and 23 local or LDAP account paths that cannot enforce one revocation, MFA, recovery, and audit standard. Leaver access remains active for 19 hours at p95 against a four-hour policy, 94 privileged users retain phishable factors, and one provider has no regional failover.",
         benefit: "Solving the problem reduces the time a departed worker can retain application access, protects privileged accounts from phishing, keeps workforce authentication available during a regional failure, and removes duplicated provider contracts without leaving application owners to reconstruct authorization and rollback behavior during an incident.",
+      },
+      feasibility: {
+        assessments: [{
+        id: "FB-IDMIG-001",
+        covers: "SHALL-001, SHALL-006, SHALL-007, AC-001, AC-004, AC-005",
+        target: "Migrate all 147 applications by December 15 while preserving accepted authorization behavior, restoring each previous provider within 30 minutes when rollback is required, completing every burn-in period, and leaving no unidentified consumer before Managed Runoff.",
+        hardLimits: "Application maintenance windows, rollback configuration, traffic convergence, the seven-day validation and 30-day burn-in periods, and the final 14 traffic-free days impose irreducible elapsed time. The 12 compatibility exceptions cannot enter a wave until their supported protocol and rollback paths are known.",
+        evidence: "ID-WAVE-MODEL-006 fits the 25-, 78-, and 44-application waves, their validation periods, the 12 bounded compatibility assessments, and 14 traffic-free days before the contract-exit date using named application-owner windows. ID-ROLLBACK-014 demonstrates rollback for each application class at 18 minutes p95 and 23 minutes maximum while reconciling roles and traffic.",
+        assumptions: "The 147-application inventory and owner windows remain current; the accepted target tenant and two-region configuration do not change; application owners supply the stated test windows; and unresolved compatibility cases leave the migration rather than consuming unplanned wave capacity.",
+        margin: "The rollback evidence leaves 7 minutes below the 30-minute limit at the measured maximum. The dated wave model retains 18 working days before December 15 for rejected applications or an explicit renewal decision.",
+        finding: "supported",
+        }, {
+        id: "FB-IDMIG-002",
+        covers: "SHALL-002, SHALL-005, AC-002",
+        target: "Directory disablement prevents new sessions within 5 minutes, SCIM disables managed accounts within 15 minutes, and all required security events reach the data lake within 5 minutes.",
+        hardLimits: "HR event delivery, directory commit and replication, SCIM polling or push delivery, application processing, network transit, and data-lake ingestion each consume part of the end-to-end budget. Existing application sessions cannot be revoked faster than the application checks the governing signal.",
+        evidence: "ID-EVENT-BENCH-008 records p99 directory disablement at 42 seconds, SCIM disablement at 6 minutes 20 seconds, approved manual disablement at 2 hours 35 minutes, and security-event arrival at 2 minutes 14 seconds across the accepted target tenant and data-lake path. The same retained data-lake test queries every required event class 410 days after ingestion.",
+        assumptions: "Applications use the accepted SCIM connector or the named manual exception; clocks are synchronized; the benchmark includes directory replication and data-lake indexing; and applications with unsupported session behavior leave the migration scope for redesign.",
+        margin: "The benchmark leaves 4 minutes 18 seconds of new-session margin, 8 minutes 40 seconds of SCIM margin, 1 hour 25 minutes of manual-path margin, 2 minutes 46 seconds of security-event margin at p99, and 10 days beyond the 400-day retention requirement.",
+        finding: "demonstrated",
+        }, {
+        id: "FB-IDMIG-003",
+        covers: "SHALL-003",
+        target: "All 612 privileged users enroll and validate a phishing-resistant factor before their application wave is accepted.",
+        hardLimits: "Hardware-key issuance, identity proofing, user enrollment, recovery registration, and validation require human participation and cannot be parallelized beyond available support sessions and devices.",
+        evidence: "MFA-PILOT-012 enrolled and validated 60 representative privileged users in two four-hour sessions with four support staff; 57 completed in the first session and all 60 completed within the second.",
+        assumptions: "Devices are distributed before each wave, the four-person support model remains available, and users who miss both sessions do not enter an accepted migration wave.",
+        margin: "The demonstrated rate supports 120 users per day with the same staffing. Six scheduled enrollment days provide capacity for 720 users, leaving 108 places, or about 18%, above the 612-user population.",
+        finding: "demonstrated",
+        }, {
+        id: "FB-IDMIG-004",
+        covers: "SHALL-004, AC-003",
+        target: "Maintain 99.95% monthly workforce-authentication availability; restore new sessions within 5 minutes and full service within 30 minutes after primary-region loss with configuration RPO 0.",
+        hardLimits: "Health detection, route convergence, token validation, configuration reconciliation, and client retry behavior consume nonzero time. Configuration RPO 0 also requires every accepted change to reach the surviving region before acknowledgement.",
+        evidence: "PLAT-ID-ACCEPT-004 records primary-region isolation with new sessions restored in 2 minutes 10 seconds, full service restored in 18 minutes, and zero missing accepted configuration records. AVAIL-MODEL-004 applies the measured detection and repair distribution to the retained failure rate and projects 99.982% monthly availability.",
+        assumptions: "The accepted two-region topology, synchronous configuration contract, health thresholds, DNS path, and observed authentication load remain unchanged; independent clients measure the entire interruption rather than only provider health.",
+        margin: "The exercise leaves 2 minutes 50 seconds of new-session margin and 12 minutes of full-service margin with no configuration loss. The availability model leaves 0.032 percentage points above the 99.95% monthly requirement.",
+        finding: "demonstrated",
+        }],
       },
       outcome: "All 6,400 employees and contractors authenticate to 147 workforce applications through the approved SSO service; privileged users receive phishing-resistant MFA, leaver access is revoked within the approved interval, authentication survives loss of the primary region, and the two inherited identity-provider contracts can enter Managed Runoff before renewal.",
       currentState: "ID-ARCH-011 rev 4 identifies 147 workforce applications used by 6,400 employees and contractors. Keystone SSO serves 83 SAML applications from an active/passive deployment in two regions. Harbor Login serves 26 SAML and 15 OIDC applications from one region. The remaining 23 applications use local or LDAP accounts; 11 can enable OIDC through a supported configuration change, while 12 require discovery because they depend on LDAP groups, application-local roles, or vendor-specific SAML behavior.\n\nProvisioning is SCIM-based for 61 applications, just-in-time for 48, and manual for 38. The June leaver sample measured 6 hours 40 minutes median and 19 hours p95 from HR termination to application revocation against a four-hour policy; 27 application accounts remained enabled after 24 hours. Six hundred twelve privileged users receive MFA, but 94 still use push or one-time-password factors. Authentication logs reach the security data lake in 3–47 minutes depending on provider and are retained for 90 days in Keystone, 180 days in Harbor, and 400 days in the data lake.\n\nKeystone failover last passed on February 12, 2025. Harbor has no regional failover. Thirty-one applications embed provider-specific group identifiers, and 18 maintain sessions for more than eight hours after account disablement. The two inherited contracts renew January 31, 2027, for a combined $620,000 annual commitment.",
@@ -521,7 +593,7 @@
       ...blankState(),
       scenario: "Identity platform redesign",
       proposalId: "WP-2026-0044",
-      proposalRevision: 2,
+      proposalRevision: 3,
       requester: "Riley Gomez",
       requestingTeam: "architecture",
       catalogPath: "change",
@@ -531,6 +603,27 @@
       problem: {
         statement: "Northstar's four identity domains encode incompatible ownership, lifecycle, delegation, credential, and recovery rules, and the existing platforms cannot decide those organizational policies. As a result, 1,740 non-human identities have no accountable owner, 812 credentials are more than a year old, 37 certificate renewals have no owner, and administrators can change 21 privileged groups outside the owning team's approval path.",
         benefit: "Solving the problem gives security, application owners, and operators one accountable basis for creating, changing, recovering, and retiring identities and trusts. It reduces unauthorized or unrecoverable access paths and prevents a future product's defaults from silently becoming organizational policy for 21,300 identities and the systems that depend on them.",
+      },
+      feasibility: {
+        assessments: [{
+        id: "FB-IDBASIS-001",
+        covers: "SHALL-001, SHALL-002, SHALL-004, SHALL-005, SHALL-006, AC-001, AC-002, AC-004",
+        target: "Reconcile 21,300 identities, 286 trusts, and 63 issuance paths; compare three product-neutral boundary models; and produce an accepted design basis within the 20-working-day, 160-person-day Discovery envelope.",
+        hardLimits: "The synchronized export window, source-system read rates, owner review time, and sequential acceptance of taxonomy and authority decisions cannot be removed by tooling. Model comparison cannot begin until the same reconciled population and control objectives are available to all three models.",
+        evidence: "ID-RECON-PILOT-002 reconciled all eight source exports and classified a 2,130-record stratified sample in three working days. The retained work decomposition assigns the full population, owner validation, taxonomy decisions, three-model comparison, and final review to named contributors within 160 person-days.",
+        assumptions: "All eight sources deliver parseable exports from the same 24-hour period; stable identifiers remain available; the named owners attend scheduled decision sessions; and unresolved records receive explicit dispositions rather than silently expanding the Discovery window.",
+        margin: "The work decomposition reserves 16 person-days and the final 2 working days for reconciliation defects, disputed ownership, and acceptance review. If source delivery or owner attendance consumes that reserve, the proposal must revise its date or scope.",
+        finding: "supported",
+        }, {
+        id: "FB-IDBASIS-002",
+        covers: "SHALL-003, AC-003",
+        target: "Establish physically achievable recovery targets for workforce and privileged-administration flows, including the proposed 15-minute and 30-minute limits, before later architecture treats them as requirements.",
+        hardLimits: "Failure detection, authority restoration, configuration recovery, directory convergence, credential validation, network propagation, and client retry behavior create a nonzero recovery floor. A design cannot remove those steps by declaring a lower RTO.",
+        evidence: "ID-RECOVERY-FLOOR-003 decomposes the current Corporate AD exercise and the target flow into detection, authority, configuration, replication, network, and client stages. The evidence is sufficient to run equivalent model tests but does not yet establish that all three boundary models meet 15 and 30 minutes.",
+        assumptions: "Each model uses the same regional-loss scenario, identity population, configuration-RPO obligation, network paths, client retry behavior, and definition of restored service.",
+        margin: "No recovery margin is claimed. The Discovery must measure each stage and either support the 15- and 30-minute targets with explicit margin or revise them before a later architecture proposal becomes reviewable.",
+        finding: "unproven",
+        }],
       },
       outcome: "Northstar has an accepted, product-neutral identity design basis for 12,000 human identities, 9,300 service and workload identities, 286 application trusts, and 63 certificate-issuance paths. The design basis defines identity classes, authoritative sources, lifecycle events, trust boundaries, delegated authorities, recovery obligations, and ownership precisely enough that a later platform design cannot inherit policy from whichever product is demonstrated first.",
       currentState: "ID-ARCH-001 rev 3 identifies four overlapping identity domains. Corporate Active Directory contains 8,600 workforce identities on eight domain controllers in two regions. Research Active Directory contains 3,400 researcher and administrator identities on four domain controllers in one data center. Six FreeIPA replicas provide Linux identity, host enrollment, sudo policy, and 2,700 service principals for 1,240 Linux hosts. Four cloud IAM tenants contain 6,600 workload identities, roles, and service accounts. Together, the platforms serve 286 SAML, OIDC, LDAP, Kerberos, and certificate-based trusts and 63 certificate-issuance paths.\n\nThe inventories do not agree. The July reconciliation found 1,740 service or workload identities without an accountable owner, 812 credentials older than 365 days, 430 human-name collisions between the corporate and research directories, and 37 application trusts whose signing-certificate renewal owner is unknown. Twenty-one privileged groups can be changed by administrators outside the owning team's approval path. Corporate AD recovery was exercised in March 2026; Research AD has no full-forest recovery evidence, FreeIPA has no tested loss-of-region procedure, and the four cloud tenants use different break-glass, rotation, and audit-retention rules.\n\nThe current platforms encode policy differently: HR is authoritative for employees, the research registry for visiting researchers, application teams act as the de facto source for 1,090 service identities, Platform Engineering creates and removes Kubernetes workloads, and 1,740 non-human identities still have no recorded authority. A product cannot reconcile those policy decisions for the organization.",
@@ -739,6 +832,51 @@
     const missing = fields.filter(([key]) => !String(state[key] || "").trim()).map(([, label]) => label);
     if (!String(state.problem?.statement || "").trim()) missing.push("Problem Statement");
     if (!String(state.problem?.benefit || "").trim()) missing.push("Benefit of Solving the Problem");
+    const feasibilityAssessments = state.feasibility?.assessments || [];
+    if (!feasibilityAssessments.length) missing.push("Feasibility Basis: at least one assessment");
+    const feasibilityIds = feasibilityAssessments.map((assessment) => String(assessment.id || "").trim().toUpperCase());
+    if (new Set(feasibilityIds).size !== feasibilityIds.length) {
+      missing.push("Feasibility Basis: unique identifiers");
+    }
+    const feasibilityFindings = new Set(["demonstrated", "supported", "unproven", "contradicted"]);
+    feasibilityAssessments.forEach((assessment, index) => {
+      const label = `Feasibility Basis ${index + 1}`;
+      if (!String(assessment.id || "").trim()) missing.push(`${label}: stable identifier`);
+      if (!String(assessment.covers || "").trim()) missing.push(`${label}: covered Requirement and Acceptance IDs`);
+      if (!String(assessment.target || "").trim()) missing.push(`${label}: assessed target`);
+      if (!String(assessment.hardLimits || "").trim()) missing.push(`${label}: hard limits and irreducible steps`);
+      if (!String(assessment.evidence || "").trim()) missing.push(`${label}: supporting evidence`);
+      if (!String(assessment.assumptions || "").trim()) missing.push(`${label}: assumptions`);
+      if (!String(assessment.margin || "").trim()) missing.push(`${label}: operating margin`);
+      if (!String(assessment.finding || "").trim()) missing.push(`${label}: finding`);
+      else if (!feasibilityFindings.has(assessment.finding)) missing.push(`${label}: supported assessment finding`);
+    });
+    if (state.guided?.enforce) {
+      const covered = new Set(
+        feasibilityAssessments.flatMap((assessment) =>
+          String(assessment.covers || "").split(/[,\n]/).map((value) => value.trim().toUpperCase()).filter(Boolean)
+        )
+      );
+      const requiredCoverage = [
+        ...(state.guided.requirements || [])
+          .filter((requirement) => String(requirement.force || "shall").toLowerCase() !== "will")
+          .map((requirement, index) => evidenceId(String(requirement.force || "shall").toUpperCase(), requirement.id, index)),
+        ...(state.guided.acceptance || []).map((_, index) => evidenceId("AC", "", index)),
+      ];
+      const allCoverageIds = [
+        ...(state.guided.requirements || []).map((requirement, index) => evidenceId(String(requirement.force || "shall").toUpperCase(), requirement.id, index)),
+        ...(state.guided.acceptance || []).map((_, index) => evidenceId("AC", "", index)),
+      ];
+      if (new Set(allCoverageIds).size !== allCoverageIds.length) {
+        missing.push("Requirements and Acceptance Conditions: unique coverage identifiers");
+      }
+      [...covered]
+        .filter((id) => !allCoverageIds.includes(id))
+        .forEach((id) => missing.push(`Feasibility Basis coverage: unknown identifier ${id}`));
+      requiredCoverage
+        .filter((id) => !covered.has(id))
+        .forEach((id) => missing.push(`Feasibility Basis coverage: ${id}`));
+    }
     if (!(state.affectedSystems || []).length) missing.push("Dependencies / affected systems");
     if (state.knownUnknowns && !String(state.uncertaintyQuestion || "").trim()) missing.push("Known Uncertainty");
     if (state.guided?.enforce) missing.push(...missingGuidedProposalEvidence(state.guided));
@@ -965,6 +1103,26 @@
         label: labels[state.catalogPath],
         summary: "This demand uses an existing operational or service path. It does not become a Work Proposal and does not prepopulate one.",
       };
+    } else if (state.feasibility?.assessments?.some((assessment) => assessment.finding === "contradicted")) {
+      disposition = {
+        key: "blocked",
+        label: "Target Is Not Physically Achievable",
+        summary: "The Feasibility Basis identifies a hard limit that contradicts the requested result. The target must be corrected; approval cannot make it achievable.",
+      };
+    } else if (
+      state.feasibility?.assessments?.some((assessment) => assessment.finding === "unproven") &&
+      !(
+        state.intent === "Discovery" &&
+        state.knownUnknowns &&
+        String(state.uncertaintyQuestion || "").trim() &&
+        String(state.discoveryTimebox || "").trim()
+      )
+    ) {
+      disposition = {
+        key: "assisted",
+        label: "Feasibility Assessment Required",
+        summary: "The delivery target has no established Feasibility Basis. Route bounded Discovery to establish or reject the target before requesting delivery authorization.",
+      };
     } else if (materialChange(state) && (!state.sponsor.trim() || !state.sponsorAccepted)) {
       disposition = {
         key: "blocked",
@@ -1044,6 +1202,7 @@
       !compiled?.problem ||
       !compiled?.currentState ||
       !compiled?.desiredOutcome ||
+      !compiled?.feasibilityBasis ||
       !compiled?.requiredDifference
     ) {
       throw new Error("Work Proposal schema version 2 requires validated, compiled form answers.");
@@ -1051,6 +1210,13 @@
     const affectedEntities = result.graph.selected.map((systemId) => COMPANY.systems[systemId]?.entityRef).filter(Boolean);
     return {
       problem: compiled.problem,
+      feasibilityBasis: {
+        assessments: compiled.feasibilityBasis.assessments.map((assessment, index) => ({
+          ...assessment,
+          id: evidenceId("FB", assessment.id, index),
+          covers: String(assessment.covers || "").split(/[,\n]/).map((value) => value.trim().toUpperCase()).filter(Boolean),
+        })),
+      },
       currentState: {
         summary: state.currentState,
         ...compiled.currentState,

@@ -286,6 +286,18 @@ test('schema version 2 renders Jira prose from atomic evidence', () => {
     proof: 'The accepted workload passes.',
     horizon: 'Five years.',
   };
+  atomic.proposal.feasibilityBasis = {
+    assessments: [{
+      id: 'FB-001',
+      covers: ['SHALL-001', 'AC-001'],
+      target: 'Sustain the accepted workload.',
+      hardLimits: 'The fixed replay path and resource envelope are hard limits.',
+      evidence: 'A retained replay demonstrates the target load.',
+      assumptions: 'The replay preserves production workload characteristics.',
+      margin: 'The target remains 21% below the demonstrated replay boundary.',
+      finding: 'supported',
+    }],
+  };
   atomic.proposal.requiredDifference = {
     summary: 'Compare retain, redesign, adopt, and buy options.',
     preserve: 'Prometheus interfaces.',
@@ -320,6 +332,8 @@ test('schema version 2 renders Jira prose from atomic evidence', () => {
     description,
     /Benefit of Solving the Problem\nSolving the problem preserves/,
   );
+  assert.match(description, /Feasibility Basis\n/);
+  assert.match(description, /FB-001 \[supported\]/);
   assert.match(
     description,
     /SHALL-001: The candidate shall execute the same workload\./,
@@ -330,6 +344,60 @@ test('schema version 2 renders Jira prose from atomic evidence', () => {
     /AC-001: Given Equivalent proof work ends\., The Decision Owner records/,
   );
   assert.doesNotMatch(description, /\[object Object\]/);
+
+  const contradicted = structuredClone(atomic);
+  contradicted.proposal.feasibilityBasis.assessments[0].finding = 'contradicted';
+  assert.throws(
+    () =>
+      buildPublicationPlan(
+        resolveArtifactRouting(contradicted, catalogEntities),
+      ),
+    /contradicted by a hard limit/,
+  );
+
+  const ambiguousCoverage = structuredClone(atomic);
+  ambiguousCoverage.proposal.acceptanceConditions[0].id = 'SHALL-001';
+  assert.throws(
+    () =>
+      buildPublicationPlan(
+        resolveArtifactRouting(ambiguousCoverage, catalogEntities),
+      ),
+    /identifiers must be unique across the Feasibility Basis coverage namespace/,
+  );
+
+  const unprovenDelivery = structuredClone(atomic);
+  unprovenDelivery.proposal.feasibilityBasis.assessments[0].finding = 'unproven';
+  unprovenDelivery.routingRequest.facts.intent = 'Migration';
+  assert.throws(
+    () =>
+      buildPublicationPlan(
+        resolveArtifactRouting(unprovenDelivery, catalogEntities),
+      ),
+    /requires bounded Discovery/,
+  );
+
+  unprovenDelivery.routingRequest.facts.intent = 'Discovery';
+  unprovenDelivery.proposal.knownUncertainty = {
+    present: false,
+    question: '',
+  };
+  assert.throws(
+    () =>
+      buildPublicationPlan(
+        resolveArtifactRouting(unprovenDelivery, catalogEntities),
+      ),
+    /requires bounded Discovery/,
+  );
+  unprovenDelivery.proposal.knownUncertainty = {
+    present: true,
+    question: 'Which implementation can satisfy the target?',
+    discoveryTimebox: 'Ten working days with a retained benchmark.',
+  };
+  assert.doesNotThrow(() =>
+    buildPublicationPlan(
+      resolveArtifactRouting(unprovenDelivery, catalogEntities),
+    ),
+  );
 });
 
 test('an unverified schema-v2 draft is indexed without creating review work', () => {
@@ -354,6 +422,18 @@ test('an unverified schema-v2 draft is indexed without creating review work', ()
     capability: artifact.proposal.desiredOutcome,
     proof: 'The accepted proof corpus passes.',
     horizon: 'Five years.',
+  };
+  draft.proposal.feasibilityBasis = {
+    assessments: [{
+      id: 'FB-001',
+      covers: ['SHALL-001', 'AC-001'],
+      target: 'Sustain the accepted workload.',
+      hardLimits: 'The fixed replay path and resource envelope are hard limits.',
+      evidence: 'A retained replay demonstrates the target load.',
+      assumptions: 'The replay preserves production workload characteristics.',
+      margin: 'The target remains below the demonstrated replay boundary.',
+      finding: 'supported',
+    }],
   };
   draft.proposal.requiredDifference = {
     summary: artifact.proposal.requiredDifference,

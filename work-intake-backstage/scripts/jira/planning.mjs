@@ -1,5 +1,7 @@
 import { createHash } from 'node:crypto';
 
+import { feasibilityPolicyIssues } from '../../packages/backend/src/workIntake/domain/feasibilityPolicy.mjs';
+
 const JIRA_PROJECT_ANNOTATION = 'northstar.example/jira-project-key';
 const TECHNICAL_REVIEWER_ANNOTATION =
   'northstar.example/technical-reviewer-role';
@@ -425,6 +427,19 @@ function atomicNonGoal(value) {
   }`;
 }
 
+function atomicFeasibilityBasis(value) {
+  return value.assessments.map(
+    assessment =>
+      `${assessment.id} [${assessment.finding}]\n` +
+      `  Covers: ${assessment.covers.join(', ')}\n` +
+      `  Assessed target: ${assessment.target}\n` +
+      `  Hard limits and irreducible steps: ${assessment.hardLimits}\n` +
+      `  Supporting evidence: ${assessment.evidence}\n` +
+      `  Assumptions: ${assessment.assumptions}\n` +
+      `  Operating margin: ${assessment.margin}`,
+  );
+}
+
 function proposalDescription(proposal, schemaVersion) {
   const atomic = schemaVersion === 2;
   const problem = atomic ? proposal.problem.statement : proposal.problem;
@@ -449,6 +464,9 @@ function proposalDescription(proposal, schemaVersion) {
   const requiredDifference = atomic
     ? atomicRequiredDifference(proposal.requiredDifference)
     : [proposal.requiredDifference];
+  const feasibilityBasis = atomic
+    ? atomicFeasibilityBasis(proposal.feasibilityBasis)
+    : [];
   const requirements = atomic
     ? proposal.requirements.map(atomicRequirement)
     : asLines(proposal.requirements);
@@ -467,6 +485,9 @@ function proposalDescription(proposal, schemaVersion) {
     '',
     'Desired Outcome',
     ...desiredOutcome,
+    ...(feasibilityBasis.length
+      ? ['', 'Feasibility Basis', ...feasibilityBasis]
+      : []),
     '',
     'Required Difference',
     ...requiredDifference,
@@ -482,7 +503,7 @@ function proposalDescription(proposal, schemaVersion) {
   ].join('\n');
 }
 
-function validateProposal(proposal, schemaVersion) {
+function validateProposal(proposal, schemaVersion, routingFacts = {}) {
   required(proposal?.id, 'Proposal id is required.');
   required(proposal?.revision, 'Proposal revision is required.');
   required(proposal?.title, 'Proposal title is required.');
@@ -494,6 +515,24 @@ function validateProposal(proposal, schemaVersion) {
       proposal?.problem?.benefit,
       'Benefit of Solving the Problem is required.',
     );
+    const feasibilityAssessments = required(
+      proposal?.feasibilityBasis?.assessments?.length,
+      'At least one Feasibility Basis is required.',
+    ) && proposal.feasibilityBasis.assessments;
+    for (const assessment of feasibilityAssessments) {
+      required(assessment.id, 'Feasibility Basis identifier is required.');
+      required(
+        assessment.covers?.length,
+        `Feasibility Basis ${assessment.id} coverage is required.`,
+      );
+      required(assessment.target, `Feasibility Basis ${assessment.id} target is required.`);
+      required(assessment.hardLimits, `Feasibility Basis ${assessment.id} hard limits are required.`);
+      required(assessment.evidence, `Feasibility Basis ${assessment.id} evidence is required.`);
+      required(assessment.assumptions, `Feasibility Basis ${assessment.id} assumptions are required.`);
+      required(assessment.margin, `Feasibility Basis ${assessment.id} margin is required.`);
+    }
+    const [feasibilityIssue] = feasibilityPolicyIssues(proposal, routingFacts);
+    if (feasibilityIssue) throw new Error(feasibilityIssue);
   }
   required(proposal?.currentState, 'Current State is required.');
   required(proposal?.desiredOutcome, 'Desired Outcome is required.');
@@ -588,7 +627,11 @@ export function buildPublicationPlan(artifact) {
       'Work-intake reviews must be resolved through the Backstage catalog before publication.',
     );
   }
-  validateProposal(artifact.proposal, artifact.schemaVersion);
+  validateProposal(
+    artifact.proposal,
+    artifact.schemaVersion,
+    artifact.routingRequest?.facts,
+  );
 
   const { proposal } = artifact;
   const issues = [

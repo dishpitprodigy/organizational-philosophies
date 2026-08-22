@@ -48,6 +48,7 @@ function prepareGuidedState(candidate) {
       statement: candidate.problem?.statement || "",
       benefit: candidate.problem?.benefit || "",
     };
+    candidate.guided.feasibility ??= structuredClone(candidate.feasibility || {});
     return;
   }
   const current = paragraphs(candidate.currentState);
@@ -61,6 +62,7 @@ function prepareGuidedState(candidate) {
       statement: candidate.problem?.statement || "",
       benefit: candidate.problem?.benefit || "",
     },
+    feasibility: structuredClone(candidate.feasibility || {}),
     currentState: {
       baselineMode: baseline ? "reference" : "define",
       baselineReference: baseline,
@@ -318,6 +320,9 @@ function compileGuidedSection(section) {
   if (section === "problem") {
     state.problem = structuredClone(guided.problem);
   }
+  if (section === "feasibility") {
+    state.feasibility = structuredClone(guided.feasibility);
+  }
   if (section === "currentState") {
     const current = guided.currentState;
     state.currentState = joinParts([
@@ -401,7 +406,7 @@ function compileGuidedSection(section) {
 }
 
 function compileAllGuidedSections() {
-  ["problem", "currentState", "outcome", "difference", "requirements", "acceptance", "nonGoals", "dependencies", "preconditions", "artifact", "downstream", "timing", "discovery", "epicOutcomes"].forEach(compileGuidedSection);
+  ["problem", "currentState", "outcome", "feasibility", "difference", "requirements", "acceptance", "nonGoals", "dependencies", "preconditions", "artifact", "downstream", "timing", "discovery", "epicOutcomes"].forEach(compileGuidedSection);
 }
 
 function guidedSectionFor(control) {
@@ -471,6 +476,13 @@ function purposeFields(mode = "all") {
         ${guidedField("proposal.desired-outcome.horizon")}
       </div>
       ${compiledPreview("outcome", "Desired Outcome")}
+    </section>
+
+    <section class="guided-section wide part ${hidden("outcome")}">
+      <div class="guided-heading"><div><p class="eyebrow">Feasibility Basis</p><h3>Establish that the required result is physically achievable.</h3></div><span class="evidence-rule">Target · limits · evidence · assumptions · margin · finding</span></div>
+      <div class="form-grid">
+        ${guidedRepeater("proposal.feasibility-bases")}
+      </div>
     </section>
 
     <section class="guided-section wide part ${hidden("outcome")}">

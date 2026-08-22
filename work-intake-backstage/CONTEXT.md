@@ -37,6 +37,20 @@ A Proposal Revision with enough evidence to enter an ordered decision route.
 Incomplete evidence belongs in Assisted Intake rather than this state.
 _Avoid_: Approved proposal, ready for delivery
 
+**Feasibility Assessment**:
+The bounded examination of whether a required result is physically achievable
+under stated conditions. It identifies hard limits, irreducible steps,
+assumptions, evidence, and operating margin. It does not decide whether the
+result is valuable or authorize work.
+_Avoid_: Entitlement, approval, effort estimate
+
+**Feasibility Basis**:
+The retained evidence and finding produced by a Feasibility Assessment for a
+specific required result. An unproven result may justify bounded Discovery; a
+result contradicted by a hard limit must be corrected before it can become a
+Reviewable Proposal.
+_Avoid_: Requester confidence, vendor maximum, aspirational target
+
 ## Decision and authority language
 
 **Decision**:

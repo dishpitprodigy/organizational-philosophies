@@ -36,6 +36,20 @@ function artifact() {
         proof: 'Proof',
         horizon: 'Horizon',
       },
+      feasibilityBasis: {
+        assessments: [
+          {
+            id: 'FB-1',
+            covers: ['R-1', 'A-1'],
+            target: 'Target',
+            hardLimits: 'Hard limits',
+            evidence: 'Evidence',
+            assumptions: 'Assumptions',
+            margin: 'Margin',
+            finding: 'supported',
+          },
+        ],
+      },
       requiredDifference: {
         summary: 'Difference',
         preserve: 'Preserve',

@@ -41,6 +41,11 @@ The browser does not ask a requester to author each Work Proposal section as one
   it. A technical improvement is not its own benefit.
 - Current State separates the authoritative baseline, live architecture, measured workload, observed failure/lifecycle/cost/operator behavior, and explicit delta.
 - Desired Outcome separates operating scope, capability or removed failure mode, decisive proof, and operating horizon.
+- Repeatable Feasibility Bases map every mandatory Requirement and Acceptance
+  Condition to its assessed target, hard physical or technical limits,
+  supporting evidence, assumptions, operating margin, and Feasibility
+  Assessment finding. An unproven delivery target routes to bounded Discovery;
+  a target contradicted by a hard limit cannot become reviewable.
 - Required Difference separates what must be preserved, what measured condition must change, and the evidence used for comparison.
 - Requirements are repeatable `will` / `shall` / `should` records with stable identifiers and required verification methods.
 - Acceptance Conditions are repeatable observable results with retained proof.

@@ -53,6 +53,11 @@ test('versioned form fields produce an atomic publication artifact', async ({
   await expect(
     intakeFrame.locator('[data-form-field-id="proposal.problem.benefit"]'),
   ).toHaveValue(/preserves reliable dashboards and alerts/);
+  await expect(
+    intakeFrame.locator(
+      '[data-form-field-id="proposal.feasibility-bases"][data-guided-key="evidence"]',
+    ).first(),
+  ).toHaveValue(/OBS-REPLAY-017/);
 
   const artifact = await page.evaluate(
     () =>
@@ -105,6 +110,13 @@ test('versioned form fields produce an atomic publication artifact', async ({
     ),
     benefit: expect.stringContaining('preserves reliable dashboards and alerts'),
   });
+  expect(artifact.proposal.feasibilityBasis.assessments[0]).toEqual(
+    expect.objectContaining({
+      finding: 'unproven',
+      hardLimits: expect.stringContaining('nonzero time'),
+      evidence: expect.stringContaining('OBS-REPLAY-017'),
+    }),
+  );
   expect(artifact.proposal.requirements[0]).toEqual(
     expect.objectContaining({
       id: 'WILL-01',

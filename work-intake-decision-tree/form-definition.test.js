@@ -77,6 +77,23 @@ test("answer compilation preserves stable field identifiers and output paths", (
       "The current metrics service cannot remain supported at the forecast workload.",
     "proposal.problem.benefit":
       "Closing the gap preserves alerting and restores capacity for SRE work.",
+    "proposal.feasibility-bases": [
+      {
+        id: "FB-001",
+        covers: "SHALL-001, AC-001",
+        target:
+          "Sustain 1.74 million samples per second under the accepted workload.",
+        hardLimits:
+          "The fixed POC path is 10 Gb/s; propagation, serialization, and storage work cannot take negative time.",
+        evidence:
+          "The replay harness has generated the target load and retained its reconciliation report.",
+        assumptions:
+          "The replay preserves production encoding, cardinality, churn, and query concurrency.",
+        margin:
+          "The target is 50% above the observed 1.16-million-sample maximum.",
+        finding: "supported",
+      },
+    ],
     "proposal.current-state.baseline-mode": "reference",
     "proposal.current-state.baseline-reference":
       "OBS-ARCH-004 rev 7, accepted May 18, 2026 by SRE",
@@ -98,6 +115,25 @@ test("answer compilation preserves stable field identifiers and output paths", (
         "The current metrics service cannot remain supported at the forecast workload.",
       benefit:
         "Closing the gap preserves alerting and restores capacity for SRE work.",
+    },
+    feasibilityBasis: {
+      assessments: [
+        {
+          id: "FB-001",
+          covers: "SHALL-001, AC-001",
+          target:
+            "Sustain 1.74 million samples per second under the accepted workload.",
+          hardLimits:
+            "The fixed POC path is 10 Gb/s; propagation, serialization, and storage work cannot take negative time.",
+          evidence:
+            "The replay harness has generated the target load and retained its reconciliation report.",
+          assumptions:
+            "The replay preserves production encoding, cardinality, churn, and query concurrency.",
+          margin:
+            "The target is 50% above the observed 1.16-million-sample maximum.",
+          finding: "supported",
+        },
+      ],
     },
     currentState: {
       baseline: {
@@ -172,6 +208,9 @@ test("answer validation follows required and conditional rules from the definiti
   );
   assert.ok(
     missingForChange.some((entry) => entry.id === "proposal.problem.benefit")
+  );
+  assert.ok(
+    missingForChange.some((entry) => entry.id === "proposal.feasibility-bases")
   );
   assert.ok(
     !missingForChange.some((entry) => entry.id === "intake.inquiry-hours")

@@ -467,6 +467,95 @@
       ]
     },
     {
+      "id": "feasibility-basis",
+      "title": "Feasibility Basis",
+      "purpose": "Establish that the required result does not exceed a physical, hardware, protocol, or procedural limit.",
+      "completionEvidence": "Every quantitative or time-bound Requirement and Acceptance Condition is covered by an identified Feasibility Basis with explicit hard limits, supporting evidence, assumptions, margin, and finding.",
+      "fields": [
+        {
+          "id": "proposal.feasibility-bases",
+          "statePath": "feasibility.assessments",
+          "type": "repeater",
+          "label": "Feasibility Bases",
+          "help": "Add one basis for each distinct target or group of targets supported by the same limits and evidence. Every SHALL, SHOULD, and Acceptance Condition identifier must be covered by at least one basis.",
+          "addLabel": "feasibility basis",
+          "required": true,
+          "minimumItems": 1,
+          "columns": [
+            {
+              "key": "id",
+              "label": "Basis ID",
+              "required": true,
+              "placeholder": "FB-001"
+            },
+            {
+              "key": "covers",
+              "label": "Covered Requirement and Acceptance IDs",
+              "required": true,
+              "wide": true,
+              "help": "Comma-separate stable identifiers, for example SHALL-001, SHALL-002, AC-001.",
+              "placeholder": "SHALL-001, SHALL-002, AC-001"
+            },
+            {
+              "key": "target",
+              "label": "Which measurable target does this basis assess?",
+              "type": "textarea",
+              "required": true,
+              "wide": true,
+              "placeholder": "Sustain 1.74 million samples per second with 14.2 million active series…"
+            },
+            {
+              "key": "hardLimits",
+              "label": "Which hard limits and irreducible steps apply?",
+              "type": "textarea",
+              "required": true,
+              "wide": true,
+              "help": "Identify physical distance, link rate, compute, storage, protocol, startup, reboot, cooling, or mandatory sequence limits. A nanosecond has a physical travel distance; if propagation alone consumes 54 ms, a 30 ms end-to-end target is impossible.",
+              "placeholder": "The fixed replay path is 10 Gb/s; serialization, propagation, and storage acknowledgement consume part of the latency budget…"
+            },
+            {
+              "key": "evidence",
+              "label": "What evidence shows that the required result is achievable?",
+              "type": "textarea",
+              "required": true,
+              "wide": true,
+              "help": "Reference a representative demonstration, retained benchmark, calculation, decomposition, or independently reviewable model. A promise or vendor maximum is not evidence by itself.",
+              "placeholder": "OBS-REPLAY-017 generated and reconciled the target load through the fixed test path…"
+            },
+            {
+              "key": "assumptions",
+              "label": "Under which conditions does that evidence hold?",
+              "type": "textarea",
+              "required": true,
+              "wide": true,
+              "placeholder": "The replay preserves production encoding, cardinality, churn, query concurrency, and failure behavior…"
+            },
+            {
+              "key": "margin",
+              "label": "What margin remains between the target and the nearest limit?",
+              "type": "textarea",
+              "required": true,
+              "wide": true,
+              "help": "A target at the boundary has no operating margin and must not be presented as routine capacity.",
+              "placeholder": "The target remains 21% below the measured saturation point…"
+            },
+            {
+              "key": "finding",
+              "label": "Feasibility Assessment finding",
+              "required": true,
+              "options": [
+                ["demonstrated", "Demonstrated"],
+                ["supported", "Supported"],
+                ["unproven", "Unproven — bounded Discovery required"],
+                ["contradicted", "Contradicted — target must change"]
+              ]
+            }
+          ],
+          "outputPath": "feasibilityBasis.assessments"
+        }
+      ]
+    },
+    {
       "id": "required-difference",
       "title": "Required Difference",
       "purpose": "Make the material gap inspectable.",
@@ -562,7 +651,7 @@
           "statePath": "acceptance",
           "type": "repeater",
           "label": "Acceptance Conditions",
-          "help": "Describe observable proof of the Desired Outcome. Acceptance is not ‘the implementation is complete,’ ‘documentation exists,’ or ‘a ticket was closed.’",
+          "help": "Record one independently assessable result per row. Describe observable proof of the Desired Outcome; acceptance is not ‘the implementation is complete,’ ‘documentation exists,’ or ‘a ticket was closed.’",
           "addLabel": "acceptance condition",
           "required": true,
           "minimumItems": 1,

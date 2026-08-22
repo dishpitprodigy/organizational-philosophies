@@ -1,5 +1,7 @@
 import { z } from 'zod/v3';
 
+import { feasibilityPolicyIssues } from './feasibilityPolicy.mjs';
+
 const nonEmpty = z.string().min(1);
 const entityReference = nonEmpty.regex(/^[a-z][a-z0-9-]*:[^/]+\/.+$/);
 
@@ -94,6 +96,27 @@ export const workProposalArtifactSchema = z
           proof: nonEmpty,
           horizon: nonEmpty,
         }),
+        feasibilityBasis: z.object({
+          assessments: z
+            .array(
+              z.object({
+                id: nonEmpty,
+                covers: z.array(nonEmpty).min(1),
+                target: nonEmpty,
+                hardLimits: nonEmpty,
+                evidence: nonEmpty,
+                assumptions: nonEmpty,
+                margin: nonEmpty,
+                finding: z.enum([
+                  'demonstrated',
+                  'supported',
+                  'unproven',
+                  'contradicted',
+                ]),
+              }),
+            )
+            .min(1),
+        }),
         requiredDifference: z.object({
           summary: nonEmpty,
           preserve: nonEmpty,
@@ -164,7 +187,19 @@ export const workProposalArtifactSchema = z
     }),
     reviews: z.array(z.record(z.unknown())).optional(),
   })
-  .passthrough();
+  .passthrough()
+  .superRefine((artifact, context) => {
+    for (const message of feasibilityPolicyIssues(
+      artifact.proposal,
+      artifact.routingRequest.facts,
+    )) {
+      context.addIssue({
+        code: z.ZodIssueCode.custom,
+        path: ['proposal', 'feasibilityBasis', 'assessments'],
+        message,
+      });
+    }
+  });
 
 export type WorkProposalArtifact = z.infer<typeof workProposalArtifactSchema>;
 

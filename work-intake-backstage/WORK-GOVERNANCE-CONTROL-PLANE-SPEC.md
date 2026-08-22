@@ -149,6 +149,19 @@ A revision becomes reviewable only when required evidence is present and valid.
 Publication freezes the exact Canonical Artifact and rendered representation
 used for review. Later edits create another revision.
 
+Every quantitative or time-bound required result includes a Feasibility Basis:
+the assessed target, applicable hard limits and irreducible steps, supporting
+evidence, assumptions, operating margin, and Feasibility Assessment finding. A
+Proposal Revision may contain several Feasibility Bases; stable coverage
+identifiers connect each mandatory Requirement and Acceptance Condition to at
+least one basis. The Feasibility Assessment verifies that each quantitative or
+time-bound result has been named and that the cited basis actually assesses it;
+the schema cannot infer physical completeness from free-form prose. A delivery
+target whose finding is unproven routes to Assisted Intake or bounded
+Discovery. A target contradicted by a physical, hardware, protocol, or
+procedural limit is rejected for correction. Approval cannot make such a target
+achievable.
+
 ### Publication control
 
 The backend attempts an atomic database claim before performing external work:
