@@ -38,13 +38,92 @@ test("Work Proposal identity is structural rather than parsed from display text"
       revision: result.proposalRecord.revision,
       label: result.proposalRecord.label,
     },
-    { id: "WP-2026-0042", revision: 6, label: "WP-2026-0042 rev 6" }
+    { id: "WP-2026-0042", revision: 7, label: "WP-2026-0042 rev 7" }
   );
+});
+
+test("metrics selection names every system affected by replacing shared monitoring", () => {
+  const result = evaluate(structuredClone(SCENARIOS["Metrics selection"]));
+
+  assert.deepEqual(result.graph.selected, [
+    "researchPortal",
+    "computeScheduler",
+    "dataTransfer",
+    "edgeServices",
+    "containerPlatform",
+    "linuxFleet",
+    "dcFoundation",
+    "networkFabric",
+    "identityPlatform",
+    "researchData",
+    "metricsPlatform",
+  ]);
+  assert.deepEqual(result.graph.upstreamSystems, [
+    "containerPlatform",
+    "networkFabric",
+    "identityPlatform",
+    "linuxFleet",
+    "dcFoundation",
+  ]);
+  assert.deepEqual(result.graph.downstreamSystems, [
+    "researchPortal",
+    "computeScheduler",
+    "dataTransfer",
+    "edgeServices",
+    "containerPlatform",
+    "linuxFleet",
+    "dcFoundation",
+    "networkFabric",
+    "identityPlatform",
+    "researchData",
+  ]);
+  assert.deepEqual(result.graph.conditionalDependencies, [{
+    dependentSystem: "metricsPlatform",
+    prerequisiteSystem: "linuxFleet",
+    condition: "The selected candidate runs on Linux virtual machines or bare-metal servers.",
+    evidence: "The candidate architecture and failure-mode record identifies its operating-system and compute substrate.",
+    createsCycle: true,
+  }]);
+});
+
+test("dependency routing exposes recursive prerequisites, consumers, and cycles", () => {
+  const state = blankState();
+  state.affectedSystems = ["metricsPlatform"];
+
+  const graph = evaluate(state).graph;
+
+  assert.deepEqual(graph.dependencies, [
+    "containerPlatform",
+    "networkFabric",
+    "identityPlatform",
+    "linuxFleet",
+    "dcFoundation",
+  ]);
+  assert.deepEqual(graph.dependents, [
+    "researchPortal",
+    "computeScheduler",
+    "dataTransfer",
+    "edgeServices",
+    "containerPlatform",
+    "linuxFleet",
+    "dcFoundation",
+    "networkFabric",
+    "identityPlatform",
+    "researchData",
+  ]);
+  assert.deepEqual(graph.cycles, [[
+    "containerPlatform",
+    "linuxFleet",
+    "dcFoundation",
+    "networkFabric",
+    "identityPlatform",
+    "metricsPlatform",
+  ]]);
 });
 
 test("publishable fixture content and artifact schema are governed by proposal revision", () => {
   const contracts = [
-    ["Metrics selection", 6, "f088246c65ce57f709dd9e4395c293ee82bda135bfe839b2238ca61cc91ae737"],
+    ["Metrics selection", 7, "94c1ce051c6ba23c1e77726f28444a40ebe8d11be4c98895f09d8675890a7f69"],
     ["SSO migration", 3, "e720cd6d955606360b6ef0e2d8b55d8de9e6a21502dcb12832280908d2081e38"],
     ["Identity platform redesign", 3, "5ec19355e875c8e4bb038cfd63a6e007c26db1e2fb66da4801f472847df9b1d0"],
   ];
@@ -70,8 +149,8 @@ test("a user explicitly creates the next Work Proposal revision", () => {
 
   const revision = beginNewRevision(state);
 
-  assert.equal(revision, 7);
-  assert.equal(state.proposalRevision, 7);
+  assert.equal(revision, 8);
+  assert.equal(state.proposalRevision, 8);
   assert.equal(state.scenario, "Custom");
 });
 
@@ -81,7 +160,7 @@ test("editing a Work Proposal does not silently consume a revision", () => {
 
   markProposalEdited(state);
 
-  assert.equal(state.proposalRevision, 6);
+  assert.equal(state.proposalRevision, 7);
   assert.equal(state.scenario, "Custom");
   assert.equal(state.guided.enforce, true);
 });
@@ -150,7 +229,7 @@ test("publication artifact preserves intake authority boundaries", () => {
     {
       schemaVersion: 2,
       id: "WP-2026-0042",
-      revision: 6,
+      revision: 7,
       state: "Draft Work Proposal — sponsor acceptance unverified",
       authorized: false,
     }

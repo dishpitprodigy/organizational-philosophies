@@ -254,7 +254,7 @@
       ...blankState(),
       scenario: "Metrics selection",
       proposalId: "WP-2026-0042",
-      proposalRevision: 6,
+      proposalRevision: 7,
       requester: "Avery Shah",
       requestingTeam: "sre",
       catalogPath: "change",
@@ -311,8 +311,15 @@
       knownUnknowns: true,
       uncertaintyQuestion: "Which option passes the 1.74-million-sample ingestion test, the 50-query latency envelope, the 8,420-rule failure tests, and the operator exercises at the lowest defensible five-year cost, and which current obligations or candidate claims remain unproven after that comparison?",
       discoveryTimebox: "30 working days: 5 days to freeze inputs, 5 days for the Implementation Currency Check and response review, 15 days for equivalent POCs, and 5 days for independent scoring and the selection record",
-      affectedSystems: ["metricsPlatform", "researchPortal", "computeScheduler", "dataTransfer", "containerPlatform"],
-      dependencyNotes: "SRE owns the baseline, replay harness, rule corpus, operator exercises, and future service. Platform provides an isolated six-node Kubernetes POC cluster and records cluster resource use. Network Engineering provides the 10 Gb/s replay path and runs packet-loss and zone-isolation tests. Identity Engineering validates OIDC groups and service identities. Researcher Portal, Compute Scheduler, Secure Data Transfer, Container Platform, and Data Platform owners each validate their ten highest-value queries and critical alerts. Finance validates the five-year cost model and may authorize contracting only after selection. Architecture reviews cross-system consequences but does not create or own the Selection Decision Record.",
+      affectedSystems: ["researchPortal", "computeScheduler", "dataTransfer", "edgeServices", "containerPlatform", "linuxFleet", "dcFoundation", "networkFabric", "identityPlatform", "researchData", "metricsPlatform"],
+      dependencyFocusSystems: ["metricsPlatform"],
+      conditionalDependencies: [{
+        dependentSystem: "metricsPlatform",
+        prerequisiteSystem: "linuxFleet",
+        condition: "The selected candidate runs on Linux virtual machines or bare-metal servers.",
+        evidence: "The candidate architecture and failure-mode record identifies its operating-system and compute substrate.",
+      }],
+      dependencyNotes: "SRE owns the baseline, replay harness, rule corpus, operator exercises, and future service. Every catalog system is affected: each consumes metrics, supplies part of the metrics service's operating substrate, or does both. Every system owner validates its highest-value queries, alerts, infrastructure signals, and failure behavior. Platform provides an isolated six-node Kubernetes POC cluster and records cluster resource use. Network Engineering provides the 10 Gb/s replay path and runs packet-loss and zone-isolation tests. Identity Engineering validates OIDC groups and service identities. If a candidate runs on Linux virtual machines or bare metal, Systems Engineering supplies the operating system and compute substrate while that same Linux fleet depends on the metrics service for monitoring; the candidate assessment must document and test that circular operating dependency. Finance validates the five-year cost model and may authorize contracting only after selection. Architecture reviews cross-system consequences but does not create or own the Selection Decision Record.",
       operationalOwner: "sre",
       acceptanceAuthority: "VP, Infrastructure & Reliability",
       affectedUsers: 420,
@@ -790,14 +797,96 @@
 
   function dependencyGraph(state) {
     const selected = new Set(state.affectedSystems || []);
-    const dependencies = new Set();
-    selected.forEach((systemId) => {
-      const system = COMPANY.systems[systemId];
-      (system?.dependsOn || []).forEach((dependencyId) => {
-        if (!selected.has(dependencyId)) dependencies.add(dependencyId);
+    const systemIds = Object.keys(COMPANY.systems);
+    const dependentsBySystem = new Map(systemIds.map((systemId) => [systemId, []]));
+    systemIds.forEach((systemId) => {
+      (COMPANY.systems[systemId].dependsOn || []).forEach((dependencyId) => {
+        dependentsBySystem.get(dependencyId)?.push(systemId);
       });
     });
-    const allSystems = [...selected, ...dependencies];
+
+    const closure = (startingIds, adjacentIds, excludedIds) => {
+      const discovered = new Set();
+      const pending = [...startingIds];
+      while (pending.length) {
+        const systemId = pending.shift();
+        (adjacentIds(systemId) || []).forEach((adjacentId) => {
+          if (excludedIds.has(adjacentId) || discovered.has(adjacentId)) return;
+          discovered.add(adjacentId);
+          pending.push(adjacentId);
+        });
+      }
+      return discovered;
+    };
+
+    const focusSystems = new Set(state.dependencyFocusSystems?.length ? state.dependencyFocusSystems : selected);
+    const upstreamSystems = closure(focusSystems, (systemId) => COMPANY.systems[systemId]?.dependsOn, focusSystems);
+    const downstreamSystems = closure(focusSystems, (systemId) => dependentsBySystem.get(systemId), focusSystems);
+    const dependencies = closure(selected, (systemId) => COMPANY.systems[systemId]?.dependsOn, selected);
+    const dependents = closure(selected, (systemId) => dependentsBySystem.get(systemId), selected);
+    const allSystems = [...new Set([...selected, ...dependencies, ...dependents])];
+    const relevantSystems = new Set(allSystems);
+    const catalogOrder = new Map(systemIds.map((systemId, index) => [systemId, index]));
+    const indices = new Map();
+    const lowLinks = new Map();
+    const stack = [];
+    const onStack = new Set();
+    const components = [];
+    let nextIndex = 0;
+
+    const visit = (systemId) => {
+      indices.set(systemId, nextIndex);
+      lowLinks.set(systemId, nextIndex);
+      nextIndex += 1;
+      stack.push(systemId);
+      onStack.add(systemId);
+
+      (COMPANY.systems[systemId]?.dependsOn || [])
+        .filter((dependencyId) => relevantSystems.has(dependencyId))
+        .forEach((dependencyId) => {
+          if (!indices.has(dependencyId)) {
+            visit(dependencyId);
+            lowLinks.set(systemId, Math.min(lowLinks.get(systemId), lowLinks.get(dependencyId)));
+          } else if (onStack.has(dependencyId)) {
+            lowLinks.set(systemId, Math.min(lowLinks.get(systemId), indices.get(dependencyId)));
+          }
+        });
+
+      if (lowLinks.get(systemId) !== indices.get(systemId)) return;
+      const component = [];
+      let member;
+      do {
+        member = stack.pop();
+        onStack.delete(member);
+        component.push(member);
+      } while (member !== systemId);
+      components.push(component.sort((left, right) => catalogOrder.get(left) - catalogOrder.get(right)));
+    };
+
+    allSystems.forEach((systemId) => {
+      if (!indices.has(systemId)) visit(systemId);
+    });
+    const cycles = components
+      .filter((component) => component.length > 1 || COMPANY.systems[component[0]]?.dependsOn.includes(component[0]))
+      .sort((left, right) => catalogOrder.get(left[0]) - catalogOrder.get(right[0]));
+    const dependencyPathExists = (startingId, targetId) => {
+      const visited = new Set();
+      const pending = [startingId];
+      while (pending.length) {
+        const systemId = pending.shift();
+        if (systemId === targetId) return true;
+        if (visited.has(systemId)) continue;
+        visited.add(systemId);
+        pending.push(...(COMPANY.systems[systemId]?.dependsOn || []));
+      }
+      return false;
+    };
+    const conditionalDependencies = (state.conditionalDependencies || [])
+      .filter(({ dependentSystem, prerequisiteSystem }) => COMPANY.systems[dependentSystem] && COMPANY.systems[prerequisiteSystem])
+      .map((relationship) => ({
+        ...relationship,
+        createsCycle: dependencyPathExists(relationship.prerequisiteSystem, relationship.dependentSystem),
+      }));
     const teamIds = [...new Set(allSystems.map((systemId) => COMPANY.systems[systemId]?.owner).filter(Boolean))];
     const handoffs = [...selected].reduce((count, systemId) => {
       const owner = COMPANY.systems[systemId]?.owner;
@@ -805,7 +894,13 @@
     }, 0);
     return {
       selected: [...selected],
+      focusSystems: [...focusSystems],
+      upstreamSystems: [...upstreamSystems],
+      downstreamSystems: [...downstreamSystems],
       dependencies: [...dependencies],
+      dependents: [...dependents],
+      cycles,
+      conditionalDependencies,
       allSystems,
       teamIds,
       handoffs,

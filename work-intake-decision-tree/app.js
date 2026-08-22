@@ -133,6 +133,12 @@ function prepareGuidedState(candidate) {
     candidate.guided.dependencies = [
       { dependency: "Versioned Current-State Baseline and workload replay", owner: "SRE", contribution: "Freeze OBS-ARCH-004 rev 7 plus delta, OBS-MEASURE-2026-05, the query and rule corpora, operator exercises, and failure scripts before candidate testing.", evidence: "Signed input manifest and retained hashes; this does not commit implementation capacity." },
       { dependency: "Equivalent POC compute and replay path", owner: "Platform and Network Engineering", contribution: "Provide the isolated six-node Kubernetes cluster, record resource use, sustain the 10 Gb/s replay path, and execute packet-loss and zone-isolation tests.", evidence: "POC environment record and accepted test schedule." },
+      ...(candidate.conditionalDependencies || []).map((relationship) => ({
+        dependency: `${COMPANY.systems[relationship.dependentSystem].name} may depend on ${COMPANY.systems[relationship.prerequisiteSystem].name}`,
+        owner: `${COMPANY.teams[COMPANY.systems[relationship.dependentSystem].owner].shortName} and ${COMPANY.teams[COMPANY.systems[relationship.prerequisiteSystem].owner].shortName}`,
+        contribution: `${relationship.condition} Identify bootstrap, failure-detection, and recovery behavior before selecting that hosting model.`,
+        evidence: relationship.evidence,
+      })),
       { dependency: "Consumer validation", owner: "Named system owners", contribution: "Each affected service owner validates its ten highest-value queries and critical alerts against the same candidate release and input package.", evidence: "Per-owner query and alert validation records." },
       { dependency: "Five-year comparison and contracting boundary", owner: "Finance & Procurement", contribution: "Validate lifecycle cost; authorize contracting only after the selection decision.", evidence: "$1.2 million comparison envelope; no purchase authorization in this proposal." },
     ];
@@ -625,8 +631,12 @@ function artifactTree(result) {
 
 function systemGraphMarkup(result) {
   const selected = result.graph.selected.map((id) => `<li><strong>${h(COMPANY.systems[id].name)}</strong> · ${h(COMPANY.teams[COMPANY.systems[id].owner].name)}</li>`).join("");
-  const dependencies = result.graph.dependencies.map((id) => `<li><strong>${h(COMPANY.systems[id].name)}</strong> · derived dependency owned by ${h(COMPANY.teams[COMPANY.systems[id].owner].name)}</li>`).join("");
-  return `<h4>Named affected systems</h4><ul>${selected || "<li>None named</li>"}</ul><h4>Derived dependencies</h4><ul>${dependencies || "<li>None derived</li>"}</ul>`;
+  const focus = result.graph.focusSystems.map((id) => `<li><strong>${h(COMPANY.systems[id].name)}</strong></li>`).join("");
+  const dependencies = result.graph.upstreamSystems.map((id) => `<li><strong>${h(COMPANY.systems[id].name)}</strong> · recursive prerequisite owned by ${h(COMPANY.teams[COMPANY.systems[id].owner].name)}</li>`).join("");
+  const dependents = result.graph.downstreamSystems.map((id) => `<li><strong>${h(COMPANY.systems[id].name)}</strong> · recursive consumer owned by ${h(COMPANY.teams[COMPANY.systems[id].owner].name)}</li>`).join("");
+  const cycles = result.graph.cycles.map((cycle) => `<li>${cycle.map((id) => `<strong>${h(COMPANY.systems[id].name)}</strong>`).join(", ")} · each can reach every other through declared dependency paths</li>`).join("");
+  const conditionalDependencies = result.graph.conditionalDependencies.map((relationship) => `<li><strong>${h(COMPANY.systems[relationship.dependentSystem].name)}</strong> may depend on <strong>${h(COMPANY.systems[relationship.prerequisiteSystem].name)}</strong><br><small>Condition: ${h(relationship.condition)} Evidence: ${h(relationship.evidence)}${relationship.createsCycle ? " Activating this relationship closes a dependency cycle." : ""}</small></li>`).join("");
+  return `<h4>Named affected systems</h4><ul>${selected || "<li>None named</li>"}</ul><h4>Relationship focus</h4><ul>${focus || "<li>None named</li>"}</ul><h4>Recursive upstream prerequisites</h4><ul>${dependencies || "<li>None</li>"}</ul><h4>Recursive downstream consumers</h4><ul>${dependents || "<li>None</li>"}</ul><h4>Unconditional cyclic dependency groups</h4><ul>${cycles || "<li>None detected</li>"}</ul><h4>Conditional solution dependencies</h4><ul>${conditionalDependencies || "<li>None identified</li>"}</ul>`;
 }
 
 function companyStructureMarkup() {
