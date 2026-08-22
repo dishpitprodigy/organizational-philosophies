@@ -98,6 +98,14 @@ ontological boundary. A later Finance review page or application integration
 must use the same API and authority model without requiring Finance users to
 enter Backstage.
 
+Jira and Jira Product Discovery are reference destinations, not required
+infrastructure. The portable artifact is this control-plane specification and
+its domain contract. An adopter may implement adapters for ServiceNow, RT,
+Remedy, Zendesk, or another system with an adequate API. The control plane does
+not provision every destination or erase its administrative boundaries; the
+adopter maps these authority and evidence requirements into the destination's
+records, permissions, and workflows.
+
 ## Required invariants
 
 1. A Proposal Lineage has a stable identity independent of Jira keys and other
@@ -113,13 +121,13 @@ enter Backstage.
    a disabled button.
 7. A retry may complete or repair the same publication operation, but it may not
    create a second logical publication.
-8. Jira edits, comments, attachments, transitions, and administrator actions
-   cannot silently revise a proposal or authorization.
+8. Edits, comments, attachments, transitions, and administrator actions in an
+   external system cannot silently revise a proposal or authorization.
 9. Execution detail may change within Delegated Execution Authority. A change
    to the authorized result or binding constraints requires an Amendment or a
    new authorization decision.
 10. Closure requires Outcome Observations and an authenticated Closure Decision;
-    completion of Jira work items is insufficient by itself.
+    completion of external execution records is insufficient by itself.
 11. Every projection remains traceable to the exact authoritative record and
     content hash that produced it.
 12. Incomplete understanding routes to Assisted Intake. Structurally invalid or
@@ -181,22 +189,28 @@ for the same publication; it does not create another publication or revision.
 
 ### Review and decision
 
-A proposal projection is a workflow envelope for a frozen revision. Reviewers
-may comment and perform authorized transitions. They do not edit the proposal
-description or add replacement artifacts.
+A proposal projection is a workflow envelope for a frozen revision. A
+projection-only destination may display the proposal, collect discussion, and
+link users back to an authenticated decision interface. Its local status is not
+a Decision.
 
-The initial Jira policy should therefore grant ordinary reviewers only the
-minimum operations required for review:
+An interactive-review destination may initiate Decision commands only when its
+adapter can preserve the actor's identity, validate that actor's Decision
+Authority through the Work Intake service, and handle duplicate commands
+safely. The destination should grant ordinary reviewers only the minimum
+operations required for review:
 
 - browse the proposal;
 - comment;
 - perform role-authorized workflow transitions; and
 - supply only the fields exposed by those transition screens.
 
-The publication service account creates records and attaches generated
-artifacts. Attachment creation, attachment deletion, and general issue editing
-are withheld from ordinary reviewers. Administrative exceptions are audited;
-they do not change the Work Intake Record.
+The publication service identity creates records and attaches generated
+artifacts. Attachment creation, attachment deletion, and general editing of the
+governance envelope are withheld from ordinary reviewers wherever the
+destination supports those controls. A destination that cannot enforce them
+remains projection-only. Administrative exceptions are audited; they do not
+change the Work Intake Record.
 
 Every disposition records the actor, authority basis, timestamp, rationale,
 and Proposal Revision. Rejection leaves the rejected revision intact. A later
@@ -204,10 +218,10 @@ revision may re-enter review and may receive a new external projection.
 
 A Decision command must enter the Work Intake service before it becomes
 authoritative. Initially, reviewers decide in the Backstage queue or a narrow
-review client, and the resulting state is projected into Jira. A future Jira
-transition may initiate the same command only when the integration can preserve
-the Jira actor, validate that actor's Decision Authority, and handle duplicate
-delivery safely. A Jira status change by itself is never a Decision.
+review client, and the resulting state is projected into external systems. A
+future external transition may initiate the same command only through an
+interactive-review adapter satisfying the preceding requirements. An external
+status change by itself is never a Decision.
 
 ### Authorization and execution
 
@@ -221,12 +235,12 @@ Approval creates an Authorized Work record containing:
 - candidate Deliverables and affected Catalog entities.
 
 The control plane then publishes team-specific Execution Projections. Each team
-may use its own Jira project, workflow, screens, and fields. A shared semantic
-intake model does not require a company-wide Jira project or a universal
-delivery form.
+may use its own system, project or queue, workflow, screens, and fields. A shared
+semantic intake model does not require a company-wide ticketing project or a
+universal delivery form.
 
 The Work Intake Record stores the authoritative relationship between Authorized
-Work and every Deliverable. Jira parentage, issue links, and comments expose
+Work and every Deliverable. External parentage, links, and comments may expose
 that relationship for users but do not define it.
 
 Execution Projections should separate locked governance context from team-owned
@@ -280,7 +294,7 @@ its own SHA-256 hash and generator version. A downloaded or emailed PDF may be
 edited, but a modified file cannot authenticate as the published rendering
 because its hash no longer matches the Work Intake Record.
 
-An initial Jira proposal projection should contain:
+The initial Jira reference projection contains:
 
 ```text
 Summary: [WP-2026-0043 rev 12] Migrate workforce authentication
@@ -402,21 +416,21 @@ separate event manager for the first implementation.
 
 ## Projection integrity
 
-Continuous Jira reconciliation is not an initial requirement. Canonical
-integrity lives in PostgreSQL; Jira receives frozen, hashed artifacts and a
-restricted workflow envelope.
+Continuous external-system reconciliation is not an initial requirement.
+Canonical integrity lives in PostgreSQL; destinations receive frozen, hashed
+artifacts and an appropriately controlled projection envelope.
 
 The first implementation must store all external identities and artifact IDs
 returned during publication. It should provide an explicit **Verify
 Publication** operation that confirms the external record and expected
-attachments still exist. Verification records observed state; it never changes
+artifacts still exist. Verification records observed state; it never changes
 publication eligibility or canonical content.
 
 Webhook-triggered reconciliation and a scheduled anti-entropy scan may be added
 after production evidence demonstrates the need. If added, only active
 publications are scheduled, terminal records are retired after a final check,
-and Jira notifications enter a deduplicated inbox before verification. A
-webhook must never update the fields used to decide whether a revision may be
+and destination notifications enter a deduplicated inbox before verification.
+A webhook must never update the fields used to decide whether a revision may be
 published.
 
 ## Interfaces
@@ -447,6 +461,35 @@ Publication Profiles map Deliverables into the projects and record types used
 by their owners. Different teams may have different data requirements and
 workflows. Adapters preserve the common authorization lineage while translating
 only the delivery information relevant to that destination.
+
+### Destination adapter contract
+
+Every publication adapter must:
+
+- create or locate a projection through a stable publication identity;
+- preserve the canonical record identity, revision, and content hash;
+- return the destination identities needed for exact receipt replay and later
+  verification;
+- make retries idempotent and distinguish repair from a new publication;
+- translate only the information owned by that destination; and
+- prevent destination state from becoming canonical merely because users can
+  edit it there.
+
+An execution adapter must also preserve the relationship between a Deliverable
+and its governing Authorized Work while leaving implementation planning within
+the delivery team's Delegated Execution Authority.
+
+An interactive-review adapter must preserve authenticated actor identity, send
+Decision commands through the Work Intake service, enforce the service's
+authority result, and deduplicate repeated commands. An adapter that cannot do
+so is still usable as a projection-only destination; it cannot turn a local
+status or approval into an authoritative Decision.
+
+This specification defines those obligations. It does not require the prototype
+to install a destination's users, roles, permission schemes, workflows, or
+other site policy. Reference-adapter documentation must state which obligations
+the adapter implements, which depend on local configuration, and which are not
+supported.
 
 ## Security and audit requirements
 
@@ -513,10 +556,11 @@ creating scores that people can optimize in place of outcomes.
 
 The initial implementation will not:
 
-- replace Jira or another team's delivery system;
-- impose one Jira project, workflow, or form on every delivery domain;
-- synchronize arbitrary Jira edits back into canonical records;
-- allow reviewers to replace proposal artifacts in Jira;
+- replace another team's delivery system;
+- impose one external project, queue, workflow, or form on every delivery
+  domain;
+- synchronize arbitrary external-system edits back into canonical records;
+- allow reviewers to replace proposal artifacts in a projection destination;
 - build continuous projection reconciliation before operational evidence
   justifies it;
 - require Kafka, MongoDB, a dedicated event store, or microservices;
@@ -532,13 +576,18 @@ The first credible closed loop is complete when:
 1. PostgreSQL retains a Proposal Lineage and every saved Proposal Revision.
 2. A reviewable revision publishes once per profile and returns the same receipt
    on an idempotent retry.
-3. Jira presents a locked workflow envelope containing exact, hashed PDF and
-   JSON artifacts.
+3. A configured reference destination presents exact, hashed human-readable and
+   canonical artifacts and declares either projection-only or
+   interactive-review mode. A projection-only destination leaves Decision
+   actions in an authenticated Work Intake client; an interactive-review
+   destination passes an acceptance test proving that an unauthorized actor
+   cannot issue a Decision command. The current reference implementation uses
+   Jira, PDF, and JSON in projection-only mode.
 4. An authenticated approval creates Authorized Work linked to the exact
    Proposal Revision and Decision.
 5. Authorized Work creates one or more team-specific Execution Projections.
 6. The control plane retains authoritative links to every external execution
-   record even if Jira links are later rearranged.
+   record even if destination-local links are later rearranged.
 7. Teams may change implementation detail without rewriting governance context.
 8. A change outside delegated bounds requires an attributable Amendment or new
    authorization.

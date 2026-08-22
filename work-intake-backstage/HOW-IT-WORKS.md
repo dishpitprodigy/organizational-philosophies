@@ -225,6 +225,16 @@ The dry run prints what would be created and changes nothing. Creation requires 
 
 Repeated applies converge because existing project keys are removed from the plan.
 
+Bootstrap stops at project creation. It does not create users, roles, permission
+schemes, workflows, screens, field schemes, or other Jira site policy. The
+command makes the Northstar reference demonstration repeatable; it does not
+turn an arbitrary Jira site into a production-ready Work Governance deployment.
+The configured demonstration site restricts ordinary reviewers from editing or
+replacing the frozen governance envelope, but those permissions are local Jira
+configuration rather than bootstrap output. The Jira adapter does not accept
+workflow transitions as authoritative Decisions; its review records remain
+projection-only.
+
 ### `scripts/jira/publish.mjs`
 
 Publish turns one versioned work-intake artifact into Jira issue projections.
@@ -378,6 +388,9 @@ It does not run as root. nginx owns the privileged network ports; Backstage owns
 - It does not commit delivery capacity because a team appears in a route.
 - It does not create Jira records during dry runs.
 - It does not place Atlassian credentials in browser code or repository configuration.
+- It does not provision Jira permissions, workflows, users, or site-wide policy.
+- It does not require Jira as a destination. Jira and Jira Product Discovery
+  are reference adapters for the destination-neutral publication contract.
 - It does not currently consume webhooks or act as an event manager. Publication is a synchronous, user-initiated request.
 - It does not make Jira the source of organizational authority. Jira stores projections of decisions made elsewhere.
 

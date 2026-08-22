@@ -1,8 +1,9 @@
 # Work Intake Backstage Prototype
 
-This is a standalone Backstage app for the work-intake prototype. Its catalog
-models the fictional Northstar Research Network used by the decision-tree
-prototype, and it uses the local development database.
+This is one application host and reference integration for the work-intake
+prototype. Its catalog models the fictional Northstar Research Network used by
+the decision-tree prototype, and it uses the local development database. The
+governance model does not require Backstage, Jira, or any other named product.
 
 For the plain-language explanation of every script, plugin, trust boundary, and
 publication step, start with [How the Work Intake Prototype Works](HOW-IT-WORKS.md).
@@ -72,17 +73,21 @@ On another machine with Node.js 22 or 24 and the same repository checkout:
 cd work-intake-backstage
 podman compose up -d postgres
 ./yarn install
-chmod 600 ~/.atlassian.env
-./yarn jira:bootstrap
 ./yarn start
 ```
 
-The bootstrap command above is a non-mutating preview and verifies the Backstage
-catalog, Jira credentials, and required project set. Use
-`./yarn jira:bootstrap --apply` only when the fictional projects are absent. No
-Jira records need to be populated by hand. Open <http://localhost:3000>, enter as
-the guest user, select **Work Intake**, and choose **Metrics selection** for the
-complete demonstration.
+With Backstage running, a separately configured Jira sandbox can receive the
+reference projections. In another terminal, configure the credentials described
+under [Atlassian configuration](#atlassian-configuration), then run
+`./yarn jira:bootstrap`. The command is a non-mutating preview that verifies the
+Backstage catalog, Jira credentials, and required demo project set. Use
+`./yarn jira:bootstrap --apply` only when the fictional projects are absent.
+
+The bootstrapper creates demo projects; it does not configure a production Jira
+site, install permission or workflow schemes, create users, or prove that the
+site satisfies the control-plane specification. Open <http://localhost:3000>,
+enter as the guest user, select **Work Intake**, and choose **Metrics selection**
+for the complete demonstration.
 
 ## LAN HTTPS through nginx
 
@@ -176,6 +181,13 @@ records and relations, and then invokes the configured Jira or JPD Adapter. Add
 later destinations by implementing the publication target and artifact-store
 ports; intake artifacts and the browser interface do not change.
 
+Jira and Jira Product Discovery are reference adapters, not required
+infrastructure. ServiceNow, RT, Remedy, Zendesk, or another system with an
+adequate API may receive the same logical projections. Each adapter must map the
+specification's identities, authority boundaries, retry behavior, and evidence
+lineage into that destination. The repository does not promise that an adopter's
+external system will work without local configuration or administrative review.
+
 The generic backend API is:
 
 ```text
@@ -195,8 +207,9 @@ GET  /api/work-intake-publication/proposals/:id/:revision
 The Jira scripts treat Backstage as the source of organizational structure and
 routing metadata. They authenticate to the local Backstage catalog, read Group
 entities, and derive Jira project keys from
-`northstar.example/jira-project-key`. Nothing needs to be entered in Jira by
-hand.
+`northstar.example/jira-project-key`. The bootstrapper may create the fictional
+projects derived from those annotations. Jira users, roles, permissions,
+workflows, schemes, and other site policy remain outside its scope.
 
 Credentials live outside the repository in `~/.atlassian.env` by default:
 
@@ -233,6 +246,34 @@ that each governance authority needs a delivery queue.
 
 Both commands query the live Backstage catalog and Jira site. Repeated applies
 converge without recreating projects.
+
+This project bootstrap exists only to make the reference demonstration
+repeatable. It is not a production Jira configuration manager. A real adopter
+must decide how the control-plane requirements map to its destination's access
+model and obtain whatever local administrative assistance that system requires.
+
+### Jira reference-adapter control boundary
+
+The Jira adapter demonstrates destination-neutral publication through one
+specific API. Its control coverage is deliberately explicit:
+
+| Adapter obligation | Jira reference status |
+| --- | --- |
+| Stable publication identity and idempotent retry | Implemented by the Publication Module's database claim, Jira publication labels and entity properties, and retained receipts |
+| Canonical proposal identity, revision, and content hash | Implemented in the projected description, attached canonical artifact, publication journal, and receipt |
+| Catalog-derived destination routing | Implemented; the browser artifact cannot choose its own trusted Jira project |
+| Proposal, review, and authorized-delivery projections | Implemented through the Jira publication profile |
+| Restricted governance-envelope editing | Depends on local Jira permission, role, screen, and workflow configuration; the bootstrapper does not install or verify those controls |
+| Authenticated Jira transition into a Decision command | Not supported; Jira review records are projection-only, and Jira status is not authoritative |
+| Users, service identities, and project access | Depends on local Jira administration |
+| Continuous webhook or scheduled reconciliation | Not supported by the initial implementation; retained receipts and idempotent repair protect publication without making Jira canonical |
+
+The locked permissions in the demonstration Jira site are therefore part of
+the reference control design, even though they are not provisioned by this
+repository. They keep ordinary reviewers from editing or replacing the frozen
+governance envelope. Another destination may enforce the same boundary through
+different roles, record ACLs, forms, or workflows. If it cannot, the adapter
+must remain projection-only for governance decisions.
 
 ### Publish an artifact
 

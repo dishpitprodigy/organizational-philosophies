@@ -1,27 +1,51 @@
-# Organizational Systems and Technical Operations
+# Most Organizations Never Close the Loop on Technical Work
 
-This repository contains working prototypes and long-form writing about how
-organizations define, authorize, deliver, operate, and learn from technical
-work.
+They can report which technical work is open, in progress, or complete. They
+cannot reliably reconstruct why that work exists, which evidence supported it,
+who authorized the commitment, what changed during delivery, or whether the
+finished work produced the operating result that justified its cost.
+
+That is an open governance loop. Demand enters through one system, decisions
+occur in meetings and documents, delivery is divided among team backlogs, and
+tickets close when their assigned output is finished. Each local workflow may
+function exactly as designed while the organization loses the chain connecting
+an observed problem to an authorized result. It can therefore complete every
+ticket without proving that it solved the problem.
+
+This repository develops the missing system: an authoritative record that
+preserves that chain through demand, evidence, decisions, authorization,
+delivery, observed outcomes, and explicit closure. The executable prototype and
+the related writing are concerned with the same question at different scales:
+how an organization carries the reason for technical work all the way through
+the work, then compares the result with the reason the work began.
 
 https://github.com/user-attachments/assets/a06a9468-e56b-459c-b4af-1ad6f95e8e68
 
 ## Work Governance Control Plane
 
 The executable prototype in this repository is a Work Governance Control Plane.
-It preserves the lineage connecting observed demand, evidence, proposal
-revisions, decisions, authorization, delivery projections, and operating
-outcomes. It does not attempt to become the place where every team plans and
-performs its work. Instead, it owns the governance record that must remain
-stable while Jira projects, review interfaces, organizational structures, and
-delivery practices change around it.
+It differs from another intake form, approval workflow, or project tracker
+because it does not optimize one segment of the path and call that segment the
+system. It owns the governance record that must remain stable while Jira
+projects, review interfaces, organizational structures, and delivery practices
+change around it. Those systems may support individual steps; none may silently
+replace the evidence, authority, or intended outcome that caused the work to
+exist.
 
 The heart of this tool is a small JavaScript/TypeScript application with a
 PostgreSQL backend. Hypothetically, it could run on any web server and be
 extended to use another tool as the backend for ownership and dependency
 mapping.
 
-The `work-intake-backstage` directory describes the current application host
+This is a working prototype, not a packaged product or an installer for a
+particular ticketing system. Jira and Jira Product Discovery are reference
+destinations because they make the publication boundary concrete. The same
+governance model may project into ServiceNow, RT, Remedy, Zendesk, or another
+system with an adequate API. An adopter is responsible for implementing that
+adapter and mapping the specification's authority rules into the destination's
+permissions, workflows, and record types.
+
+The `work-intake-backstage` directory describes one application host
 implementation. Backstage provides a useful engineering interface,
 authentication and service infrastructure, and access to catalog-owned facts
 about systems, owners, and dependencies. The Work Intake Record remains
@@ -30,7 +54,7 @@ lineage built from them. Jira and Jira Product Discovery receive controlled
 projections; neither Backstage entities nor Jira issues become the canonical
 work record.
 
-### The loop it controls
+### The loop most organizations leave open
 
 ```text
 Observe demand
@@ -57,8 +81,16 @@ Observe delivery and operating outcomes
 Close, amend, supersede, or withdraw
 ```
 
-This boundary preserves distinctions that ticket-driven intake commonly
-collapses:
+The final step is not administrative cleanup. The loop closes only when observed
+delivery and operating evidence is compared with the authorized result and an
+accountable authority decides what that evidence means. Closing a delivery
+ticket proves that somebody produced an output; it does not prove that the
+output changed the condition that justified the work. If the result did not
+become true, the record must show whether the work will continue, change, be
+replaced, or stop.
+
+Controlling the complete loop also preserves distinctions that ticket-driven
+intake commonly collapses:
 
 - Demand is a reason to investigate, not pre-authorized work.
 - A Work Proposal argues for an operating result. It does not authorize
@@ -126,8 +158,8 @@ same API and authority rules without requiring those users to adopt Backstage.
   language and the boundaries among demand, proposals, decisions,
   authorization, delivery, outcomes, and projections.
 - [Work Governance Control Plane Specification](work-intake-backstage/WORK-GOVERNANCE-CONTROL-PLANE-SPEC.md)
-  defines the authoritative lifecycle, persistence model, invariants, security
-  boundary, and implementation stages.
+  defines the authoritative lifecycle, persistence model, destination-adapter
+  contract, invariants, security boundary, and implementation stages.
 - [Backstage-hosted implementation](work-intake-backstage/) contains the current
   client, HTTP service, PostgreSQL persistence, publication module, Catalog
   integration, Jira adapters, deployment configuration, and tests.
