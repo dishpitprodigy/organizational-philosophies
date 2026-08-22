@@ -72,6 +72,10 @@ export const workProposalArtifactSchema = z
         title: nonEmpty,
         state: nonEmpty,
         authority: nonEmpty,
+        problem: z.object({
+          statement: nonEmpty,
+          benefit: nonEmpty,
+        }),
         currentState: z.object({
           summary: nonEmpty,
           baseline: z.object({

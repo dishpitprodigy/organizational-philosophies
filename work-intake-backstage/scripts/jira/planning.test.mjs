@@ -89,6 +89,10 @@ const artifact = {
     title: 'Select a successor metrics capability',
     state: 'Ready for Ordered Review',
     authority: 'May consume ordered review or bounded Discovery capacity',
+    problem:
+      'The current metrics platform cannot remain supported at the forecast workload.',
+    benefit:
+      'Solving the problem preserves reliable alerting and returns operating capacity to SRE.',
     currentState: 'The current metrics capability has three storage tiers.',
     desiredOutcome: 'Select a supportable capability using retained evidence.',
     requiredDifference: 'Compare retain, redesign, adopt, and buy options.',
@@ -243,10 +247,27 @@ test('reviewable proposal publishes intake and review projections, not candidate
   assert.match(plan.notes[0], /Candidate delivery was not published/);
 });
 
+test('historical schema-version-1 artifacts remain publishable without new evidence', () => {
+  const historical = structuredClone(artifact);
+  delete historical.proposal.problem;
+  delete historical.proposal.benefit;
+
+  const plan = buildPublicationPlan(
+    resolveArtifactRouting(historical, catalogEntities),
+  );
+
+  assert.doesNotMatch(plan.issues[0].description, /Problem\n/);
+  assert.match(plan.issues[0].description, /Current State\n/);
+});
+
 test('schema version 2 renders Jira prose from atomic evidence', () => {
   const atomic = structuredClone(artifact);
   atomic.schemaVersion = 2;
   atomic.form = { id: 'technical-work-proposal', version: 1 };
+  atomic.proposal.problem = {
+    statement: artifact.proposal.problem,
+    benefit: artifact.proposal.benefit,
+  };
   atomic.proposal.currentState = {
     summary: 'The current metrics capability has three storage tiers.',
     baseline: {
@@ -294,6 +315,11 @@ test('schema version 2 renders Jira prose from atomic evidence', () => {
   const description = plan.issues[0].description;
 
   assert.match(description, /Baseline: OBS-ARCH-004 rev 7/);
+  assert.match(description, /Problem\nThe current metrics platform cannot/);
+  assert.match(
+    description,
+    /Benefit of Solving the Problem\nSolving the problem preserves/,
+  );
   assert.match(
     description,
     /SHALL-001: The candidate shall execute the same workload\./,
@@ -311,6 +337,10 @@ test('an unverified schema-v2 draft is indexed without creating review work', ()
   draft.schemaVersion = 2;
   draft.proposal.state = 'Draft Work Proposal — sponsor acceptance unverified';
   draft.proposal.authority = 'No authority granted';
+  draft.proposal.problem = {
+    statement: artifact.proposal.problem,
+    benefit: artifact.proposal.benefit,
+  };
   draft.proposal.currentState = {
     summary: artifact.proposal.currentState,
     baseline: { mode: 'define' },

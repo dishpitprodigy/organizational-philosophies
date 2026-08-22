@@ -73,6 +73,10 @@ test("conditional fields use the bounded declarative grammar", () => {
 
 test("answer compilation preserves stable field identifiers and output paths", () => {
   const answers = {
+    "proposal.problem.statement":
+      "The current metrics service cannot remain supported at the forecast workload.",
+    "proposal.problem.benefit":
+      "Closing the gap preserves alerting and restores capacity for SRE work.",
     "proposal.current-state.baseline-mode": "reference",
     "proposal.current-state.baseline-reference":
       "OBS-ARCH-004 rev 7, accepted May 18, 2026 by SRE",
@@ -89,6 +93,12 @@ test("answer compilation preserves stable field identifiers and output paths", (
   };
 
   assert.deepEqual(compileAnswers(definition, answers), {
+    problem: {
+      statement:
+        "The current metrics service cannot remain supported at the forecast workload.",
+      benefit:
+        "Closing the gap preserves alerting and restores capacity for SRE work.",
+    },
     currentState: {
       baseline: {
         mode: "reference",
@@ -155,6 +165,14 @@ test("answer validation follows required and conditional rules from the definiti
 
   const missingForChange = validateAnswers(definition, minimal);
   assert.ok(missingForChange.some((entry) => entry.id === "proposal.title"));
+  assert.ok(
+    missingForChange.some(
+      (entry) => entry.id === "proposal.problem.statement"
+    )
+  );
+  assert.ok(
+    missingForChange.some((entry) => entry.id === "proposal.problem.benefit")
+  );
   assert.ok(
     !missingForChange.some((entry) => entry.id === "intake.inquiry-hours")
   );

@@ -47,6 +47,12 @@ test('versioned form fields produce an atomic publication artifact', async ({
     '[data-form-field-id="proposal.current-state.baseline-reference"]',
   );
   await expect(baseline).toHaveValue(/OBS-ARCH-004 rev 7/);
+  await expect(
+    intakeFrame.locator('[data-form-field-id="proposal.problem.statement"]'),
+  ).toHaveValue(/cannot remain supported at the forecast workload/);
+  await expect(
+    intakeFrame.locator('[data-form-field-id="proposal.problem.benefit"]'),
+  ).toHaveValue(/preserves reliable dashboards and alerts/);
 
   const artifact = await page.evaluate(
     () =>
@@ -93,6 +99,12 @@ test('versioned form fields produce an atomic publication artifact', async ({
   expect(artifact.answers['proposal.current-state.baseline-reference']).toMatch(
     /OBS-ARCH-004 rev 7/,
   );
+  expect(artifact.proposal.problem).toEqual({
+    statement: expect.stringContaining(
+      'cannot remain supported at the forecast workload',
+    ),
+    benefit: expect.stringContaining('preserves reliable dashboards and alerts'),
+  });
   expect(artifact.proposal.requirements[0]).toEqual(
     expect.objectContaining({
       id: 'WILL-01',

@@ -303,6 +303,36 @@
       ]
     },
     {
+      "id": "problem-and-benefit",
+      "title": "Problem and Benefit",
+      "purpose": "Establish why any change is warranted before defining what the change should produce.",
+      "completionEvidence": "The unmet need or failure is stated in plain language, the current system's limitation is explicit, and the benefit connects solving the problem to an operating or business result.",
+      "fields": [
+        {
+          "id": "proposal.problem.statement",
+          "statePath": "problem.statement",
+          "type": "textarea",
+          "label": "What problem does this solve that the existing system cannot solve?",
+          "help": "Describe the unmet need, failure, or opportunity in plain English. Name who experiences it and what the existing system cannot do; do not describe the proposed solution.",
+          "placeholder": "The current metrics platform cannot remain supported at the forecast workload, leaving SRE unable to preserve reliable alerting and long-term retention…",
+          "freeForm": true,
+          "required": true,
+          "outputPath": "problem.statement"
+        },
+        {
+          "id": "proposal.problem.benefit",
+          "statePath": "problem.benefit",
+          "type": "textarea",
+          "label": "What benefit does solving this problem create?",
+          "help": "Explain who benefits and how. Connect technical improvement to the operating or business result it protects or makes possible; a faster query or larger capacity is not a benefit by itself.",
+          "placeholder": "Reliable queries and alerts allow engineering teams to detect production failures before users are affected, while reducing recurring SRE work that displaces higher-value reliability improvements…",
+          "freeForm": true,
+          "required": true,
+          "outputPath": "problem.benefit"
+        }
+      ]
+    },
+    {
       "id": "current-state",
       "title": "Current-State Baseline",
       "purpose": "Define the system that exists before proposing its replacement.",

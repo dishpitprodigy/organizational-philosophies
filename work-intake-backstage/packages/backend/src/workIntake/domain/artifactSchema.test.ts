@@ -28,6 +28,12 @@ function atomicArtifact() {
       title: 'Select the next engineering metrics capability',
       state: 'Work Proposal — Ready for Ordered Review',
       authority: 'May consume ordered review or bounded Discovery capacity',
+      problem: {
+        statement:
+          'The current metrics service cannot remain supported at the forecast workload.',
+        benefit:
+          'Closing the gap preserves reliable alerting and returns operating capacity to SRE.',
+      },
       currentState: {
         summary: 'The current metrics capability is measurable but expiring.',
         baseline: {
@@ -146,6 +152,13 @@ describe('atomic Work Proposal artifact schema', () => {
   it('requires an explicit Current-State Baseline mode', () => {
     const artifact = atomicArtifact();
     delete (artifact.proposal.currentState.baseline as { mode?: string }).mode;
+
+    expect(workProposalArtifactSchema.safeParse(artifact).success).toBe(false);
+  });
+
+  it('requires the problem and the benefit of solving it as separate evidence', () => {
+    const artifact = atomicArtifact();
+    delete (artifact.proposal as { problem?: unknown }).problem;
 
     expect(workProposalArtifactSchema.safeParse(artifact).success).toBe(false);
   });

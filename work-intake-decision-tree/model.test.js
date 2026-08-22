@@ -38,15 +38,15 @@ test("Work Proposal identity is structural rather than parsed from display text"
       revision: result.proposalRecord.revision,
       label: result.proposalRecord.label,
     },
-    { id: "WP-2026-0042", revision: 4, label: "WP-2026-0042 rev 4" }
+    { id: "WP-2026-0042", revision: 5, label: "WP-2026-0042 rev 5" }
   );
 });
 
 test("publishable fixture content and artifact schema are governed by proposal revision", () => {
   const contracts = [
-    ["Metrics selection", 4, "a477bb4a57646aed3817205f6829a09e2647b1c807ae44df3e325efd89937450"],
-    ["SSO migration", 1, "eb4f3818cb4462ac45c65b03b16c4e078b62bb62f75d8c0cb45fe56b93a51b52"],
-    ["Identity platform redesign", 1, "c07e47503f699dfb94144597595a8db291ac573e9f3607ead764f46c34a7b4a1"],
+    ["Metrics selection", 5, "47404dfe29502773c6fe5587bacdbe90f36657ba9263008df4363a7ca7811616"],
+    ["SSO migration", 2, "7c219cd925409580fb67b1c2b9105315ce8e242b4c44fa4b0bfd13932c70ba30"],
+    ["Identity platform redesign", 2, "c45652a2b8a9109dff4467d663330645915a71848ac5353430e506dcf3daa48f"],
   ];
 
   for (const [scenarioName, proposalRevision, fixtureSha256] of contracts) {
@@ -70,8 +70,8 @@ test("a user explicitly creates the next Work Proposal revision", () => {
 
   const revision = beginNewRevision(state);
 
-  assert.equal(revision, 5);
-  assert.equal(state.proposalRevision, 5);
+  assert.equal(revision, 6);
+  assert.equal(state.proposalRevision, 6);
   assert.equal(state.scenario, "Custom");
 });
 
@@ -81,7 +81,7 @@ test("editing a Work Proposal does not silently consume a revision", () => {
 
   markProposalEdited(state);
 
-  assert.equal(state.proposalRevision, 4);
+  assert.equal(state.proposalRevision, 5);
   assert.equal(state.scenario, "Custom");
   assert.equal(state.guided.enforce, true);
 });
@@ -92,6 +92,12 @@ test("publication artifact preserves intake authority boundaries", () => {
   state.guided = {
     version: 1,
     enforce: false,
+    problem: {
+      statement:
+        "The current metrics service cannot remain supported at the forecast workload.",
+      benefit:
+        "Closing the gap preserves reliable alerting and returns recurring operating capacity to SRE.",
+    },
     currentState: {
       baselineMode: "reference",
       baselineReference: "OBS-ARCH-004 rev 7, accepted May 18, 2026 by SRE",
@@ -132,12 +138,13 @@ test("publication artifact preserves intake authority boundaries", () => {
     {
       schemaVersion: 2,
       id: "WP-2026-0042",
-      revision: 4,
+      revision: 5,
       state: "Draft Work Proposal — sponsor acceptance unverified",
       authorized: false,
     }
   );
   assert.deepEqual(artifact.form, { id: "technical-work-proposal", version: 1 });
+  assert.deepEqual(artifact.proposal.problem, state.guided.problem);
   assert.deepEqual(artifact.proposal.requirements[0], {
     id: "SHALL-001",
     modality: "shall",
@@ -214,8 +221,8 @@ test("identity redesign routes the complete catalog dependency closure without i
 });
 
 for (const [scenarioName, expectedRevision] of [
-  ["SSO migration", 1],
-  ["Identity platform redesign", 1],
+  ["SSO migration", 2],
+  ["Identity platform redesign", 2],
 ]) {
   test(`${scenarioName} supplies complete structured evidence for publication`, () => {
     const state = structuredClone(SCENARIOS[scenarioName]);
@@ -225,6 +232,8 @@ for (const [scenarioName, expectedRevision] of [
 
     const artifact = publicationArtifact(compileState(state));
     assert.equal(artifact.proposal.revision, expectedRevision);
+    assert.equal(artifact.proposal.problem.statement.length > 0, true);
+    assert.equal(artifact.proposal.problem.benefit.length > 0, true);
     assert.equal(artifact.proposal.desiredOutcome.scope.length > 0, true);
     assert.equal(artifact.proposal.requirements.every((requirement) => requirement.verification.length > 0), true);
   });
@@ -239,6 +248,7 @@ test("draft demand cannot be published as a Work Proposal", () => {
 
 test("guided intake does not treat a legacy paragraph as complete atomic evidence", () => {
   const state = structuredClone(SCENARIOS["Metrics selection"]);
+  state.problem = { statement: "", benefit: "" };
   state.guided = {
     enforce: true,
     currentState: {},
@@ -258,6 +268,10 @@ test("guided intake does not treat a legacy paragraph as complete atomic evidenc
   const result = evaluate(state);
 
   assert.equal(result.disposition.key, "draft");
+  assert.ok(result.proposalMissing.includes("Problem Statement"));
+  assert.ok(
+    result.proposalMissing.includes("Benefit of Solving the Problem")
+  );
   assert.ok(result.proposalMissing.includes("Current State: architecture and operating path"));
   assert.ok(result.proposalMissing.includes("Requirement 1: verification method"));
   assert.ok(result.framingMissing.includes("reusable artifact: acceptance proof"));

@@ -36,6 +36,9 @@ Scenario presets populate evidence-complete fictional examples for a metrics cap
 
 The browser does not ask a requester to author each Work Proposal section as one undifferentiated essay. It captures atomic facts and assembles the canonical artifact language from them:
 
+- Problem and Benefit separately capture the unmet need or failure the existing
+  system cannot resolve and the operating or business result created by solving
+  it. A technical improvement is not its own benefit.
 - Current State separates the authoritative baseline, live architecture, measured workload, observed failure/lifecycle/cost/operator behavior, and explicit delta.
 - Desired Outcome separates operating scope, capability or removed failure mode, decisive proof, and operating horizon.
 - Required Difference separates what must be preserved, what measured condition must change, and the evidence used for comparison.

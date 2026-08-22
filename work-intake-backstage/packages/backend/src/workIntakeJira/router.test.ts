@@ -21,6 +21,7 @@ function artifact() {
       title: 'Metrics',
       state: 'Ready',
       authority: 'Review',
+      problem: { statement: 'Problem', benefit: 'Benefit' },
       currentState: {
         summary: 'Now',
         baseline: { mode: 'define', delta: 'Delta' },

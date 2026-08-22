@@ -152,6 +152,14 @@ function proposalContent(
     ],
     sections: [
       {
+        heading: 'Problem',
+        paragraphs: [proposal.problem.statement],
+      },
+      {
+        heading: 'Benefit of Solving the Problem',
+        paragraphs: [proposal.problem.benefit],
+      },
+      {
         heading: 'Current State',
         paragraphs: [proposal.currentState.summary],
         fields: [

@@ -427,6 +427,19 @@ function atomicNonGoal(value) {
 
 function proposalDescription(proposal, schemaVersion) {
   const atomic = schemaVersion === 2;
+  const problem = atomic ? proposal.problem.statement : proposal.problem;
+  const benefit = atomic ? proposal.problem.benefit : proposal.benefit;
+  const problemSections =
+    problem || benefit
+      ? [
+          '',
+          'Problem',
+          problem || '',
+          '',
+          'Benefit of Solving the Problem',
+          benefit || '',
+        ]
+      : [];
   const currentState = atomic
     ? atomicCurrentState(proposal.currentState)
     : [proposal.currentState];
@@ -447,6 +460,7 @@ function proposalDescription(proposal, schemaVersion) {
     `Artifact: ${proposal.id} rev ${proposal.revision}`,
     `State: ${proposal.state}`,
     `Authority: ${proposal.authority}`,
+    ...problemSections,
     '',
     'Current State',
     ...currentState,
@@ -468,12 +482,19 @@ function proposalDescription(proposal, schemaVersion) {
   ].join('\n');
 }
 
-function validateProposal(proposal) {
+function validateProposal(proposal, schemaVersion) {
   required(proposal?.id, 'Proposal id is required.');
   required(proposal?.revision, 'Proposal revision is required.');
   required(proposal?.title, 'Proposal title is required.');
   required(proposal?.state, 'Proposal state is required.');
   required(proposal?.authority, 'Proposal authority is required.');
+  if (schemaVersion === 2) {
+    required(proposal?.problem?.statement, 'Problem Statement is required.');
+    required(
+      proposal?.problem?.benefit,
+      'Benefit of Solving the Problem is required.',
+    );
+  }
   required(proposal?.currentState, 'Current State is required.');
   required(proposal?.desiredOutcome, 'Desired Outcome is required.');
   required(proposal?.requiredDifference, 'Required Difference is required.');
@@ -567,7 +588,7 @@ export function buildPublicationPlan(artifact) {
       'Work-intake reviews must be resolved through the Backstage catalog before publication.',
     );
   }
-  validateProposal(artifact.proposal);
+  validateProposal(artifact.proposal, artifact.schemaVersion);
 
   const { proposal } = artifact;
   const issues = [

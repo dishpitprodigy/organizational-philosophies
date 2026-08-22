@@ -35,6 +35,12 @@ function artifact() {
       title: 'Choose metrics capability',
       state: 'Ready for Ordered Review',
       authority: 'Review only',
+      problem: {
+        statement:
+          'The current metrics service cannot remain supported at the forecast workload.',
+        benefit:
+          'Closing the gap preserves reliable alerting and returns operating capacity to SRE.',
+      },
       currentState: {
         summary: 'Support is expiring.',
         baseline: { mode: 'reference', reference: 'OBS-1' },
@@ -162,6 +168,20 @@ describe('PublicationService preview', () => {
       'review-1',
     ]);
     expect(plan.records[1].title).toContain('Architecture Review');
+    expect(plan.records[0].content.sections.slice(0, 2)).toEqual([
+      {
+        heading: 'Problem',
+        paragraphs: [
+          'The current metrics service cannot remain supported at the forecast workload.',
+        ],
+      },
+      {
+        heading: 'Benefit of Solving the Problem',
+        paragraphs: [
+          'Closing the gap preserves reliable alerting and returns operating capacity to SRE.',
+        ],
+      },
+    ]);
     expect(JSON.stringify(plan)).not.toContain('Browser supplied');
     expect(plan.placements.map(item => item.binding.target.targetId)).toEqual([
       'NWI',

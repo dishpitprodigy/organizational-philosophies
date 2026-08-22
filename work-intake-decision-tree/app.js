@@ -43,7 +43,13 @@ function requirementRows(value) {
 }
 
 function prepareGuidedState(candidate) {
-  if (candidate.guided?.version === 1) return;
+  if (candidate.guided?.version === 1) {
+    candidate.guided.problem ??= {
+      statement: candidate.problem?.statement || "",
+      benefit: candidate.problem?.benefit || "",
+    };
+    return;
+  }
   const current = paragraphs(candidate.currentState);
   const baseline = firstSentence(current[0]);
   const artifactMatch = String(candidate.reusableArtifact || "").match(/^([^:]+):\s*(.*)$/s);
@@ -51,6 +57,10 @@ function prepareGuidedState(candidate) {
     version: 1,
     enforce: candidate.scenario === "Blank" || candidate.scenario === "Metrics selection",
     dirty: {},
+    problem: {
+      statement: candidate.problem?.statement || "",
+      benefit: candidate.problem?.benefit || "",
+    },
     currentState: {
       baselineMode: baseline ? "reference" : "define",
       baselineReference: baseline,
@@ -305,6 +315,9 @@ function joinParts(parts) {
 function compileGuidedSection(section) {
   const guided = state.guided;
   guided.dirty[section] = true;
+  if (section === "problem") {
+    state.problem = structuredClone(guided.problem);
+  }
   if (section === "currentState") {
     const current = guided.currentState;
     state.currentState = joinParts([
@@ -388,7 +401,7 @@ function compileGuidedSection(section) {
 }
 
 function compileAllGuidedSections() {
-  ["currentState", "outcome", "difference", "requirements", "acceptance", "nonGoals", "dependencies", "preconditions", "artifact", "downstream", "timing", "discovery", "epicOutcomes"].forEach(compileGuidedSection);
+  ["problem", "currentState", "outcome", "difference", "requirements", "acceptance", "nonGoals", "dependencies", "preconditions", "artifact", "downstream", "timing", "discovery", "epicOutcomes"].forEach(compileGuidedSection);
 }
 
 function guidedSectionFor(control) {
@@ -427,6 +440,14 @@ function purposeFields(mode = "all") {
     ${teamSelectField("submission.requesting-team")}
     <div class="wide">${textField("proposal.title")}</div>
     </div>
+
+    <section class="guided-section wide part ${hidden("current")}">
+      <div class="guided-heading"><div><p class="eyebrow">Problem and Benefit</p><h3>Establish why any change is warranted.</h3></div><span class="evidence-rule">Problem · limitation · benefit</span></div>
+      <div class="form-grid">
+        <div class="wide">${guidedField("proposal.problem.statement")}</div>
+        <div class="wide">${guidedField("proposal.problem.benefit")}</div>
+      </div>
+    </section>
 
     <section class="guided-section wide part ${hidden("current")}">
       <div class="guided-heading"><div><p class="eyebrow">Current-State Baseline</p><h3>Define the system that exists before proposing its replacement.</h3></div><span class="evidence-rule">Architecture · workload · failure · cost · delta</span></div>

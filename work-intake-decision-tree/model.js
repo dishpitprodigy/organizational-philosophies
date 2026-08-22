@@ -209,6 +209,7 @@
     purchase: false,
     spendUsd: 0,
     title: "",
+    problem: { statement: "", benefit: "" },
     outcome: "",
     currentState: "",
     difference: "",
@@ -250,13 +251,17 @@
       ...blankState(),
       scenario: "Metrics selection",
       proposalId: "WP-2026-0042",
-      proposalRevision: 4,
+      proposalRevision: 5,
       requester: "Avery Shah",
       requestingTeam: "sre",
       catalogPath: "change",
       purchase: true,
       spendUsd: 1200000,
       title: "Select the next engineering metrics capability",
+      problem: {
+        statement: "The current metrics platform cannot remain supported at the forecast workload. Its longest-retention tier reaches its operating limit in seven months, the installed release leaves vendor support on March 31, 2027, recovery has not been proven, and routine operation already consumes 56 SRE hours each month.",
+        benefit: "Solving the problem preserves reliable dashboards and alerts as engineering demand grows, prevents an unsupported or capacity-constrained metrics service from hiding production failures, and returns recurring SRE capacity to reliability work instead of emergency expansion and platform maintenance.",
+      },
       outcome: "Northstar has selected a metrics capability that can ingest 1.74 million samples per second, preserve 31-day, 93-day, and 730-day retention outcomes, evaluate 8,420 alert and recording rules, and serve the accepted query corpus without carrying forward the current platform's unsupported release, seven-month capacity horizon, or 56 person-hours of monthly operating work.",
       currentState: "OBS-ARCH-004 rev 7, accepted May 18, 2026, is the Current-State Baseline. Thirty-eight vmagent collectors receive Prometheus-format metrics from 16 Kubernetes clusters, 1,240 Linux hosts, and 74 application services in two data centers and three cloud regions. Relabeling routes each series to one of three VictoriaMetrics clusters: 31-day retention has 24 TiB usable and 11.6 TiB consumed; 93-day retention has 36 TiB usable and 21.8 TiB consumed; 730-day retention has 42 TiB usable and 31.4 TiB consumed. Four Grafana replicas query the three clusters through separate data sources; four vmalert replicas evaluate 8,420 alert and recording rules.\n\nThe May 1–28 workload baseline recorded 640,000 sustained samples per second, 910,000 p95, and a 1.16-million maximum lasting 22 minutes. Daily active-series cardinality was 11.8 million at p95 and 14.2 million at maximum; series churn was 212,000 new series per hour at p95 and 690,000 at maximum during coordinated deployments. The service executed 38,600 dashboard and API queries per day. Query p95 was 1.8 seconds over six hours, 7.4 seconds over 30 days, and 22.8 seconds over one year. Rule evaluation p95 was 4.8 seconds and p99 was 12.6 seconds; the platform recorded 31 late or missed evaluations per day.\n\nThe current release leaves vendor support on March 31, 2027. At the observed 2.8% monthly growth rate, the 730-day tier reaches the 90% operating limit in seven months. SRE spent 56 person-hours per month on upgrades, storage expansion, tenant changes, and incidents during the last quarter. Direct infrastructure cost averaged $42,800 per month. A vmselect rollout on June 11 created an 11-minute critical-alert evaluation gap; no full retention-tier restore has been exercised.",
       difference: "The selected capability must preserve the current Prometheus remote-write, PromQL, dashboard, and alerting contracts while removing three material gaps: the March 31, 2027 support deadline, the 730-day tier's seven-month capacity horizon, and an operating model that consumes 56 SRE hours each month. Selection must be based on the measured May workload, including the 1.16-million-sample peak, 14.2 million active series, 690,000-series hourly churn event, long-range query corpus, and observed alert failure. A product feature list or vendor sizing estimate does not close this gap.",
@@ -387,13 +392,17 @@
       ...blankState(),
       scenario: "SSO migration",
       proposalId: "WP-2026-0043",
-      proposalRevision: 1,
+      proposalRevision: 2,
       requester: "Morgan Lee",
       requestingTeam: "identity",
       catalogPath: "change",
       purchase: true,
       spendUsd: 480000,
       title: "Migrate workforce applications to a common SSO service",
+      problem: {
+        statement: "Northstar's workforce access is split across two identity providers and 23 local or LDAP account paths that cannot enforce one revocation, MFA, recovery, and audit standard. Leaver access remains active for 19 hours at p95 against a four-hour policy, 94 privileged users retain phishable factors, and one provider has no regional failover.",
+        benefit: "Solving the problem reduces the time a departed worker can retain application access, protects privileged accounts from phishing, keeps workforce authentication available during a regional failure, and removes duplicated provider contracts without leaving application owners to reconstruct authorization and rollback behavior during an incident.",
+      },
       outcome: "All 6,400 employees and contractors authenticate to 147 workforce applications through the approved SSO service; privileged users receive phishing-resistant MFA, leaver access is revoked within the approved interval, authentication survives loss of the primary region, and the two inherited identity-provider contracts can enter Managed Runoff before renewal.",
       currentState: "ID-ARCH-011 rev 4 identifies 147 workforce applications used by 6,400 employees and contractors. Keystone SSO serves 83 SAML applications from an active/passive deployment in two regions. Harbor Login serves 26 SAML and 15 OIDC applications from one region. The remaining 23 applications use local or LDAP accounts; 11 can enable OIDC through a supported configuration change, while 12 require discovery because they depend on LDAP groups, application-local roles, or vendor-specific SAML behavior.\n\nProvisioning is SCIM-based for 61 applications, just-in-time for 48, and manual for 38. The June leaver sample measured 6 hours 40 minutes median and 19 hours p95 from HR termination to application revocation against a four-hour policy; 27 application accounts remained enabled after 24 hours. Six hundred twelve privileged users receive MFA, but 94 still use push or one-time-password factors. Authentication logs reach the security data lake in 3–47 minutes depending on provider and are retained for 90 days in Keystone, 180 days in Harbor, and 400 days in the data lake.\n\nKeystone failover last passed on February 12, 2025. Harbor has no regional failover. Thirty-one applications embed provider-specific group identifiers, and 18 maintain sessions for more than eight hours after account disablement. The two inherited contracts renew January 31, 2027, for a combined $620,000 annual commitment.",
       difference: "The migration must move 147 applications and 6,400 people from two provider contracts and 23 local-account paths to one approved workforce trust boundary without changing application authorization semantics. It must reduce leaver revocation from 19 hours p95 to 15 minutes for SCIM-connected applications and four hours for approved manual exceptions, replace push and one-time-password MFA for 94 privileged users, provide tested regional recovery where Harbor provides none, and remove provider-specific identifiers without stranding 31 applications.",
@@ -512,13 +521,17 @@
       ...blankState(),
       scenario: "Identity platform redesign",
       proposalId: "WP-2026-0044",
-      proposalRevision: 1,
+      proposalRevision: 2,
       requester: "Riley Gomez",
       requestingTeam: "architecture",
       catalogPath: "change",
       purchase: true,
       spendUsd: 1800000,
       title: "Establish the next enterprise identity platform",
+      problem: {
+        statement: "Northstar's four identity domains encode incompatible ownership, lifecycle, delegation, credential, and recovery rules, and the existing platforms cannot decide those organizational policies. As a result, 1,740 non-human identities have no accountable owner, 812 credentials are more than a year old, 37 certificate renewals have no owner, and administrators can change 21 privileged groups outside the owning team's approval path.",
+        benefit: "Solving the problem gives security, application owners, and operators one accountable basis for creating, changing, recovering, and retiring identities and trusts. It reduces unauthorized or unrecoverable access paths and prevents a future product's defaults from silently becoming organizational policy for 21,300 identities and the systems that depend on them.",
+      },
       outcome: "Northstar has an accepted, product-neutral identity design basis for 12,000 human identities, 9,300 service and workload identities, 286 application trusts, and 63 certificate-issuance paths. The design basis defines identity classes, authoritative sources, lifecycle events, trust boundaries, delegated authorities, recovery obligations, and ownership precisely enough that a later platform design cannot inherit policy from whichever product is demonstrated first.",
       currentState: "ID-ARCH-001 rev 3 identifies four overlapping identity domains. Corporate Active Directory contains 8,600 workforce identities on eight domain controllers in two regions. Research Active Directory contains 3,400 researcher and administrator identities on four domain controllers in one data center. Six FreeIPA replicas provide Linux identity, host enrollment, sudo policy, and 2,700 service principals for 1,240 Linux hosts. Four cloud IAM tenants contain 6,600 workload identities, roles, and service accounts. Together, the platforms serve 286 SAML, OIDC, LDAP, Kerberos, and certificate-based trusts and 63 certificate-issuance paths.\n\nThe inventories do not agree. The July reconciliation found 1,740 service or workload identities without an accountable owner, 812 credentials older than 365 days, 430 human-name collisions between the corporate and research directories, and 37 application trusts whose signing-certificate renewal owner is unknown. Twenty-one privileged groups can be changed by administrators outside the owning team's approval path. Corporate AD recovery was exercised in March 2026; Research AD has no full-forest recovery evidence, FreeIPA has no tested loss-of-region procedure, and the four cloud tenants use different break-glass, rotation, and audit-retention rules.\n\nThe current platforms encode policy differently: HR is authoritative for employees, the research registry for visiting researchers, application teams act as the de facto source for 1,090 service identities, Platform Engineering creates and removes Kubernetes workloads, and 1,740 non-human identities still have no recorded authority. A product cannot reconcile those policy decisions for the organization.",
       difference: "The organization must replace an implementation-defined identity model with an explicit organizational model. Every one of the 21,300 known identities, 286 trusts, and 63 issuance paths needs a class, authoritative source, lifecycle owner, credential rule, recovery obligation, and decommission condition. The design basis must resolve 1,740 ownerless identities, 812 credentials older than 365 days, 430 namespace collisions, 37 ownerless certificate renewals, and 21 delegated-administration exceptions before a platform design or vendor response can be judged against anything more reliable than preference.",
@@ -724,6 +737,8 @@
       ["acceptanceAuthority", "Acceptance Authority"],
     ];
     const missing = fields.filter(([key]) => !String(state[key] || "").trim()).map(([, label]) => label);
+    if (!String(state.problem?.statement || "").trim()) missing.push("Problem Statement");
+    if (!String(state.problem?.benefit || "").trim()) missing.push("Benefit of Solving the Problem");
     if (!(state.affectedSystems || []).length) missing.push("Dependencies / affected systems");
     if (state.knownUnknowns && !String(state.uncertaintyQuestion || "").trim()) missing.push("Known Uncertainty");
     if (state.guided?.enforce) missing.push(...missingGuidedProposalEvidence(state.guided));
@@ -1025,11 +1040,17 @@
 
   function atomicProposalEvidence(state, result) {
     const compiled = state.compiledAnswers;
-    if (!compiled?.currentState || !compiled?.desiredOutcome || !compiled?.requiredDifference) {
+    if (
+      !compiled?.problem ||
+      !compiled?.currentState ||
+      !compiled?.desiredOutcome ||
+      !compiled?.requiredDifference
+    ) {
       throw new Error("Work Proposal schema version 2 requires validated, compiled form answers.");
     }
     const affectedEntities = result.graph.selected.map((systemId) => COMPANY.systems[systemId]?.entityRef).filter(Boolean);
     return {
+      problem: compiled.problem,
       currentState: {
         summary: state.currentState,
         ...compiled.currentState,
