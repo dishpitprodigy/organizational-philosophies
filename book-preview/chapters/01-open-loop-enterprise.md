@@ -1,16 +1,16 @@
 # The Open-Loop Enterprise
 
-*Part I — Learning to See the Loop*
-
-The book begins with a diagnosis: organizations preserve results more reliably than they preserve the judgments that produced them. The consequence is not merely weak documentation. It is an enterprise that cannot distinguish good reasoning from luck, cannot grade its own forecasts, and cannot make the next decision from anything better than institutional memory.
-
-## Thesis
+An open loop enterprise is a company that cannot tell its own good judgment from its own luck, because it never wrote down enough to differentiate them.
 
 Most enterprises run open-loop. They make requests, forecasts, hiring decisions, architecture calls, vendor selections, and performance judgments, and then they let the reasoning behind those calls evaporate. The decision is made, the moment passes, and the organization moves on carrying only the outcome: a ship date, a rating, a purchase, an incident count. It keeps no durable record of what it expected to happen, why, or what it would have accepted as proof that it was wrong.
 
-An open loop is not a company that lacks opinions. It is a company that cannot tell its own good judgment from its own luck, because it never wrote down enough to check.
+An organization works as one connected system. If someone want to deploy a new management tool, they need somewhere to run it, a way for it to communicate with other systems, and a way to keep it from creating unnecessary risk. One work request minimally creates work for three teams: systems, networking, and security all have work to do before anyone can use the tool. 
 
-Closing the loop means five things, done as a matter of course rather than as a special project:
+Similar dependencies exists wherever people share time, money, equipment, or responsibility; yet, organizations routinely make decisions as though the consequences will stay inside the department that made them.
+
+“Open-loop” describes what happens to the organization's learning. Departments affect one another whether anyone records those effects or not. Closing the loop requires the organization to bring evidence of those effects back to the people making decisions, so they can compare what they expected with what their decisions actually caused.
+
+Learning from that work requires the organization to preserve the reasoning throughout the inquiry:
 
 1. Record the judgment or prediction when it is made, not after the fact.
 2. Preserve the context, assumptions, constraints, and expected outcome that produced it.
@@ -18,111 +18,44 @@ Closing the loop means five things, done as a matter of course rather than as a 
 4. Reconcile the original claim against what actually happened.
 5. Feed what was learned back into the next decision.
 
-None of these steps is exotic. Most organizations already do some version of each one, just badly: informally, inconsistently, or only after something goes wrong enough to force a postmortem. The rest of this book is an argument that the same five-step loop belongs in how work gets written, how architecture gets decided, how people get coached and promoted, how vendors get selected, and how services get retired, and that an organization unwilling to close the loop in small things will not manage it when the stakes are high.
+Most organizations already perform these practices informally, inconsistently, or only after something goes wrong enough to force a postmortem. They belong throughout the work: while a team investigates a problem, tests an approach, delivers a change, and examines the result. Applying them to ordinary decisions gives the organization a dependable way to learn when the stakes are high.
 
-![An open-loop organization records a result but loses the original judgment and context; a closed-loop organization returns evidence through reconciliation so the next decision begins with preserved learning.](../assets/images/open-loop-enterprise/open-vs-closed-loop.svg){#fig-open-vs-closed-loop}
+Diagram 1.1 shows the difference between keeping an outcome and keeping enough of the decision to learn from it.
 
----
+![Diagram 1.1: An open-loop organization records an outcome but loses the original judgment and context; a closed-loop organization returns the evidence to people who can use it in the next decision.](../assets/images/open-loop-enterprise/open-vs-closed-loop.svg){#fig-open-vs-closed-loop}
 
-## Why This Book Makes Use of Sports Metaphors
+All proposed work carries an assumption about how the world works. A team that automates a recurring task assumes that the automation will save effort while preserving the required behavior. A manager who assigns a developmental project assumes that the work, support, and feedback will help the employee build a particular capability. In all cases, the scientific method can be used to examine the assumption: question, research, hypothesize, experiment, analyze, and communicate.
 
-A correct explanation that puts the reader to sleep before the causal structure becomes visible has not done its job. Systems theory, feedback loops, and evidentiary reasoning are simple ideas once you see them, but "once you see them" is exactly the problem: a reader has to get past the vocabulary first.
+Diagram 1.2 shows the inquiry from the initial observation through the use of what was learned. Observation gives rise to the question; communicating the findings lets someone use them in a later decision. Each activity can send the team back to earlier work when it discovers something its original explanation cannot account for.
 
-Sports solve that problem because they make systems concrete before they make them technical. The goal is visible. The constraints can be explained in a a sentences. Preparation and execution are different activities performed by different people. Roles carry real decision rights, not just titles. Feedback is immediate. Failure has consequences a reader has felt, at least at a smaller scale, in their own body. Nobody needs a graduate seminar to understand at a visceral level the disappointment a baseball pitcher probably feels after throwing a pitch that resulted in a walk-off grand slam to end game 7 of the World Series. All you need to know is that it's the pitcher's job to prevent the other team from getting points, a grand-slam is 4 points, and the World Series is what crowns that year's champion for the MLB (the highest level at which one can play baseball competitively). We can all empathize with seeing the most well-intended plans go terribly wrong, even if we never experience a moment quite that dramatic.
+![Diagram 1.2: The scientific method carries an observation through a question, research, a hypothesis, an experiment, analysis, and communication. Findings inform later decisions and questions.](../assets/images/organizational-method/canonical-organizational-method.svg){#fig-canonical-organizational-method height=6.2in}
 
-That is the job sports analogies aim to do in this book: make the organizational pattern easier to see. It is not used to prove anything. A reader who has never watched a football game and does not care to should still be able to follow every argument in this book using ordinary business language alone: the analogy is a way in, not a load-bearing wall.
+Each component has to work, the components have to work together, and the finished thing has to achieve its purpose. An office building can pass every inspection, finish ahead of schedule, and sit empty because nobody wants office space in that location. The builders did their jobs well; the investment still failed.
 
-Three sports do most of the work here, each for a different reason:
+The owner might recover the investment by converting the building to housing. That requires a new project, with more work, more money, and another assumption about demand. A successful conversion still leaves the original decision worth examining: why did the company expect tenants for those offices?
 
-- **Football** makes operating context visible: field position, down, distance, clock, score, personnel, risk posture. It shows how a plan survives contact with reality only because qualified people are trusted to adjust it live.
-- **Baseball** is the cleanest example of a metrics-heavy operating model. Almost every efficiency system dreams for its metrics to be as strong and durable as Sabermetrics: effectively, Moneyball is the desired end-state of any observability system, which makes it useful both as a model for structured development pipelines, and as a warning about how attractive clean numbers become when the underlying work is actually much messier than a box score.
-- **Boxing** makes individual preparation under pressure visible: the difference between a person who has drilled the mechanics and a person who has only been told to be brave.
+Reviewing that decision gives the company a chance to improve the next one. Someone needs to compare what it expected with what happened, investigate the difference, and write down what they learned. That knowledge becomes useful to the organization when the people making the next investment read it.
 
-Other sports, and other domains entirely, earn a place in this book only when they make a point clearer than these three already do. The rule is the same every time: use the analogy when it makes a reusable organizational pattern legible, and drop it the moment it would require the reader to already know something about the sport to follow the argument. A metaphor that needs a glossary has stopped paying its way.
+Diagram 1.3 follows three examples through the same six activities. A hiring process may separate interviews, selection, onboarding, and review into several steps because different people make those decisions using different evidence. A maintenance procedure may group its work more tightly. The number of steps changes with the detail needed to carry out the work; every version still needs a question, a reason to expect an answer, and an examination of what happened.
 
-It is also fine if a sports analogy does not land for a particular reader. The goal underneath all of this is cross-domain pattern recognition, not sports appreciation. If someone reads a football comparison and thinks "this is really about theater production" or "this maps better to a video game raid" or simply "this metaphor is wrong, but I see the structure it's pointing at," the analogy has done its job. The point was never the game: the point was getting the reader to notice the same shape, or pattern, showing up in an unfamiliar place.
+![Diagram 1.3: Hiring, vendor selection, and defect correction use different evidence to ask questions, research explanations, test predictions, analyze what happened, and communicate what they learned.](../assets/images/organizational-method/organizational-method-domain-crosswalk.svg){#fig-organizational-method-domain-crosswalk}
 
----
+A business depends on learning to keep making money as its customers, competitors, and costs change. Employees learn from that work individually, but the organization needs a way to retain what they learned when they change jobs or leave. Someone must write down the experience in enough detail for a person who was absent to understand it. Someone else must be able to find and read that record when it can inform a decision. Otherwise, the next team inherits the same uncertainty and pays to resolve it again.
 
-## Where "Closed Loop" Comes From
-
-The closed-loop language in this book did not start in a systems-engineering textbook, nor anywhere near technology or organizational theory. It started with a discussion of the one system with which every reader of this book will undoubtedly be familiar: the human body. While giving a trainee a lifting cue, Mike Mentzer described the human body as a closed hydraulic system: approximately, the pressure created in one part of the body necessarily shows up somewhere else in the system. That wording is a remembered paraphrase, not a verified quotation: the origin of an idea, not a citation to defend.
-
-The specific example was a heavy leg press. Gripping the handles as hard as possible, clenching muscles that had nothing to do with moving the weight, does not add force to the lift. It spends a finite resource on the wrong target while advertising the appearance of effort. The system does not care how hard the lifter grips the handles; it only cares how hard the legs are pressing against the sled.
-
-Organizations do the equivalent constantly. A manager forced to carry a normal individual-contributor workload on top of managing people is not "doing more" in any way that helps either job; the effort is being spent somewhere other than the target, and something else in the system absorbs the pressure: unfunded management, unfunded execution, or a person quietly failing at both while getting blamed for prioritization. Hidden work, role compression, process added without removing anything, and activity performed to look busy rather than to move an outcome are all the same failure wearing different clothes: local effort spent on something other than the thing that was supposed to move.
-
-That is the only piece of the idea this book needs up front. It recurs everywhere in what follows: the organization is one system, not a collection of independent boxes, and pressure applied in one place has to come from, or go to, somewhere else.
-
----
-
-## Film Review: The Practice That Closes the Loop
-
-If there is one habit that best explains what closing the loop actually looks like in practice, it is this one:
+## Reviewing Work Or: How People Actually Grow
 
 > **Coaches never skip film review.**
 
-The point is not that every loss hides a clever tactical lesson waiting to be discovered. Sometimes a team gets dismantled because it had a bad day, and the film shows exactly that and nothing more elegant. The review still happens, because the team is not made only of tactics. Memory, confidence, preparation, and the felt experience of losing control all affect the next performance, and none of that is directly visible in the final score.
+We can think of sports box scores as roughly equivalent to organizational/team KPIs and OKRs. They track the data and metadata of the game being played. In the NFL, for example, a box score will tell you the final score of a game, along with the measurements that track individual performance: yards gained or lost, passer completion percentage, dropped passes, touchdowns (scores), and turnovers. As with KPIs and OKRs, the box score of a sports match can only tell you whether the target was met or not: it cannot tell you the context that led to the target being unmet.
 
-The box score says what happened, and the film shows how it happened: which read was missed, where the structure broke down, when execution stopped matching intent, what changed on the field, and how it felt to lose control of a game the team thought it had. A team that only ever looks at the box score is optimizing for a number it does not understand.
+In sports, this is an accepted fact of life, and, as such, there has never been a winning coach in the history of sports who relied on the box score to help them determine the corrective actions to implement before the next game. The box score says what happened, and the film shows how it happened: which read was missed, where the structure broke down, when execution stopped matching intent, what changed on the field, and how it felt to lose control of a game the team thought it had. A team that only ever looks at the box score is optimizing for a number it does not understand. Yet businesses routinely dismiss this step as unnecessary administrative overhead, seemingly because it is too difficult to put a dollar value in the ledger that justifies the work.
 
-The organizational equivalent of film review is reconciliation after a decision or an outcome. A budget variance, a project status, a performance rating, an uptime number, a vendor score: every one of these is a box score. Each can be perfectly accurate and still be radically incomplete, because the score preserves the result and discards the causal story: the original claims, the assumptions that seemed reasonable at the time, the constraints nobody chose, the decisions that were actually available, and the evidence the organization had and ignored.
+The organizational equivalent of film review is reconciliation after a decision or an outcome. A budget variance, a project status, a performance rating, an uptime number, a vendor score: every one of these is an item in a box score. Each can be perfectly accurate and still be radically incomplete, because the score preserves the result and discards the causal story: the original claims, the assumptions that seemed reasonable at the time, the constraints nobody chose, the decisions that were actually available, and the evidence the organization had and ignored.
 
-This is the failure mode worth naming precisely, because it gets mistaken for its opposite:
+Imagine a quarterback throwing a ball that hits his receiver's hands uncontested, and the receiver fails to catch the ball, which sends the ball sailing into the hands of a defender: the box score attributes the interception to the quarterback; the film shows the truth. An organization that tracks metrics without reviewing the decisions and conditions that produced those metrics has kept the score and thrown away the film.
 
-> The bean-counter failure is not the use of numbers. It is confusing the box score with the game.
+![Diagram 1.4: A box score accurately compresses the result, while film review reconnects that result to the original claim, operating context, available choices, and execution before the learning enters the next decision.](../assets/images/open-loop-enterprise/box-score-and-film.svg){#fig-box-score-and-film}
 
-Nobody who reviews film is anti-statistics. A completion percentage, a yards-per-carry average, and a turnover margin are all useful. What film review refuses to accept is the idea that the number is the whole story. Imagine a football quarterback throwing a ball that hits his receivers hands uncontested, but the receiver does not catch the ball, instead, he tips it into the air and a defender catches it: the stat sheet says the quaterback threw an interception, the film tells a very different story. An organization that tracks cost, schedule, and rating with genuine rigor, but never returns to the decisions and conditions that produced those numbers, has kept the score and thrown away the film.
+Written records give a later readers the means to review a decision: who made it, what they knew, what they expected, and how they planned to check. The organization needs to assign that review to someone and give them time to do it. A record that nobody reads leaves the next decision dependent on whichever participants happen to remember the difficulties produced by the last one.
 
-![A box score accurately compresses the result, while film review reconnects that result to the original claim, operating context, available choices, and execution before the learning enters the next decision.](../assets/images/open-loop-enterprise/box-score-and-film.svg){#fig-box-score-and-film}
-
----
-
-## The Box Score Across the Enterprise
-
-The same substitution of score for film happens in every function this book touches. Each domain below has an obvious number that gets recorded, and a much less convenient record that usually does not survive the review, if a review happens at all.
-
-| Domain | Box score | Film the organization usually discards | Loop-closing review |
-|---|---|---|---|
-| People | Rating, promotion, resignation, or termination | Assignments, coaching, constraints, hidden work, and the evidence actually available at the time | Calibration and development reconciliation |
-| Projects | On time, late, over budget, or canceled | Original forecast, assumptions, tradeoffs, changing conditions, and any reusable capability the work produced | Benefits-realization or post-implementation review |
-| Vendors | Selected vendor, implementation date, purchase price | Claims made, alternatives rejected, proof conditions, accepted risks, and operational burden | Claim and acceptance reconciliation |
-| Architecture | Shipped design, incident count | Problem framing, expected axes of change, complexity exported to other teams, and decision boundaries | Architecture decision review against live operation |
-| Risk | Incident, avoided loss, or no visible event at all | Who noticed the risk, what evidence existed, how it was routed, and why action was or was not taken | Significant-risk review |
-| Hiring | Hired, rejected, time to fill, later performance | CV context, interview claims, work-sample evidence, and the assumptions made about what the person would need after hire | Hiring-decision and post-hire reconciliation |
-
-Take the people row on its own for a moment, because it is the one most likely to be treated as settled by the number. A rating looks like a fact. It is really a compressed opinion about a much longer record: what the person was actually assigned, what they were coached on and when, what was happening around them that made a stretch assignment harder or easier than it looked from outside, and what evidence existed that never made it into the file. Two people can receive the same rating for entirely different reasons, and an organization that only keeps the rating has no way to tell which reason applies to which person the next time a promotion, a layoff, or a difficult reassignment is on the table.
-
-Or take projects. "Canceled" reads as a failure in the box score and often is treated as one in the room where headcount gets discussed. But a canceled project can still leave behind reusable automation, a clearer picture of a real constraint, a relationship worth having, or a sharper understanding of a failure mode the organization would otherwise have discovered in production. The box score has no column for that. Only a review that goes back to the original forecast and asks what actually changed can tell the difference between waste and a drive that failed to score but improved field position anyway.
-
-The pattern repeats down every row in the table. The box score is not wrong. It is just not enough, and an organization that treats it as enough has quietly decided that the causal story behind its own decisions is not worth keeping.
-
----
-
-## A Framework, Not an Answer Key
-
-Everything that follows is an opinion about how to apply this loop. It is a well-considered opinion: the product of sixteen years and seven months of work, along with formal study of the methodologies referenced throughout this book. That experience earns the argument a hearing. It does not turn the argument into a universal implementation specification.
-
-The ambition is universal applicability at the level of mechanism, not identical execution. Anyone who has ordered a "one-size-fits-all" item and received what is clearly the children's version already understands the problem with the label. Organizations differ in size, authority, regulation, risk, capability, and tolerance for ceremony. The form, review body, cadence, or metric that closes a loop in one environment may create waste or false confidence in another. What should survive the translation is the causal obligation: preserve the claim, identify the owner, define the evidence path, and return to the decision when reality has had a chance to answer it.
-
-When a reader finds a gap, an oversight, or a difficult local case, the tempting questions are: "What specific thing should I do here, Mr. Dishpit?" or "Which KPIs will make my organization successful if I track them?" Those questions ask an external answer to replace the local judgment the organization is responsible for recording. A metric imported without the decision it is supposed to inform becomes another box score. A prescribed step copied without knowing which risk or assumption it controls can open a new loop while making the organization feel governed.
-
-Ask instead: Does this create a new loop? What would close that loop before the project goes live? Who owns the claim, what evidence would change the decision, and when must somebody look at it? The book can supply patterns, examples, and warnings. It cannot absolve the reader's organization of translating them into its own operating conditions.
-
-That is not permission to improvise without discipline. Adaptation should leave behind its own reasoning: why the local implementation differs, which consequence it controls, what proof will count, and when the choice will be reviewed. The standard is not whether an organization copied the example. The standard is whether it can later reconcile the decision it actually made.
-
----
-
-## The Rule
-
-Everything in this book applies one rule, stated once here so it need not be restated every time it recurs:
-
-> Every important decision needs a durable claim, an owner, an expected outcome, an evidence path, and a review point.
-
-A written record produced by that rule is not automatically bureaucracy. It is the answer key the organization needs when it eventually sits down to watch its own film. It will need to, because judgment is unavoidable. Every hire, every architecture call, every performance rating, every vendor selection is somebody's judgment call, made with incomplete information under real constraints. That is not a flaw to be engineered away. The flaw is judgment that goes unrecorded, because unrecorded judgment cannot be reconciled against what actually happened. It can only be defended, forgotten, or repeated.
-
-The chapters that follow apply this same rule to a different part of the enterprise each time: how work gets written before it gets built, how architecture commitments get framed before they get made, how process improves without becoming theater, how people get coached and developed against evidence instead of impressions, how vendors get selected and held to their own claims, and how services get retired instead of merely abandoned. The domain changes. The loop does not.
-
-The rest of the book follows the claim into the operating system. If every important decision needs an owner, expected outcome, evidence path, and review point, the next question is which demands deserve to become important decisions at all.
-
-<!-- Preview assembly source: The-Open-Loop-Enterprise.md, complete article -->
+Every request consumes time and attention from people whose obligations may already exceed what they can do in a given period. Before committing them to another piece of work, the organization needs to decide which demands deserve that commitment.
