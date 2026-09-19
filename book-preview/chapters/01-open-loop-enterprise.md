@@ -1,5 +1,6 @@
 # The Open-Loop Enterprise
 
+## What is an Open-Loop Enterprise?
 An open loop enterprise is a company that cannot tell its own good judgment from its own luck, because it never wrote down enough to differentiate them.
 
 Most enterprises run open-loop. They make requests, forecasts, hiring decisions, architecture calls, vendor selections, and performance judgments, and then they let the reasoning behind those calls evaporate. The decision is made, the moment passes, and the organization moves on carrying only the outcome: a ship date, a rating, a purchase, an incident count. It keeps no durable record of what it expected to happen, why, or what it would have accepted as proof that it was wrong.
